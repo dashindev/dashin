@@ -1,6 +1,6 @@
 {
   "name": "bunadmin",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.1-alpha.1",
   "description": "A simple graphql admin dashboard. Easy to expand with the flexible plugin. Graphql first, also supports api. Based on React, Material-UI, Realtime RxDB, Formik, I18N.",
   "license": "Apache-2.0",
   "repository": {

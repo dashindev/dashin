@@ -22,6 +22,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jest-environment-jsdom-sixteen",
+    "pretest": "node bunadmin-scripts.js",
     "eject": "react-scripts eject",
     "prettier": "prettier --write  --no-semi src/** pages/** plugins/** test/**",
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest",

@@ -4,9 +4,4 @@ import App from "./App"
 
 export * from "./main"
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root")
-)
+ReactDOM.render(<App />, document.getElementById("root"))

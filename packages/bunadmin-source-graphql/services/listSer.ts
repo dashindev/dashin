@@ -49,9 +49,15 @@ export default async function listSer({
     }
 
     if (typeof filterValue === "object") {
-      suffix = "_in"
-      // fix value: []
-      if (filterValue.length === 0) suffix = "_nin"
+      if (Array.isArray(filterValue)) {
+        // array []
+        suffix = "_in"
+        // fix value: []
+        if (filterValue.length === 0) suffix = "_nin"
+      } else {
+        // object {}
+        suffix = ""
+      }
     }
 
     // handling numeric column
@@ -66,7 +72,12 @@ export default async function listSer({
 
     if (suffix === "_like") filterValue = `%${filterValue}%`
 
-    filtersObj[filterField] = { [suffix]: filterValue }
+    filtersObj[filterField] =
+      suffix === ""
+        ? // filter object
+          filterValue
+        : // common
+          { [suffix]: filterValue }
   })
 
   if (!filtersObj[searchField]) {

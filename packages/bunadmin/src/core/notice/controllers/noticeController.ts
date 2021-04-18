@@ -4,6 +4,7 @@ import { Collection } from "../collections"
 import { Primary } from "../schema"
 import { store } from "@/utils/store"
 import { setNotice } from "@/slices/noticeSlice"
+import { nanoid } from "nanoid"
 
 const collection = Collection.name
 const primary = Primary
@@ -19,7 +20,7 @@ export default async function noticeController({
   severity,
   content
 }: Interface) {
-  const nanoId = require("nanoid")(10)
+  const nanoId = nanoid(10)
   const created_at = { created_at: Date.now() }
 
   try {

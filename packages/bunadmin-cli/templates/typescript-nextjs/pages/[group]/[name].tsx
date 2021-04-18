@@ -5,13 +5,19 @@ import {
   CoreContainer,
   SchemaContainer,
   withoutLayout,
-  ENV
+  ENV,
+  MenuType
 } from "@bunred/bunadmin"
 import PluginTable from "../../components/PluginTable"
 import DefaultLayout from "../../components/DefaultLayout"
 import Error from "../../components/Error"
+import Home from "../../components/Home"
 
-const DynamicGroupNamePage = () => {
+const DynamicGroupNamePage = ({
+  leftMenuData
+}: {
+  leftMenuData?: MenuType[]
+}) => {
   const router = useRouter()
   const { group, name } = router.query as ParsedUrlQuery
   const [NtTable, setNtTable] = useState<JSX.Element>()
@@ -52,6 +58,9 @@ const DynamicGroupNamePage = () => {
               Error={Error}
             />
           )
+        case undefined:
+          render = <Home />
+          break
         default:
           render = <SchemaContainer PluginTable={PluginTable} Error={Error} />
       }
@@ -62,7 +71,9 @@ const DynamicGroupNamePage = () => {
 
   if (withoutLayout(group, name)) return render
 
-  return <DefaultLayout>{render}</DefaultLayout>
+  return (
+    <DefaultLayout leftMenu={{ data: leftMenuData }}>{render}</DefaultLayout>
+  )
 }
 
 export default DynamicGroupNamePage

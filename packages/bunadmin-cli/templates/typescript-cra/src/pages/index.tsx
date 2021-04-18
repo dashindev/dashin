@@ -1,7 +1,6 @@
 import React from "react"
 import { Container, Typography, Box, Link } from "@material-ui/core"
 import { ENV, ProTip } from "@bunred/bunadmin"
-import DefaultLayout from "../components/DefaultLayout"
 
 function Copyright() {
   return (
@@ -18,16 +17,14 @@ function Copyright() {
 
 export default function Index() {
   return (
-    <DefaultLayout>
-      <Container maxWidth="sm">
-        <Box p={3} my={4}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Welcome to {ENV.SITE_NAME}
-          </Typography>
-          <ProTip />
-          <Copyright />
-        </Box>
-      </Container>
-    </DefaultLayout>
+    <Container maxWidth="sm">
+      <Box p={3} my={4}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Welcome to {ENV.SITE_NAME}
+        </Typography>
+        <ProTip />
+        <Copyright />
+      </Box>
+    </Container>
   )
 }

@@ -18,8 +18,8 @@ import { SnackbarProvider } from "notistack"
 import { CubeSpinner, Snackbar, SnackMessage } from "./components"
 import { useTranslation } from "react-i18next"
 import { createBrowserHistory } from "history"
+import { MenuType } from "@/core"
 
-const Home = lazy(() => import("./pages/index"))
 const HTTP404 = lazy(() => import("./pages/404"))
 const GroupName = lazy(() => import("./pages/[group]-[name]"))
 
@@ -31,6 +31,7 @@ const App = () => {
   const [ready, setReady] = useState(false)
   const [initialized, setInitialized] = useState(false)
   const [isProtected, setIsProtected] = useState(false)
+  const [leftMenuData, setLeftMenuData] = useState<MenuType[]>([])
 
   function requirePlugin(path: string) {
     try {
@@ -69,16 +70,20 @@ const App = () => {
       /**
        * Initialization data
        */
-      await initData({
+      const initDataRes = await initData({
         i18n,
         authPlugin,
         setIsProtected,
         pluginsData,
         requirePlugin,
-        setReady,
         initialized,
         setInitialized
       })
+
+      if (initDataRes) {
+        setLeftMenuData(initDataRes.menuData)
+        setReady(true)
+      }
     })()
   }, [asPath])
 
@@ -116,8 +121,10 @@ const App = () => {
         <Router history={history}>
           <Suspense fallback={<CubeSpinner />}>
             <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/:group/:name" component={GroupName} />
+              <Route
+                path={["/:group/:name", "/"]}
+                component={() => <GroupName leftMenuData={leftMenuData} />}
+              />
               <Route path="*" component={HTTP404} />
             </Switch>
           </Suspense>

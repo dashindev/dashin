@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from "react"
 import { useRouter } from "@/router"
 import { ParsedUrlQuery } from "querystring"
-import { CoreContainer, SchemaContainer, withoutLayout, ENV } from "../../src"
+import {
+  CoreContainer,
+  SchemaContainer,
+  withoutLayout,
+  ENV,
+  MenuType
+} from "../../src"
 import PluginTable from "../../src/private/PluginTable"
 import DefaultLayout from "../../src/private/DefaultLayout"
 import Error from "../../src/private/Error"
+import Index from "./index"
 
-const DynamicGroupNamePage = () => {
+const DynamicGroupNamePage = ({
+  leftMenuData
+}: {
+  leftMenuData?: MenuType[]
+}) => {
   const router = useRouter()
   const { group, name } = router.query as ParsedUrlQuery
   const [NtTable, setNtTable] = useState<JSX.Element>()
@@ -51,13 +62,18 @@ const DynamicGroupNamePage = () => {
           render = <SchemaContainer PluginTable={PluginTable} Error={Error} />
       }
       break
+    case undefined:
+      render = <Index />
+      break
     default:
       render = <SchemaContainer PluginTable={PluginTable} Error={Error} />
   }
 
   if (withoutLayout(group, name)) return render
 
-  return <DefaultLayout>{render}</DefaultLayout>
+  return (
+    <DefaultLayout leftMenu={{ data: leftMenuData }}>{render}</DefaultLayout>
+  )
 }
 
 export default DynamicGroupNamePage

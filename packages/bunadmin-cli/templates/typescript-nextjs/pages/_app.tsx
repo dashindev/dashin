@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react"
 import { Provider } from "react-redux"
 import { useTranslation } from "react-i18next"
 import { AppProps } from "next/app"
-import { useRouter } from "@bunred/bunadmin"
 import Head from "next/head"
 import { ThemeProvider, CssBaseline } from "@material-ui/core"
 import { SnackbarProvider } from "notistack"
 import {
+  useRouter,
   defaultTheme,
   initData,
   store,
@@ -18,7 +18,8 @@ import {
   IAuthPlugin,
   DEFAULT_AUTH_PLUGIN,
   PluginData,
-  UserRoute
+  UserRoute,
+  MenuType
 } from "@bunred/bunadmin"
 import "@bunred/bunadmin/lib/utils/i18n"
 import "../public/index.css"
@@ -30,6 +31,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [ready, setReady] = useState(false)
   const [initialized, setInitialized] = useState(false)
   const [isProtected, setIsProtected] = useState(false)
+  const [leftMenuData, setLeftMenuData] = useState<MenuType[]>([])
 
   function requirePlugin(path: string) {
     try {
@@ -68,16 +70,20 @@ const App = ({ Component, pageProps }: AppProps) => {
       /**
        * Initialization data
        */
-      await initData({
+      const initDataRes = await initData({
         i18n,
         authPlugin,
         setIsProtected,
         pluginsData,
         requirePlugin,
-        setReady,
         initialized,
         setInitialized
       })
+
+      if (initDataRes) {
+        setLeftMenuData(initDataRes.menuData)
+        setReady(true)
+      }
     })()
   }, [asPath])
 
@@ -120,7 +126,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           >
             <Snackbar />
           </SnackbarProvider>
-          <Component {...pageProps} />
+          <Component leftMenuData={leftMenuData} {...pageProps} />
         </ThemeProvider>
       </Provider>
     </>

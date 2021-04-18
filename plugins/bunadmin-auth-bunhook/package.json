@@ -1,18 +1,19 @@
 {
-  "name": "bunadmin-source-graphql",
-  "version": "1.1.1-beta.1.1",
+  "name": "bunadmin-auth-bunhook",
+  "version": "1.1.1-beta.1",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib"
   ],
+  "devDependencies": {
+    "prettier": "1.19.1",
+    "typescript": "^3.9.3"
+  },
   "scripts": {
     "test": "prettier --check --no-semi src/** pages/** test/** && jest",
     "tsc": "rm -rf lib & tsc",
     "pack": "rm -rf lib & tsc && npm pack"
-  },
-  "devDependencies": {
-    "typescript": "^3.9.3"
   }
 }

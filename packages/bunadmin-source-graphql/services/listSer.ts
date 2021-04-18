@@ -70,6 +70,14 @@ export default async function listSer({
       if (filterValue === "unchecked") filterValue = false
     }
 
+    // handling the specified string "uuid"
+    if (
+      column.filterPlaceholder &&
+      column.filterPlaceholder.indexOf("uuid") > -1
+    ) {
+      suffix = eq
+    }
+
     if (suffix === "_like") filterValue = `%${filterValue}%`
 
     filtersObj[filterField] =

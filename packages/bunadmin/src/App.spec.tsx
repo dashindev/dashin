@@ -5,7 +5,7 @@ import { MemoryRouter } from "react-router-dom"
 import App from "./App"
 import { ENV } from "@/utils"
 
-test("loading page", async () => {
+test("index page", async () => {
   render(
     <MemoryRouter initialEntries={["/"]}>
       <App />
@@ -15,19 +15,8 @@ test("loading page", async () => {
   await waitFor(() => screen.getByTestId("loading"))
 
   expect(screen.getByTestId("loading")).not.toBeNull()
-})
 
-test("index page", async () => {
-  render(
-    <MemoryRouter initialEntries={["/"]}>
-      <App />
-    </MemoryRouter>
-  )
-
-  await waitFor(() => screen.getByTestId("loading"))
-  await waitFor(() => screen.getAllByText(ENV.SITE_NAME))
-
-  // screen.debug(screen.getAllByText(ENV.SITE_NAME))
+  await waitFor(() => screen.getAllByText(ENV.SITE_NAME), { timeout: 5000 })
 
   expect(screen.getAllByText(ENV.SITE_NAME)).not.toBeNull()
 })

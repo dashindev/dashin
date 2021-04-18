@@ -20,7 +20,6 @@ type Props = {
   setIsProtected: Dispatch<SetStateAction<boolean>>
   pluginsData: PluginData[]
   requirePlugin: (path: string) => any
-  setReady: Dispatch<SetStateAction<boolean>>
   initialized: boolean
   setInitialized: Dispatch<SetStateAction<boolean>>
 }
@@ -31,26 +30,10 @@ export default async function initData({
   setIsProtected,
   pluginsData,
   requirePlugin,
-  setReady,
   initialized,
   setInitialized
-}: Props) {
-  const {
-    initData,
-    authResponseKey,
-    authRequestUrl,
-    authRequestMethod
-  } = authPlugin
-
-  /**
-   * Avoid repeated initialization
-   */
-  if (!initialized) {
-    /**
-     * Init auth plugin data
-     */
-    initData && initData.data && (await initPluginsData(initData.data))
-  }
+}: Props): Promise<undefined | { menuData: MenuType[] }> {
+  const { authResponseKey, authRequestUrl, authRequestMethod } = authPlugin
 
   /**
    * Authenticate the current user, fail to execute redirect
@@ -109,7 +92,7 @@ export default async function initData({
   /**
    * Init plugins data
    */
-  await initPluginsData(pluginsData)
+  const initPluginsDataRes = await initPluginsData(pluginsData)
 
   /**
    * Init I18n for plugins
@@ -123,10 +106,10 @@ export default async function initData({
   addSources(i18n, pluginsData)
 
   setInitialized(true)
-  /**
-   * Main page ready
-   */
-  setReady(true)
+
+  if (initPluginsDataRes) {
+    return { menuData: initPluginsDataRes.menuData }
+  }
 
   function addSources(i18n: i18n, pluginsData: PluginData[]) {
     const schemas = pluginsData as SchemaType[]
@@ -150,7 +133,9 @@ export default async function initData({
   }
 }
 
-async function initPluginsData(pluginsData: PluginData[]) {
+async function initPluginsData(
+  pluginsData: PluginData[]
+): Promise<undefined | { schemaData: SchemaType[]; menuData: MenuType[] }> {
   /**
    * Set PluginsData
    */
@@ -158,8 +143,8 @@ async function initPluginsData(pluginsData: PluginData[]) {
     /**
      * handle schemaData, menuData
      */
-    const schemaData = ([] as unknown) as SchemaType[]
-    const menuData = ([] as unknown) as MenuType[]
+    const schemaData: SchemaType[] = []
+    const menuData: MenuType[] = []
     pluginsData.map(data => {
       const item = data as SchemaType & MenuType
       !item.ignore_schema &&
@@ -201,5 +186,7 @@ async function initPluginsData(pluginsData: PluginData[]) {
      * redux setNestedMenu
      */
     store.dispatch(setNestedMenu(menuData))
+
+    return { schemaData, menuData }
   }
 }

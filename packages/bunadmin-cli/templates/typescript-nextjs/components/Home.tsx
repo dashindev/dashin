@@ -1,6 +1,6 @@
 import React from "react"
 import { Container, Typography, Box, Link } from "@material-ui/core"
-import { ENV, ProTip } from "@bunred/bunadmin"
+import { ProTip, ENV } from "@bunred/bunadmin"
 
 function Copyright() {
   return (
@@ -15,7 +15,7 @@ function Copyright() {
   )
 }
 
-export default function Index() {
+export default function Home() {
   return (
     <Container maxWidth="sm">
       <Box p={3} my={4}>

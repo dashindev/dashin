@@ -5,20 +5,16 @@ import NestedList from "./NestedMenu"
 import SettingMenu from "./SettingMenu"
 import { Type } from "@/core/menu/types"
 import { ENV } from "@/utils/config"
-import { useSelector } from "react-redux"
-import { selectNestedMenu } from "@/slices/nestedMenuSlice"
 
 export interface LeftMenuProps {
   data?: Type[]
   offLeftSetting?: boolean
 }
 
-const LeftMenu = ({ data: propsData, offLeftSetting }: LeftMenuProps) => {
-  const menus = useSelector(selectNestedMenu)
-
+const LeftMenu = ({ data: leftMenuData, offLeftSetting }: LeftMenuProps) => {
   return (
     <>
-      <NestedList data={propsData || menus} />
+      {leftMenuData && <NestedList data={leftMenuData} />}
       <Divider />
       {!offLeftSetting && ENV.ON_SETTING && <SettingMenu />}
     </>

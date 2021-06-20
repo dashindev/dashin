@@ -54,7 +54,9 @@ module.exports = ({ modulesPath, dynamicPath, pluginsPath }) => {
   let importLine = ""
   let arrayLine = ""
   customPluginsPaths.map((path, i) => {
-    const name = path.replace(`${pluginsPath}/`, "")
+    let name = path.replace(/\\/g, "/") // Fixing the PATH on Windows
+    name = name.replace(/.*\/(.*)/g, "$1")
+
     const varName = `data_${i + 1}`
     importLine += `
 import { initData as ${varName} } from "../${relativePath}/plugins/${name}"`
@@ -104,7 +106,8 @@ export const data: IPluginData[] = [${arrayLine}]
      */
     try {
       if (!plugin) return
-      const pluginName = pathItem.replace(/.*\//g, "")
+      let pluginName = pathItem.replace(/\\/g, "/") // Fixing the PATH on Windows
+      pluginName = pluginName.replace(/.*\//g, "")
       /**
        * Recreate directory dynamic/[plugin]
        */
@@ -142,6 +145,7 @@ export const data: IPluginData[] = [${arrayLine}]
 
   const name = "pluginsData.json"
   const savePath = path.resolve(dynamicPath, name)
+  console.log("savePath", savePath)
   fs.writeFile(savePath, JSON.stringify(pluginsData), "utf8", () => {
     /**
      * Prepare plugins END

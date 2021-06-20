@@ -48,6 +48,14 @@ cd packages/bunadmin && yarn run start
 - Username: `admin`
 - Password: `bunadmin`
 
+## Lerna (publish packages)
+```
+yarn global add lerna rimraf
+
+lerna run pack
+lerna publish --force-publish
+```
+
 #### Thanks
 
 [material-ui](https://github.com/mui-org/material-ui)

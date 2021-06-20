@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "rm -rf lib & tsc",
-    "pack": "rm -rf lib & tsc && npm pack"
+    "tsc": "rimraf lib & tsc",
+    "pack": "rimraf lib & tsc && npm pack"
   },
   "keywords": [],
   "author": "",

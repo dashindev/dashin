@@ -13,7 +13,7 @@
   },
   "scripts": {
     "test": "prettier --check --no-semi src/** pages/** test/** && jest",
-    "tsc": "rm -rf lib & tsc",
-    "pack": "rm -rf lib & tsc && npm pack"
+    "tsc": "rimraf lib & tsc",
+    "pack": "rimraf lib & tsc && npm pack"
   }
 }

@@ -8,8 +8,8 @@
     "lib"
   ],
   "scripts": {
-    "tsc": "rm -rf lib & tsc",
-    "pack": "rm -rf lib & tsc && npm pack"
+    "tsc": "rimraf lib & tsc",
+    "pack": "rimraf lib & tsc && npm pack"
   },
   "devDependencies": {
     "prettier": "1.19.1",

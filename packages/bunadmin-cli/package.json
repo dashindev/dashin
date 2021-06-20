@@ -10,8 +10,8 @@
   },
   "scripts": {
     "test": "xo && ava",
-    "tsc": "rm -rf lib & tsc",
-    "pack": "rm -rf lib & tsc && npm pack",
+    "tsc": "rimraf lib & tsc",
+    "pack": "rimraf lib & tsc && npm pack",
     "local-install-global": "npm run pack && npm uninstall bunadmin-cli --global && npm install --global ./"
   },
   "files": [

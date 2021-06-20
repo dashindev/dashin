@@ -7,7 +7,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "type-check": "tsc",
-    "yarn force": "rm -rf yarn.lock & yarn --force && yarn start"
+    "yarn force": "rimraf yarn.lock & yarn --force && yarn start"
   },
   "dependencies": {
     "@bunred/bunadmin": "^1.1.1-beta.2",

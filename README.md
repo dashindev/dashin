@@ -52,7 +52,7 @@ cd packages/bunadmin && yarn run start
 ```
 yarn global add lerna rimraf
 
-lerna run pack
+yarn lerna-pack
 lerna publish --force-publish
 ```
 

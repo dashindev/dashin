@@ -12,7 +12,8 @@
     "material-table": "npm:@bunred/material-table@0.69.1-beta.2"
   },
   "scripts": {
-    "lerna-build": "lerna run ttsc && lerna run tsc"
+    "lerna-build": "lerna run ttsc && lerna run tsc",
+    "lerna-pack": "lerna run ttsc-pack && lerna run pack"
   },
   "devDependencies": {}
 }

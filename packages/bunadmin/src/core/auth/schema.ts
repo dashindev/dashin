@@ -10,6 +10,9 @@ export const Schema = {
       type: "string",
       primary: true
     },
+    id: {
+      type: "string"
+    },
     updated_at: {
       type: "number",
       index: true

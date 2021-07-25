@@ -3,7 +3,7 @@ import { Collection as Setting } from "@/core/setting/collections"
 import rxDb from "@/utils/database/rxConnect"
 import { Primary } from "@/core/auth/schema"
 
-export default async function storedToken() {
+export default async function storedToken(returnUser?: true) {
   const authStore = Auth.name
   const setting = Setting.name
   const db = await rxDb()
@@ -23,5 +23,5 @@ export default async function storedToken() {
     .eq(username)
     .exec()
 
-  return localUser && localUser.token
+  return returnUser ? localUser : localUser && localUser.token
 }

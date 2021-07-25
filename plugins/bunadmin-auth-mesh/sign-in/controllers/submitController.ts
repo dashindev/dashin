@@ -41,6 +41,7 @@ const submitController = async ({
     // store auth
     await db[Auth.name].upsert({
       [primary]: res.username,
+      id: res.id,
       token,
       role: res.admin ? "admin" : res.groups.values(),
       details: JSON.stringify(res),

@@ -38,6 +38,7 @@ const submitController = async ({
     // store auth
     await db[Auth.name].upsert({
       [primary]: res.user.username,
+      id: res.id,
       token: res.jwt,
       role: res.user.role.name,
       details: JSON.stringify(res),

@@ -1,4 +1,5 @@
-import { addPouchPlugin, createRxDatabase, getRxStoragePouch, RxDatabase } from "rxdb"
+import { addPouchPlugin, createRxDatabase, getRxStoragePouch } from "rxdb"
+import { BunadminCollection } from "../types"
 import { rxCollections } from "./rxCollections"
 
 addPouchPlugin(require("pouchdb-adapter-idb"))
@@ -7,7 +8,7 @@ addPouchPlugin(require("pouchdb-adapter-http")) //enable syncing over http
 
 const adapter = process.env.NODE_ENV === "test" ? "memory" : "idb"
 
-const _create = async () => {
+const _create = async (collections?: BunadminCollection[]) => {
   const db = await createRxDatabase({
     name: "bunadmin", // <- name
     storage: getRxStoragePouch(adapter), // <- storage-adapter
@@ -18,8 +19,9 @@ const _create = async () => {
   // console.log("DatabaseService: created database")
 
   // create collections
-  for (let index = 0; index < rxCollections.length; index++) {
-    const obj = rxCollections[index];
+  const colArr = collections ? [...rxCollections, ...collections] : rxCollections
+  for (let index = 0; index < colArr.length; index++) {
+    const obj = colArr[index];
     await db.addCollections({
       [obj.name]: { schema: obj.schema }
     })
@@ -29,6 +31,6 @@ const _create = async () => {
   return db
 }
 
-export default async function rxDb() {
-  return await _create()
+export default async function rxDb(collections?: BunadminCollection[]) {
+  return await _create(collections)
 }

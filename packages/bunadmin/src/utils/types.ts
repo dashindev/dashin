@@ -75,6 +75,11 @@ export interface EditableCtrl {
   primaryKey?: string
 }
 
+export interface BunadminCollection {
+  name: string,
+  schema: BunadminSchema
+}
+
 export interface BunadminSchema extends RxJsonSchema<any> {
   title: string
 }

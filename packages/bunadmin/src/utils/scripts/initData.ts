@@ -4,7 +4,7 @@ import rxDb from "@/utils/database/rxConnect"
 import { Primary as AuthPrimary } from "@/core/auth/schema"
 import { ENV } from "@/utils/config"
 import { MenuType, SchemaType } from "@/core"
-import { IAuthPlugin, PluginData, store } from "@/utils"
+import { BunadminCollection, IAuthPlugin, PluginData, store } from "@/utils"
 import { setNestedMenu } from "@/slices/nestedMenuSlice"
 import { setSchema } from "@/slices/schemaSlice"
 import { Dispatch, SetStateAction } from "react"
@@ -22,6 +22,7 @@ type Props = {
   requirePlugin: (path: string) => any
   initialized: boolean
   setInitialized: Dispatch<SetStateAction<boolean>>
+  collections?: BunadminCollection[]
 }
 
 export default async function initData({
@@ -31,7 +32,8 @@ export default async function initData({
   pluginsData,
   requirePlugin,
   initialized,
-  setInitialized
+  setInitialized,
+  collections
 }: Props): Promise<undefined | { menuData: MenuType[] }> {
   const { authResponseKey, authRequestUrl, authRequestMethod } = authPlugin
 
@@ -51,7 +53,7 @@ export default async function initData({
    */
   if (initialized) return
 
-  const db = await rxDb()
+  const db = await rxDb(collections)
 
   /**
    * Init core setting data

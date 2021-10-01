@@ -51,7 +51,7 @@ cd packages/bunadmin && yarn run start
 ## Lerna (publish packages)
 ```
 yarn lerna-pack
-lerna publish --force-publish
+npx lerna publish --force-publish
 ```
 
 #### Thanks

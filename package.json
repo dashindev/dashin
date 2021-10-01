@@ -4,8 +4,8 @@
   "author": "BunRed Team",
   "workspaces": ["packages/*", "plugins/*"],
   "dependencies": {
-    "@material-ui/core": "^4.10.0",
-    "@material-ui/icons": "^4.9.1",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
     "material-table": "npm:@bunred/material-table@0.69.1-beta.2"
   },
   "scripts": {

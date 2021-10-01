@@ -2,10 +2,7 @@
   "license": "Apache-2.0",
   "private": true,
   "author": "BunRed Team",
-  "workspaces": [
-    "packages/*",
-    "plugins/*"
-  ],
+  "workspaces": ["packages/*", "plugins/*"],
   "dependencies": {
     "@material-ui/core": "^4.10.0",
     "@material-ui/icons": "^4.9.1",
@@ -15,5 +12,8 @@
     "lerna-build": "lerna run ttsc && lerna run tsc",
     "lerna-pack": "lerna run ttsc-pack && lerna run pack"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "lerna": "4.0.0",
+    "rimraf": "3.0.2"
+  }
 }

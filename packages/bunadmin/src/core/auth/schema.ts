@@ -1,21 +1,22 @@
+import { BunadminSchema } from "@/utils"
+
 export const Primary = "username"
 
-export const Schema = {
+export const Schema: BunadminSchema = {
   title: "Authentication",
   description: "Store signed-in user's information",
   version: 0,
+  primaryKey: Primary,
   type: "object",
   properties: {
     [Primary]: {
       type: "string",
-      primary: true
     },
     id: {
       type: "string"
     },
     updated_at: {
       type: "number",
-      index: true
     },
     role: {
       type: "string"
@@ -27,5 +28,6 @@ export const Schema = {
       type: "string"
     }
   },
-  required: ["role", "token"]
+  required: ["role", "token"],
+  indexes: ["updated_at"]
 }

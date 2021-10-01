@@ -1,18 +1,19 @@
+import { BunadminSchema } from "@/utils"
+
 export const Primary = "id"
 
-export const Schema = {
+export const Schema: BunadminSchema = {
   title: "Local Notice",
   description: "local notices",
   version: 0,
+  primaryKey: Primary,
   type: "object",
   properties: {
     [Primary]: {
       type: "string",
-      primary: true
     },
     created_at: {
       type: "number",
-      index: true
     },
     title: {
       type: "string"
@@ -25,5 +26,6 @@ export const Schema = {
       type: "string"
     }
   },
-  required: ["title", "severity"]
+  required: ["title", "severity"],
+  indexes: ["created_at"]
 }

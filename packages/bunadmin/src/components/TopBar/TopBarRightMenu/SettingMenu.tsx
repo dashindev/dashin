@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import RxDB from "rxdb"
+import { getRxStoragePouch, removeRxDatabase } from 'rxdb'
 
 import { useRouter } from "@/router"
 import IconButton from "@material-ui/core/IconButton"
@@ -97,7 +97,7 @@ export default function SettingMenu() {
         title={modalState.title}
         msg={modalState.msg}
         doFunc={() => {
-          RxDB.removeDatabase("bunadmin", "idb").then(_r =>
+          removeRxDatabase("bunadmin", getRxStoragePouch('idb')).then(_r =>
             window.location.reload()
           )
         }}

@@ -1,4 +1,4 @@
-import { RxDatabase } from "rxdb/dist/typings/types"
+import { RxDatabase } from "rxdb"
 import { MenuType, SchemaType, SettingType } from "@/core"
 
 export type DocsData = SchemaType | MenuType | SettingType

@@ -19,11 +19,11 @@ export default function I18nMenu() {
   const [curCode, setCurCode] = useState<string>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const db = await rxDb()
       const setting = db[Setting.name]
       const resI18nCode = await setting
-        .findOne({ name: { $eq: SettingNames.i18n_code } })
+        .findOne({ selector: { name: { $eq: SettingNames.i18n_code } } })
         .exec()
       if (resI18nCode) setCurCode(resI18nCode.value)
     })()

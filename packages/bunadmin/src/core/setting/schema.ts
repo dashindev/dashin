@@ -1,22 +1,24 @@
+import { BunadminSchema } from "@/utils"
+
 export const Primary = "name"
 
-export const Schema = {
+export const Schema: BunadminSchema = {
   title: "Bunadmin Setting",
   description: "Manage your Bunadmin Settings",
   version: 0,
+  primaryKey: Primary,
   type: "object",
   properties: {
     [Primary]: {
       type: "string",
-      primary: true
     },
     updated_at: {
       type: "number",
-      index: true
     },
     value: {
       type: "string"
     }
   },
-  required: []
+  required: [],
+  indexes: ["updated_at"]
 }

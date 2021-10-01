@@ -38,7 +38,7 @@ export default function MigrationDialogs({
           const db = await rxDb()
           switch (selData.mode) {
             case "Export DB":
-              db.dump().then((json: any) =>
+              db.exportJSON().then((json: any) =>
                 fsDownload(json, "bunadmin.json", "application/json")
               )
               break
@@ -63,13 +63,13 @@ export default function MigrationDialogs({
             const db = await rxDb()
             // dump collection
             if (selData.name !== "ALL") {
-              db[selData.name].importDump(json).then(() => {
+              db[selData.name].importJSON(json).then(() => {
                 // show notice
                 notice({ title: `Import successful` })
               })
             } else {
               // dump database
-              db.importDump(json).then(() => {
+              db.importJSON(json).then(() => {
                 // show notice
                 notice({ title: `Import successful` })
               })

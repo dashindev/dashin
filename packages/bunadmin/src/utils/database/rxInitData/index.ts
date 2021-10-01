@@ -1,4 +1,4 @@
-import { RxDatabase } from "rxdb/dist/typings/types"
+import { RxDatabase } from "rxdb"
 
 interface Props {
   db: RxDatabase<any>
@@ -14,7 +14,7 @@ export default async function rxInitData({
   initFunc
 }: Props) {
   const setting = db[collection]
-  const is_init = await setting.findOne({ name: { $eq: name } }).exec()
+  const is_init = await setting.findOne({ selector: { name: { $eq: name } } }).exec()
 
   if (!!is_init) {
     /**

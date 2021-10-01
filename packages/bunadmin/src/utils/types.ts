@@ -2,6 +2,7 @@ import { MenuType, SchemaType } from "@/core"
 import { TFunction } from "i18next"
 import { RefObject } from "react"
 import { DocsData } from "@/utils/database/rxInitData/initDocsData"
+import { RxJsonSchema } from "rxdb"
 
 export interface IPluginData {
   id: SchemaType["id"]
@@ -72,4 +73,8 @@ export interface EditableCtrl {
   SchemaName: string
   disableAdd?: boolean
   primaryKey?: string
+}
+
+export interface BunadminSchema extends RxJsonSchema<any> {
+  title: string
 }

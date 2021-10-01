@@ -50,8 +50,6 @@ cd packages/bunadmin && yarn run start
 
 ## Lerna (publish packages)
 ```
-yarn global add lerna rimraf
-
 yarn lerna-pack
 lerna publish --force-publish
 ```

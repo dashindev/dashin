@@ -62,7 +62,7 @@ export default function MigrationContainer() {
                 const db = await rxDb()
                 const collection = data.name
                 db[collection]
-                  .dump()
+                  .exportJSON()
                   .then((json: any) =>
                     fsDownload(json, collection, "application/json")
                   )

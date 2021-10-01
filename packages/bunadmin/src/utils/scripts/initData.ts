@@ -99,7 +99,7 @@ export default async function initData({
    */
   const setting = db[Setting.name]
   const resI18nCode = await setting
-    .findOne({ name: { $eq: SettingNames.i18n_code } })
+    .findOne({ selector: { name: { $eq: SettingNames.i18n_code } } })
     .exec()
   if (resI18nCode) i18n.changeLanguage(resI18nCode.value).then()
 

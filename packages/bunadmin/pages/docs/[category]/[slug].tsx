@@ -9,7 +9,7 @@ import { ParsedUrlQuery } from "querystring"
 import { useRouter } from "next/router"
 import { defaultTheme, DynamicDocRoute, ENV } from "@/utils"
 import {
-  createMuiTheme,
+  createTheme,
   createStyles,
   makeStyles
 } from "@material-ui/core/styles"
@@ -34,14 +34,14 @@ export default function DocsCategorySlug() {
   const bunadminDocPath = "bunadmin-docs"
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       try {
         const content = await import(
           `../../../.bunadmin/dynamic/${bunadminDocPath}/menus`
         )
         const menuData: Type[] = content ? content.menu : []
         setMenuData(menuData)
-      } catch (e) {}
+      } catch (e) { }
     })()
   }, [])
 
@@ -57,16 +57,16 @@ export default function DocsCategorySlug() {
       previous:
         previousData && previousData.label && previousData && previousData.slug
           ? {
-              title: previousData.label,
-              uri: previousData.slug
-            }
+            title: previousData.label,
+            uri: previousData.slug
+          }
           : undefined,
       next:
         nextData && nextData.label && nextData && nextData.slug
           ? {
-              title: nextData.label,
-              uri: nextData.slug
-            }
+            title: nextData.label,
+            uri: nextData.slug
+          }
           : undefined
     })
   }, [slug, menuData])
@@ -199,7 +199,7 @@ export default function DocsCategorySlug() {
   }
 
   function theme() {
-    return createMuiTheme({
+    return createTheme({
       ...defaultTheme,
       typography: {
         fontSize: 14,

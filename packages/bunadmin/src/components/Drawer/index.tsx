@@ -25,6 +25,7 @@ export interface DrawerProps {
   buttonSize?: "small" | "medium" | "large"
   buttonDisabled?: boolean
   buttonHidden?: boolean
+  buttonStyle?: CSS.Properties
   // switch toggleDrawer
   switchDrawer?: number
   // run func when open drawer
@@ -46,6 +47,7 @@ export default function Drawer({
   buttonSize,
   buttonDisabled,
   buttonHidden,
+  buttonStyle,
   switchDrawer,
   onOpen,
   onClose,
@@ -83,6 +85,7 @@ export default function Drawer({
           color={buttonColor || "primary"}
           disabled={buttonDisabled}
           onClick={() => toggleDrawer()}
+          style={buttonStyle}
         >
           {buttonTitle}
         </Button>

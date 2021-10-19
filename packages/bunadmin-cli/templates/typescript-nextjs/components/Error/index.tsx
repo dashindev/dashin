@@ -5,7 +5,7 @@ import { ErrorGetProps, ErrorMsg } from "./types"
 import DefaultLayout from "../DefaultLayout"
 import { ErrorProps, useRouter } from "@bunred/bunadmin"
 
-function Error({ statusCode, hasLayout, message, redirect }: ErrorProps) {
+const Error = ({ statusCode, hasLayout, message, redirect }: ErrorProps) => {
   const router = useRouter()
 
   const msg = (msg: ErrorMsg) => {

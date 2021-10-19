@@ -2,6 +2,10 @@ const path = require("path")
 const bunadminPlugin = require("@bunred/bunadmin/plugin")
 
 module.exports = () => {
+  /**
+ * @type {import('next').NextConfig}
+ */
+
   return {
     poweredByHeader: false,
     generateBuildId: async () => {
@@ -12,9 +16,7 @@ module.exports = () => {
        * fix npm packages that depend on `fs` module
        */
       if (!isServer) {
-        config.node = {
-          fs: "empty"
-        }
+        config.resolve.fallback.fs = false
       } else {
         const modulesPath = path.resolve(__dirname, "./node_modules")
         const dynamicPath = path.resolve(__dirname, "./.bunadmin/dynamic")

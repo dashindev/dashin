@@ -40,9 +40,12 @@ Display help for command
 
 ```shell script
 git clone git@github.com:bunred/bunadmin.git
-cd bunadmin && yarn && yarn run lerna-build
-cd packages/bunadmin && yarn run start
+
+yarn
+yarn lerna-build
+yarn start
 ```
+
 [http://localhost:3000](http://localhost:3000)
 
 - Username: `admin`
@@ -50,7 +53,7 @@ cd packages/bunadmin && yarn run start
 
 ## Lerna (publish packages)
 ```
-yarn lerna-pack
+# yarn lerna-pack
 npx lerna publish --force-publish
 ```
 

@@ -2,13 +2,17 @@
   "license": "Apache-2.0",
   "private": true,
   "author": "BunRed Team",
-  "workspaces": ["packages/*", "plugins/*"],
+  "workspaces": [
+    "packages/*",
+    "plugins/*"
+  ],
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "material-table": "npm:@bunred/material-table@0.69.1-beta.2"
   },
   "scripts": {
+    "start": "cd packages/bunadmin && yarn start",
     "lerna-build": "lerna run ttsc && lerna run tsc",
     "lerna-pack": "lerna run ttsc-pack && lerna run pack"
   },

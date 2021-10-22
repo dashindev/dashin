@@ -32,7 +32,7 @@ module.exports = ({ modulesPath, dynamicPath, pluginsPath }) => {
     rimraf.sync(dynamicPath)
   }
 
-  const dotBunadminPath = dynamicPath.replace("/dynamic", "")
+  const dotBunadminPath = dynamicPath.replace("dynamic", "")
   if (!fs.existsSync(dotBunadminPath)) {
     fs.mkdirSync(dotBunadminPath)
   }
@@ -47,14 +47,14 @@ module.exports = ({ modulesPath, dynamicPath, pluginsPath }) => {
    * Generate `pluginsData.ts` in `.bunadmin/dynamic/`
    */
   const customPluginsPaths = findPlugins(pluginsPath)
-  const relativePath = path.relative(
-    path.dirname(dynamicPath),
-    path.dirname(pluginsPath)
-  )
+  const relativePath = path
+    .relative(path.dirname(dynamicPath), path.dirname(pluginsPath))
+    .replaceAll(/\\/g, "/") // Fixing the PATH on Windows
+
   let importLine = ""
   let arrayLine = ""
   customPluginsPaths.map((path, i) => {
-    let name = path.replace(/\\/g, "/") // Fixing the PATH on Windows
+    let name = path.replaceAll(/\\/g, "/") // Fixing the PATH on Windows
     name = name.replace(/.*\/(.*)/g, "$1")
 
     const varName = `data_${i + 1}`
@@ -106,14 +106,14 @@ export const data: IPluginData[] = [${arrayLine}]
      */
     try {
       if (!plugin) return
-      let pluginName = pathItem.replace(/\\/g, "/") // Fixing the PATH on Windows
+      let pluginName = pathItem.replaceAll(/\\/g, "/") // Fixing the PATH on Windows
       pluginName = pluginName.replace(/.*\//g, "")
       /**
        * Recreate directory dynamic/[plugin]
        */
       const savePluginPath = path.resolve(dynamicPath, pluginName)
       if (!fs.existsSync(savePluginPath)) {
-        await fs.mkdirSync(savePluginPath)
+        fs.mkdirSync(savePluginPath)
       }
       plugin.initData.data.map(async dataItem => {
         if (dataItem["ignore_schema"] || !dataItem["name"]) return
@@ -122,7 +122,7 @@ export const data: IPluginData[] = [${arrayLine}]
          */
         const saveNamePath = path.resolve(savePluginPath, dataItem["name"])
         if (!fs.existsSync(saveNamePath)) {
-          await fs.mkdirSync(saveNamePath)
+          fs.mkdirSync(saveNamePath)
         }
         const saveNameContent = `export { default } from "${pluginName}/lib/${dataItem["name"]}"`
         fs.writeFile(`${saveNamePath}/index.js`, saveNameContent, e => {

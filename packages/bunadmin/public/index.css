@@ -1,3 +1,8 @@
 @import "assets/css/cubeSpinner.css";
 @import "assets/css/blurBg.css";
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+#root {
+    width: 100%;
+    overflow: hidden;
+}

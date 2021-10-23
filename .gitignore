@@ -21,7 +21,6 @@ out
 # IDE
 .idea/workspace.xml
 .idea/vcs.xml
-.vscode/*
 
 # BunAdmin START
 /packages/bunadmin/.env*.*

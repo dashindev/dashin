@@ -6,7 +6,6 @@ import {
   Setting,
   Auth,
   AuthPrimary as Primary,
-  DynamicRoute,
   notice,
   SettingNames,
   Router
@@ -24,7 +23,6 @@ const submitController = async ({
   t,
   values,
   setSubmitting,
-  router
 }: Props) => {
   const res = await userSignInService(values)
   setSubmitting(false)
@@ -59,19 +57,7 @@ const submitController = async ({
     // show notice
     await notice({ title: t("Sign in successful") })
     // push to origin url
-    const { asPath } = router
-    const pathArr = asPath.split("?redirect=")
-    const redirect = pathArr[1] || "/"
-    const regex = /\//g
-    const matchStr: RegExpMatchArray = redirect.match(regex) || []
-    // is match /[group]/[name]
-    const isMatch = matchStr.length === 2
-
-    if (regex && isMatch) {
-      router.replace(DynamicRoute, redirect)
-    } else {
-      router.replace(redirect)
-    }
+    window.location.reload()
   } else {
     // show notice
     await notice({

@@ -12,11 +12,14 @@ import PluginTable from "../../components/PluginTable"
 import DefaultLayout from "../../components/DefaultLayout"
 import Error from "../../components/Error"
 import Home from "../../components/Home"
+import { SignIn as AuthComponent } from "bunadmin-auth-strapi"
 
 const DynamicGroupNamePage = ({
-  leftMenuData
+  leftMenuData,
+  isProtected
 }: {
   leftMenuData?: MenuType[]
+  isProtected?: boolean
 }) => {
   const router = useRouter()
   const { group, name } = router.query as ParsedUrlQuery
@@ -24,7 +27,7 @@ const DynamicGroupNamePage = ({
   const [NtCount, setNtCount] = useState<() => Promise<number>>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (!ENV.NOTIFICATION_PLUGIN) return
       const customNotificationPath = ENV.NOTIFICATION_PLUGIN
       const { NotificationTable, notificationCount } = await import(
@@ -70,6 +73,8 @@ const DynamicGroupNamePage = ({
   }
 
   if (withoutLayout(group, name)) return render
+
+  if (isProtected) return <AuthComponent />
 
   return (
     <DefaultLayout leftMenu={{ data: leftMenuData }}>{render}</DefaultLayout>

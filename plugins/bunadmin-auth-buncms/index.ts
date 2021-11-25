@@ -1,9 +1,9 @@
 import initData from "./utils/initData"
 
 import users from "./users"
-import signIn from "./sign-in"
+import SignIn from "./sign-in"
 
-export { initData, users, signIn }
+export { initData, users, SignIn }
 
 export const authResponseKey = "id"
 export const authRequestUrl = "/auth/me"

@@ -112,7 +112,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           >
             <Snackbar />
           </SnackbarProvider>
-          <Component leftMenuData={leftMenuData} {...pageProps} />
+          <Component leftMenuData={leftMenuData} isProtected={isProtected} {...pageProps} />
         </ThemeProvider>
       </Provider>
     </>

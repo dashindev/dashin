@@ -8,8 +8,9 @@ const meow = require("meow")
 const ui = importJsx("./lib/ui")
 
 const cli = meow(`
-	Create a new project
+	Create a new project (CRA or Next.js)
 	  $ bunadmin new {name}
+	  $ bunadmin new {name} --nextjs
 
     Options
       --plugin  with demo plugin

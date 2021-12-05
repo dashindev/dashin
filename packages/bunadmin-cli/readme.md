@@ -13,8 +13,9 @@ $ npm install --global bunadmin-cli
 $ bunadmin --help
 
 Usage
-  Create a new project
-  $ bunadmin new {name}
+	Create a new project (CRA or Next.js)
+	  $ bunadmin new {name}
+	  $ bunadmin new {name} --nextjs
 
 Options
     --plugin  with demo plugin

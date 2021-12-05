@@ -1,5 +1,5 @@
 export { default as SchemaColumns } from "./columns"
 
-export const SCHEMA_NAME = "posts"
+export const SchemaName = "posts"
 
-export const SCHEMA_LABEL = "Posts"
+export const SchemaLabel = "Posts"

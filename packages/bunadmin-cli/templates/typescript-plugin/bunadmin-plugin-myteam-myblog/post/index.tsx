@@ -8,7 +8,7 @@ import {
   useTranslation,
   notice
 } from "@bunred/bunadmin"
-import { SCHEMA_LABEL, SchemaColumns } from "./plugin"
+import { SchemaLabel, SchemaColumns } from "./plugin"
 import Type from "./types"
 
 export default function Post() {
@@ -18,11 +18,11 @@ export default function Post() {
 
   return (
     <>
-      <TableHead title={t(SCHEMA_LABEL)} />
+      <TableHead title={t(SchemaLabel)} />
       <Table
         tableRef={tableRef}
-        title={t(SCHEMA_LABEL)}
-        columns={SchemaColumns()}
+        title={t(SchemaLabel)}
+        columns={SchemaColumns({ t, tableRef })}
         style={DefaultProps.style}
         icons={tableIcons({ theme })}
         options={{

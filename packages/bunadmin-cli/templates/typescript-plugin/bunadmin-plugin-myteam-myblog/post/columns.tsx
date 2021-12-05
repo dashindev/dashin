@@ -1,7 +1,9 @@
 import { Column } from "material-table"
 import Type from "./types"
+import { TFunction } from 'i18next';
+import { RefObject } from "react";
 
-export default function Columns(): Column<Type>[] {
+export default function Columns({ t }: { t: TFunction; tableRef: RefObject<any> }): Column<Type>[] {
   return [
     {
       title: "ID",
@@ -11,7 +13,7 @@ export default function Columns(): Column<Type>[] {
       defaultSort: "desc"
     },
     {
-      title: "Name",
+      title: t("Name"),
       field: "name"
     },
     {

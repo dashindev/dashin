@@ -15,7 +15,7 @@ export default class MyDocument extends Document {
             content={defaultTheme.palette.primary.main}
           />
           <link
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            href="/assets/css/icon.css"
             rel="stylesheet"
           />
         </Head>

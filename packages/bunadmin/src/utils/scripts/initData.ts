@@ -22,7 +22,7 @@ type Props = {
   requirePlugin: (path: string) => any
   initialized: boolean
   setInitialized: Dispatch<SetStateAction<boolean>>
-  collections?: BunadminCollection[]
+  collections?: BunadminCollection[] // additional collections
 }
 
 export default async function initData({
@@ -53,15 +53,16 @@ export default async function initData({
    */
   if (initialized) return
 
-  const db = await rxDb(collections)
+  let db = await rxDb(collections)
 
   /**
    * Init core setting data
    */
-  await rxInitData({
+  db = await rxInitData({
     db,
     collection: Setting.name,
     name: SettingNames.init_status,
+    collections,
     initFunc: () =>
       initDocsData({
         db,
@@ -110,6 +111,12 @@ export default async function initData({
   setInitialized(true)
 
   if (initPluginsDataRes) {
+    // /**
+    //  * !!!DEBUG ONLY
+    //  * Initialize data after refreshing
+    //  */
+    // await setting.remove() // !!!DEBUG ONLY
+
     return { menuData: initPluginsDataRes.menuData }
   }
 

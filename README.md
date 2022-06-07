@@ -53,7 +53,7 @@ yarn start
 
 ## Lerna (publish packages)
 ```
-# yarn lerna-pack
+yarn lerna-build
 npx lerna publish --force-publish
 ```
 

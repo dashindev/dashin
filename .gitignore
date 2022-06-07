@@ -35,7 +35,6 @@ pluginsData.json
 .bunadmin
 /packages/bunadmin/src/private/plugins/pluginsData.ts
 
-yarn.lock
 package-lock.json
 
 # BunAdmin END

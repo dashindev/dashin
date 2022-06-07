@@ -37,6 +37,7 @@ export type AuthProps = {
   authResponseKey?: IAuthPlugin["authResponseKey"]
   authRequestUrl?: IAuthPlugin["authRequestUrl"]
   authRequestMethod?: IAuthPlugin["authRequestMethod"]
+  authorizationOverwrite?: IAuthPlugin["authorizationOverwrite"]
 }
 
 export interface IAuthPlugin {
@@ -44,6 +45,8 @@ export interface IAuthPlugin {
   authResponseKey?: string
   authRequestUrl?: string
   authRequestMethod?: string
+  // overwrite/custom authorization function
+  authorizationOverwrite?: () => Promise<boolean>
 }
 
 export type NoticePlugin = {
@@ -76,7 +79,7 @@ export interface EditableCtrl {
 }
 
 export interface BunadminCollection {
-  name: string,
+  name: string
   schema: BunadminSchema
 }
 

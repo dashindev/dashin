@@ -35,16 +35,26 @@ export default async function initData({
   setInitialized,
   collections
 }: Props): Promise<undefined | { menuData: MenuType[] }> {
-  const { authResponseKey, authRequestUrl, authRequestMethod } = authPlugin
+  const {
+    authResponseKey,
+    authRequestUrl,
+    authRequestMethod,
+    authorizationOverwrite
+  } = authPlugin
 
   /**
    * Authenticate the current user, fail to execute redirect
    */
-  const isVerified = await authorization({
-    authResponseKey, // Successful when the response data[key] is not null
-    authRequestUrl,
-    authRequestMethod
-  })
+  let isVerified: boolean
+  if (authorizationOverwrite) {
+    isVerified = await authorizationOverwrite()
+  } else {
+    isVerified = await authorization({
+      authResponseKey, // Successful when the response data[key] is not null
+      authRequestUrl,
+      authRequestMethod
+    })
+  }
 
   setIsProtected(!isVerified)
 

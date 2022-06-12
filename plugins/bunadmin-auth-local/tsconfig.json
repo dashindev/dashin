@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./lib",
+    "declaration": true,
+    "declarationDir": "./lib",
+    "baseUrl": "./"
+  },
+  "exclude": ["node_modules", "lib"],
+  "include": ["*.ts", "*.tsx"]
+}

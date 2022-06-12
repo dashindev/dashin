@@ -1,4 +1,4 @@
-import AppBar from "@material-ui/core/AppBar"
+import AppBar, { AppBarProps } from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import IconButton from "@material-ui/core/IconButton"
 import EvaIcon from "react-eva-icons"
@@ -21,10 +21,12 @@ const useStyles = topBarStyles
 type TopBarProps = {
   menuClick: () => void
   docsHome?: string
+  removeLeft?: boolean
+  appBarPros?: AppBarProps
 } & NoticePlugin
 
 export default function TopBar(props: TopBarProps) {
-  const { menuClick, notificationCount } = props
+  const { menuClick, removeLeft, appBarPros, notificationCount } = props
   const classes = useStyles()
   const theme = useTheme()
   const router = useRouter()
@@ -37,36 +39,39 @@ export default function TopBar(props: TopBarProps) {
       color="inherit"
       position="relative"
       className={classes.appBar}
+      {...appBarPros}
     >
       <Toolbar className={classes.toolbar} classes={{ gutters: classes.gutters }}>
-        <div className={classes.leftBlock}>
-          {!isDoc && (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={menuClick}
-              className={classes.menuButton}
-              size="small"
+        {!removeLeft &&
+          <div className={classes.leftBlock}>
+            {!isDoc && (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={menuClick}
+                className={classes.menuButton}
+                size="small"
+              >
+                <EvaIcon
+                  name="menu-2-outline"
+                  size="large"
+                  fill={theme.bunadmin.iconColor}
+                />
+              </IconButton>
+            )}
+            <Button
+              variant={"text"}
+              size="medium"
+              color="primary"
+              onClick={() => {
+                router.push(!isDoc ? "/" : docsHome)
+              }}
             >
-              <EvaIcon
-                name="menu-2-outline"
-                size="large"
-                fill={theme.bunadmin.iconColor}
-              />
-            </IconButton>
-          )}
-          <Button
-            variant={"text"}
-            size="medium"
-            color="primary"
-            onClick={() => {
-              router.push(!isDoc ? "/" : docsHome)
-            }}
-          >
-            {!isDoc ? ENV.SITE_NAME : ENV.SITE_NAME + " DOCS"}
-          </Button>
-        </div>
+              {!isDoc ? ENV.SITE_NAME : ENV.SITE_NAME + " DOCS"}
+            </Button>
+          </div>
+        }
 
         <div className={classes.rightBlock}>
           {!isDoc && (

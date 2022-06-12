@@ -38,6 +38,56 @@ export default function Post() {
             id: 2,
             name: "post 2",
             content: "content 2"
+          },
+          {
+            id: 1,
+            name: "post 1",
+            content: "content 1"
+          },
+          {
+            id: 2,
+            name: "post 2",
+            content: "content 2"
+          },
+          {
+            id: 1,
+            name: "post 1",
+            content: "content 1"
+          },
+          {
+            id: 2,
+            name: "post 2",
+            content: "content 2"
+          },
+          {
+            id: 1,
+            name: "post 1",
+            content: "content 1"
+          },
+          {
+            id: 2,
+            name: "post 2",
+            content: "content 2"
+          },
+          {
+            id: 1,
+            name: "post 1",
+            content: "content 1"
+          },
+          {
+            id: 2,
+            name: "post 2",
+            content: "content 2"
+          },
+          {
+            id: 1,
+            name: "post 1",
+            content: "content 1"
+          },
+          {
+            id: 2,
+            name: "post 2",
+            content: "content 2"
           }
         ]}
         editable={{

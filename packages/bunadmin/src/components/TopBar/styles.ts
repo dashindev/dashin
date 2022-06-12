@@ -8,12 +8,16 @@ export const topBarStyles = makeStyles((theme: Theme) => {
       }
     },
     menuButton: {
-      marginRight: theme.spacing(2)
+      marginRight: theme.spacing(0)
     },
     toolbar: {
       [theme.breakpoints.up("sm")]: {
         justifyContent: "space-between"
       }
+    },
+    gutters: {
+      paddingLeft: 16,
+      minHeight: 46
     },
     leftBlock: {
       display: "flex",

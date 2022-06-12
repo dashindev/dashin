@@ -37,7 +37,7 @@ export default function DocMenu({
       >
         <EvaIcon
           name={isDoc ? "home-outline" : "book-outline"}
-          size="large"
+          size="medium"
           fill={theme.bunadmin.iconColor}
         />
       </IconButton>

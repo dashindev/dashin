@@ -106,6 +106,15 @@ const defaultTheme = createTheme({
         ".eva-hover": {
           display: "inherit"
         },
+        // MuiTable
+        ".MuiTable-root .MuiTableHead-root": {
+          "display": "block"
+        },
+        ".MuiTable-root .MuiTableBody-root": {
+          display: "block",
+          overflowY: "scroll",
+          height: "calc(100vh - 310px)"
+        },
         // MuiTable icon
         ".MuiTable-root .MuiIconButton-root": {
           color: iconColor

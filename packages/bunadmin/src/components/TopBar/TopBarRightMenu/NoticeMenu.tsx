@@ -34,7 +34,7 @@ export default function NoticeMenu(props: Props) {
   }
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await queryCount()
     })()
   }, [])
@@ -45,7 +45,7 @@ export default function NoticeMenu(props: Props) {
       return
     }
 
-    ;(async () => {
+    ; (async () => {
       const { notificationCount }: NoticePlugin = props
       if (!notificationCount) return
     })()
@@ -73,7 +73,7 @@ export default function NoticeMenu(props: Props) {
         <Badge badgeContent={count} color="primary">
           <EvaIcon
             name="bell-outline"
-            size="large"
+            size="medium"
             fill={theme.bunadmin.iconColor}
           />
         </Badge>

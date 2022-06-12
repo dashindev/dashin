@@ -33,12 +33,12 @@ export default function TopBar(props: TopBarProps) {
 
   return (
     <AppBar
-      elevation={1}
+      elevation={0}
       color="inherit"
-      position="fixed"
+      position="relative"
       className={classes.appBar}
     >
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className={classes.toolbar} classes={{ gutters: classes.gutters }}>
         <div className={classes.leftBlock}>
           {!isDoc && (
             <IconButton
@@ -47,17 +47,18 @@ export default function TopBar(props: TopBarProps) {
               edge="start"
               onClick={menuClick}
               className={classes.menuButton}
+              size="small"
             >
               <EvaIcon
                 name="menu-2-outline"
-                size="xlarge"
+                size="large"
                 fill={theme.bunadmin.iconColor}
               />
             </IconButton>
           )}
           <Button
             variant={"text"}
-            size="large"
+            size="medium"
             color="primary"
             onClick={() => {
               router.push(!isDoc ? "/" : docsHome)

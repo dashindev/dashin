@@ -28,7 +28,7 @@ export default function UserMenu() {
   })
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       await rxQuery({
         collection: Collection.name,
         where: { name: Primary },
@@ -80,7 +80,7 @@ export default function UserMenu() {
       >
         <EvaIcon
           name="shield-outline"
-          size="large"
+          size="medium"
           fill={theme.bunadmin.iconColor}
         />
       </IconButton>

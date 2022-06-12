@@ -62,7 +62,7 @@ export default function I18nMenu() {
       >
         <EvaIcon
           name="globe-outline"
-          size="large"
+          size="medium"
           fill={theme.bunadmin.iconColor}
         />
       </IconButton>

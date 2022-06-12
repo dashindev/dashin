@@ -33,7 +33,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   const [NtCount, setNtCount] = useState<() => Promise<number>>()
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (!ENV.NOTIFICATION_PLUGIN) return
       const customNotificationPath = ENV.NOTIFICATION_PLUGIN
       const { NotificationTable, notificationCount } = await import(
@@ -47,37 +47,39 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   return (
     <div className={classes.root}>
       <TopBar menuClick={handleDrawerToggle} notificationCount={NtCount} />
-      <nav aria-label="mailbox folders">
-        <Drawer
-          PaperProps={{
-            elevation: 1
-          }}
-          variant="permanent"
-          className={clsx(classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open
-          })}
-          classes={{
-            paper: clsx({
+      <Box display="flex">
+        <nav aria-label="mailbox folders">
+          <Drawer
+            PaperProps={{
+              elevation: 0
+            }}
+            variant="permanent"
+            className={clsx(classes.drawer, {
               [classes.drawerOpen]: open,
               [classes.drawerClose]: !open
-            })
-          }}
-          anchor={theme.direction === "rtl" ? "right" : "left"}
-          ModalProps={{
-            keepMounted: true // Better open performance on mobile.
-          }}
-        >
-          <LeftMenu {...leftMenu} />
-        </Drawer>
-      </nav>
-      <Container className={classes.content}>
-        <Fade in>
-          <Box boxShadow={1} className={classes.contentBox}>
-            {children}
-          </Box>
-        </Fade>
-      </Container>
+            })}
+            classes={{
+              paper: clsx(classes.pager, {
+                [classes.drawerOpen]: open,
+                [classes.drawerClose]: !open
+              })
+            }}
+            anchor={theme.direction === "rtl" ? "right" : "left"}
+            ModalProps={{
+              keepMounted: true // Better open performance on mobile.
+            }}
+          >
+            <LeftMenu {...leftMenu} />
+          </Drawer>
+        </nav>
+        <Container className={classes.content}>
+          <Fade in>
+            <Box boxShadow={1} className={classes.contentBox}>
+              {children}
+            </Box>
+          </Fade>
+        </Container>
+      </Box>
     </div>
   )
 

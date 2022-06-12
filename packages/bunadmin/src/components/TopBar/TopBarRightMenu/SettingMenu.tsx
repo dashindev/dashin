@@ -57,7 +57,7 @@ export default function SettingMenu() {
       >
         <EvaIcon
           name="settings-outline"
-          size="large"
+          size="medium"
           fill={theme.bunadmin.iconColor}
         />
       </IconButton>

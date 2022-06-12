@@ -1,6 +1,6 @@
 {
   "name": "bunadmin-auth-strapi",
-  "version": "1.1.3-beta.11",
+  "version": "1.2.0",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

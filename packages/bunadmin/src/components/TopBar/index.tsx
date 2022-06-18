@@ -23,7 +23,7 @@ type TopBarProps = {
   docsHome?: string
   removeLeft?: boolean
   appBarPros?: AppBarProps
-}
+} & NoticePlugin
 
 export default function TopBar(props: TopBarProps) {
   const { menuClick, removeLeft, appBarPros } = props
@@ -32,22 +32,6 @@ export default function TopBar(props: TopBarProps) {
   const router = useRouter()
   const isDoc = router.route === DynamicDocRoute
   const docsHome = props.docsHome || "/docs/getting-started/introduction"
-
-  const [NtTable, setNtTable] = useState<JSX.Element>()
-  const [NtCount, setNtCount] = useState<() => Promise<number>>()
-
-  useEffect(() => {
-    ;(async () => {
-      if (!ENV.NOTIFICATION_PLUGIN) return
-      const customNotificationPath = ENV.NOTIFICATION_PLUGIN
-      const { NotificationTable, notificationCount } = await import(
-        `../../.bunadmin/dynamic/${customNotificationPath}`
-      )
-      if (!NotificationTable || !notificationCount) return
-      setNtTable(NotificationTable)
-      setNtCount(notificationCount)
-    })()
-  }, [])
 
   return (
     <AppBar
@@ -96,8 +80,8 @@ export default function TopBar(props: TopBarProps) {
           {!isDoc && (
             <>
               <NoticeMenu
-                notificationCount={NtCount}
-                NotificationTable={NtTable}
+                notificationCount={props.notificationCount}
+                NotificationTable={props.NotificationTable}
               />
               <UserMenu />
               {ENV.ON_SETTING && <SettingMenu />}

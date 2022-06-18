@@ -2,7 +2,7 @@ import AppBar, { AppBarProps } from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import IconButton from "@material-ui/core/IconButton"
 import EvaIcon from "react-eva-icons"
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { useTheme } from "@material-ui/core/styles"
 import { topBarStyles } from "./styles"
 import UserMenu from "./TopBarRightMenu/UserMenu"
@@ -23,15 +23,31 @@ type TopBarProps = {
   docsHome?: string
   removeLeft?: boolean
   appBarPros?: AppBarProps
-} & NoticePlugin
+}
 
 export default function TopBar(props: TopBarProps) {
-  const { menuClick, removeLeft, appBarPros, notificationCount } = props
+  const { menuClick, removeLeft, appBarPros } = props
   const classes = useStyles()
   const theme = useTheme()
   const router = useRouter()
   const isDoc = router.route === DynamicDocRoute
   const docsHome = props.docsHome || "/docs/getting-started/introduction"
+
+  const [NtTable, setNtTable] = useState<JSX.Element>()
+  const [NtCount, setNtCount] = useState<() => Promise<number>>()
+
+  useEffect(() => {
+    ;(async () => {
+      if (!ENV.NOTIFICATION_PLUGIN) return
+      const customNotificationPath = ENV.NOTIFICATION_PLUGIN
+      const { NotificationTable, notificationCount } = await import(
+        `../../.bunadmin/dynamic/${customNotificationPath}`
+      )
+      if (!NotificationTable || !notificationCount) return
+      setNtTable(NotificationTable)
+      setNtCount(notificationCount)
+    })()
+  }, [])
 
   return (
     <AppBar
@@ -41,8 +57,11 @@ export default function TopBar(props: TopBarProps) {
       className={classes.appBar}
       {...appBarPros}
     >
-      <Toolbar className={classes.toolbar} classes={{ gutters: classes.gutters }}>
-        {!removeLeft &&
+      <Toolbar
+        className={classes.toolbar}
+        classes={{ gutters: classes.gutters }}
+      >
+        {!removeLeft && (
           <div className={classes.leftBlock}>
             {!isDoc && (
               <IconButton
@@ -71,12 +90,15 @@ export default function TopBar(props: TopBarProps) {
               {!isDoc ? ENV.SITE_NAME : ENV.SITE_NAME + " DOCS"}
             </Button>
           </div>
-        }
+        )}
 
         <div className={classes.rightBlock}>
           {!isDoc && (
             <>
-              <NoticeMenu notificationCount={notificationCount} />
+              <NoticeMenu
+                notificationCount={NtCount}
+                NotificationTable={NtTable}
+              />
               <UserMenu />
               {ENV.ON_SETTING && <SettingMenu />}
             </>

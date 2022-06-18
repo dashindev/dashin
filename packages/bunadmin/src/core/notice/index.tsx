@@ -16,8 +16,12 @@ import { Type } from "./types"
 import { useTranslation } from "react-i18next"
 import NoticeTabs from "./components/NoticeTabs"
 import { ENV, NoticePlugin } from "@/utils"
+import { Drawer } from "@/components"
 
-type Props = {} & NoticePlugin
+type Props = {
+  toggleNotify: number
+  drawerWidth?: string
+} & NoticePlugin
 
 export default function NoticeContainer(props: Props) {
   const { t } = useTranslation("table")
@@ -66,82 +70,92 @@ export default function NoticeContainer(props: Props) {
   }, [])
 
   return (
-    <div className={CustomNotification && classes.root}>
-      <>
-        <TableHead title={t(Schema.title)} />
-        {CustomNotification && <NoticeTabs t={t} tab={tab} setTab={setTab} />}
-        {tab === 0 && (
-          <Table
-            title={t(Schema.title)}
-            columns={Columns({ t })}
-            editable={editableController()}
-            data={data}
-            // style
-            style={DefaultProps.style}
-            // icons
-            icons={tableIcons({ theme })}
-            // options
-            options={{ ...DefaultProps.options, filtering: true }}
-            // actions
-            actions={[
-              {
-                tooltip: "Remove All Selected Notices",
-                icon: "delete",
-                onClick: (_evt, data) => {
-                  data = data as Type[]
-                  const msg = "Do you want to delete " + data.length + " rows ?"
-                  setModalState({
-                    title: "Bulk delete",
-                    open: modalState.open + 1,
-                    msg
-                  })
-                  setSelData(data)
+    <Drawer
+      width={props.drawerWidth || "38%"}
+      height="100%"
+      direction="right"
+      buttonTitle=""
+      buttonHidden
+      switchDrawer={props.toggleNotify}
+    >
+      <div className={CustomNotification && classes.root}>
+        <>
+          <TableHead title={t(Schema.title)} />
+          {CustomNotification && <NoticeTabs t={t} tab={tab} setTab={setTab} />}
+          {tab === 0 && (
+            <Table
+              title={t(Schema.title)}
+              columns={Columns({ t })}
+              editable={editableController()}
+              data={data}
+              // style
+              style={DefaultProps.style}
+              // icons
+              icons={tableIcons({ theme })}
+              // options
+              options={{ ...DefaultProps.options, filtering: true }}
+              // actions
+              actions={[
+                {
+                  tooltip: "Remove All Selected Notices",
+                  icon: "delete",
+                  onClick: (_evt, data) => {
+                    data = data as Type[]
+                    const msg =
+                      "Do you want to delete " + data.length + " rows ?"
+                    setModalState({
+                      title: "Bulk delete",
+                      open: modalState.open + 1,
+                      msg
+                    })
+                    setSelData(data)
+                  }
                 }
-              }
-            ]}
-            // detailPanel
-            detailPanel={rowData => {
-              return (
-                <div
-                  style={{
-                    color: "white",
-                    backgroundColor: theme.bunadmin.iconColor,
-                    padding: "10px 30px"
-                  }}
-                >
-                  {rowData.content || "CONTENT IS EMPTY"}
-                </div>
-              )
-            }}
-          />
-        )}
-        {tab === 1 && CustomNotification && CustomNotification}
-      </>
-      {/* ConfirmDialog */}
-      <ConfirmDialog
-        openModal={modalState.open}
-        title={modalState.title}
-        msg={modalState.msg}
-        doFunc={() => {
-          // bulk delete
-          if (selData && selData.length > 0) {
-            selData.map(async item => {
-              try {
-                const db = await rxDb()
+              ]}
+              // detailPanel
+              detailPanel={rowData => {
+                return (
+                  <div
+                    style={{
+                      color: "white",
+                      backgroundColor: theme.bunadmin.iconColor,
+                      padding: "10px 30px"
+                    }}
+                  >
+                    {rowData.content || "CONTENT IS EMPTY"}
+                  </div>
+                )
+              }}
+            />
+          )}
+          {tab === 1 && CustomNotification && CustomNotification}
+        </>
+        {/* ConfirmDialog */}
+        <ConfirmDialog
+          openModal={modalState.open}
+          title={modalState.title}
+          msg={modalState.msg}
+          doFunc={() => {
+            // bulk delete
+            if (selData && selData.length > 0) {
+              selData.map(async item => {
+                try {
+                  const db = await rxDb()
 
-                const query = db[Collection.name]
-                  .findOne()
-                  .where("id")
-                  .eq(item.id)
+                  const query = db[Collection.name]
+                    .findOne()
+                    .where("id")
+                    .eq(item.id)
 
-                await query.remove()
-              } catch (e) {
-                console.error(e)
-              }
-            })
-          }
-        }}
-      />
-    </div>
+                  await query.remove()
+                } catch (e) {
+                  console.error(e)
+                }
+              })
+            }
+          }}
+        />
+      </div>
+    </Drawer>
   )
 }

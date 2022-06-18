@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import clsx from "clsx"
 import Drawer from "@material-ui/core/Drawer"
 import Box from "@material-ui/core/Box"
@@ -13,7 +13,6 @@ import LeftMenu from "../../components/LeftMenu"
 import TopBar from "../../components/TopBar"
 import { Container, Fade, useMediaQuery } from "@material-ui/core"
 import { DefaultLayoutProps } from "@/components"
-import { ENV } from "@/utils"
 
 /**
  * !DO NOT export DefaultLayout in @bunred/bunadmin
@@ -30,23 +29,10 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   const classes = makeStyles((theme: Theme) =>
     createStyles(styles({ theme, drawerOpen: open, phoneVertical }))
   )()
-  const [NtCount, setNtCount] = useState<() => Promise<number>>()
-
-  useEffect(() => {
-    ; (async () => {
-      if (!ENV.NOTIFICATION_PLUGIN) return
-      const customNotificationPath = ENV.NOTIFICATION_PLUGIN
-      const { NotificationTable, notificationCount } = await import(
-        `../../.bunadmin/dynamic/${customNotificationPath}`
-      )
-      if (!NotificationTable || !notificationCount) return
-      setNtCount(notificationCount)
-    })()
-  }, [])
 
   return (
     <div className={classes.root}>
-      <TopBar menuClick={handleDrawerToggle} notificationCount={NtCount} />
+      <TopBar menuClick={handleDrawerToggle} />
       <Box display="flex">
         <nav aria-label="mailbox folders">
           <Drawer

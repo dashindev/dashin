@@ -108,12 +108,16 @@ const defaultTheme = createTheme({
         },
         // MuiTable
         ".MuiTable-root .MuiTableHead-root": {
-          "display": "block"
+          display: "block"
         },
         ".MuiTable-root .MuiTableBody-root": {
           display: "block",
           overflowY: "scroll",
           height: "calc(100vh - 310px)"
+        },
+        // fix MuiTableBody inside MuiDrawer
+        ".MuiDrawer-root .MuiTable-root .MuiTableBody-root": {
+          height: "calc(100vh - 255px)"
         },
         // MuiTable icon
         ".MuiTable-root .MuiIconButton-root": {

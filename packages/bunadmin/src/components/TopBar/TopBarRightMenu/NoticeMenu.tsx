@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react"
 import IconButton from "@material-ui/core/IconButton"
-import { useRouter } from "@/router"
 import EvaIcon from "react-eva-icons"
 import { useTheme } from "@material-ui/core/styles"
-import { DynamicRoute, LocalDataRoute } from "@/utils/routes"
 import Badge from "@material-ui/core/Badge"
 import { ENV, NoticePlugin } from "@/utils"
+import NoticeContainer from "@/core/notice"
 
 type Props = {} & NoticePlugin
 
 export default function NoticeMenu(props: Props) {
   const theme = useTheme()
-  const router = useRouter()
 
   const [intervalID, setIntervalID] = useState<NodeJS.Timeout>()
   const ref = React.useRef()
+  const [toggleNotify, setToggleNotify] = useState(0)
   const [count, setCount] = useState(0)
 
   const handleMenu = async (_event: React.MouseEvent<HTMLElement>) => {
-    await router.push(DynamicRoute, LocalDataRoute.notice)
+    setToggleNotify(toggleNotify + 1)
+    // await router.push(DynamicRoute, LocalDataRoute.notice)
   }
 
   async function queryCount() {
@@ -34,7 +34,7 @@ export default function NoticeMenu(props: Props) {
   }
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       await queryCount()
     })()
   }, [])
@@ -45,7 +45,7 @@ export default function NoticeMenu(props: Props) {
       return
     }
 
-    ; (async () => {
+    ;(async () => {
       const { notificationCount }: NoticePlugin = props
       if (!notificationCount) return
     })()
@@ -78,6 +78,7 @@ export default function NoticeMenu(props: Props) {
           />
         </Badge>
       </IconButton>
+      <NoticeContainer toggleNotify={toggleNotify} />
     </div>
   )
 }

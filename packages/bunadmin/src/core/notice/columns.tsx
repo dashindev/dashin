@@ -3,7 +3,7 @@ import { Column } from "material-table"
 import { Type } from "./types"
 
 export const Columns = ({ t }: any): Column<Type>[] => [
-  { title: t("Id"), field: "id", editable: "never" },
+  { title: t("Id"), field: "id", editable: "never", hidden: true },
   { title: t("Title"), field: "title" },
   {
     title: t("Severity"),

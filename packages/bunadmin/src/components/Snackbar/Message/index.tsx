@@ -14,9 +14,10 @@ import CheckCircleIcon from "@material-ui/icons/OpenInNew"
 import { useStyles } from "./styles"
 import { SeverityType } from "@/core/notice/types"
 import { useTheme } from "@material-ui/core/styles"
-import { LocalDataRoute } from "@/utils/routes"
 import { useSelector } from "react-redux"
-import { selectNotice } from "@/slices/noticeSlice"
+import { selectNotice, toggleNotifyDrawer } from "@/slices/noticeSlice"
+import { store } from "@/utils"
+import { useTranslation } from "react-i18next"
 
 interface State {
   severity?: SeverityType
@@ -25,6 +26,7 @@ interface State {
 
 const SnackMessage = React.forwardRef(
   (props: { id: SnackbarKey; message: SnackbarMessage }, ref) => {
+    const { t } = useTranslation()
     const notice = useSelector(selectNotice)
 
     const theme = useTheme()
@@ -105,10 +107,10 @@ const SnackMessage = React.forwardRef(
             <Button
               size="small"
               className={classes.button}
-              onClick={() => window.open(LocalDataRoute.notice, "_blank")}
+              onClick={() => store.dispatch(toggleNotifyDrawer())}
             >
               <CheckCircleIcon className={classes.checkIcon} />
-              Open List
+              {t("Open List")}
             </Button>
           </Paper>
         </Collapse>

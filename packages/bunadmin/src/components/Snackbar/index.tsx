@@ -12,7 +12,7 @@ function Snackbar(props: WithSnackbarProps) {
     props.enqueueSnackbar(notice.title, {
       variant: notice.severity || "success"
     })
-  }, [notice])
+  }, [notice.key])
 
   return null
 }

@@ -1,5 +1,6 @@
 const Notification = {
   "Request Failed": "Request Failed",
+  "Open List": "Open List",
   Created: "Created",
   Saved: "Saved",
   "Changes Saved": "Changes Saved",

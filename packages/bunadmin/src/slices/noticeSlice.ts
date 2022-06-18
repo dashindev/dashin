@@ -7,6 +7,7 @@ interface NoticeState {
   severity?: SeverityType | null
   content?: string
   key?: string | number
+  showDrawer?: number // show drawer noticy list
 }
 
 const initialState: NoticeState = {
@@ -22,12 +23,15 @@ export const noticeSlice = createSlice({
       state.severity = action.payload.severity
       state.content = action.payload.content
       state.key = action.payload.key || new Date().getTime() + Math.random()
+    },
+    toggleNotifyDrawer: state => {
+      state.showDrawer = state.showDrawer ? state.showDrawer + 1 : 1
     }
   }
 })
 
-export const { setNotice } = noticeSlice.actions
+export const { setNotice, toggleNotifyDrawer } = noticeSlice.actions
 
-export const selectNotice = (state: RootState) => state.notice
+export const selectNotice = (state: RootState) => state.notice as NoticeState
 
 export default noticeSlice.reducer

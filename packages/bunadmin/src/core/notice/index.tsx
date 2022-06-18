@@ -17,15 +17,17 @@ import { useTranslation } from "react-i18next"
 import NoticeTabs from "./components/NoticeTabs"
 import { ENV, NoticePlugin } from "@/utils"
 import { Drawer } from "@/components"
+import { useSelector } from "react-redux"
+import { selectNotice } from "@/slices"
 
 type Props = {
-  toggleNotify: number
   drawerWidth?: string
 } & NoticePlugin
 
 export default function NoticeContainer(props: Props) {
   const { t } = useTranslation("table")
   const theme = useTheme()
+  const notice = useSelector(selectNotice)
   const [data, setData] = useState([])
   const [selData, setSelData] = useState<Type[]>()
   const [modalState, setModalState] = useState({
@@ -76,7 +78,7 @@ export default function NoticeContainer(props: Props) {
       direction="right"
       buttonTitle=""
       buttonHidden
-      switchDrawer={props.toggleNotify}
+      switchDrawer={notice.showDrawer}
     >
       <div className={CustomNotification && classes.root}>
         <>

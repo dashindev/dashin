@@ -1,5 +1,6 @@
 const Notification = {
   "Request Failed": "请求失败",
+  "Open List": "打开列表",
   Created: "已创建",
   Saved: "已保存",
   "Changes Saved": "修改已保存",

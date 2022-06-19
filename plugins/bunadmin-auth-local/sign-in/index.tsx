@@ -97,7 +97,6 @@ export default function SignInContainer() {
                       />
                       {isSubmitting && <LinearProgress />}
                       <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"

@@ -23,6 +23,8 @@ export const noticeSlice = createSlice({
       state.severity = action.payload.severity
       state.content = action.payload.content
       state.key = action.payload.key || new Date().getTime() + Math.random()
+      // reset showDrawer
+      state.showDrawer = undefined
     },
     toggleNotifyDrawer: state => {
       state.showDrawer = state.showDrawer ? state.showDrawer + 1 : 1

@@ -2,7 +2,9 @@ import AppBar, { AppBarProps } from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import IconButton from "@material-ui/core/IconButton"
 import EvaIcon from "react-eva-icons"
-import React, { useState, useEffect } from "react"
+import React from "react"
+import { EnhancedStore, AnyAction } from "@reduxjs/toolkit"
+import { ThunkMiddlewareFor } from "@reduxjs/toolkit/src/getDefaultMiddleware"
 import { useTheme } from "@material-ui/core/styles"
 import { topBarStyles } from "./styles"
 import UserMenu from "./TopBarRightMenu/UserMenu"
@@ -19,6 +21,7 @@ import { Button } from "@material-ui/core"
 const useStyles = topBarStyles
 
 type TopBarProps = {
+  store: EnhancedStore<any, AnyAction, [ThunkMiddlewareFor<any>]>
   menuClick: () => void
   docsHome?: string
   removeLeft?: boolean
@@ -80,6 +83,7 @@ export default function TopBar(props: TopBarProps) {
           {!isDoc && (
             <>
               <NoticeMenu
+                store={props.store}
                 notificationCount={props.notificationCount}
                 NotificationTable={props.NotificationTable}
               />

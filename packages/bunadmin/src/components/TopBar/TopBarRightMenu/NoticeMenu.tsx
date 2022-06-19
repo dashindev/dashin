@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react"
+import { EnhancedStore, AnyAction } from "@reduxjs/toolkit"
+import { ThunkMiddlewareFor } from "@reduxjs/toolkit/src/getDefaultMiddleware"
 import IconButton from "@material-ui/core/IconButton"
 import EvaIcon from "react-eva-icons"
 import { useTheme } from "@material-ui/core/styles"
 import Badge from "@material-ui/core/Badge"
-import { ENV, NoticePlugin, store } from "@/utils"
+import { ENV, NoticePlugin } from "@/utils"
 import NoticeContainer from "@/core/notice"
 import { toggleNotifyDrawer } from "@/slices/noticeSlice"
 
-type Props = {} & NoticePlugin
+type Props = {
+  store: EnhancedStore<any, AnyAction, [ThunkMiddlewareFor<any>]>
+} & NoticePlugin
 
 export default function NoticeMenu(props: Props) {
   const theme = useTheme()
@@ -17,7 +21,7 @@ export default function NoticeMenu(props: Props) {
   const [count, setCount] = useState(0)
 
   const handleMenu = async (_event: React.MouseEvent<HTMLElement>) => {
-    store.dispatch(toggleNotifyDrawer())
+    props.store.dispatch(toggleNotifyDrawer())
   }
 
   async function queryCount() {

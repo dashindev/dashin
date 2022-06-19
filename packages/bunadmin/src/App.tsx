@@ -113,7 +113,7 @@ const App = () => {
           }}
           autoHideDuration={2000}
           content={(key, message) => (
-            <SnackMessage id={key} message={message} />
+            <SnackMessage store={store} id={key} message={message} />
           )}
         >
           <Snackbar />

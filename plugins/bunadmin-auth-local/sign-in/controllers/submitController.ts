@@ -23,6 +23,7 @@ const submitController = async ({
   t,
   values,
   setSubmitting,
+  router
 }: Props) => {
   const res = await userSignInService(values)
   setSubmitting(false)
@@ -36,6 +37,7 @@ const submitController = async ({
     // store auth
     await db[Auth.name].upsert({
       [primary]: res.user.username,
+      token: "fake_token",
       id: res.id,
       role: res.user.role,
       details: JSON.stringify(res),
@@ -56,7 +58,7 @@ const submitController = async ({
     // show notice
     await notice({ title: t("Sign in successful") })
     // push to origin url
-    window.location.reload()
+    router.push("/")
   } else {
     // show notice
     await notice({

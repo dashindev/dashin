@@ -35,8 +35,6 @@ export { default as LeftMenu } from "./LeftMenu"
 export { default as NestedList } from "./NestedMenu"
 export { default as TopBar } from "./TopBar"
 
-export { MDXProvider } from "@mdx-js/react"
-
 export interface DefaultLayoutProps {
   children?: any
   leftMenu?: LeftMenuProps

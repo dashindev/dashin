@@ -1,6 +1,4 @@
-import mockjs from "mockjs"
 export { useTranslation } from "react-i18next"
-export const Mock = mockjs
 
 export * from "./types"
 export { store } from "./store"

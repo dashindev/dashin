@@ -24,23 +24,23 @@ export function editableController(): EditableDataType<any> {
       new Promise(async resolve => {
         // check group
         if (await checkGroup(newData.group)) {
-          return resolve()
+          return resolve("")
         }
 
-        resolve()
+        resolve("")
       }),
     onRowUpdate: newData =>
       new Promise(async resolve => {
         // check group
         if (await checkGroup(newData.group)) {
-          return resolve()
+          return resolve("")
         }
 
-        resolve()
+        resolve("")
       }),
     onRowDelete: () =>
       new Promise(async resolve => {
-        resolve()
+        resolve("")
       })
   }
 }

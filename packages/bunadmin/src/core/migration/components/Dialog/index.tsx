@@ -75,11 +75,12 @@ export default function MigrationDialogs({
               })
             }
           } catch (e) {
+            const ea = e as any
             // show notice
             await notice({
               title: `Import failed`,
               severity: "error",
-              content: e.toString()
+              content: ea.toString()
             })
           }
         }}

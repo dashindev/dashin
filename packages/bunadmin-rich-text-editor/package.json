@@ -19,6 +19,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "draft-js-export-html": "^1.4.1",
-    "mui-rte": "^1.24.0"
+    "mui-rte": "^1.24.0",
+    "prettier": "1.19.1",
+    "typescript": "^4.7.4"
   }
 }

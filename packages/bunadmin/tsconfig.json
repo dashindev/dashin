@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react",
     "rootDir": "./src",
     "outDir": "./lib",
     "declaration": true,
@@ -23,7 +22,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "jsx": "react-jsx"
   },
   "exclude": [
     "node_modules",

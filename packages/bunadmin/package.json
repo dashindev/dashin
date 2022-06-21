@@ -32,7 +32,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "peerDependencies": {
+  "resolutions": {
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2",
     "react": "17.0.2",
@@ -50,7 +50,7 @@
     "formik-material-ui": "3.0.1",
     "i18next": "^21.8.10",
     "json-bigint": "^1.0.0",
-    "material-table": "npm:@bunred/material-table@0.69.0-beta.1",
+    "material-table": "npm:@bunred/material-table@0.69.1-beta.2",
     "nanoid": "3.3.4",
     "notistack": "^1.0.10",
     "pouchdb-adapter-http": "^7.3.0",
@@ -93,7 +93,7 @@
     "react-test-renderer": "^17.0.1",
     "serve-handler": "^6.1.3",
     "ttypescript": "^1.5.13",
-    "typescript": "^4.7.4",
+    "typescript": "4.3.5",
     "typescript-transform-paths": "^3.3.1"
   },
   "jest": {

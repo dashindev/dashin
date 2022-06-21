@@ -42,7 +42,7 @@ Display help for command
 git clone git@github.com:bunred/bunadmin.git
 
 yarn
-yarn lerna-build
+yarn build
 yarn start
 ```
 
@@ -53,7 +53,7 @@ yarn start
 
 ## Lerna (publish packages)
 ```
-yarn lerna-build
+yarn build
 npx lerna publish --force-publish
 ```
 

@@ -13,8 +13,8 @@
   },
   "scripts": {
     "start": "cd packages/bunadmin && yarn start",
-    "lerna-build": "lerna run ttsc && lerna run tsc",
-    "lerna-pack": "lerna run ttsc-pack && lerna run pack"
+    "build": "lerna run ttsc && lerna run tsc",
+    "pack": "lerna run ttsc-pack && lerna run pack"
   },
   "devDependencies": {
     "lerna": "^5.1.4",

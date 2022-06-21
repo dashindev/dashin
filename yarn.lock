@@ -6933,8 +6933,8 @@ detective@^4.3.1:
     acorn "^5.2.1"
     defined "^1.0.0"
 
-dexie@4.0.0-alpha.1:
-  version "4.0.0-alpha.1"
+dexie@^4.0.0-alpha.3:
+  version "4.0.0-alpha.3"
   resolved "https://registry.yarnpkg.com/dexie/-/dexie-4.0.0-alpha.1.tgz#76c0a7bc20cf0c6fd2634c046c36d9c77dfaf4bf"
   integrity sha512-/Ft0iWYFNL/U7tRWXLXKVoeMwvegNKIcXdi0Cbd9MYIan+56GY9wVHy9dDFBzxkZrsuKs48j7jEYE4T+T3PGjQ==
 
@@ -7204,8 +7204,8 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
-ejs@^2.6.1:
-  version "2.7.4"
+ejs@^3.1.7:
+  version "3.1.7"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.7.4.tgz#48661287573dcc53e366c7a1ae52c3a120eec9ba"
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
@@ -9691,8 +9691,8 @@ immediate@~3.0.5:
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==
 
-immer@8.0.1:
-  version "8.0.1"
+immer@^9.0.6:
+  version "9.0.6"
   resolved "https://registry.yarnpkg.com/immer/-/immer-8.0.1.tgz#9c73db683e2b3975c424fb0572af5889877ae656"
   integrity sha512-aqXhGP7//Gui2+UrEtvxZxSquQVXTpZ7KDxfCcKAF3Vysvw0CViVaW9RZ1j1xlIYqaaaipBoqdqeibkc18PNvA==
 
@@ -13050,8 +13050,8 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-forge@^0.10.0:
-  version "0.10.0"
+node-forge@^1.3.0:
+  version "1.3.0"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.10.0.tgz#32dea2afb3e9926f02ee5ce8794902691a676bf3"
   integrity sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==
 

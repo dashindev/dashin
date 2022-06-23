@@ -4,14 +4,12 @@ import MenuItem from "@material-ui/core/MenuItem"
 import Menu from "@material-ui/core/Menu"
 import EvaIcon from "react-eva-icons"
 import { useTheme } from "@material-ui/core/styles"
-import { Collection } from "@/core/setting/collections"
-import rxDb from "@/utils/database/rxConnect"
 import Divider from "@material-ui/core/Divider"
 import { DynamicRoute, LocalDataRoute, UserRoute } from "@/utils/routes"
 import { useRouter } from "@/router"
-import rxQuery from "@/utils/database/rxQuery"
 import { Primary } from "@/core/auth/schema"
 import { Trans, useTranslation } from "react-i18next"
+import { BA_DB } from "@/utils/database"
 
 interface State {
   username: string | "Guest"
@@ -28,18 +26,17 @@ export default function UserMenu() {
   })
 
   useEffect(() => {
-    ; (async () => {
-      await rxQuery({
-        collection: Collection.name,
-        where: { name: Primary },
-        callback: data =>
-          data &&
-          data[0] &&
-          setState({
-            ...state,
-            username: data[0]["value"]
-          })
-      })
+    ;(async () => {
+      const user = await BA_DB.settings
+        .where("name")
+        .equals(Primary)
+        .first()
+      if (user && user.value) {
+        setState({
+          ...state,
+          username: user.value
+        })
+      }
     })()
   }, [])
 
@@ -55,17 +52,16 @@ export default function UserMenu() {
 
   const handleLogout = async () => {
     // update username in setting
-    const collection = Collection.name
-    const db = await rxDb()
+    const db = BA_DB
 
-    await db[collection].upsert({
+    await BA_DB.settings.put({
       name: Primary,
       value: undefined,
       updated_at: Date.now()
     })
 
     handleClose({})
-    await router.push(UserRoute.signIn)
+    router.push(UserRoute.signIn)
   }
 
   return (

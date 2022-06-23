@@ -1,6 +1,4 @@
 import React, { useState } from "react"
-import { getRxStoragePouch, removeRxDatabase } from 'rxdb'
-
 import { useRouter } from "@/router"
 import IconButton from "@material-ui/core/IconButton"
 import MenuItem from "@material-ui/core/MenuItem"
@@ -12,6 +10,7 @@ import Divider from "@material-ui/core/Divider"
 import { settingMenus } from "@/utils/config/settingMenus"
 import { DynamicRoute } from "@/utils/routes"
 import { useTranslation } from "react-i18next"
+import { BA_DB } from "@/utils/database"
 
 export default function SettingMenu() {
   const { t } = useTranslation()
@@ -96,10 +95,9 @@ export default function SettingMenu() {
         openModal={modalState.open}
         title={modalState.title}
         msg={modalState.msg}
-        doFunc={() => {
-          removeRxDatabase("bunadmin", getRxStoragePouch('idb')).then(_r =>
-            window.location.reload()
-          )
+        doFunc={async () => {
+          await BA_DB.delete()
+          window.location.reload()
         }}
       />
     </div>

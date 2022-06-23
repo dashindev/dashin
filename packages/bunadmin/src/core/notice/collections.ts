@@ -1,7 +1,6 @@
-import { BunadminCollection } from "@/main"
 import { Schema } from "./schema"
 
-export const Collection: BunadminCollection = {
+export const Collection = {
   name: "bunadmin_notice",
   schema: Schema
 }

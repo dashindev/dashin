@@ -12,9 +12,8 @@ import { DynamicRoute, DynamicDocRoute } from "@/utils/routes"
 import ExpandLess from "@material-ui/icons/ExpandLess"
 import ExpandMore from "@material-ui/icons/ExpandMore"
 import { useTranslation } from "react-i18next"
-import { Collection as Setting, SettingNames } from "@/core/setting/collections"
-import rxDb from "@/utils/database/rxConnect"
-import { specialPluginSlug } from "@/utils"
+import { SETTING_NAMES, specialPluginSlug } from "@/utils"
+import { BA_DB } from "@/utils/database"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,13 +59,11 @@ export default function NestedList({ data }: Props): any {
     handleOpen({ name: parent })
     ;(async () => {
       // query role from bunadmin_setting
-      const setting = Setting.name
-      const db = await rxDb()
-      const settingRes = await db[setting]
-        .findOne()
+      const db = BA_DB
+      const settingRes = await db.settings
         .where("name")
-        .eq(SettingNames.role)
-        .exec()
+        .equals(SETTING_NAMES.role)
+        .first()
       const role = (settingRes && settingRes.value) || ""
       setCurrentRole(role)
     })()

@@ -5,22 +5,21 @@ import { TableDefaultProps as DefaultProps } from "@/components/Table/models/def
 
 import Table, { TableHead } from "@/components/Table"
 import tableIcons from "@/components/Table/models/tableIcons"
-import rxQuery from "@/utils/database/rxQuery"
 import { Columns } from "./columns"
-import { Primary, Schema } from "./schema"
-import { Collection } from "./collections"
-import { Collection as Setting, SettingNames } from "../setting/collections"
 import ConfirmDialog from "@/components/Dialog/ConfirmDialog"
-import rxDb from "@/utils/database/rxConnect"
 import { Type } from "./types"
 import { Box, Button } from "@material-ui/core"
 import { useTranslation } from "react-i18next"
 import { JSON_VIEW_BG } from "@/utils/themes/defaultTheme"
+import { BA_DB, IUser } from "@/utils/database"
+import { AuthPrimary, SETTING_NAMES } from "@/main"
+
+const Primary = AuthPrimary
 
 export default function AuthInfoContainer() {
   const { t } = useTranslation("table")
   const theme = useTheme()
-  const [data, setData] = useState([])
+  const [data, setData] = useState<IUser[]>([])
   const [selData, setSelData] = useState<Type[]>()
   const [modalState, setModalState] = useState({
     open: 0,
@@ -30,20 +29,17 @@ export default function AuthInfoContainer() {
 
   useEffect(() => {
     ;(async () => {
-      await rxQuery({
-        collection: Collection.name,
-        sort: { updated_at: "desc" },
-        callback: data => setData(data)
-      })
+      const user = await BA_DB.users.reverse().sortBy("updated_at")
+      setData(user)
     })()
   }, [])
 
   return (
     <>
       <>
-        <TableHead title={t(Schema.title)} />
+        <TableHead title={t("Authentication")} />
         <Table
-          title={t(Schema.title)}
+          title={t("Authentication")}
           columns={Columns({ t })}
           data={data}
           // style
@@ -105,16 +101,16 @@ export default function AuthInfoContainer() {
                       size="small"
                       color="primary"
                       onClick={async () => {
-                        const db = await rxDb()
+                        const db = BA_DB
                         // Insert to setting: username
-                        await db[Setting.name].upsert({
+                        await db.settings.put({
                           name: Primary,
                           value: rowData[Primary],
                           updated_at: Date.now()
                         })
                         // Insert to setting: role
-                        await db[Setting.name].upsert({
-                          name: SettingNames.role,
+                        await db.settings.put({
+                          name: SETTING_NAMES.role,
                           value: rowData["role"],
                           updated_at: Date.now()
                         })
@@ -140,14 +136,11 @@ export default function AuthInfoContainer() {
           if (selData && selData.length > 0) {
             selData.map(async item => {
               try {
-                const db = await rxDb()
+                const db = BA_DB
 
-                const query = db[Collection.name]
-                  .findOne()
-                  .where(Primary)
-                  .eq(item[Primary])
+                const query = db.users.where(Primary).equals(item[Primary])
 
-                await query.remove()
+                await query.delete()
               } catch (e) {
                 console.error(e)
               }

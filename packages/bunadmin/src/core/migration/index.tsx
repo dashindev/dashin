@@ -10,12 +10,11 @@ import { Columns } from "./columns"
 import { Schema } from "./schema"
 import { Data } from "./data"
 import EvaIcon from "react-eva-icons"
-import rxDb from "@/utils/database/rxConnect"
 import IconButton from "@material-ui/core/IconButton"
-import { fsDownload } from "@/utils/scripts/fs"
 import { Type } from "./types"
 import MigrationDialogs from "./components/Dialog"
 import { useTranslation } from "react-i18next"
+import { BA_DB } from "@/utils/database"
 
 export default function MigrationContainer() {
   const { t } = useTranslation("table")
@@ -59,13 +58,14 @@ export default function MigrationContainer() {
               ),
               onClick: async (_evt, data: Type[] | Type) => {
                 if (!("name" in data)) return
-                const db = await rxDb()
+                const db = BA_DB
                 const collection = data.name
-                db[collection]
-                  .exportJSON()
-                  .then((json: any) =>
-                    fsDownload(json, collection, "application/json")
-                  )
+                // TODO DX export
+                // db[collection]
+                //   .exportJSON()
+                //   .then((json: any) =>
+                //     fsDownload(json, collection, "application/json")
+                //   )
               }
             },
             {

@@ -62,7 +62,6 @@ npx lerna publish --force-publish
 [material-ui](https://github.com/mui-org/material-ui)
 [material-table](https://github.com/mbrn/material-table)
 [next.js](https://github.com/zeit/next.js)
-[rxdb](https://github.com/pubkey/rxdb)
 [formik](https://github.com/jaredpalmer/formik)
 [ngx-admin](https://github.com/akveo/ngx-admin)
 [ant-design-pro](https://github.com/ant-design/ant-design-pro)

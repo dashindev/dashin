@@ -27,8 +27,8 @@ export default function NoticeTabs({
         onChange={handleChange}
         aria-label="core notice tabs"
       >
-        <Tab label={t("Local Notices")} />
-        <Tab label={t("Online Notifications")} />
+        <Tab label={<>{t("Local Notices")}</>} />
+        <Tab label={<>{t("Online Notifications")}</>} />
       </Tabs>
       <Divider />
     </Paper>

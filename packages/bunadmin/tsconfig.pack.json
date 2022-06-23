@@ -20,6 +20,7 @@
     "lib",
     "pages",
     "src/private",
+    "src/App.spec.tsx",
     "src/App.tsx",
     "src/index.tsx",
     "src/serviceWorker.ts",

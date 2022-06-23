@@ -8,8 +8,8 @@ import { useTranslation } from "react-i18next"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import { i18nMenus } from "@/utils/i18n"
-import rxDb from "@/utils/database/rxConnect"
-import { Collection as Setting, SettingNames } from "@/core/setting/collections"
+import { BA_DB } from "@/utils/database"
+import { SETTING_NAMES } from "@/main"
 
 export default function I18nMenu() {
   const { i18n } = useTranslation()
@@ -19,12 +19,13 @@ export default function I18nMenu() {
   const [curCode, setCurCode] = useState<string>()
 
   useEffect(() => {
-    ; (async () => {
-      const db = await rxDb()
-      const setting = db[Setting.name]
+    ;(async () => {
+      const db = BA_DB
+      const setting = db.settings
       const resI18nCode = await setting
-        .findOne({ selector: { name: { $eq: SettingNames.i18n_code } } })
-        .exec()
+        .where("name")
+        .equals(SETTING_NAMES.i18n_code)
+        .first()
       if (resI18nCode) setCurCode(resI18nCode.value)
     })()
   }, [])
@@ -36,9 +37,9 @@ export default function I18nMenu() {
   const handleI18n = ({ code }: { code: string }) => {
     i18n.changeLanguage(code).then(async () => {
       // update setting i18n_code
-      const db = await rxDb()
-      await db[Setting.name].upsert({
-        name: SettingNames.i18n_code,
+      const db = BA_DB
+      await db.settings.put({
+        name: SETTING_NAMES.i18n_code,
         value: code
       })
       setCurCode(code)

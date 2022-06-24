@@ -28,11 +28,18 @@ export const noticeSlice = createSlice({
     },
     toggleNotifyDrawer: state => {
       state.showDrawer = state.showDrawer ? state.showDrawer + 1 : 1
+    },
+    resetNotifyDrawer: state => {
+      state.showDrawer = undefined
     }
   }
 })
 
-export const { setNotice, toggleNotifyDrawer } = noticeSlice.actions
+export const {
+  setNotice,
+  toggleNotifyDrawer,
+  resetNotifyDrawer
+} = noticeSlice.actions
 
 export const selectNotice = (state: RootState) => state.notice as NoticeState
 

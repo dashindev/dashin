@@ -15,10 +15,13 @@ import NoticeTabs from "./components/NoticeTabs"
 import { ENV, NoticePlugin } from "@/utils"
 import { Drawer } from "@/components"
 import { useSelector } from "react-redux"
-import { selectNotice } from "@/slices"
+import { resetNotifyDrawer, selectNotice } from "@/slices"
 import { BA_DB, INotification } from "@/utils/database"
+import { EnhancedStore, AnyAction } from "@reduxjs/toolkit"
+import { ThunkMiddlewareFor } from "@reduxjs/toolkit/dist/getDefaultMiddleware"
 
 type Props = {
+  store: EnhancedStore<any, AnyAction, [ThunkMiddlewareFor<any>]>
   drawerWidth?: string
 } & NoticePlugin
 
@@ -49,6 +52,9 @@ export default function NoticeContainer(props: Props) {
 
   useEffect(() => {
     ;(async () => {
+      if (!notice.showDrawer) return
+      props.store.dispatch(resetNotifyDrawer())
+
       await queryList()
 
       try {

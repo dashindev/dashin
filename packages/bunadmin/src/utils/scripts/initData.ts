@@ -8,7 +8,7 @@ import { Type } from "@/core/schema/types"
 import addResource from "@/utils/scripts/addResource"
 import { i18n } from "i18next"
 import dxInitData from "../database/dx/dxInitData"
-import { BunadminDatabase } from "../database"
+import { BA_DB, BunadminDatabase } from "../database"
 
 type Props = {
   i18n: i18n
@@ -59,12 +59,11 @@ export default async function initData({
    */
   if (initialized) return
 
-  let db = dbOverride
-    ? dbOverride
-    : /**
-       * Init core setting data
-       */
-      await dxInitData()
+  let db = dbOverride ? dbOverride : BA_DB
+  /**
+   * Init core setting data
+   */
+  await dxInitData(db)
 
   /**
    * Init plugins data

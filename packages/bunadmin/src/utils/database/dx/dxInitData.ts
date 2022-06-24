@@ -1,8 +1,10 @@
 import { SETTING_NAMES, ENV } from "@/main"
-import { BA_DB, BunadminDatabase } from "."
+import { BunadminDatabase } from "."
 
-export default async function dxInitData(): Promise<BunadminDatabase> {
-  const settings = BA_DB.settings
+export default async function dxInitData(
+  db: BunadminDatabase
+): Promise<BunadminDatabase> {
+  const settings = db.settings
   const findInitData = await settings
     .where("name")
     .equals(SETTING_NAMES.i18n_code)
@@ -11,7 +13,7 @@ export default async function dxInitData(): Promise<BunadminDatabase> {
   if (findInitData) {
     // console.log(`initData: already exists`)
 
-    return BA_DB
+    return db
   } else {
     const initData = [
       {
@@ -39,6 +41,6 @@ export default async function dxInitData(): Promise<BunadminDatabase> {
 
     // console.log(`init data done`)
 
-    return BA_DB
+    return db
   }
 }

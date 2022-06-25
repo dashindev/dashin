@@ -12,7 +12,6 @@
     "pack": "lerna run ttsc-pack && lerna run pack"
   },
   "devDependencies": {
-    "lerna": "^5.1.4",
-    "rimraf": "^3.0.2"
+    "lerna": "^5.1.4"
   }
 }

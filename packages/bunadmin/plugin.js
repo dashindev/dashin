@@ -1,6 +1,6 @@
 const path = require("path")
 const fs = require("fs")
-const rimraf = require("rimraf")
+const del = require("del")
 const { findPlugins, getPlugins } = require("./lib/utils/node/plugin-action")
 
 /**
@@ -14,7 +14,7 @@ const { findPlugins, getPlugins } = require("./lib/utils/node/plugin-action")
  * @param pluginsPath {string}
  * @return {boolean}
  */
-module.exports = ({ modulesPath, dynamicPath, pluginsPath }) => {
+module.exports = async ({ modulesPath, dynamicPath, pluginsPath }) => {
   /**
    * Prepare plugins START
    */
@@ -29,7 +29,7 @@ module.exports = ({ modulesPath, dynamicPath, pluginsPath }) => {
    * Check, recreate directory .bunadmin/dynamic
    */
   if (fs.existsSync(dynamicPath)) {
-    rimraf.sync(dynamicPath)
+    await del(dynamicPath)
   }
 
   const dotBunadminPath = dynamicPath.replace("dynamic", "")

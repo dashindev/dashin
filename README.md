@@ -41,6 +41,8 @@ Display help for command
 ```shell script
 git clone git@github.com:bunred/bunadmin.git
 
+npm install rimraf -g
+
 yarn
 yarn build
 yarn start

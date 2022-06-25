@@ -5,22 +5,23 @@ import { TableDefaultProps as DefaultProps } from "@/components/Table/models/def
 
 import Table, { TableHead } from "@/components/Table"
 import tableIcons from "@/components/Table/models/tableIcons"
-import rxSubscribe from "@/utils/database/rxSubscribe"
 import { Columns } from "./columns"
 import { Schema } from "./schema"
 import { editableController } from "./controllers/editableController"
-import { Collection } from "./collections"
 import ConfirmDialog from "@/components/Dialog/ConfirmDialog"
-import rxDb from "@/utils/database/rxConnect"
 import { Type } from "./types"
 import { useTranslation } from "react-i18next"
 import NoticeTabs from "./components/NoticeTabs"
 import { ENV, NoticePlugin } from "@/utils"
 import { Drawer } from "@/components"
 import { useSelector } from "react-redux"
-import { selectNotice } from "@/slices"
+import { resetNotifyDrawer, selectNotice } from "@/slices"
+import { BA_DB, INotification } from "@/utils/database"
+import { EnhancedStore, AnyAction } from "@reduxjs/toolkit"
+import { ThunkMiddlewareFor } from "@reduxjs/toolkit/dist/getDefaultMiddleware"
 
 type Props = {
+  store: EnhancedStore<any, AnyAction, [ThunkMiddlewareFor<any>]>
   drawerWidth?: string
 } & NoticePlugin
 
@@ -28,7 +29,7 @@ export default function NoticeContainer(props: Props) {
   const { t } = useTranslation("table")
   const theme = useTheme()
   const notice = useSelector(selectNotice)
-  const [data, setData] = useState([])
+  const [data, setData] = useState<INotification[]>([])
   const [selData, setSelData] = useState<Type[]>()
   const [modalState, setModalState] = useState({
     open: 0,
@@ -51,12 +52,11 @@ export default function NoticeContainer(props: Props) {
 
   useEffect(() => {
     ;(async () => {
-      // Subscribe to keep real-time data when received or deleted local messages
-      await rxSubscribe({
-        collection: Collection.name,
-        sort: { created_at: "desc" },
-        callback: data => setData(data)
-      })
+      if (!notice.showDrawer) return
+      props.store.dispatch(resetNotifyDrawer())
+
+      await queryList()
+
       try {
         if (!ENV.NOTIFICATION_PLUGIN) return
         // Handle dynamic import `plugins`
@@ -69,7 +69,12 @@ export default function NoticeContainer(props: Props) {
         setTab(count > 0 ? 1 : 0)
       } catch (e) {}
     })()
-  }, [])
+  }, [notice.showDrawer])
+
+  async function queryList() {
+    const data = await BA_DB.notifications.reverse().sortBy("created_at")
+    setData(data)
+  }
 
   return (
     <Drawer
@@ -88,7 +93,7 @@ export default function NoticeContainer(props: Props) {
             <Table
               title={t(Schema.title)}
               columns={Columns({ t })}
-              editable={editableController()}
+              editable={editableController({ queryList })}
               data={data}
               // style
               style={DefaultProps.style}
@@ -142,14 +147,12 @@ export default function NoticeContainer(props: Props) {
             if (selData && selData.length > 0) {
               selData.map(async item => {
                 try {
-                  const db = await rxDb()
+                  const db = BA_DB
 
-                  const query = db[Collection.name]
-                    .findOne()
-                    .where("id")
-                    .eq(item.id)
+                  const query = db.notifications.where("id").equals(item.id)
 
-                  await query.remove()
+                  await query.delete()
+                  await queryList()
                 } catch (e) {
                   console.error(e)
                 }

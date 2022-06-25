@@ -1,12 +1,10 @@
-import rxDb from "@/utils/database/rxConnect"
 import { SeverityType } from "../types"
-import { Collection } from "../collections"
 import { Primary } from "../schema"
 import { store } from "@/utils/store"
 import { setNotice } from "@/slices/noticeSlice"
 import { nanoid } from "nanoid"
+import { BA_DB } from "@/utils/database"
 
-const collection = Collection.name
 const primary = Primary
 
 interface Interface {
@@ -24,7 +22,7 @@ export default async function noticeController({
   const created_at = { created_at: Date.now() }
 
   try {
-    const db = await rxDb()
+    const db = BA_DB
 
     if (typeof content === "object") content = JSON.stringify(content)
     if (typeof content !== "string") {
@@ -42,7 +40,7 @@ export default async function noticeController({
       })
     )
 
-    await db[collection].insert({
+    await db.notifications.add({
       [primary]: nanoId,
       ...created_at,
       ...data

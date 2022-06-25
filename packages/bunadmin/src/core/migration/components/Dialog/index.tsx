@@ -1,7 +1,6 @@
 import React from "react"
 import ConfirmDialog from "@/components/Dialog/ConfirmDialog"
-import rxDb from "@/utils/database/rxConnect"
-import { fsDownload, fsUpload } from "@/utils/scripts/fs"
+import { fsUpload } from "@/utils/scripts/fs"
 import UploadConfirmDialog from "@/components/Dialog/UploadCustomDialog"
 import { notice } from "@/core"
 
@@ -35,12 +34,13 @@ export default function MigrationDialogs({
         title={modalState.title}
         msg={modalState.msg}
         doFunc={async () => {
-          const db = await rxDb()
+          // const db = BA_DB
           switch (selData.mode) {
             case "Export DB":
-              db.exportJSON().then((json: any) =>
-                fsDownload(json, "bunadmin.json", "application/json")
-              )
+              // TODO Export dx DB
+              // db.exportJSON().then((json: any) =>
+              //   fsDownload(json, "bunadmin.json", "application/json")
+              // )
               break
             case "Import DB":
               // db.dump().then((json: any) => console.dir(json))
@@ -60,20 +60,21 @@ export default function MigrationDialogs({
           try {
             const json = await fsUpload(e)
             if (!json) return
-            const db = await rxDb()
+            // const db = BA_DB
+            // TODO DX dump
             // dump collection
-            if (selData.name !== "ALL") {
-              db[selData.name].importJSON(json).then(() => {
-                // show notice
-                notice({ title: `Import successful` })
-              })
-            } else {
-              // dump database
-              db.importJSON(json).then(() => {
-                // show notice
-                notice({ title: `Import successful` })
-              })
-            }
+            // if (selData.name !== "ALL") {
+            //   db[selData.name].importJSON(json).then(() => {
+            //     // show notice
+            //     notice({ title: `Import successful` })
+            //   })
+            // } else {
+            //   // dump database
+            //   db.importJSON(json).then(() => {
+            //     // show notice
+            //     notice({ title: `Import successful` })
+            //   })
+            // }
           } catch (e) {
             const ea = e as any
             // show notice

@@ -81,7 +81,7 @@ export default function NoticeMenu(props: Props) {
           />
         </Badge>
       </IconButton>
-      <NoticeContainer />
+      <NoticeContainer store={props.store} />
     </div>
   )
 }

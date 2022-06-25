@@ -13,6 +13,7 @@ type EnvTypes = {
   UPLOAD_URL?: string
   FILE_PREVIEW_URL?: string
   SITE_URLS: string[]
+  DB_NAME: string
   ON_I18N: boolean
   ON_SETTING: boolean
   ON_DOC: boolean
@@ -53,6 +54,10 @@ export const ENV: EnvTypes = {
   SITE_URLS:
     strToArr(process.env.REACT_APP_SITE_URLS) ||
     strToArr(process.env.NEXT_PUBLIC_SITE_URLS),
+  DB_NAME:
+    process.env.REACT_APP_DB_NAME ||
+    process.env.NEXT_PUBLIC_DB_NAME ||
+    "BunadminDatabase",
   ON_I18N:
     process.env.REACT_APP_ON_I18N === "true" ||
     process.env.NEXT_PUBLIC_ON_I18N === "true" ||
@@ -89,4 +94,13 @@ export const ENV: EnvTypes = {
     process.env.REACT_APP_OFF_NOTIFICATION_INTERVAL_COUNT === "true" ||
     process.env.NEXT_PUBLIC_OFF_NOTIFICATION_INTERVAL_COUNT === "true" ||
     false
+}
+
+export const SETTING_NAMES = {
+  i18n_code: "i18n_code",
+  site_name: "site_name",
+  theme: "theme",
+  role: "role",
+  init_status: "init_status"
+  // others: init_{team}_{name}, {username}(AuthPrimary)
 }

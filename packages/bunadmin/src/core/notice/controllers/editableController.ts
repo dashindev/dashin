@@ -1,24 +1,22 @@
-import rxDb from "@/utils/database/rxConnect"
 import { EditableDataType } from "@/components/Table/models/types"
 import { Type } from "../types"
-import { Collection } from "../collections"
 import { Primary } from "../schema"
+import { BA_DB } from "@/utils/database"
 
-export function editableController(): EditableDataType<Type> {
-  const collection = Collection.name
+type Props = { queryList: () => Promise<void> }
+export function editableController({
+  queryList
+}: Props): EditableDataType<Type> {
   const primary = Primary
 
   return {
     onRowDelete: async oldData => {
       try {
-        const db = await rxDb()
+        const db = BA_DB
+        const query = db.notifications.where(primary).equals(oldData[primary])
 
-        const query = db[collection]
-          .findOne()
-          .where(primary)
-          .eq(oldData[primary])
-
-        await query.remove()
+        await query.delete()
+        await queryList()
       } catch (e) {
         console.error(e)
       }

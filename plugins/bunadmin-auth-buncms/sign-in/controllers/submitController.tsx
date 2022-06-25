@@ -1,14 +1,7 @@
 import { Values } from "../types"
 import userSignInService from "../services/signInService"
 
-import {
-  rxDb,
-  Setting,
-  Auth,
-  AuthPrimary as Primary,
-  notice,
-  Router
-} from "@bunred/bunadmin"
+import { AuthPrimary as Primary, notice, Router, BA_DB } from "@bunred/bunadmin"
 import { TFunction } from "i18next"
 
 interface Props {
@@ -18,11 +11,7 @@ interface Props {
   router: Router
 }
 
-const submitController = async ({
-  t,
-  values,
-  setSubmitting,
-}: Props) => {
+const submitController = async ({ t, values, setSubmitting }: Props) => {
   const res = await userSignInService(values)
   setSubmitting(false)
   // Sign-in successfully
@@ -31,9 +20,9 @@ const submitController = async ({
     const primary = Primary
     const updated_at = Date.now()
 
-    const db = await rxDb()
+    const db = BA_DB
     // store auth
-    await db[Auth.name].upsert({
+    await db.users.put({
       [primary]: res.username,
       id: res.id,
       token: res.token,
@@ -42,7 +31,7 @@ const submitController = async ({
       updated_at
     })
     // update username in setting
-    await db[Setting.name].upsert({
+    await db.settings.put({
       name: Primary,
       value: res[Primary],
       updated_at: Date.now()

@@ -1,18 +1,14 @@
-import rxInitData from "@/utils/database/rxInitData"
-import { Collection as Setting, SettingNames } from "@/core/setting/collections"
-import rxDb from "@/utils/database/rxConnect"
-import { Primary as AuthPrimary } from "@/core/auth/schema"
-import { ENV } from "@/utils/config"
 import { MenuType, SchemaType } from "@/core"
-import { BunadminCollection, IAuthPlugin, PluginData, store } from "@/utils"
+import { IAuthPlugin, PluginData, SETTING_NAMES, store } from "@/utils"
 import { setNestedMenu } from "@/slices/nestedMenuSlice"
 import { setSchema } from "@/slices/schemaSlice"
 import { Dispatch, SetStateAction } from "react"
 import authorization from "@/utils/scripts/authorization"
-import initDocsData from "@/utils/database/rxInitData/initDocsData"
 import { Type } from "@/core/schema/types"
 import addResource from "@/utils/scripts/addResource"
 import { i18n } from "i18next"
+import dxInitData from "../database/dx/dxInitData"
+import { BA_DB, BunadminDatabase } from "../database"
 
 type Props = {
   i18n: i18n
@@ -22,7 +18,7 @@ type Props = {
   requirePlugin: (path: string) => any
   initialized: boolean
   setInitialized: Dispatch<SetStateAction<boolean>>
-  collections?: BunadminCollection[] // additional collections
+  dbOverride?: BunadminDatabase // override database
 }
 
 export default async function initData({
@@ -33,7 +29,7 @@ export default async function initData({
   requirePlugin,
   initialized,
   setInitialized,
-  collections
+  dbOverride
 }: Props): Promise<undefined | { menuData: MenuType[] }> {
   const {
     authResponseKey,
@@ -63,44 +59,11 @@ export default async function initData({
    */
   if (initialized) return
 
-  let db = await rxDb(collections)
-
+  let db = dbOverride ? dbOverride : BA_DB
   /**
    * Init core setting data
    */
-  db = await rxInitData({
-    db,
-    collection: Setting.name,
-    name: SettingNames.init_status,
-    collections,
-    initFunc: () =>
-      initDocsData({
-        db,
-        collection: Setting.name,
-        docsData: [
-          {
-            name: SettingNames.i18n_code,
-            value: ENV.I18N_CODE
-          },
-          {
-            name: AuthPrimary, // username
-            value: undefined
-          },
-          {
-            name: SettingNames.role,
-            value: undefined
-          },
-          {
-            name: SettingNames.site_name,
-            value: undefined
-          },
-          {
-            name: SettingNames.theme,
-            value: undefined
-          }
-        ]
-      })
-  })
+  await dxInitData(db)
 
   /**
    * Init plugins data
@@ -110,10 +73,10 @@ export default async function initData({
   /**
    * Init I18n for plugins
    */
-  const setting = db[Setting.name]
+  const setting = db.settings
   const resI18nCode = await setting
-    .findOne({ selector: { name: { $eq: SettingNames.i18n_code } } })
-    .exec()
+    .filter(item => item.name === SETTING_NAMES.i18n_code)
+    .first()
   if (resI18nCode) i18n.changeLanguage(resI18nCode.value).then()
 
   addSources(i18n, pluginsData)

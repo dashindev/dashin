@@ -1,8 +1,6 @@
-import { MenuType, SchemaType } from "@/core"
+import { MenuType, SchemaType, SettingType } from "@/core"
 import { TFunction } from "i18next"
 import { RefObject } from "react"
-import { DocsData } from "@/utils/database/rxInitData/initDocsData"
-import { RxJsonSchema } from "rxdb"
 
 export interface IPluginData {
   id: SchemaType["id"]
@@ -63,7 +61,7 @@ export type InitData = {
   data?: PluginData[]
 }
 
-export type PluginData = DocsData
+export type PluginData = SchemaType | MenuType | SettingType
 
 export type ListServiceRes = {
   data: any
@@ -76,13 +74,4 @@ export interface EditableCtrl {
   SchemaName: string
   disableAdd?: boolean
   primaryKey?: string
-}
-
-export interface BunadminCollection {
-  name: string
-  schema: BunadminSchema
-}
-
-export interface BunadminSchema extends RxJsonSchema<any> {
-  title: string
 }

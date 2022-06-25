@@ -5,24 +5,20 @@ import { TableDefaultProps as DefaultProps } from "@/components/Table/models/def
 
 import Table, { TableHead } from "@/components/Table"
 import tableIcons from "@/components/Table/models/tableIcons"
-import rxQuery from "@/utils/database/rxQuery"
 import { Columns } from "./columns"
 import { Schema } from "./schema"
-import { Collection } from "./collections"
 import { useTranslation } from "react-i18next"
+import { BA_DB, ISetting } from "@/utils/database"
 
 export default function AuthInfoContainer() {
   const { t } = useTranslation("table")
   const theme = useTheme()
-  const [data, setData] = useState([])
+  const [data, setData] = useState<ISetting[]>([])
 
   React.useEffect(() => {
     ;(async () => {
-      await rxQuery({
-        collection: Collection.name,
-        sort: { name: "asc" },
-        callback: data => setData(data)
-      })
+      const settings = await BA_DB.settings.toArray()
+      setData(settings)
     })()
   }, [])
 

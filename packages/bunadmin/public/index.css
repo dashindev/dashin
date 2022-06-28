@@ -1,6 +1,6 @@
 @import "assets/css/cubeSpinner.css";
 @import "assets/css/blurBg.css";
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import "assets/css/icon.css";
 
 #root {
     width: 100%;

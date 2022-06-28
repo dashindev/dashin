@@ -56,7 +56,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
         NotificationTable={NotifyTable}
       />
       <Box display="flex">
-        <nav aria-label="mailbox folders">
+        <nav aria-label="left menus">
           <Drawer
             PaperProps={{
               elevation: 0

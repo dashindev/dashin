@@ -14,12 +14,13 @@ export default function styles({
   drawerOpen,
   phoneVertical
 }: Props): StyleRules {
-  const drawerTop = theme.spacing(8)
   return {
     root: {
-      display: "flex",
       height: "-webkit-fill-available",
+      background: "#fff",
       "& .MuiContainer-root": {
+        borderTopLeftRadius: 10,
+        height: "calc(100vh - 46px)", // minus the minHeight of TopBar
         maxWidth: phoneVertical
           ? "auto"
           : drawerOpen
@@ -31,12 +32,12 @@ export default function styles({
       whiteSpace: "nowrap",
       [theme.breakpoints.up("sm")]: {
         width: drawerWidth,
-        flexShrink: 0
+        flexShrink: 0,
+        height: "100%"
       }
     },
     drawerOpen: {
       width: drawerWidth,
-      top: drawerTop,
       borderRight: "none",
       transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
@@ -44,7 +45,6 @@ export default function styles({
       })
     },
     drawerClose: {
-      top: drawerTop,
       borderRight: "none",
       transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
@@ -55,6 +55,9 @@ export default function styles({
       [theme.breakpoints.up("sm")]: {
         width: theme.spacing(9) + 1
       }
+    },
+    pager: {
+      position: "relative"
     },
     hide: {
       display: "none"
@@ -70,7 +73,9 @@ export default function styles({
     },
     contentBox: {
       background: theme.bunadmin.contentBoxBg,
-      marginTop: theme.spacing(8)
+      overflow: "hidden",
+      borderRadius: 10,
+      height: "100%"
     },
     // table
     treeDataThHidden: {

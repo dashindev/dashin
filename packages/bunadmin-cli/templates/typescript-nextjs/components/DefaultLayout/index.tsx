@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from "react"
-import { TopBar, LeftMenu, DefaultLayoutProps, ENV } from "@bunred/bunadmin"
-import { Box, Drawer } from "@material-ui/core"
 import clsx from "clsx"
-import { useTheme } from "@material-ui/core/styles"
-import { Container, Fade, useMediaQuery } from "@material-ui/core"
+import { Box, Container, Drawer, Fade, useMediaQuery } from "@material-ui/core"
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  useTheme
+} from "@material-ui/core/styles"
 import styles from "./styles"
+import {
+  TopBar,
+  LeftMenu,
+  DefaultLayoutProps,
+  ENV,
+  store
+} from "@bunred/bunadmin"
 
 export default function DefaultLayout(props: DefaultLayoutProps) {
   const { children, leftMenu } = props
   const theme = useTheme()
   const [open, setOpen] = React.useState(true)
   const phoneVertical = useMediaQuery("(max-width:640px)")
-  const classes = styles({ drawerOpen: open, phoneVertical })
-  const [NtCount, setNtCount] = useState<() => Promise<number>>()
+  const classes = makeStyles((theme: Theme) =>
+    createStyles(styles({ theme, drawerOpen: open, phoneVertical }))
+  )()
+
+  const [notifyTable, setNotifyTable] = useState<JSX.Element>()
+  const [notifyCount, setNotifyCount] = useState<() => Promise<number>>()
 
   useEffect(() => {
     ;(async () => {
@@ -22,44 +36,52 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
         `../../plugins/${customNotificationPath}`
       )
       if (!NotificationTable || !notificationCount) return
-      setNtCount(notificationCount)
+      setNotifyTable(notifyTable)
+      setNotifyCount(notificationCount)
     })()
   }, [])
 
   return (
     <div className={classes.root}>
-      <TopBar menuClick={handleDrawerToggle} notificationCount={NtCount} />
-      <nav aria-label="mailbox folders">
-        <Drawer
-          PaperProps={{
-            elevation: 1
-          }}
-          variant="permanent"
-          className={clsx(classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open
-          })}
-          classes={{
-            paper: clsx({
+      <TopBar
+        store={store}
+        menuClick={handleDrawerToggle}
+        notificationCount={notifyCount}
+        NotificationTable={notifyTable}
+      />
+      <Box display="flex">
+        <nav aria-label="left menus">
+          <Drawer
+            PaperProps={{
+              elevation: 1
+            }}
+            variant="permanent"
+            className={clsx(classes.drawer, {
               [classes.drawerOpen]: open,
               [classes.drawerClose]: !open
-            })
-          }}
-          anchor={theme.direction === "rtl" ? "right" : "left"}
-          ModalProps={{
-            keepMounted: true // Better open performance on mobile.
-          }}
-        >
-          <LeftMenu {...leftMenu} />
-        </Drawer>
-      </nav>
-      <Container className={classes.content}>
-        <Fade in>
-          <Box boxShadow={1} className={classes.contentBox}>
-            {children}
-          </Box>
-        </Fade>
-      </Container>
+            })}
+            classes={{
+              paper: clsx({
+                [classes.drawerOpen]: open,
+                [classes.drawerClose]: !open
+              })
+            }}
+            anchor={theme.direction === "rtl" ? "right" : "left"}
+            ModalProps={{
+              keepMounted: true // Better open performance on mobile.
+            }}
+          >
+            <LeftMenu {...leftMenu} />
+          </Drawer>
+        </nav>
+        <Container className={classes.content}>
+          <Fade in>
+            <Box boxShadow={1} className={classes.contentBox}>
+              {children}
+            </Box>
+          </Fade>
+        </Container>
+      </Box>
     </div>
   )
 

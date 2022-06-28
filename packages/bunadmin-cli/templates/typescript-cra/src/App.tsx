@@ -11,7 +11,6 @@ import {
   initData,
   PluginData,
   store,
-  UserRoute,
   CubeSpinner,
   Snackbar,
   SnackMessage,
@@ -21,6 +20,7 @@ import {
 import { CssBaseline, ThemeProvider } from "@material-ui/core"
 import { SnackbarProvider } from "notistack"
 import { createBrowserHistory } from "history"
+import { YOUR_DB } from "./utils/database"
 
 const HTTP404 = lazy(() => import("./pages/404"))
 const GroupName = lazy(() => import("./pages/[group]-[name]"))
@@ -44,7 +44,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const jssStyles = document.querySelector("#jss-server-side")
       if (jssStyles) {
         // @ts-ignore
@@ -58,35 +58,36 @@ const App = () => {
      * Waiting for dynamic route
      */
     if (asPath === DynamicRoute || asPath === DynamicDocRoute) return
-      ; (async () => {
-        const authPluginName =
-          process.env.REACT_APP_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
-        const authPlugin: IAuthPlugin = await import(
-          `./.bunadmin/dynamic/${authPluginName}`
-        )
-        let pluginsData: PluginData[] = require("./.bunadmin/dynamic/pluginsData.json")
-        const plugins = require("./.bunadmin/dynamic/pluginsData")
-        if (plugins && plugins.data)
-          pluginsData = [...pluginsData, ...plugins.data]
+    ;(async () => {
+      const authPluginName =
+        process.env.REACT_APP_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
+      const authPlugin: IAuthPlugin = await import(
+        `./.bunadmin/dynamic/${authPluginName}`
+      )
+      let pluginsData: PluginData[] = require("./.bunadmin/dynamic/pluginsData.json")
+      const plugins = require("./.bunadmin/dynamic/pluginsData")
+      if (plugins && plugins.data)
+        pluginsData = [...pluginsData, ...plugins.data]
 
-        /**
-         * Initialization data
-         */
-        const initDataRes = await initData({
-          i18n,
-          authPlugin,
-          setIsProtected,
-          pluginsData,
-          requirePlugin,
-          initialized,
-          setInitialized
-        })
+      /**
+       * Initialization data
+       */
+      const initDataRes = await initData({
+        i18n,
+        authPlugin,
+        setIsProtected,
+        pluginsData,
+        requirePlugin,
+        initialized,
+        setInitialized,
+        dbOverride: YOUR_DB
+      })
 
-        if (initDataRes) {
-          setLeftMenuData(initDataRes.menuData)
-          setReady(true)
-        }
-      })()
+      if (initDataRes) {
+        setLeftMenuData(initDataRes.menuData)
+        setReady(true)
+      }
+    })()
   }, [asPath, i18n, initialized])
 
   if (!ready) return <CubeSpinner />
@@ -102,7 +103,7 @@ const App = () => {
           }}
           autoHideDuration={2000}
           content={(key, message) => (
-            <SnackMessage id={key} message={message} />
+            <SnackMessage store={store} id={key} message={message} />
           )}
         >
           <Snackbar />
@@ -112,7 +113,12 @@ const App = () => {
             <Switch>
               <Route
                 path={["/:group/:name", "/"]}
-                component={() => <GroupName leftMenuData={leftMenuData} isProtected={isProtected} />}
+                component={() => (
+                  <GroupName
+                    leftMenuData={leftMenuData}
+                    isProtected={isProtected}
+                  />
+                )}
               />
               <Route path="*" component={HTTP404} />
             </Switch>

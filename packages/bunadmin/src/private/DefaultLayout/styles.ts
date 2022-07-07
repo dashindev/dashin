@@ -24,8 +24,8 @@ export default function styles({
         maxWidth: phoneVertical
           ? "auto"
           : drawerOpen
-            ? "calc(100vw - 240px)"
-            : "calc(100vw - 73px)"
+          ? "calc(100vw - 240px)"
+          : "calc(100vw - 73px)"
       }
     },
     drawer: {
@@ -39,6 +39,7 @@ export default function styles({
     drawerOpen: {
       width: drawerWidth,
       borderRight: "none",
+      position: "relative",
       transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen

@@ -39,6 +39,7 @@ export default function styles({
     drawerOpen: {
       width: drawerWidth,
       borderRight: "none",
+      position: "relative",
       transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen

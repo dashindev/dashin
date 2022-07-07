@@ -13,7 +13,9 @@ export default async function newPlugin(
 ): Promise<undefined | string> {
   // check in the plugins path
   const currentPath = path.resolve()
-  if (!/.*\/plugins$/.test(currentPath)) {
+
+  // check if the user ist in the `plugins` folder
+  if (!/.*(\/|\\)plugins$/.test(currentPath)) {
     return "You need to run this command in the plugins path"
   }
 

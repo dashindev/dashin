@@ -66,6 +66,13 @@ const defaultTheme = createTheme({
         letterSpacing: 0.8
       }
     },
+    MuiListItem: {
+      button: {
+        borderLeft: "1px solid #fff",
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10
+      }
+    },
     MuiListItemIcon: {
       root: {
         color: iconColor,
@@ -132,6 +139,16 @@ const defaultTheme = createTheme({
           display: "inline-block",
           overflow: "hidden"
         }, // root
+        "nav .MuiList-root": {
+          paddingRight: 8
+        },
+        "nav .MuiListItem-button:hover, nav .MuiListItem-root.Mui-selected, nav .MuiListItem-root.Mui-selected:hover": {
+          borderLeft: "3px solid #36f",
+          borderTopRightRadius: 10,
+          borderBottomRightRadius: 10,
+          background: "#edf1f7",
+          transition: "all ease-in-out 0.2s"
+        },
         "[class*=drawerClose] nav .MuiCollapse-container .MuiListItem-root .MuiListItemText-root span": {
           overflow: "visible",
           whiteSpace: "nowrap",

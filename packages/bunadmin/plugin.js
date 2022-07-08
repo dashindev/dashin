@@ -92,11 +92,16 @@ export const data: IPluginData[] = [${arrayLine}]
       plugin = require(pathItem)
       if (!plugin || !plugin.initData || !plugin.initData.data) return
     } catch (e) {
+      console.error("\n*************")
       console.error(
-        "cannot find 'initData' in the plugin, please export or check: " +
+        "Failed to process bunadmin plugin, there may be two reasons: " + e
+      )
+      console.error("1. " + e)
+      console.error(
+        "2. cannot find 'initData' in the plugin, please export or check: " +
           pathItem
       )
-      console.error(e)
+      console.error("*************\n")
     }
 
     /**

@@ -76,6 +76,16 @@ const en = {
     "Last Signed-in": "Last Signed-in",
     // migration
     Migration: "Migration",
+    Upload: "Upload",
+    Download: "Download",
+    Count: "Count",
+    Key: "Key",
+    Export: "Export",
+    Import: "Import",
+    "Do you want to backup the current database locally?":
+      "Do you want to backup the current database locally?",
+    "Are you sure you want to import and overwrite the database?":
+      "Are you sure you want to import and overwrite the database?",
     // setting
     "Bunadmin Setting": "Bunadmin Parameters",
     Value: "Value",

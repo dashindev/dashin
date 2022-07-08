@@ -1,8 +1,11 @@
 import React from "react"
 import ConfirmDialog from "@/components/Dialog/ConfirmDialog"
-import { fsUpload } from "@/utils/scripts/fs"
+import { fsDownload } from "@/utils/scripts/fs"
 import UploadConfirmDialog from "@/components/Dialog/UploadCustomDialog"
-import { notice } from "@/core"
+import { BA_DB } from "@/utils"
+import { notice } from "@/main"
+
+let dxIEModule
 
 interface Interface {
   selData: {
@@ -19,12 +22,14 @@ interface Interface {
     title: string
     msg: string
   }
+  tableRef?: React.RefObject<any>
 }
 
 export default function MigrationDialogs({
   selData,
   modalState,
-  uploadModal
+  uploadModal,
+  tableRef
 }: Interface) {
   return (
     <>
@@ -34,13 +39,23 @@ export default function MigrationDialogs({
         title={modalState.title}
         msg={modalState.msg}
         doFunc={async () => {
-          // const db = BA_DB
           switch (selData.mode) {
             case "Export DB":
-              // TODO Export dx DB
-              // db.exportJSON().then((json: any) =>
-              //   fsDownload(json, "bunadmin.json", "application/json")
-              // )
+              if (typeof window === "undefined") return
+              // use dynamic-import to fix error `ReferenceError: self is not defined`
+              dxIEModule = await import("dexie-export-import")
+              const blob = await dxIEModule.exportDB(BA_DB, {
+                prettyJson: true,
+                filter: table => table !== "notifications"
+              })
+
+              const dateObj = new Date()
+              const month = dateObj.getUTCMonth() + 1 //months from 1-12
+              const day = dateObj.getDate()
+              const year = dateObj.getUTCFullYear()
+
+              const newDate = year + "-" + month + "-" + day
+              fsDownload(blob, `${BA_DB.name}-${newDate}.json`)
               break
             case "Import DB":
               // db.dump().then((json: any) => console.dir(json))
@@ -57,33 +72,31 @@ export default function MigrationDialogs({
         accept="application/json"
         openModal={uploadModal.open}
         onChange={async e => {
+          let errMsg: string | undefined
           try {
-            const json = await fsUpload(e)
-            if (!json) return
-            // const db = BA_DB
-            // TODO DX dump
-            // dump collection
-            // if (selData.name !== "ALL") {
-            //   db[selData.name].importJSON(json).then(() => {
-            //     // show notice
-            //     notice({ title: `Import successful` })
-            //   })
-            // } else {
-            //   // dump database
-            //   db.importJSON(json).then(() => {
-            //     // show notice
-            //     notice({ title: `Import successful` })
-            //   })
-            // }
-          } catch (e) {
-            const ea = e as any
-            // show notice
-            await notice({
-              title: `Import failed`,
+            let file = e.target?.files[0]
+            if (!file) throw new Error(`Only files can be dropped here`)
+            file = file as Blob
+
+            await BA_DB.delete()
+
+            dxIEModule = await import("dexie-export-import")
+            await dxIEModule.importDB(file)
+          } catch (error) {
+            errMsg = "" + error
+            console.error(errMsg)
+          }
+          // reopen
+          await BA_DB.open()
+          if (errMsg) {
+            return notice({
+              title: "Import database failed",
               severity: "error",
-              content: ea.toString()
+              content: errMsg
             })
           }
+          // reload
+          tableRef?.current && tableRef.current.onQueryChange()
         }}
       />
     </>

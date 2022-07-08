@@ -76,6 +76,16 @@ const zh = {
     "Last Signed-in": "上次登录",
     // migration
     Migration: "数据迁移",
+    Count: "统计",
+    Key: "键名",
+    Upload: "上传",
+    Download: "下载",
+    Export: "导出",
+    Import: "导入",
+    "Do you want to backup the current database locally?":
+      "请确认是否需要备份当前数据库到本地?",
+    "Are you sure you want to import and overwrite the database?":
+      "你确认要导入并覆盖数据库吗?",
     // setting
     "Bunadmin Setting": "BunAdmin 参数",
     Value: "参数值",

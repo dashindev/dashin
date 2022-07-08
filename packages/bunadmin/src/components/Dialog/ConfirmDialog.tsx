@@ -59,7 +59,7 @@ export default function ConfirmDialog({
           {content || <DialogContentText>{msg}</DialogContentText>}
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button autoFocus onClick={handleClose} color="primary">
             {disagree || <Translation>{t => t("Cancel")}</Translation>}
           </Button>
           <Button onClick={handleAgree} color="primary" autoFocus>

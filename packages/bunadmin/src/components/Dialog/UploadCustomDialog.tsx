@@ -7,6 +7,7 @@ import DialogContentText from "@material-ui/core/DialogContentText"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import useMediaQuery from "@material-ui/core/useMediaQuery"
 import { useTheme } from "@material-ui/core/styles"
+import { useTranslation } from "react-i18next"
 
 interface Interface {
   openModal: number
@@ -23,6 +24,7 @@ export default function UploadConfirmDialog({
   onChange,
   accept
 }: Interface) {
+  const { t } = useTranslation()
   const [open, setOpen] = React.useState(false)
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -55,7 +57,7 @@ export default function UploadConfirmDialog({
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose} color="primary">
-            Close
+            {t("Cancel")}
           </Button>
 
           <input
@@ -67,7 +69,7 @@ export default function UploadConfirmDialog({
           />
           <label htmlFor="icon-button-file">
             <Button color="primary" component="span">
-              Agree
+              {t("Confirm")}
             </Button>
           </label>
         </DialogActions>

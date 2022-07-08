@@ -5,10 +5,13 @@ import MigrationContainer from "@/core/migration"
 import SchemaManagerContainer from "@/core/schema"
 import AuthInfoContainer from "@/core/auth"
 import BunadminSettingContainer from "@/core/setting"
+import { BunadminDatabase } from ".."
 
-type Props = {}
+type Props = {
+  db?: BunadminDatabase
+}
 
-export default function CoreContainer(props: Props) {
+export default function CoreContainer({ db }: Props) {
   const router = useRouter()
   const { name } = router.query
 
@@ -19,7 +22,7 @@ export default function CoreContainer(props: Props) {
       container = <LocalLeftMenuContainer />
       break
     case "migration":
-      container = <MigrationContainer />
+      container = <MigrationContainer db={db} />
       break
     case "schema":
       container = <SchemaManagerContainer />

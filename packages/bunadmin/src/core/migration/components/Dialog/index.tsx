@@ -3,7 +3,8 @@ import ConfirmDialog from "@/components/Dialog/ConfirmDialog"
 import { fsDownload } from "@/utils/scripts/fs"
 import UploadConfirmDialog from "@/components/Dialog/UploadCustomDialog"
 import { BA_DB } from "@/utils"
-import { notice } from "@/main"
+import { BunadminDatabase, notice } from "@/main"
+import { debug } from "util"
 
 let dxIEModule
 
@@ -23,13 +24,15 @@ interface Interface {
     msg: string
   }
   tableRef?: React.RefObject<any>
+  db?: BunadminDatabase
 }
 
 export default function MigrationDialogs({
   selData,
   modalState,
   uploadModal,
-  tableRef
+  tableRef,
+  db
 }: Interface) {
   return (
     <>
@@ -42,9 +45,10 @@ export default function MigrationDialogs({
           switch (selData.mode) {
             case "Export DB":
               if (typeof window === "undefined") return
+              db = db || BA_DB
               // use dynamic-import to fix error `ReferenceError: self is not defined`
               dxIEModule = await import("dexie-export-import")
-              const blob = await dxIEModule.exportDB(BA_DB, {
+              const blob = await dxIEModule.exportDB(db, {
                 prettyJson: true,
                 filter: table => table !== "notifications"
               })
@@ -55,7 +59,7 @@ export default function MigrationDialogs({
               const year = dateObj.getUTCFullYear()
 
               const newDate = year + "-" + month + "-" + day
-              fsDownload(blob, `${BA_DB.name}-${newDate}.json`)
+              fsDownload(blob, `${db.name}-${newDate}.json`)
               break
             case "Import DB":
               // db.dump().then((json: any) => console.dir(json))
@@ -72,13 +76,15 @@ export default function MigrationDialogs({
         accept="application/json"
         openModal={uploadModal.open}
         onChange={async e => {
+          db = db || BA_DB
+
           let errMsg: string | undefined
           try {
             let file = e.target?.files[0]
             if (!file) throw new Error(`Only files can be dropped here`)
             file = file as Blob
 
-            await BA_DB.delete()
+            await db.delete()
 
             dxIEModule = await import("dexie-export-import")
             await dxIEModule.importDB(file)
@@ -87,7 +93,7 @@ export default function MigrationDialogs({
             console.error(errMsg)
           }
           // reopen
-          await BA_DB.open()
+          await db.open()
           if (errMsg) {
             return notice({
               title: "Import database failed",

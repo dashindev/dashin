@@ -156,6 +156,7 @@ export default function MigrationContainer({ db }: { db?: BunadminDatabase }) {
         modalState={modalState}
         uploadModal={uploadModal}
         tableRef={tableRef}
+        db={db}
       />
     </>
   )

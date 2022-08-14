@@ -5,25 +5,27 @@
 Bunadmin hopes to achieve as many function reuse as possible through simple development methods, so in each bunadmin project, **common functions have been built**, such as dynamic routing, multi-level menus, **permission control, data management**, search filtering and sorting, CRUD, **file management, message notification**, documenting your code, etc. You only need to build your own plugin to call it, and the bunadmin plugin is also easy to learn and use.
 
 ## Quick start
+
 ```
 npm install --global bunadmin-cli
 bunadmin new my-bunadmin
 ```
 
 Create a plugin
-  `$ bunadmin plugin [team]-[group]`
-  (Run in the plugins directory: plugins/)
+`$ bunadmin plugin [team]-[group]`
+(Run in the plugins directory: plugins/)
 
 Create a schema
-  `$ bunadmin schema [name]`
-  (Run in the plugin directory: plugins/bunadmin-plugin-[team]-[group]/)
+`$ bunadmin schema [name]`
+(Run in the plugin directory: plugins/bunadmin-plugin-[team]-[group]/)
 
-Display help for command 
-  `$ bunadmin --help`
+Display help for command
+`$ bunadmin --help`
 
 [Read the Getting Started tutorial](http://blog.eg.bunadmin.com/docs/getting-started/introduction)
 
 ## Online demo
+
 [blog.eg.bunadmin.com](http://blog.eg.bunadmin.com/)
 
 - Username: `admin`
@@ -32,6 +34,7 @@ Display help for command
 [More details](http://blog.eg.bunadmin.com/docs/getting-started/remote-data)
 
 ## Screenshot
+
 ![Sign in](https://gblobscdn.gitbook.com/assets%2F-M1ZbjnBaWO_NJOdj8_A%2F-M6mhhE1-tUO_GCYLgQI%2F-M6miE4Tjmp-npJcYvYz%2Fsign-in.png)
 
 ![Blog Post](https://gblobscdn.gitbook.com/assets%2F-M1ZbjnBaWO_NJOdj8_A%2F-MHlKrSo5A7uYDJDV45k%2F-MHlKxF4-lohTzN3gsiA%2Fblog-post-strapi.png)
@@ -54,9 +57,11 @@ yarn start
 - Password: `bunadmin`
 
 ## Lerna (publish packages)
+
 ```
 yarn build
-npx lerna publish --force-publish
+
+npx lerna publish --force-publish --skip-git
 ```
 
 #### Thanks

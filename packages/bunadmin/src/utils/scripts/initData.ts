@@ -39,25 +39,14 @@ export default async function initData({
   } = authPlugin
 
   /**
-   * Authenticate the current user, fail to execute redirect
-   */
-  let isVerified: boolean
-  if (authorizationOverwrite) {
-    isVerified = await authorizationOverwrite()
-  } else {
-    isVerified = await authorization({
-      authResponseKey, // Successful when the response data[key] is not null
-      authRequestUrl,
-      authRequestMethod
-    })
-  }
-
-  setIsProtected(!isVerified)
-
-  /**
    * Avoid repeated initialization
    */
-  if (initialized) return
+  if (initialized) {
+    const isLoggedIn = await checkAuth()
+    setIsProtected(!isLoggedIn)
+
+    return
+  }
 
   let db = dbOverride ? dbOverride : BA_DB
   /**
@@ -83,6 +72,9 @@ export default async function initData({
 
   setInitialized(true)
 
+  const isLoggedIn = await checkAuth()
+  setIsProtected(!isLoggedIn)
+
   if (initPluginsDataRes) {
     // /**
     //  * !!!DEBUG ONLY
@@ -91,6 +83,18 @@ export default async function initData({
     // await setting.remove() // !!!DEBUG ONLY
 
     return { menuData: initPluginsDataRes.menuData }
+  }
+
+  async function checkAuth() {
+    if (authorizationOverwrite) {
+      return await authorizationOverwrite()
+    } else {
+      return await authorization({
+        authResponseKey, // Successful when the response data[key] is not null
+        authRequestUrl,
+        authRequestMethod
+      })
+    }
   }
 
   function addSources(i18n: i18n, pluginsData: PluginData[]) {

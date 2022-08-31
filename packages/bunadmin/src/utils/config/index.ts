@@ -14,6 +14,7 @@ type EnvTypes = {
   FILE_PREVIEW_URL?: string
   SITE_URLS: string[]
   DB_NAME: string
+  DB_VERSION: string
   ON_I18N: boolean
   ON_SETTING: boolean
   ON_DOC: boolean
@@ -57,6 +58,10 @@ export const ENV: EnvTypes = {
   DB_NAME:
     process.env.REACT_APP_DB_NAME ||
     process.env.NEXT_PUBLIC_DB_NAME ||
+    "BunadminDatabase",
+  DB_VERSION:
+    process.env.REACT_APP_DB_VERSION ||
+    process.env.NEXT_PUBLIC_DB_VERSION ||
     "BunadminDatabase",
   ON_I18N:
     process.env.REACT_APP_ON_I18N === "true" ||

@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "wescraper" },
+    { "path": "web" },
+    { "path": "desktop" },
+    { "path": "server" },
+    { "path": "css-selector" }
+  ]
+}

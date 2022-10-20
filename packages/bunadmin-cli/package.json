@@ -9,9 +9,10 @@
     "node": ">=10"
   },
   "scripts": {
+    "tsc:watch": "tsc -w",
+    "tsc:clean": "tsc --build --clean",
+    "tsc:build": "tsc",
     "test": "xo && ava",
-    "tsc": "rimraf lib & tsc",
-    "pack": "rimraf lib & tsc && npm pack",
     "local-install-global": "npm run tsc && npm uninstall bunadmin-cli --global && npm install --global ./"
   },
   "files": [
@@ -39,11 +40,10 @@
     "eslint-plugin-react-hooks": "^4.1.2",
     "ink-testing-library": "^2.1.0",
     "prettier": "1.19.1",
-    "typescript": "4.3.5",
+    "typescript": "4.8.3",
     "xo": "^0.33.1"
   },
   "ava": {
-    "babel": true,
     "require": [
       "@babel/register"
     ]

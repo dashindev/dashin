@@ -8,11 +8,12 @@
     "lib"
   ],
   "scripts": {
-    "test": "prettier --check --no-semi src/** pages/** test/** && jest",
-    "tsc": "rimraf lib & tsc",
-    "pack": "rimraf lib & tsc && npm pack"
+    "tsc:watch": "tsc -w",
+    "tsc:clean": "tsc --build --clean",
+    "tsc:build": "tsc",
+    "test": "prettier --check --no-semi src/** pages/** test/** && jest"
   },
   "devDependencies": {
-    "typescript": "4.3.5"
+    "typescript": "4.8.3"
   }
 }

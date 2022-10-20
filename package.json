@@ -7,9 +7,10 @@
     "plugins/*"
   ],
   "scripts": {
-    "start": "cd packages/bunadmin && yarn start",
-    "build": "lerna run ttsc && lerna run tsc",
-    "pack": "lerna run ttsc-pack && lerna run pack"
+    "tsc:watch": "lerna run --parallel tsc:watch",
+    "tsc:clean": "lerna run --parallel tsc:clean",
+    "tsc:build": "lerna run ttsc:build && lerna run tsc:build",
+    "dev": "cd packages/bunadmin && yarn start"
   },
   "devDependencies": {
     "lerna": "^5.1.4"

@@ -26,10 +26,20 @@ type TopBarProps = {
   docsHome?: string
   removeLeft?: boolean
   appBarPros?: AppBarProps
+  appendLeft?: React.ReactNode
+  prependRight?: React.ReactNode
+  appendRight?: React.ReactNode
 } & NoticePlugin
 
 export default function TopBar(props: TopBarProps) {
-  const { menuClick, removeLeft, appBarPros } = props
+  const {
+    menuClick,
+    removeLeft,
+    appendLeft,
+    prependRight,
+    appendRight,
+    appBarPros
+  } = props
   const classes = useStyles()
   const theme = useTheme()
   const router = useRouter()
@@ -76,10 +86,12 @@ export default function TopBar(props: TopBarProps) {
             >
               {!isDoc ? ENV.SITE_NAME : ENV.SITE_NAME + " DOCS"}
             </Button>
+            {appendLeft}
           </div>
         )}
 
         <div className={classes.rightBlock}>
+          {prependRight}
           {!isDoc && (
             <>
               <NoticeMenu
@@ -93,6 +105,7 @@ export default function TopBar(props: TopBarProps) {
           )}
           {ENV.ON_I18N && <I18nMenu />}
           {ENV.ON_DOC && <DocMenu isDoc={isDoc} docsHome={docsHome} />}
+          {appendRight}
         </div>
       </Toolbar>
     </AppBar>

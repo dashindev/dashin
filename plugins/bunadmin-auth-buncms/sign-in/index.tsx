@@ -22,7 +22,7 @@ import {
   AnimatedRandomBG,
   useTranslation,
   useRouter
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 
 function Copyright() {
   return (

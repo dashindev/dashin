@@ -1,6 +1,6 @@
 import React from "react"
 import { Action } from "material-table"
-import { BulkDeleteProps } from "@bunred/bunadmin"
+import { BulkDeleteProps } from "@xbuilder/bunadmin"
 // @ts-ignore
 import EvaIcon from "react-eva-icons"
 import bulkDeleteSer from "../services/bulkDeleteSer"

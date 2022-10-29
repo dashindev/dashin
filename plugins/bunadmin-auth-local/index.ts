@@ -2,7 +2,7 @@ import initData from "./utils/initData"
 export * from "./utils/types"
 
 import SignIn from "./sign-in"
-import { IAuthPlugin } from "@bunred/bunadmin"
+import { IAuthPlugin } from "@xbuilder/bunadmin"
 
 export { initData, SignIn }
 

@@ -5,7 +5,7 @@ import {
   dataToGql,
   EditableCtrl,
   notice
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 
 interface Props<RowData> extends EditableCtrl {
   newData: RowData

@@ -4,11 +4,11 @@ import {
   TableHead,
   tableIcons,
   TableDefaultProps as DefaultProps
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 import { useTheme } from "@material-ui/core/styles"
 
 import { SchemaLabel, SchemaColumns, SchemaName } from "./plugin"
-import { useTranslation } from "@bunred/bunadmin"
+import { useTranslation } from "@xbuilder/bunadmin"
 import { bulkDeleteCtrl, dataCtrl, editableCtrl } from "bunadmin-source-strapi"
 import Type from "./types"
 

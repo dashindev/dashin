@@ -2,7 +2,7 @@ import React from "react"
 import { Column } from "material-table"
 import Type from "./types"
 import { SchemaName } from "./plugin"
-import { ListSelector, PluginColumns } from "@bunred/bunadmin"
+import { ListSelector, PluginColumns } from "@xbuilder/bunadmin"
 import { dataCtrl } from "bunadmin-source-strapi"
 
 const columns = ({ t }: PluginColumns): Column<Type>[] => [

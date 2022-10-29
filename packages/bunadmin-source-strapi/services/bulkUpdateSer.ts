@@ -4,7 +4,7 @@ import {
   storedToken,
   notice,
   BulkUpdateProps
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 
 export default async function bulkUpdateSer<T>({
   t,

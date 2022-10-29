@@ -3,11 +3,13 @@
 Plugin types include **ordinary** and **special**, all plugins start with `bunadmin-` will be automatically registered and loaded.
 
 ## Ordinary plugin
+
 The folder name needs to start with `bunadmin-plugin`
 
 `bunadmin-plugin-[team]-[group]/utils/initData.ts`
-``` ts
-import { IPluginData } from "@bunred/bunadmin"
+
+```ts
+import { IPluginData } from "@xbuilder/bunadmin"
 const plugin = "mypost"
 const commonProps = {
   team: "myteam",
@@ -28,14 +30,16 @@ export default { plugin, data }
 ```
 
 ## Special plugin
+
 For designated purposes including authentication or file management.
 
 1. The folder name needs to start with `bunadmin-auth` or `bunadmin-upload`
 2. The `group` value of IPluginData needs to start with `auth` or `upload`
 
 `bunadmin-[group]/utils/initData.ts`
-``` ts
-import { IPluginData } from "@bunred/bunadmin"
+
+```ts
+import { IPluginData } from "@xbuilder/bunadmin"
 
 const plugin = "buncms-upload"
 const commonProps = {

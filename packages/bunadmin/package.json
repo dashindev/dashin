@@ -1,16 +1,16 @@
 {
-  "name": "@bunred/bunadmin",
-  "version": "1.3.12",
+  "name": "@xbuilder/bunadmin",
+  "version": "1.4.0-alpha.1",
   "description": "A simple graphql admin dashboard. Easy to expand with the flexible plugin. Graphql first, also supports api. Based on React, Redux, Material-UI, Formik, I18N.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bunred/bunadmin"
+    "url": "https://github.com/xbuilder/bunadmin"
   },
   "bugs": {
-    "url": "https://github.com/bunred/bunadmin/issues"
+    "url": "https://github.com/xbuilder/bunadmin/issues"
   },
-  "author": "BunRed Team",
+  "author": "XBuilder Team",
   "main": "lib/main.js",
   "types": "lib/main.d.ts",
   "files": [
@@ -55,7 +55,7 @@
     "formik-material-ui": "3.0.1",
     "i18next": "^21.8.10",
     "json-bigint": "^1.0.0",
-    "material-table": "npm:@bunred/material-table@0.69.1-beta.2",
+    "material-table": "npm:@xbuilder/material-table@0.69.1-beta.2",
     "nanoid": "3.3.4",
     "notistack": "^1.0.10",
     "prism-react-renderer": "^1.3.3",
@@ -96,7 +96,7 @@
   "jest": {
     "moduleNameMapper": {
       "@/(.*)": "<rootDir>/src/$1",
-      "@bunred/bunadmin/(.*)": "<rootDir>/src/$1",
+      "@xbuilder/bunadmin/(.*)": "<rootDir>/src/$1",
       "@.bunadmin/dynamic/(.*)": "<rootDir>/./bunadmin/dynamic/$1"
     }
   },
@@ -116,7 +116,7 @@
     "dashboard",
     "admin panel"
   ],
-  "homepage": "https://www.bunred.com/",
+  "homepage": "https://www.xbuilder.net/",
   "browserslist": {
     "production": [
       ">0.2%",

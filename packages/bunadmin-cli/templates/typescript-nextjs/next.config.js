@@ -1,10 +1,10 @@
 const path = require("path")
-const bunadminPlugin = require("@bunred/bunadmin/plugin")
+const bunadminPlugin = require("@xbuilder/bunadmin/plugin")
 
 module.exports = () => {
   /**
- * @type {import('next').NextConfig}
- */
+   * @type {import('next').NextConfig}
+   */
 
   return {
     poweredByHeader: false,

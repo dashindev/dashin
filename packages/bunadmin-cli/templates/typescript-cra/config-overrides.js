@@ -1,4 +1,4 @@
-const bunadminPlugin = require("@bunred/bunadmin/plugin")
+const bunadminPlugin = require("@xbuilder/bunadmin/plugin")
 
 module.exports = function override(config) {
   // run bunadmin scripts

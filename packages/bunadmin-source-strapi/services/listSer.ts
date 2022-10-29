@@ -1,7 +1,13 @@
 /**
  * Remote data controller
  */
-import { ENV, request, storedToken, store, TableState } from "@bunred/bunadmin"
+import {
+  ENV,
+  request,
+  storedToken,
+  store,
+  TableState
+} from "@xbuilder/bunadmin"
 import { ListService } from "../types"
 
 const operatorRex = new RegExp(/=|<=|>=|<|>|_.*=/)

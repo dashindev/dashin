@@ -42,14 +42,14 @@ Display help for command
 ## Development
 
 ```shell script
-git clone git@github.com:bunred/bunadmin.git
+git clone git@github.com:xbuilder/bunadmin.git
 
 yarn
 yarn tsc:watch
 yarn dev
 
 # minium command
-$ yarn workspace @bunred/bunadmin tsc:watch
+$ yarn workspace @xbuilder/bunadmin tsc:watch
 $ yarn workspace bunadmin-auth-local tsc:watch
 
 $ yarn dev

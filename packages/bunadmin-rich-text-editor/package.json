@@ -16,7 +16,7 @@
   "keywords": [
     "bunadmin"
   ],
-  "author": "bunred",
+  "author": "xbuilder",
   "license": "Apache-2.0",
   "dependencies": {
     "draft-js-export-html": "^1.4.1",

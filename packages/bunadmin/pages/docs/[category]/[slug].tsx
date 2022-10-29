@@ -8,11 +8,7 @@ import { MDXProvider } from "@mdx-js/react"
 import { ParsedUrlQuery } from "querystring"
 import { useRouter } from "next/router"
 import { defaultTheme, DynamicDocRoute, ENV } from "@/utils"
-import {
-  createTheme,
-  createStyles,
-  makeStyles
-} from "@material-ui/core/styles"
+import { createTheme, createStyles, makeStyles } from "@material-ui/core/styles"
 import { ThemeProvider } from "@material-ui/styles"
 
 import PrismHighlight, { defaultProps } from "prism-react-renderer"
@@ -22,7 +18,7 @@ import Error from "@/private/Error"
 // import prismTheme from "prism-react-renderer/themes/vsDark"
 const prismCss = "/assets/css/prism.css"
 
-const REMOTE_BRANCH = "https://github.com/bunred/bunadmin/blob/master"
+const REMOTE_BRANCH = "https://github.com/xbuilder/bunadmin/blob/master"
 
 export default function DocsCategorySlug() {
   const classes = useStyles()
@@ -34,14 +30,14 @@ export default function DocsCategorySlug() {
   const bunadminDocPath = "bunadmin-docs"
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       try {
         const content = await import(
           `../../../.bunadmin/dynamic/${bunadminDocPath}/menus`
         )
         const menuData: Type[] = content ? content.menu : []
         setMenuData(menuData)
-      } catch (e) { }
+      } catch (e) {}
     })()
   }, [])
 
@@ -57,16 +53,16 @@ export default function DocsCategorySlug() {
       previous:
         previousData && previousData.label && previousData && previousData.slug
           ? {
-            title: previousData.label,
-            uri: previousData.slug
-          }
+              title: previousData.label,
+              uri: previousData.slug
+            }
           : undefined,
       next:
         nextData && nextData.label && nextData && nextData.slug
           ? {
-            title: nextData.label,
-            uri: nextData.slug
-          }
+              title: nextData.label,
+              uri: nextData.slug
+            }
           : undefined
     })
   }, [slug, menuData])

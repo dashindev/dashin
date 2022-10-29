@@ -1,4 +1,4 @@
-import { ENV, request } from "@bunred/bunadmin"
+import { ENV, request } from "@xbuilder/bunadmin"
 
 export interface SignInParamsType {
   username: string

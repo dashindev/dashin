@@ -1,5 +1,5 @@
 import Type from "../types"
-import { ENV, storedToken, notice } from "@bunred/bunadmin"
+import { ENV, storedToken, notice } from "@xbuilder/bunadmin"
 import request from "umi-request"
 
 export default async function updateSer(newData: Type, oldData: Type) {

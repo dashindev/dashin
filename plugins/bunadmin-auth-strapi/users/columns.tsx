@@ -2,7 +2,7 @@ import { Column } from "material-table"
 import Type from "./types"
 import { TFunction } from "i18next"
 import React from "react"
-import { SingleSelector } from "@bunred/bunadmin"
+import { SingleSelector } from "@xbuilder/bunadmin"
 
 export default ({ t, roleLookup }: { t: TFunction; roleLookup: object }) =>
   [

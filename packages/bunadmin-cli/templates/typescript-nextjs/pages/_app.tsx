@@ -19,8 +19,8 @@ import {
   DEFAULT_AUTH_PLUGIN,
   PluginData,
   MenuType
-} from "@bunred/bunadmin"
-import "@bunred/bunadmin/lib/utils/i18n"
+} from "@xbuilder/bunadmin"
+import "@xbuilder/bunadmin/lib/utils/i18n"
 import "../public/index.css"
 import { YOUR_DB } from "../utils/database"
 

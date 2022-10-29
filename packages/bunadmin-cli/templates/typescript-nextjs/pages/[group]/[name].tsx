@@ -6,7 +6,7 @@ import {
   SchemaContainer,
   withoutLayout,
   MenuType
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 import PluginTable from "../../components/PluginTable"
 import DefaultLayout from "../../components/DefaultLayout"
 import Error from "../../components/Error"

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { BunadminFileType, notice, OnDropProps } from "@bunred/bunadmin"
+import { BunadminFileType, notice, OnDropProps } from "@xbuilder/bunadmin"
 import uploadFileSer from "../services/uploadFileSer"
 import { EditComponentProps } from "material-table"
 

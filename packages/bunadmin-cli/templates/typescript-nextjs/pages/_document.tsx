@@ -1,7 +1,7 @@
 import React from "react"
 import Document, { Html, Head, Main, NextScript } from "next/document"
 import { ServerStyleSheets } from "@material-ui/core/styles"
-import { defaultTheme, ENV } from "@bunred/bunadmin"
+import { defaultTheme, ENV } from "@xbuilder/bunadmin"
 
 export default class MyDocument extends Document {
   render() {

@@ -1,7 +1,7 @@
 {
   "license": "Apache-2.0",
   "private": true,
-  "author": "BunRed Team",
+  "author": "Xbuilder Team",
   "workspaces": [
     "packages/*",
     "plugins/*"

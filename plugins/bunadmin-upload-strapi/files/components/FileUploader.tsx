@@ -1,6 +1,11 @@
 import React, { useState, useEffect, RefObject } from "react"
 import { TFunction } from "i18next"
-import { ENV, BunadminFileType, Uploader, OnDropProps } from "@bunred/bunadmin"
+import {
+  ENV,
+  BunadminFileType,
+  Uploader,
+  OnDropProps
+} from "@xbuilder/bunadmin"
 import { EditComponentProps } from "material-table"
 import { DropResult } from "react-beautiful-dnd"
 import { IFile } from "../.."

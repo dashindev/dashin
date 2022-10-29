@@ -1,7 +1,12 @@
 import { Values } from "../types"
 import userSignInService from "../services/signInService"
 
-import { AuthPrimary as Primary, notice, Router, BA_DB } from "@bunred/bunadmin"
+import {
+  AuthPrimary as Primary,
+  notice,
+  Router,
+  BA_DB
+} from "@xbuilder/bunadmin"
 import { TFunction } from "i18next"
 
 interface Props {

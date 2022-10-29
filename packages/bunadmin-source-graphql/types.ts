@@ -1,6 +1,6 @@
 import { Query } from "material-table"
 import { TFunction } from "i18next"
-import { ListServiceRes } from "@bunred/bunadmin"
+import { ListServiceRes } from "@xbuilder/bunadmin"
 
 export interface DataCtrl {
   t?: TFunction

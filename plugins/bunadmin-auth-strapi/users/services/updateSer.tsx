@@ -1,6 +1,6 @@
 import Type from "../types"
 import { SchemaName } from "../plugin"
-import { ENV, request, storedToken, notice } from "@bunred/bunadmin"
+import { ENV, request, storedToken, notice } from "@xbuilder/bunadmin"
 
 export default async function updateSer(newData: Type, oldData: Type) {
   const token = await storedToken()

@@ -4,7 +4,7 @@ import {
   PluginTableProps,
   TableSkeleton,
   handlePluginPath
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 
 function PluginTable({ team, group, name, hideLoading }: PluginTableProps) {
   const pluginPath = handlePluginPath({ team, group, name })

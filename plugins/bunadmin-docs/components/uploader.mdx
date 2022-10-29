@@ -1,24 +1,34 @@
-import { Uploader } from "@bunred/bunadmin"
+import { Uploader } from "@xbuilder/bunadmin"
 
 # Uploader
+
 ### Used to display/upload single/multiple pictures/files
+
 <br />
 
 ## Display
+
 #### Click to preview
+
 <Uploader
   viewMode={true}
-  files={[{ id: 1, url: "/p/default.jpg" }, { id: 2, url: "/p/default.jpg" }]}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
   noDrawer={true}
   width={80}
 />
 
 ```tsx
-import { Uploader } from "@bunred/bunadmin"
+import { Uploader } from "@xbuilder/bunadmin"
 //...
-<Uploader
+;<Uploader
   viewMode={true}
-  files={[{ id: 1, url: "/p/default.jpg" }, { id: 2, url: "/p/default.jpg" }]}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
   noDrawer={true}
   width={80}
 />
@@ -27,10 +37,15 @@ import { Uploader } from "@bunred/bunadmin"
 <br />
 
 ## Upload
+
 #### Click/drop to upload/replace, drag the outer box to sort
+
 <Uploader
   viewMode={false}
-  files={[{ id: 1, url: "/p/default.jpg" }, { id: 2, url: "/p/default.jpg" }]}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
   onDrop={() => console.log("onDrop")}
   onDel={() => console.log("onDel")}
   onDragSort={() => console.log("onDragSort")}
@@ -39,11 +54,14 @@ import { Uploader } from "@bunred/bunadmin"
 />
 
 ```tsx
-import { Uploader } from "@bunred/bunadmin"
+import { Uploader } from "@xbuilder/bunadmin"
 //...
-<Uploader
+;<Uploader
   viewMode={false}
-  files={[{ id: 1, url: "/p/default.jpg" }, { id: 2, url: "/p/default.jpg" }]}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
   onDrop={() => console.log("onDrop")}
   onDel={() => console.log("onDel")}
   onDragSort={() => console.log("onDragSort")}
@@ -55,9 +73,13 @@ import { Uploader } from "@bunred/bunadmin"
 <br />
 
 ## Use Drawer
+
 <Uploader
   viewMode={false}
-  files={[{ id: 1, url: "/p/default.jpg" }, { id: 2, url: "/p/default.jpg" }]}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
   onDrop={() => console.log("onDrop")}
   onDel={() => console.log("onDel")}
   onDragSort={() => console.log("onDragSort")}
@@ -65,11 +87,14 @@ import { Uploader } from "@bunred/bunadmin"
 />
 
 ```tsx
-import { Uploader } from "@bunred/bunadmin"
+import { Uploader } from "@xbuilder/bunadmin"
 //...
-<Uploader
+;<Uploader
   viewMode={false}
-  files={[{ id: 1, url: "/p/default.jpg" }, { id: 2, url: "/p/default.jpg" }]}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
   onDrop={() => console.log("onDrop")}
   onDel={() => console.log("onDel")}
   onDragSort={() => console.log("onDragSort")}

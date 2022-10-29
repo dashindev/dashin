@@ -1,7 +1,11 @@
 import React from "react"
 import { Column } from "material-table"
 import Type from "./types"
-import { PluginColumns, MultipleSelector, ListSelector } from "@bunred/bunadmin"
+import {
+  PluginColumns,
+  MultipleSelector,
+  ListSelector
+} from "@xbuilder/bunadmin"
 import { Chip } from "@material-ui/core"
 import { ENUM_STATUS } from "./plugin"
 import { FileUploader } from "bunadmin-upload-strapi"

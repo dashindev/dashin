@@ -4,7 +4,7 @@ import {
   TableHead,
   tableIcons,
   TableDefaultProps as DefaultProps
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 import { useTheme } from "@material-ui/core/styles"
 
 import { SchemaLabel, SchemaColumns } from "./plugin"

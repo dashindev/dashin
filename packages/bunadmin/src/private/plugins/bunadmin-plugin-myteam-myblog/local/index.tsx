@@ -7,7 +7,7 @@ import {
   TableDefaultProps as DefaultProps,
   useTranslation,
   notice
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 import { SchemaLabel, SchemaColumns } from "./plugin"
 
 export default function Post() {

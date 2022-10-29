@@ -1,4 +1,8 @@
-import { TableDefaultProps as DefaultProps, Table, TableHead } from "@bunred/bunadmin";
+import {
+  TableDefaultProps as DefaultProps,
+  Table,
+  TableHead
+} from "@xbuilder/bunadmin"
 const editableCtrl = {
   // isEditable: rowData => rowData.not_editable === true, // only name(a) rows would be editable
   // isDeletable: rowData => rowData.not_deletable === true, // only name(a) rows would be deletable
@@ -8,6 +12,7 @@ const editableCtrl = {
 }
 
 # Table
+
 ### Data management: browse (filter, sort, search), edit, create, delete, etc.
 
 <div>
@@ -39,9 +44,9 @@ const editableCtrl = {
     // data
     data={query =>
       new Promise((resolve, reject) => {
-        let url = "https://reqres.in/api/users?";
-        url += "per_page=" + query.pageSize;
-        url += "&page=" + (query.page + 1);
+        let url = "https://reqres.in/api/users?"
+        url += "per_page=" + query.pageSize
+        url += "&page=" + (query.page + 1)
         fetch(url)
           .then(response => response.json())
           .then(result => {
@@ -49,8 +54,8 @@ const editableCtrl = {
               data: result.data,
               page: result.page - 1,
               totalCount: result.total
-            });
-          });
+            })
+          })
       })
     }
     // actions, `undefined` to disable refresh button
@@ -59,7 +64,7 @@ const editableCtrl = {
 </div>
 
 ```tsx
-import { TableDefaultProps as DefaultProps, Table, TableHead } from "@bunred/bunadmin";
+import { TableDefaultProps as DefaultProps, Table, TableHead } from "@xbuilder/bunadmin";
 const editableCtrl = {
   // isEditable: rowData => rowData.not_editable === true, // only name(a) rows would be editable
   // isDeletable: rowData => rowData.not_deletable === true, // only name(a) rows would be deletable
@@ -118,7 +123,8 @@ const editableCtrl = {
 ```
 
 ## Update values out of table
-``` ts
+
+```ts
 // Insert to MUI Table Field
 if (!editProps) return
 const field = editProps.columnDef.field
@@ -133,4 +139,7 @@ editProps.onRowDataChange({
 ## Props
 
 ### See more on [material-table](https://material-table.com/)
+
+```
+
 ```

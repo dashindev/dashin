@@ -4,35 +4,36 @@ import { Checkbox } from "@material-ui/core"
 
 In this tutorial, we will:
 
-1. Create a basic plugin by creating 100 lines of code *(3 directories and 5 files)*.
+1. Create a basic plugin by creating 100 lines of code _(3 directories and 5 files)_.
 2. Learn how to automatically generate multi-level menus and table columns.
 3. Manage data from the table you created.
 
-------
+---
 
 ## Create a plugin directory
-Create a new command line window, enter the bunadmin **root directory** ***(bunadmin-tutorial)***. **!NOT** ~~***packages/bunadmin***~~
 
-``` shell
+Create a new command line window, enter the bunadmin **root directory** **_(bunadmin-tutorial)_**. **!NOT** ~~**_packages/bunadmin_**~~
+
+```shell
 # cd ../..
 mkdir plugins/bunadmin-plugin-myteam-blog
 ```
 
-*Folders starting with `bunadmin-plugin-` in the `plugins` directory will be automatically recognized as plugins.*
-
+_Folders starting with `bunadmin-plugin-` in the `plugins` directory will be automatically recognized as plugins._
 
 ## Create an initialization data file
 
-``` shell
+```shell
 $_ && mkdir utils
 touch utils/initData.ts
 ```
 
-*File `utils/initData.ts` will automatically activate the plugin, and it will automatically generate multi-level menus and table columns.*
+_File `utils/initData.ts` will automatically activate the plugin, and it will automatically generate multi-level menus and table columns._
 
-Replace the content of `utils/initData.ts` ***(bunadmin-tutorial/plugins/bunadmin-plugin-myteam-blog/utils/initData.ts)*** with the following:
-``` ts
-import { IPluginData } from "@bunred/bunadmin"
+Replace the content of `utils/initData.ts` **_(bunadmin-tutorial/plugins/bunadmin-plugin-myteam-blog/utils/initData.ts)_** with the following:
+
+```ts
+import { IPluginData } from "@xbuilder/bunadmin"
 
 const plugin = "mypost"
 
@@ -54,12 +55,11 @@ const data: IPluginData[] = [
 ]
 
 export default { plugin, data }
-
 ```
 
 ## Create a schema
 
-``` shell
+```shell
 SCHEMA="post" && mkdir $SCHEMA && \
 touch $SCHEMA/columns.tsx && \
 touch $SCHEMA/index.tsx && \
@@ -67,16 +67,17 @@ touch $SCHEMA/plugin.ts && \
 touch $SCHEMA/types.ts
 ```
 
-*The updated `post` schema will automatically generate a table for data management.*
+_The updated `post` schema will automatically generate a table for data management._
 
 ### The Steps
+
 1. Create interface
 2. Prepare table columns
 3. Construct table
 
 `post/types.ts` <Checkbox />
 
-``` ts
+```ts
 export default interface Type {
   id: number
   title: string
@@ -85,7 +86,8 @@ export default interface Type {
 ```
 
 `post/columns.tsx` <Checkbox />
-``` tsx
+
+```tsx
 import { Column } from "material-table"
 import Type from "./types"
 
@@ -109,7 +111,8 @@ export default (): Column<Type>[] => [
 ```
 
 `post/plugin.ts` <Checkbox />
-``` ts
+
+```ts
 import Columns from "./columns"
 
 export const SchemaName = "posts"
@@ -117,18 +120,18 @@ export const SchemaName = "posts"
 export const SchemaLabel = "Posts"
 
 export const SchemaColumns = Columns
-
 ```
 
 `post/index.tsx` <Checkbox />
-``` tsx
+
+```tsx
 import React, { createRef } from "react"
 import {
   Table,
   TableHead,
   TableDefaultProps,
   tableIcons
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 import { useTheme } from "@material-ui/core/styles"
 import { SchemaLabel, SchemaColumns } from "./plugin"
 
@@ -174,6 +177,6 @@ You can now query local data, test filtering and sorting, but you can’t modify
 
 ![Blog Post](https://gblobscdn.gitbook.com/assets%2F-M1ZbjnBaWO_NJOdj8_A%2F-MHfe3l6qmtBikzv9V28%2F-MHfedSDcseBrb_aue5G%2Fblog-post.png)
 
-*If you see the screenshot page, it means that the plugin has been created and successfully activated, otherwise please check the steps above or try to restart bunadmin.*
+_If you see the screenshot page, it means that the plugin has been created and successfully activated, otherwise please check the steps above or try to restart bunadmin._
 
-## [Sample code](https://github.com/bunred/bunadmin-example-plugin-tutorial)
+## [Sample code](https://github.com/xbuilder/bunadmin-example-plugin-tutorial)

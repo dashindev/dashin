@@ -1,4 +1,4 @@
-import { notice, ConfirmDialog } from "@bunred/bunadmin"
+import { notice, ConfirmDialog } from "@xbuilder/bunadmin"
 
 # Dialog
 
@@ -16,10 +16,10 @@ import { notice, ConfirmDialog } from "@bunred/bunadmin"
   msg="This is an example of content, Click `CONFIRM` will active a Notice"
 />
 
-``` tsx
-import { notice } from "@bunred/bunadmin"
+```tsx
+import { notice } from "@xbuilder/bunadmin"
 //...
-<ConfirmDialog
+;<ConfirmDialog
   doFunc={async () => {
     await notice({
       title: "Confirmed",
@@ -33,7 +33,8 @@ import { notice } from "@bunred/bunadmin"
 ```
 
 ## Props
-``` ts
+
+```ts
 interface Interface {
   openModal: number
   title?: string | ReactElement

@@ -14,7 +14,7 @@ import {
   DefaultLayoutProps,
   ENV,
   store
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 
 export default function DefaultLayout(props: DefaultLayoutProps) {
   const { children, leftMenu } = props

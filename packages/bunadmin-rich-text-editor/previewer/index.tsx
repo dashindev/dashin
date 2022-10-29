@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import MUIRichTextEditor from "mui-rte"
 import { MuiThemeProvider } from "@material-ui/core/styles"
-import { defaultTheme } from "@bunred/bunadmin"
+import { defaultTheme } from "@xbuilder/bunadmin"
 import { convertFromHTML, ContentState, convertToRaw } from "draft-js"
 
 const newTheme = {

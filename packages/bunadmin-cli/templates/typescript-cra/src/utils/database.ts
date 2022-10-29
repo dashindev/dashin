@@ -1,4 +1,4 @@
-import { BunadminDatabase } from "@bunred/bunadmin"
+import { BunadminDatabase } from "@xbuilder/bunadmin"
 
 export class YourDatabase extends BunadminDatabase {}
 

@@ -4,12 +4,12 @@ import {
   TableHead,
   tableIcons,
   TableDefaultProps as DefaultProps
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 import { useTheme } from "@material-ui/core/styles"
 
 import { SchemaLabel, SchemaColumns } from "./plugin"
 import editableCtrl from "./controllers/editableCtrl"
-import { useTranslation } from "@bunred/bunadmin"
+import { useTranslation } from "@xbuilder/bunadmin"
 import { dataCtrl } from "bunadmin-source-strapi"
 import listSer from "./services/listSer"
 

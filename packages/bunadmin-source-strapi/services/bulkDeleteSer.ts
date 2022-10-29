@@ -4,7 +4,7 @@ import {
   storedToken,
   notice,
   BulkDeleteProps
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 
 type Props<RowData extends object> = BulkDeleteProps & {
   data: RowData[]

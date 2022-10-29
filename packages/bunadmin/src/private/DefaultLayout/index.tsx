@@ -16,7 +16,7 @@ import { DefaultLayoutProps } from "@/components"
 import { ENV, store } from "@/utils"
 
 /**
- * !DO NOT export DefaultLayout in @bunred/bunadmin
+ * !DO NOT export DefaultLayout in @xbuilder/bunadmin
  * Due to the dynamic import of aliases (@plugin) and customized elements
  * DefaultLayout needs to be defined in each project.
  * @param props

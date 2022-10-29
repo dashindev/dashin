@@ -1,4 +1,4 @@
-import { IPluginData } from "@bunred/bunadmin"
+import { IPluginData } from "@xbuilder/bunadmin"
 
 export default {
   plugin: "strapi-upload",

@@ -2,7 +2,7 @@
  * Remote data controller
  */
 import { QueryResult } from "material-table"
-import { notice } from "@bunred/bunadmin"
+import { notice } from "@xbuilder/bunadmin"
 import listSer from "../services/listSer"
 import { DataCtrl, ListService } from "../types"
 

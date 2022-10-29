@@ -1,4 +1,4 @@
-import { MenuType as Type } from "@bunred/bunadmin"
+import { MenuType as Type } from "@xbuilder/bunadmin"
 import gettingStarted from "./getting-started"
 import core from "./core"
 import components from "./components"

@@ -3,7 +3,7 @@ import { Box, Button, Typography } from "@material-ui/core"
 import errorMessages from "./errorMessages"
 import { ErrorGetProps, ErrorMsg } from "./types"
 import DefaultLayout from "../DefaultLayout"
-import { ErrorProps, useRouter } from "@bunred/bunadmin"
+import { ErrorProps, useRouter } from "@xbuilder/bunadmin"
 
 const Error = ({ statusCode, hasLayout, message, redirect }: ErrorProps) => {
   const router = useRouter()

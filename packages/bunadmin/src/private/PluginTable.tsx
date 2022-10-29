@@ -2,7 +2,7 @@ import React, { Suspense } from "react"
 import { PluginTableProps, TableSkeleton, handlePluginPath } from "../"
 
 /**
- * !DO NOT export PluginTable in @bunred/bunadmin
+ * !DO NOT export PluginTable in @xbuilder/bunadmin
  * Due to the dynamic import of aliases (@plugin)
  * PluginTable needs to be defined in each project.
  * @param team

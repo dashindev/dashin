@@ -7,7 +7,7 @@ import {
   notice,
   Router,
   SETTING_NAMES
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 import { TFunction } from "i18next"
 
 interface Props {

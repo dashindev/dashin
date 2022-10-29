@@ -2,7 +2,7 @@
   <configuration default="false" name="Dockerfile (static demo - blog)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
     <deployment type="dockerfile">
       <settings>
-        <option name="imageTag" value="bunred/bunadmin:static-demo-blog" />
+        <option name="imageTag" value="xbuilder/bunadmin:static-demo-blog" />
         <option name="buildCliOptions" value="" />
         <option name="command" value="" />
         <option name="containerName" value="bunadmin-static-demo-blog" />

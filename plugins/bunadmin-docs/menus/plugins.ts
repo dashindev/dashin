@@ -1,4 +1,4 @@
-import { MenuType as Type } from "@bunred/bunadmin"
+import { MenuType as Type } from "@xbuilder/bunadmin"
 
 const plugins = [
   {

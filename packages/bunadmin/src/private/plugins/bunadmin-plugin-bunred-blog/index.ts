@@ -1,9 +1,9 @@
-import { IPluginData } from "@bunred/bunadmin"
+import { IPluginData } from "@xbuilder/bunadmin"
 
 export { default as post } from "./post"
 
 const shared = {
-  team: "bunred",
+  team: "xbuilder",
   group: "blog",
   customized: true
 }
@@ -11,8 +11,8 @@ const shared = {
 export const initData: IPluginData[] = [
   {
     ...shared,
-    id: "bunred_blog",
-    name: "bunred_blog",
+    id: "xbuilder_blog",
+    name: "xbuilder_blog",
     label: "Blog",
     icon_type: "eva",
     icon: "file-text-outline",
@@ -20,20 +20,20 @@ export const initData: IPluginData[] = [
   },
   {
     ...shared,
-    id: "bunred_blog_category",
+    id: "xbuilder_blog_category",
     name: "category",
     label: "Category",
     icon_type: "eva",
     icon: "file-text-outline",
-    parent: "bunred_blog"
+    parent: "xbuilder_blog"
   },
   {
     ...shared,
-    id: "bunred_blog_post",
+    id: "xbuilder_blog_post",
     name: "post",
     label: "Post",
     icon_type: "eva",
     icon: "file-text-outline",
-    parent: "bunred_blog"
+    parent: "xbuilder_blog"
   }
 ]

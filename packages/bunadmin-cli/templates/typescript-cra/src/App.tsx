@@ -16,7 +16,7 @@ import {
   SnackMessage,
   useTranslation,
   MenuType
-} from "@bunred/bunadmin"
+} from "@xbuilder/bunadmin"
 import { CssBaseline, ThemeProvider } from "@material-ui/core"
 import { SnackbarProvider } from "notistack"
 import { createBrowserHistory } from "history"

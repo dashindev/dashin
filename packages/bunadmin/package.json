@@ -28,7 +28,7 @@
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest",
     "tsc:watch": "ttsc -w -p tsconfig.pack.json",
     "tsc:clean": "tsc --build --clean",
-    "ttsc:build": "ttsc -p tsconfig.pack.json"
+    "tsc:build": "ttsc -p tsconfig.pack.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -55,7 +55,7 @@
     "formik-material-ui": "3.0.1",
     "i18next": "^21.8.10",
     "json-bigint": "^1.0.0",
-    "material-table": "npm:@xbuilder/material-table@0.69.1-beta.2",
+    "material-table": "1.69.3",
     "nanoid": "3.3.4",
     "notistack": "^1.0.10",
     "prism-react-renderer": "^1.3.3",

@@ -9,7 +9,7 @@
   "scripts": {
     "tsc:watch": "lerna run --parallel tsc:watch",
     "tsc:clean": "lerna run --parallel tsc:clean",
-    "tsc:build": "lerna run ttsc:build && lerna run tsc:build",
+    "tsc:build": "lerna run tsc:build",
     "dev": "cd packages/bunadmin && yarn start",
     "turbo:tsc:build": "turbo run tsc:build",
     "turbo:build": "turbo run build",

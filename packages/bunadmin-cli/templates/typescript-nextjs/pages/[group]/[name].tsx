@@ -11,7 +11,7 @@ import PluginTable from "../../components/PluginTable"
 import DefaultLayout from "../../components/DefaultLayout"
 import Error from "../../components/Error"
 import Home from "../../components/Home"
-import { SignIn as AuthComponent } from "bunadmin-auth-local"
+import { SignIn as AuthComponent } from "@xbuilder/bunadmin-auth-local"
 
 const DynamicGroupNamePage = ({
   leftMenuData,

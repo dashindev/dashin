@@ -10,7 +10,7 @@ import { useTheme } from "@material-ui/core/styles"
 import { SchemaLabel, SchemaColumns } from "./plugin"
 import editableCtrl from "./controllers/editableCtrl"
 import { useTranslation } from "@xbuilder/bunadmin"
-import { dataCtrl } from "bunadmin-source-strapi"
+import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
 import listSer from "./services/listSer"
 
 export default function() {

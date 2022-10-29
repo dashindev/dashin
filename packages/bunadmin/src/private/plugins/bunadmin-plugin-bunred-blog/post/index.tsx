@@ -9,7 +9,11 @@ import { useTheme } from "@material-ui/core/styles"
 
 import { SchemaLabel, SchemaColumns, SchemaName } from "./plugin"
 import { useTranslation } from "@xbuilder/bunadmin"
-import { bulkDeleteCtrl, dataCtrl, editableCtrl } from "bunadmin-source-strapi"
+import {
+  bulkDeleteCtrl,
+  dataCtrl,
+  editableCtrl
+} from "@xbuilder/bunadmin-source-strapi"
 import Type from "./types"
 
 export default function Post() {

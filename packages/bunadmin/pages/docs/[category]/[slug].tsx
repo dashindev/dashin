@@ -27,7 +27,7 @@ export default function DocsCategorySlug() {
   const [pagination, setPagination] = useState<PaginationType>({})
   const [menuData, setMenuData] = useState<Type[]>([])
 
-  const bunadminDocPath = "bunadmin-docs"
+  const bunadminDocPath = "@xbuilder/bunadmin-docs"
 
   useEffect(() => {
     ;(async () => {

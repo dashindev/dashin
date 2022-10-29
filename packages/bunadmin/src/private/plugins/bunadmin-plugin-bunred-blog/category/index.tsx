@@ -10,7 +10,11 @@ import { useTheme } from "@material-ui/core/styles"
 
 import { SchemaName, SchemaLabel, SchemaColumns } from "./plugin"
 import { useTranslation } from "react-i18next"
-import { bulkDeleteCtrl, dataCtrl, editableCtrl } from "bunadmin-source-strapi"
+import {
+  bulkDeleteCtrl,
+  dataCtrl,
+  editableCtrl
+} from "@xbuilder/bunadmin-source-strapi"
 import Type from "./types"
 
 export default function() {

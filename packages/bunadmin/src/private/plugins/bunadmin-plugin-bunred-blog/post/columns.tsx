@@ -8,10 +8,10 @@ import {
 } from "@xbuilder/bunadmin"
 import { Chip } from "@material-ui/core"
 import { ENUM_STATUS } from "./plugin"
-import { FileUploader } from "bunadmin-upload-strapi"
-import { dataCtrl } from "bunadmin-source-strapi"
+import { FileUploader } from "@xbuilder/bunadmin-upload-strapi"
+import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
 import { SchemaName } from "../category/plugin"
-import { RichTextEditor } from "bunadmin-rich-text-editor"
+import { RichTextEditor } from "@xbuilder/bunadmin-rich-text-editor"
 
 export default ({ t }: PluginColumns): Column<Type>[] => [
   {

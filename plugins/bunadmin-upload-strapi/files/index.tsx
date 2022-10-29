@@ -11,7 +11,7 @@ import { useTheme } from "@material-ui/core/styles"
 import { SchemaLabel, SchemaColumns } from "./plugin"
 import editableCtrl from "./controllers/editableCtrl"
 import { useTranslation } from "react-i18next"
-import { dataCtrl } from "bunadmin-source-strapi"
+import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
 import { SchemaName } from "./plugin"
 import Type from "./types"
 

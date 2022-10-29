@@ -3,7 +3,7 @@ import { Column } from "material-table"
 import Type from "./types"
 import { SchemaName } from "./plugin"
 import { ListSelector, PluginColumns } from "@xbuilder/bunadmin"
-import { dataCtrl } from "bunadmin-source-strapi"
+import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
 
 const columns = ({ t }: PluginColumns): Column<Type>[] => [
   {

@@ -1,6 +1,6 @@
 {
   "name": "@xbuilder/bunadmin-rich-text-editor",
-  "version": "1.4.0-alpha.0",
+  "version": "1.4.0-beta.0",
   "description": "Rich Text Editor for bunadmin",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

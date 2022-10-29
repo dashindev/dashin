@@ -63,9 +63,10 @@ $ yarn dev
 ## Lerna (publish packages)
 
 ```
-yarn build
+yarn turbo:tsc:build
 
-npx lerna publish --force-publish --skip-git
+npx lerna version --force-publish --no-git-tag-version
+npx lerna publish from-git
 ```
 
 #### Thanks

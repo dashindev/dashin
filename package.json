@@ -10,10 +10,16 @@
     "tsc:watch": "lerna run --parallel tsc:watch",
     "tsc:clean": "lerna run --parallel tsc:clean",
     "tsc:build": "lerna run ttsc:build && lerna run tsc:build",
-    "dev": "cd packages/bunadmin && yarn start"
+    "dev": "cd packages/bunadmin && yarn start",
+    "turbo:tsc:build": "turbo run tsc:build",
+    "turbo:build": "turbo run build",
+    "turbo:test": "turbo run test",
+    "turbo:lint": "turbo run lint",
+    "turbo:dev": "turbo run dev"
   },
   "devDependencies": {
-    "lerna": "^5.1.4"
+    "lerna": "^5.1.4",
+    "turbo": "^1.6.2"
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"

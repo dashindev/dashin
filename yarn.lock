@@ -17913,6 +17913,48 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
+turbo-darwin-64@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/turbo-darwin-64/-/turbo-darwin-64-1.6.2.tgz#201078bb26bf0057deb2489fa6774d6cc222d5ee"
+  integrity sha512-qzqVdJZcVeu1d0mzeSxffgeOToSgM+Hl1y9yDiJQ4QQjiR/WGCzS9FtydLnk0ori8T1j/lxiiQz2sHjHYfLCTg==
+
+turbo-darwin-arm64@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/turbo-darwin-arm64/-/turbo-darwin-arm64-1.6.2.tgz#df661f839ab5297c8786ec3d9b731e710a704c0d"
+  integrity sha512-EJvgWSjLwzJbAsqRuqeaYSdXNKwyiUfOfEOPerYCvwxC+ILiqpladjteMCzzF/z2OmIbPzuqZpyik30TfpIC9A==
+
+turbo-linux-64@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/turbo-linux-64/-/turbo-linux-64-1.6.2.tgz#25b815792671ac23f3755532ddfbf67bde21cf28"
+  integrity sha512-SJ5ThDApOyOavjvkYb6a1MKJbOvX4JEvSYxoZv+ZpN8g7A7x1SE9b7EnxFl26S4eyy0J4+r+YJBDBZ7sFkqRWQ==
+
+turbo-linux-arm64@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/turbo-linux-arm64/-/turbo-linux-arm64-1.6.2.tgz#1a889d16aefc84ebf1fc6b639bd62c6a0f814f0d"
+  integrity sha512-0vHojVlvAelsYZo6p/xE9H9Dg8spNjXx+PO5RwP12ui8GuEqHb3Vomdb7AKDnWkIH7bpysNb9GbKEk7awQpGSg==
+
+turbo-windows-64@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/turbo-windows-64/-/turbo-windows-64-1.6.2.tgz#d158c3df3aea1a28df2ab794b17b1dcb225f565c"
+  integrity sha512-j4mJmY5pEt7OaBXDM99BpDnJuSpiLVbVbUl4Ezp8w3gyIcGuxy3wAfLbQyZSLu8ke6R9SdmXIBAM2Y0MjS/Z1g==
+
+turbo-windows-arm64@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/turbo-windows-arm64/-/turbo-windows-arm64-1.6.2.tgz#bad383efc06da6304b5e384fcf499cf9e17b850a"
+  integrity sha512-AlDYjxPU21YSefP3qMl/Zys5spglXtaBt2ZF5N2+OWcjiJZ/0mIIc69oFdzuAuiyoYkyWMdkoCSGwuljtl31vg==
+
+turbo@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/turbo/-/turbo-1.6.2.tgz#61bb7056d7266c2e07b1f3241d9d859b1715917e"
+  integrity sha512-a6UM9HaAjM5ai+vxDFI/z0l4Bf6zWjf7wCf9Ip2iyd4XZkZZnhRtM6FpaUWzorjz9Dsqnfwu3nkWY3wPdH02IQ==
+  optionalDependencies:
+    turbo-darwin-64 "1.6.2"
+    turbo-darwin-arm64 "1.6.2"
+    turbo-linux-64 "1.6.2"
+    turbo-linux-arm64 "1.6.2"
+    turbo-windows-64 "1.6.2"
+    turbo-windows-arm64 "1.6.2"
+
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"

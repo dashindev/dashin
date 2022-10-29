@@ -18,6 +18,8 @@ yarn-error.log*
 .next
 out
 
+.turbo
+
 # IDE
 .idea/workspace.xml
 .idea/vcs.xml

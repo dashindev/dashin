@@ -14,5 +14,8 @@
   },
   "devDependencies": {
     "lerna": "^5.1.4"
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
   }
 }

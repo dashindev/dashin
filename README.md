@@ -47,6 +47,12 @@ git clone git@github.com:bunred/bunadmin.git
 yarn
 yarn tsc:watch
 yarn dev
+
+# minium command
+$ yarn workspace @bunred/bunadmin tsc:watch
+$ yarn workspace bunadmin-auth-local tsc:watch
+
+$ yarn dev
 ```
 
 [http://localhost:3000](http://localhost:3000)

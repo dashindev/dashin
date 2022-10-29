@@ -1,5 +1,6 @@
 import FileHound from "filehound"
 import { PluginData } from "@/utils"
+import * as fs from "fs"
 
 /**
  * NODE MODULE
@@ -62,27 +63,66 @@ export function findPlugins(paths: string): string[] {
 
 /**
  * NODE MODULE
- * Get plugins data from [paths]
+ * Get plugin names from package.json
+ */
+export function getPluginNames(packageJson: string): string[] {
+  const b = fs.readFileSync(packageJson)
+
+  let pluginNames: string[] = []
+
+  try {
+    const content = b.toString()
+    const obj: { [k: string]: string } = JSON.parse(content)
+
+    pluginNames = Object.keys(obj.dependencies || {}).filter(k => {
+      const matchPlugins = [
+        "bunadmin-auth",
+        "bunadmin-upload",
+        "bunadmin-plugin"
+      ]
+
+      for (let index = 0; index < matchPlugins.length; index++) {
+        const r = matchPlugins[index]
+        if (k.indexOf(r) > -1) return true
+      }
+    })
+
+    if (pluginNames.length == 0)
+      console.warn(
+        "you should add at least one bunadmin plugin in your dependencies"
+      )
+
+    return pluginNames
+  } catch (error) {
+    console.error("failed to get plugin names", error)
+    return []
+  }
+}
+
+/**
+ * NODE MODULE
+ * Get plugins data from package.json
  * @param paths
  */
-export function getPlugins(paths: string[]): PluginData[] {
-  let pluginsData: PluginData[] = []
-  paths.map(async pathItem => {
-    if (pathItem.indexOf("node_modules") < 0) return
 
+export function getPlugins(pluginNames: string[]): PluginData[] {
+  // Get plugin data in each plugin initData
+  let pluginsData: PluginData[] = []
+  for (let index = 0; index < pluginNames.length; index++) {
+    const pluginName = pluginNames[index]
     let plugin
     try {
-      plugin = require("" + pathItem)
-      if (!plugin || !plugin.initData || !plugin.initData.data) return
+      plugin = require("" + pluginName)
+      if (!plugin || !plugin.initData || !plugin.initData.data) continue
       pluginsData = [...pluginsData, ...plugin.initData.data]
     } catch (e) {
       console.error(
         "cannot find 'initData' in the plugin, please export or check: " +
-          pathItem
+          pluginName
       )
       console.error(e)
     }
-  })
+  }
 
   return pluginsData
 }

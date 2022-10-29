@@ -8,7 +8,7 @@ import {
 } from "@xbuilder/bunadmin"
 import { EditComponentProps } from "material-table"
 import { DropResult } from "react-beautiful-dnd"
-import { IFile } from "../.."
+import { IFile } from "../../utils/types/file"
 import uploadMediaCtrl from "../controllers/uploadMediaCtrl"
 
 export default function FileUploader({

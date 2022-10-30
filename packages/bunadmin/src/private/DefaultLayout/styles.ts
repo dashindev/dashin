@@ -1,3 +1,4 @@
+import { HEADER_HEIGHT } from "@/components/TopBar/styles"
 import { Theme } from "@material-ui/core/styles"
 import { StyleRules } from "@material-ui/styles/withStyles"
 
@@ -20,7 +21,7 @@ export default function styles({
       background: "#fff",
       "& .MuiContainer-root": {
         borderTopLeftRadius: 10,
-        height: "calc(100vh - 46px)", // minus the minHeight of TopBar
+        height: `calc(100vh - ${HEADER_HEIGHT}px)`, // minus the minHeight of TopBar
         maxWidth: phoneVertical
           ? "auto"
           : drawerOpen

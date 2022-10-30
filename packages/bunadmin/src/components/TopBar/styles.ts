@@ -1,5 +1,6 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 
+export const HEADER_HEIGHT: number = 46
 export const topBarStyles = makeStyles((theme: Theme) => {
   return createStyles({
     appBar: {
@@ -16,8 +17,8 @@ export const topBarStyles = makeStyles((theme: Theme) => {
       }
     },
     gutters: {
-      paddingLeft: 16,
-      minHeight: 46
+      paddingLeft: 20,
+      minHeight: HEADER_HEIGHT
     },
     leftBlock: {
       display: "flex",

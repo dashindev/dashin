@@ -17,6 +17,7 @@ import { useRouter } from "@/router"
 import { DynamicDocRoute } from "@/utils/routes"
 import { NoticePlugin } from "@/utils"
 import { Button } from "@material-ui/core"
+import { UserMenuProps } from "./TopBarRightMenu/UserMenu"
 
 const useStyles = topBarStyles
 
@@ -29,6 +30,7 @@ type TopBarProps = {
   appendLeft?: React.ReactNode
   prependRight?: React.ReactNode
   appendRight?: React.ReactNode
+  userMenuProps?: UserMenuProps
 } & NoticePlugin
 
 export default function TopBar(props: TopBarProps) {
@@ -67,11 +69,10 @@ export default function TopBar(props: TopBarProps) {
                 edge="start"
                 onClick={menuClick}
                 className={classes.menuButton}
-                size="small"
               >
                 <EvaIcon
                   name="menu-2-outline"
-                  size="large"
+                  size="medium"
                   fill={theme.bunadmin.iconColor}
                 />
               </IconButton>
@@ -92,6 +93,8 @@ export default function TopBar(props: TopBarProps) {
 
         <div className={classes.rightBlock}>
           {prependRight}
+          {ENV.ON_I18N && <I18nMenu />}
+          {ENV.ON_DOC && <DocMenu isDoc={isDoc} docsHome={docsHome} />}
           {!isDoc && (
             <>
               <NoticeMenu
@@ -99,13 +102,12 @@ export default function TopBar(props: TopBarProps) {
                 notificationCount={props.notificationCount}
                 NotificationTable={props.NotificationTable}
               />
-              <UserMenu />
               {ENV.ON_SETTING && <SettingMenu />}
+
+              {appendRight}
+              <UserMenu {...props.userMenuProps} />
             </>
           )}
-          {ENV.ON_I18N && <I18nMenu />}
-          {ENV.ON_DOC && <DocMenu isDoc={isDoc} docsHome={docsHome} />}
-          {appendRight}
         </div>
       </Toolbar>
     </AppBar>

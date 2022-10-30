@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import Button from "@material-ui/core/Button"
 import IconButton from "@material-ui/core/IconButton"
 import MenuItem from "@material-ui/core/MenuItem"
 import Menu from "@material-ui/core/Menu"
@@ -15,14 +16,22 @@ interface State {
   username: string | "Guest"
 }
 
-export default function UserMenu() {
+export type UserMenuProps = {
+  onProfile?: () => void
+  onLogout?: {
+    func: () => void
+    override?: boolean
+  }
+}
+
+export default function UserMenu(props: UserMenuProps) {
   const { t } = useTranslation()
   const theme = useTheme()
   const router = useRouter()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const [state, setState] = useState<State>({
-    username: "Guest"
+    username: ""
   })
 
   useEffect(() => {
@@ -50,10 +59,17 @@ export default function UserMenu() {
     router.push(DynamicRoute, route)
   }
 
-  const handleLogout = async () => {
-    // update username in setting
-    const db = BA_DB
+  const onProfile = () => {
+    props.onProfile?.()
+  }
 
+  const onLogout = async () => {
+    if (props.onLogout) {
+      props.onLogout.func()
+      if (props.onLogout.override) return
+    }
+
+    // update username in setting
     await BA_DB.settings.put({
       name: Primary,
       value: undefined,
@@ -67,19 +83,34 @@ export default function UserMenu() {
   return (
     // User Icon
     <div>
-      <IconButton
-        aria-label="account of current user"
-        aria-controls="menu-appbar"
-        aria-haspopup="true"
-        onClick={handleMenu}
-        color="inherit"
-      >
-        <EvaIcon
-          name="shield-outline"
-          size="medium"
-          fill={theme.bunadmin.iconColor}
-        />
-      </IconButton>
+      {state.username == "" ? (
+        <Button
+          color="primary"
+          variant="outlined"
+          size="small"
+          onClick={() => {
+            router.push(DynamicRoute, UserRoute.signIn)
+          }}
+          style={{ marginLeft: 12 }}
+        >
+          Sign in
+        </Button>
+      ) : (
+        <IconButton
+          aria-label="account of current user"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          onClick={handleMenu}
+          color="inherit"
+        >
+          <EvaIcon
+            name="shield-outline"
+            size="medium"
+            fill={theme.bunadmin.iconColor}
+          />
+        </IconButton>
+      )}
+
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
@@ -98,10 +129,12 @@ export default function UserMenu() {
         <MenuItem disabled>
           <Trans
             i18nKey="Signed as $username"
-            values={{ name: state.username && state.username.substr(0, 20) }}
+            values={{
+              name: state.username && state.username.substr(0, 20)
+            }}
           />
         </MenuItem>
-        <MenuItem onClick={() => handleClose({})}>{t("Profile")}</MenuItem>
+        <MenuItem onClick={onProfile}>{t("Profile")}</MenuItem>
         <Divider />
         <MenuItem onClick={() => handleClose({ route: LocalDataRoute.auth })}>
           {t("Switch account")}
@@ -110,7 +143,7 @@ export default function UserMenu() {
           {t("Add another account")}
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleLogout}>{t("Logout")}</MenuItem>
+        <MenuItem onClick={onLogout}>{t("Logout")}</MenuItem>
       </Menu>
     </div>
   )

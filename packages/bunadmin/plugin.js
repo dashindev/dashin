@@ -14,11 +14,17 @@ const {
  * `dynamic/[plugin]/[name]/index.js`.
  * generate the data file (menu, schema) `pluginsData.ts` to `.bunadmin/dynamic/`,
  * @param packagePath {string}
+ * @param modulesPath {string}
  * @param dynamicPath {string}
  * @param pluginsPath {string}
  * @return {boolean}
  */
-module.exports = async ({ packagePath, dynamicPath, pluginsPath }) => {
+module.exports = async ({
+  packagePath,
+  modulesPath,
+  dynamicPath,
+  pluginsPath
+}) => {
   /**
    * Prepare plugins START
    */
@@ -44,12 +50,13 @@ module.exports = async ({ packagePath, dynamicPath, pluginsPath }) => {
     fs.mkdirSync(dynamicPath)
   }
 
-  // Find plugins in packagePath
+  // Find plugins in package.json
   const pluginNames = getPluginNames(packagePath)
   const pluginsData = getPlugins(pluginNames)
 
   /**
-   * Generate `index.ts` in `.bunadmin/dynamic/`
+   * Generate `index.js` in `.bunadmin/dynamic/`
+   * for dynamically importing packages from package.json
    */
   let exportLine = ""
   pluginNames.map(pluginName => {
@@ -67,6 +74,7 @@ export default {\n  ${exportLine}}`
 
   /**
    * Generate `pluginsData.ts` in `.bunadmin/dynamic/`
+   * for dynamically importing packages from custom plugins
    */
   const customPluginsPaths = findPlugins(pluginsPath)
   const relativePath = path
@@ -96,6 +104,76 @@ export const data: IPluginData[] = [${arrayLine}]
 `
   fs.writeFile(`${dynamicPath}/pluginsData.ts`, tsContent, e => {
     if (e) console.error("cannot generating pluginsData.ts: " + e)
+  })
+
+  /**
+   * Generate plugin schemas ([plugin]/[group]/[name].js)
+   * form plugin files (in `node_modules`)
+   */
+  pluginNames.map(async pluginName => {
+    if (typeof modulesPath !== "string") throw "modulesPath is required!"
+    const pathItem = `${modulesPath}/${pluginName}`
+
+    if (pathItem.indexOf("node_modules") < 0) {
+      throw "modulesPath needs to contain `node_modules`!"
+    }
+
+    let plugin
+    try {
+      plugin = require(pathItem)
+      if (!plugin || !plugin.initData || !plugin.initData.data) return
+    } catch (e) {
+      console.error("\n*************")
+      console.error(
+        "Failed to process bunadmin plugin, there may be two reasons: " + e
+      )
+      console.error("1. " + e)
+      console.error(
+        "2. cannot find 'initData' in the plugin, please export or check: " +
+          pathItem
+      )
+      console.error("*************\n")
+    }
+
+    /**
+     * Generating plugin files under `dynamic/`
+     * mkdir directories [plugin], [plugin]/[group]
+     * create files [plugin]/[group]/[name].js
+     */
+    try {
+      if (!plugin) return
+      let fileName = pathItem.replaceAll(/\\/g, "/") // Fixing the PATH on Windows
+      fileName = fileName.replace(/.*\//g, "")
+      /**
+       * Recreate directory dynamic/[plugin]
+       */
+      const savePluginPath = path.resolve(dynamicPath, fileName)
+      if (!fs.existsSync(savePluginPath)) {
+        fs.mkdirSync(savePluginPath)
+      }
+      plugin.initData.data.map(async dataItem => {
+        if (dataItem["ignore_schema"] || !dataItem["name"]) return
+        /**
+         * Recreate directory dynamic/[plugin]/[name]
+         */
+        const saveNamePath = path.resolve(savePluginPath, dataItem["name"])
+        if (!fs.existsSync(saveNamePath)) {
+          fs.mkdirSync(saveNamePath)
+        }
+        const saveNameContent = `export { default } from "${pluginName}/lib/${dataItem["name"]}"`
+        fs.writeFile(`${saveNamePath}/index.js`, saveNameContent, e => {
+          if (e) console.error("could not generate plugin schema: " + e)
+        })
+
+        const saveIndexPath = path.resolve(dynamicPath, `${fileName}/index.js`)
+        const saveIndexContent = `export * from "${pluginName}"`
+        fs.writeFile(saveIndexPath, saveIndexContent, e => {
+          if (e) console.error("could not generate plugin index.js: " + e)
+        })
+      })
+    } catch (e) {
+      console.error("could not generate pluginSchema: " + e)
+    }
   })
 
   const name = "pluginsData.json"

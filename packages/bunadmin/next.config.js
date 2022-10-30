@@ -20,9 +20,10 @@ module.exports = () => {
         }
       } else {
         const packagePath = path.resolve(__dirname, "package.json")
+        const modulesPath = path.resolve(__dirname, "../../node_modules")
         const dynamicPath = path.resolve(__dirname, ".bunadmin/dynamic")
         const pluginsPath = path.resolve(__dirname, "src/private/plugins")
-        bunadminPlugin({ packagePath, dynamicPath, pluginsPath })
+        bunadminPlugin({ packagePath, modulesPath, dynamicPath, pluginsPath })
       }
       /**
        * alias

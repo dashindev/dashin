@@ -50,7 +50,7 @@ yarn dev
 
 # minium command
 $ yarn workspace @xbuilder/bunadmin tsc:watch
-$ yarn workspace bunadmin-auth-local tsc:watch
+$ yarn workspace @xbuilder/bunadmin-auth-local tsc:watch
 
 $ yarn dev
 ```
@@ -66,7 +66,7 @@ $ yarn dev
 yarn turbo:tsc:build
 
 npx lerna version --force-publish --no-git-tag-version
-npx lerna publish from-git
+npx lerna publish from-package
 ```
 
 #### Thanks

@@ -25,11 +25,11 @@ export type UserMenuProps = {
   onLogin?: () => void
   onProfile?: () => void
   onLogout?: {
-    func: () => void
+    func?: () => void
     funcOverride?: boolean
     // do action after `logout`; default or undefined is `redirect`
     actionAfter?: "reload" | "none" | "redirect"
-    redirectTo: string // redirect URL, default is `auth/sign-in`
+    redirectTo?: string // redirect URL, default is `auth/sign-in`
   }
 }
 
@@ -82,7 +82,7 @@ export default function UserMenu(props: UserMenuProps) {
 
   const onLogout = async () => {
     if (props.onLogout) {
-      props.onLogout.func()
+      props.onLogout.func?.()
       if (props.onLogout.funcOverride) return
     }
 

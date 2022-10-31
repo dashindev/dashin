@@ -177,17 +177,16 @@ export default function UserMenu(props: UserMenuProps) {
         {props.prepend}
         <MenuItem onClick={onProfile}>{t("Profile")}</MenuItem>
         <Divider />
+        {/* Switch user is not disabled */}
         {!props.disableSwitch && (
-          <>
-            <MenuItem
-              onClick={() => handleClose({ route: LocalDataRoute.auth })}
-            >
-              {t("Switch account")}
-            </MenuItem>
-            <MenuItem onClick={onLogin}>{t("Add another account")}</MenuItem>
-            <Divider />
-          </>
+          <MenuItem onClick={() => handleClose({ route: LocalDataRoute.auth })}>
+            {t("Switch account")}
+          </MenuItem>
         )}
+        {!props.disableSwitch && (
+          <MenuItem onClick={onLogin}>{t("Add another account")}</MenuItem>
+        )}
+        {!props.disableSwitch && <Divider />}
 
         {props.append}
         <MenuItem onClick={onLogout}>{t("Logout")}</MenuItem>

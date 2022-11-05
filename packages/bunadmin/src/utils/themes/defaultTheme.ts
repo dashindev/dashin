@@ -99,15 +99,16 @@ const defaultTheme = createTheme({
         },
         // scrollbar start
         "*::-webkit-scrollbar": {
-          width: ".4rem"
+          width: "8px"
         },
         "*::-webkit-scrollbar-track": {
           "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
         },
         "*::-webkit-scrollbar-thumb": {
-          background: iconColor,
           cursor: "pointer",
-          borderRadius: ".15625rem"
+          border: "2px solid white",
+          borderRadius: "4px",
+          backgroundColor: "rgba(0, 0, 0, .3)"
         }, // scrollbar end
         // eva icon
         ".eva-hover": {

@@ -64,8 +64,7 @@ export default function<RowData extends object>() {
             t,
             tableQuery,
             path: SchemaName,
-            searchField: "username",
-            skipCount: true
+            searchField: "username"
           })
         }
       />

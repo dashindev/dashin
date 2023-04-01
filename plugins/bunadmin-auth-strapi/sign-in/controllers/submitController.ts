@@ -30,9 +30,9 @@ const submitController = async ({ t, values, setSubmitting }: Props) => {
     // store auth
     await db.users.put({
       [primary]: res.user.username,
-      id: res.id,
+      id: res.user.id,
       token: res.jwt,
-      role: res.user.role.name,
+      role: res.user.role?.name,
       details: JSON.stringify(res),
       updated_at
     })
@@ -45,7 +45,7 @@ const submitController = async ({ t, values, setSubmitting }: Props) => {
     // update role in setting
     await db.settings.put({
       name: SETTING_NAMES.role,
-      value: res.user.role.name,
+      value: res.user.role?.name,
       updated_at: Date.now()
     })
     // show notice

@@ -25,14 +25,14 @@ export default async function updateSer({
     headers: {
       Authorization: `Bearer ${token}`
     },
-    data: newData
+    data: { data: newData.attributes }
   })
 
   if (res.error) {
     await notice({
       title: t("Save Failed"),
       severity: "warning",
-      content: JSON.stringify({ errors: res.error, newData })
+      content: JSON.stringify({ errors: res, newData })
     })
   } else {
     await notice({

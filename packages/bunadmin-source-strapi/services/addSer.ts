@@ -19,14 +19,14 @@ export default async function addSer({ t, SchemaName, newData }: Props<any>) {
     headers: {
       Authorization: `Bearer ${token}`
     },
-    data: newData
+    data: { data: newData.attributes }
   })
 
   if (res.error) {
     await notice({
       title: t("Create Failed"),
       severity: "warning",
-      content: JSON.stringify(newData)
+      content: res
     })
   } else {
     await notice({

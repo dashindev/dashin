@@ -15,7 +15,7 @@ import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
 import listSer from "../roles/services/listSer"
 import { IRole } from "../utils/types"
 
-export default function<RowData extends object>() {
+export default function <RowData extends object>() {
   const { t } = useTranslation("table")
   const theme = useTheme()
   const tableRef = createRef()
@@ -59,14 +59,19 @@ export default function<RowData extends object>() {
           filtering: true
         }}
         // data
-        data={async tableQuery =>
-          await dataCtrl({
+        data={async tableQuery => {
+          const data = await dataCtrl({
             t,
             tableQuery,
             path: SchemaName,
             searchField: "username"
           })
-        }
+          return {
+            ...data,
+            page: 0,
+            totalCount: data.data.length
+          }
+        }}
       />
     </>
   )

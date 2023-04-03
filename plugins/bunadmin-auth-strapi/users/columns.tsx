@@ -54,22 +54,5 @@ export default ({ t, roleLookup }: { t: TFunction; roleLookup: object }) =>
       field: "confirmed",
       type: "boolean",
       width: 100
-    },
-    {
-      title: t("Created At"),
-      field: "created_at",
-      editable: "never",
-      filtering: false,
-      defaultSort: "desc",
-      width: 135,
-      render: r => r && new Date(r.created_at).toLocaleString()
-    },
-    {
-      title: t("Updated At"),
-      field: "updated_at",
-      editable: "never",
-      filtering: false,
-      width: 135,
-      render: r => (r ? new Date(r.updated_at).toLocaleString() : "")
     }
   ] as Column<Type>[]

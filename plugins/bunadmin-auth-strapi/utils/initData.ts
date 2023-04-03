@@ -13,6 +13,15 @@ const data: IPluginData[] = [
     ignore_menu: true
   },
   {
+    id: "bunadmin_auth_strapi_sign_up",
+    group: "auth-strapi",
+    name: "sign-up",
+    label: "Sign-up",
+    team: "bunadmin",
+    customized: true,
+    ignore_menu: true
+  },
+  {
     id: "bunadmin_auth_strapi_users",
     group: "auth-strapi",
     name: "users",
@@ -22,7 +31,10 @@ const data: IPluginData[] = [
     icon_type: "eva",
     icon: "person-outline",
     rank: "100",
-    role: process.env.REACT_APP_AUTH_STRAPI_ROLE
+    role:
+      process.env.REACT_APP_AUTH_STRAPI_ROLE ||
+      process.env.NEXT_PUBLIC_AUTH_STRAPI_ROLE ||
+      "Admin,Reviewer"
   },
   {
     id: "bunadmin_auth_strapi_roles",
@@ -34,7 +46,10 @@ const data: IPluginData[] = [
     icon_type: "eva",
     icon: "people-outline",
     rank: "100",
-    role: process.env.REACT_APP_AUTH_STRAPI_ROLE
+    role:
+      process.env.REACT_APP_AUTH_STRAPI_ROLE ||
+      process.env.NEXT_PUBLIC_AUTH_STRAPI_ROLE ||
+      "Admin,Reviewer"
   }
 ]
 

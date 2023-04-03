@@ -1,5 +1,5 @@
 import { Values } from "../types"
-import userSignInService from "../services/signInService"
+import userSignUpService from "../services/signUpService"
 
 import {
   BA_DB,
@@ -25,7 +25,17 @@ const submitController = async ({
   setSubmitting,
   router
 }: Props) => {
-  const resSign = await userSignInService(values)
+  const resSign = await userSignUpService(values)
+
+  if (!resSign || !resSign.jwt) {
+    // show notice
+    await notice({
+      title: t("Sign up failed"),
+      severity: "error",
+      content: JSON.stringify(resSign)
+    })
+    return
+  }
 
   // Get role data from '/users/me?populate=*'
   const res = await request("/users/me?populate=*", {
@@ -38,7 +48,7 @@ const submitController = async ({
   const user = res
   setSubmitting(false)
   // Sign-in successfully
-  if (resSign && resSign.jwt && user) {
+  if (user) {
     // store user profile
     const primary = Primary
     const updated_at = Date.now()
@@ -66,13 +76,13 @@ const submitController = async ({
       updated_at: Date.now()
     })
     // show notice
-    await notice({ title: t("Sign in successful") })
+    await notice({ title: t("Sign up successful") })
     // push to origin url
     router.push("/")
   } else {
     // show notice
     await notice({
-      title: t("Sign in failed"),
+      title: t("Sign up failed"),
       severity: "error",
       content: JSON.stringify(res)
     })

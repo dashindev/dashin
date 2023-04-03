@@ -1,12 +1,10 @@
 import React from "react"
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Checkbox from "@material-ui/core/Checkbox"
 import Link from "@material-ui/core/Link"
 import Box from "@material-ui/core/Box"
 import Grid from "@material-ui/core/Grid"
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
+import LockOutlinedIcon from "@material-ui/icons/PeopleOutline"
 import Typography from "@material-ui/core/Typography"
 import { Form, Formik } from "formik"
 import { TextField } from "formik-material-ui"
@@ -36,7 +34,7 @@ function Copyright() {
   )
 }
 
-export default function SignInContainer() {
+export default function SignUpContainer() {
   const { t } = useTranslation("plugins")
   const router = useRouter()
   const classes = useStyles()
@@ -60,13 +58,15 @@ export default function SignInContainer() {
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                {t("Sign in")}
+                {t("Sign up")}
               </Typography>
               <div className={classes.form}>
                 <Formik
                   initialValues={{
-                    identifier: "",
-                    password: ""
+                    username: "",
+                    email: "",
+                    password: "",
+                    password_confirm: ""
                   }}
                   validate={values => validateController(values, t)}
                   onSubmit={handleOnSubmit}
@@ -75,9 +75,18 @@ export default function SignInContainer() {
                     <Form>
                       <BunField
                         component={TextField}
-                        name="identifier"
+                        name="username"
                         type="text"
                         label={t("Username")}
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                      />
+                      <BunField
+                        component={TextField}
+                        name="email"
+                        type="text"
+                        label={t("Email")}
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -91,9 +100,14 @@ export default function SignInContainer() {
                         margin="normal"
                         fullWidth
                       />
-                      <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label={t("Remember me")}
+                      <BunField
+                        component={TextField}
+                        type="password"
+                        label={t("Confirm password")}
+                        name="password_confirm"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
                       />
                       {isSubmitting && <LinearProgress />}
                       <Button
@@ -104,7 +118,7 @@ export default function SignInContainer() {
                         disabled={isSubmitting}
                         onClick={submitForm}
                       >
-                        {t("Sign in")}
+                        {t("Sign up")}
                       </Button>
                     </Form>
                   )}
@@ -118,10 +132,10 @@ export default function SignInContainer() {
                   <Grid item>
                     <Link
                       href="#"
-                      onClick={() => router.push("/auth/sign-up")}
+                      onClick={() => router.push("/auth/sign-in")}
                       variant="body2"
                     >
-                      {t("Don't have an account? Sign Up")}
+                      {t("I have an account. Sign in")}
                     </Link>
                   </Grid>
                 </Grid>

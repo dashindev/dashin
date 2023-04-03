@@ -41,8 +41,7 @@ export default function media() {
           await dataCtrl({
             t,
             tableQuery,
-            path: `upload/${SchemaName}`,
-            fixCount: true
+            path: `upload/${SchemaName}`
           })
         }
       />

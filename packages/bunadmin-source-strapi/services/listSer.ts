@@ -60,10 +60,11 @@ export default async function listSer<RowData extends object>({
     }
   })
 
-  const { total } = data.meta.pagination
+  // Adapt to total users by 'data.length'
+  const { total = data.length } = data.meta?.pagination || {}
 
   return {
-    data: data.data,
+    data: data.data || data,
     totalCount: total,
     errors: data.error ? data.error : undefined
   }

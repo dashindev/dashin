@@ -25,11 +25,14 @@ export default async function listSer<RowData extends object>({
   filters.map(({ column: { field }, operator, value }) => {
     if (!field) return
 
+    if (typeof field == "string") {
+      field = field.replace("attributes.", "")
+    }
+
     operator = handleOperator(operator as any) as "="
 
     filtersStr += `&filters[${field as string}][${operator}]=${value}`
   })
-  filtersStr = filtersStr.replace("attributes.", "")
 
   if (searchWords) {
     filtersStr =
@@ -113,7 +116,7 @@ function handleOperator(operator: string): string {
       suffix = "$null"
       break
     default:
-      suffix = "$contains"
+      suffix = operator
   }
   return suffix
 }

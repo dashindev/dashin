@@ -12,6 +12,7 @@ import { Primary } from "@/core/auth/schema"
 import { Trans, useTranslation } from "react-i18next"
 import { BA_DB } from "@/utils/database"
 import { SETTING_NAMES } from "@/utils"
+import { useLayoutReducer } from "@/slices/layoutSlice"
 
 interface State {
   username: string | "Guest"
@@ -39,9 +40,12 @@ export default function UserMenu(props: UserMenuProps) {
   const router = useRouter()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
-  const [state, setState] = useState<State>({
-    username: ""
-  })
+  const {
+    user: { username },
+    isSignedIn,
+    signIn,
+    signOut
+  } = useLayoutReducer()
 
   useEffect(() => {
     ;(async () => {
@@ -50,10 +54,7 @@ export default function UserMenu(props: UserMenuProps) {
         .equals(Primary)
         .first()
       if (user && user.value) {
-        setState({
-          ...state,
-          username: user.value
-        })
+        signIn({ username: user.value })
       }
     })()
   }, [])
@@ -86,11 +87,14 @@ export default function UserMenu(props: UserMenuProps) {
       if (props.onLogout.funcOverride) return
     }
 
+    // Sign out
+    signOut()
+
     // renew user profile
 
     const db = BA_DB
     // delete auth
-    await db.users.delete(state.username)
+    await db.users.delete(username)
     // update username in setting
     await db.settings.put({
       name: Primary,
@@ -105,7 +109,8 @@ export default function UserMenu(props: UserMenuProps) {
     })
 
     handleClose({})
-    if (props.onLogout?.actionAfter == "none") return
+    if (!props.onLogout?.actionAfter || props.onLogout?.actionAfter == "none")
+      return
 
     if (props.onLogout?.actionAfter == "reload") {
       window.location.reload()
@@ -120,8 +125,8 @@ export default function UserMenu(props: UserMenuProps) {
 
   return (
     // User Icon
-    <div>
-      {state.username == "" ? (
+    <div key={`isSignedIn_${isSignedIn}`}>
+      {isSignedIn == false ? (
         props.LoginOverride ? (
           <props.LoginOverride />
         ) : (
@@ -170,7 +175,7 @@ export default function UserMenu(props: UserMenuProps) {
           <Trans
             i18nKey="Signed as $username"
             values={{
-              name: state.username && state.username.substr(0, 20)
+              name: username && username.substr(0, 20)
             }}
           />
         </MenuItem>

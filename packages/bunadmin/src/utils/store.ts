@@ -10,6 +10,7 @@ import noticeReducer from "../slices/noticeSlice"
 import nestedMenuReducer from "../slices/nestedMenuSlice"
 import schemaReducer from "../slices/schemaSlice"
 import tableReducer from "../slices/tableSlice"
+import layoutReducer from "../slices/layoutSlice"
 
 export const store: EnhancedStore<
   any,
@@ -20,7 +21,8 @@ export const store: EnhancedStore<
     notice: noticeReducer,
     nestedMenu: nestedMenuReducer,
     schema: schemaReducer,
-    table: tableReducer
+    table: tableReducer,
+    layout: layoutReducer
   }
 })
 

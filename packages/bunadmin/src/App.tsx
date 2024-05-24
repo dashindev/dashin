@@ -1,6 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect } from "react"
-import { Route, Switch } from "react-router-dom"
-import { Router } from "react-router"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Provider } from "react-redux"
 import {
   DEFAULT_AUTH_PLUGIN,
@@ -22,7 +21,6 @@ import {
 import { SnackbarProvider } from "notistack"
 import { CubeSpinner, Snackbar, SnackMessage } from "./components"
 import { useTranslation } from "react-i18next"
-import { createBrowserHistory } from "history"
 import { MenuType } from "@/core"
 
 declare module "@mui/styles/defaultTheme" {
@@ -32,8 +30,6 @@ declare module "@mui/styles/defaultTheme" {
 
 const HTTP404 = lazy(() => import("./pages/404"))
 const GroupName = lazy(() => import("./pages/[group]-[name]"))
-
-const history = createBrowserHistory()
 
 const App = () => {
   const asPath = window.location.pathname
@@ -138,17 +134,21 @@ const App = () => {
           >
             <Snackbar />
           </SnackbarProvider>
-          <Router history={history}>
+          <BrowserRouter>
             <Suspense fallback={<CubeSpinner />}>
-              <Switch>
+              <Routes>
                 <Route
-                  path={["/:group/:name", "/"]}
-                  component={() => <GroupName leftMenuData={leftMenuData} />}
+                  path={"/"}
+                  Component={() => <GroupName leftMenuData={leftMenuData} />}
                 />
-                <Route path="*" component={HTTP404} />
-              </Switch>
+                <Route
+                  path={"/:group/:name"}
+                  Component={() => <GroupName leftMenuData={leftMenuData} />}
+                />
+                <Route path="*" Component={HTTP404} />
+              </Routes>
             </Suspense>
-          </Router>
+          </BrowserRouter>
         </ThemeProvider>
       </StyledEngineProvider>
     </Provider>

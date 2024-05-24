@@ -1,4 +1,4 @@
-import { useParams, useLocation, useHistory } from "react-router-dom"
+import { useParams, useLocation, useNavigate } from "react-router-dom"
 
 export type Router = {
   asPath: any
@@ -9,19 +9,19 @@ export type Router = {
 }
 
 export function useRouter(): Router {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const query: any = useParams()
   let route: any = useLocation()
   route = route.pathname
 
   const push = async (url: string, url2?: string) => {
-    if (url && !url2) history.push(url)
-    if (url2) history.push(url2)
+    if (url && !url2) navigate(url)
+    if (url2) navigate(url2)
   }
   const replace = async (url: string, url2?: string) => {
-    if (url && !url2) history.push(url)
-    if (url2) history.push(url2)
+    if (url && !url2) navigate(url)
+    if (url2) navigate(url2)
   }
 
   return {

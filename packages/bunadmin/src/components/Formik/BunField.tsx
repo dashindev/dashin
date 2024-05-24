@@ -1,8 +1,8 @@
 import React from "react"
 
-import { TextFieldProps as MuiTextFieldProps } from "@material-ui/core/TextField"
-import { RadioProps as MuiRadioProps } from "@material-ui/core/Radio"
-import { CheckboxProps as MuiCheckboxProps } from "@material-ui/core/Checkbox"
+import { TextFieldProps as MuiTextFieldProps } from "@mui/material/TextField"
+import { RadioProps as MuiRadioProps } from "@mui/material/Radio"
+import { CheckboxProps as MuiCheckboxProps } from "@mui/material/Checkbox"
 import { Field, FieldProps } from "formik"
 
 export type BunFieldTypes = (

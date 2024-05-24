@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react"
 import clsx from "clsx"
-import { Box, Container, Drawer, Fade, useMediaQuery } from "@material-ui/core"
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  useTheme
-} from "@material-ui/core/styles"
+import { Box, Container, Drawer, Fade, useMediaQuery } from "@mui/material"
+import { createStyles, Theme, useTheme } from "@mui/material/styles"
+import { makeStyles } from "@mui/styles"
 import styles from "./styles"
 import {
   TopBar,

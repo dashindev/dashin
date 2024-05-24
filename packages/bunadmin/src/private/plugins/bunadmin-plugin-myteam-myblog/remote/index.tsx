@@ -1,5 +1,5 @@
 import React, { createRef } from "react"
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 import {
   Table,
   TableHead,

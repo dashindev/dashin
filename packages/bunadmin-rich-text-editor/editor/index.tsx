@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react"
-import MUIRichTextEditor from "mui-rte"
-import { EditComponentProps } from "material-table"
-import { MuiThemeProvider } from "@material-ui/core/styles"
-import { defaultTheme } from "@xbuilder/bunadmin"
+import React, { useState,useEffect, useRef } from "react"
+import { Button } from "@mui/material";
 import {
-  EditorState,
-  convertFromHTML,
-  ContentState,
-  convertToRaw
-} from "draft-js"
-import { stateToHTML } from "draft-js-export-html"
+  MenuButtonBold,
+  MenuButtonItalic,
+  MenuControlsContainer,
+  MenuDivider,
+  MenuSelectHeading,
+  RichTextEditor,
+  type RichTextEditorRef,
+} from "mui-tiptap";
+import StarterKit from "@tiptap/starter-kit";
+import { EditComponentProps } from "material-table"
+import { ThemeProvider } from "@mui/material/styles"
+import { defaultTheme } from "@xbuilder/bunadmin"
 
 const newTheme = {
   ...defaultTheme,
@@ -31,7 +34,7 @@ const newTheme = {
     MuiButtonBase: {
       root: {
         // hide save button in toolbar
-        "&#mui-rte-Save-button": { display: "none" }
+        "&#mui-editor-Save-button": { display: "none" }
       }
     }
   }
@@ -40,35 +43,44 @@ const newTheme = {
 interface Props<T extends object> extends EditComponentProps<T> {}
 
 export default function RtEditor<T extends object>(props: Props<T>) {
-  const [content, setContent] = useState<string>("")
+  const rteRef = useRef<RichTextEditorRef>(null);
+  const [content, setContent] = useState<string>("Start typing...")
 
-  const handleClick = (state: EditorState) => {
-    const html = stateToHTML(state.getCurrentContent())
+  useEffect(() => {
+    const html = props.value || ""
+    setContent(html)
+  }, [])
+
+  const handleClick = () => {
+    const html = rteRef.current?.editor?.getHTML()
     props.onChange(html)
     props.onRowDataChange({
       ...props.rowData,
       content: html
     })
+    setContent(html)
   }
 
-  useEffect(() => {
-    const html = props.value || ""
-    const contentHTML = convertFromHTML(html)
-    const state = ContentState.createFromBlockArray(
-      contentHTML.contentBlocks,
-      contentHTML.entityMap
-    )
-    const defaultContent = JSON.stringify(convertToRaw(state))
-    setContent(defaultContent)
-  }, [])
-
   return (
-    <MuiThemeProvider theme={newTheme}>
-      <MUIRichTextEditor
-        label="Start typing..."
-        defaultValue={content}
-        onChange={handleClick}
+    <ThemeProvider theme={newTheme}>
+      <RichTextEditor
+        ref={rteRef}
+        content={content} // Initial content for the editor
+        extensions={[StarterKit]}
+        // Optionally include `renderControls` for a menu-bar atop the editor:
+        renderControls={() => (
+          <MenuControlsContainer>
+            <MenuSelectHeading />
+            <MenuDivider />
+            <MenuButtonBold />
+            <MenuButtonItalic />
+            {/* Add more controls of your choosing here */}
+          </MenuControlsContainer>
+        )}
       />
-    </MuiThemeProvider>
+            <Button onClick={handleClick}>
+        Log HTML
+      </Button>
+    </ThemeProvider>
   )
 }

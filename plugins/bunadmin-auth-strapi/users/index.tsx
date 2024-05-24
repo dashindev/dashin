@@ -6,7 +6,7 @@ import {
   TableDefaultProps as DefaultProps,
   notice
 } from "@xbuilder/bunadmin"
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 
 import { SchemaLabel, SchemaColumns, SchemaName } from "./plugin"
 import editableCtrl from "./controllers/editableCtrl"
@@ -15,7 +15,7 @@ import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
 import listSer from "../roles/services/listSer"
 import { IRole } from "../utils/types"
 
-export default function <RowData extends object>() {
+export default function<RowData extends object>() {
   const { t } = useTranslation("table")
   const theme = useTheme()
   const tableRef = createRef()

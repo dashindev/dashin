@@ -1,9 +1,9 @@
 import React from "react"
 
 import { useRouter } from "@/router"
-import IconButton from "@material-ui/core/IconButton"
+import IconButton from "@mui/material/IconButton"
 import EvaIcon from "react-eva-icons"
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 import { DynamicDocRoute } from "@/utils/routes"
 
 export default function DocMenu({

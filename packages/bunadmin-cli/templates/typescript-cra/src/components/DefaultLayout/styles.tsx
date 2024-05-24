@@ -1,5 +1,5 @@
-import { Theme } from "@material-ui/core/styles"
-import { StyleRules } from "@material-ui/styles/withStyles"
+import { Theme } from "@mui/material/styles"
+import { StyleRules } from "@mui/styles/withStyles"
 
 const drawerWidth = 240
 

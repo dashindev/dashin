@@ -6,7 +6,7 @@ import {
   MultipleSelector,
   ListSelector
 } from "@xbuilder/bunadmin"
-import { Chip } from "@material-ui/core"
+import { Chip } from "@mui/material"
 import { ENUM_STATUS } from "./plugin"
 import { FileUploader } from "@xbuilder/bunadmin-upload-strapi"
 import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"

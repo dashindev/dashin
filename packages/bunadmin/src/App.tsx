@@ -13,7 +13,7 @@ import {
   store,
   UserRoute
 } from "./utils"
-import { CssBaseline, ThemeProvider } from "@material-ui/core"
+import { CssBaseline, ThemeProvider } from "@mui/material"
 import { SnackbarProvider } from "notistack"
 import { CubeSpinner, Snackbar, SnackMessage } from "./components"
 import { useTranslation } from "react-i18next"

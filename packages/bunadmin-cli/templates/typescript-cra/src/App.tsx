@@ -17,7 +17,7 @@ import {
   useTranslation,
   MenuType
 } from "@xbuilder/bunadmin"
-import { CssBaseline, ThemeProvider } from "@material-ui/core"
+import { CssBaseline, ThemeProvider } from "@mui/material"
 import { SnackbarProvider } from "notistack"
 import { createBrowserHistory } from "history"
 import { YOUR_DB } from "./utils/database"

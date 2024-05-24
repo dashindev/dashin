@@ -1,5 +1,5 @@
 import React from "react"
-import { Container, Typography, Box, Link } from "@material-ui/core"
+import { Container, Typography, Box, Link } from "@mui/material"
 import { ProTip, ENV } from "@xbuilder/bunadmin"
 
 function Copyright() {

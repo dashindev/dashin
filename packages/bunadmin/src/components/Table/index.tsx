@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 
 import MaterialTable from "material-table"
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 import tableIcons from "./models/tableIcons"
 import { TableProps } from "@/components"
 import { TableDefaultProps as DefaultProps } from "./models/defaultProps"

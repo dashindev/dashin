@@ -1,13 +1,14 @@
 import React, { useState } from "react"
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles"
-import Accordion from "@material-ui/core/Accordion"
-import AccordionDetails from "@material-ui/core/AccordionDetails"
-import AccordionSummary from "@material-ui/core/AccordionSummary"
-import Typography from "@material-ui/core/Typography"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import { AccordionActions, IconButton, Paper, Button } from "@material-ui/core"
-import DeleteIcon from "@material-ui/icons/Clear"
-import SortIcon from "@material-ui/icons/DragHandle"
+import { Theme, createStyles } from "@mui/material/styles"
+import { makeStyles } from "@mui/styles"
+import Accordion from "@mui/material/Accordion"
+import AccordionDetails from "@mui/material/AccordionDetails"
+import AccordionSummary from "@mui/material/AccordionSummary"
+import Typography from "@mui/material/Typography"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import { AccordionActions, IconButton, Paper, Button } from "@mui/material"
+import DeleteIcon from "@mui/icons-material/Clear"
+import SortIcon from "@mui/icons-material/DragHandle"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -1,5 +1,5 @@
-import { Box, Typography } from "@material-ui/core"
-import { Skeleton } from "@material-ui/lab"
+import { Box, Typography } from "@mui/material"
+import { Skeleton } from "@mui/lab"
 import React from "react"
 
 interface Props {

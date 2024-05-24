@@ -1,5 +1,5 @@
-import { Theme } from "@material-ui/core"
-import { StyleRules } from "@material-ui/styles/withStyles"
+import { Theme } from "@mui/material"
+import { StyleRules } from "@mui/styles/withStyles"
 
 interface Props {
   theme: Theme

@@ -1,4 +1,5 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
+import { createStyles, Theme } from "@mui/material/styles"
+import { makeStyles } from "@mui/styles"
 
 export const HEADER_HEIGHT: number = 46
 export const topBarStyles = makeStyles((theme: Theme) => {

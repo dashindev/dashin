@@ -1,7 +1,7 @@
 import React from "react"
 import { Drawer, DrawerProps } from "@xbuilder/bunadmin"
 import { EditComponentProps } from "material-table"
-import { Box, Typography, Divider } from "@material-ui/core"
+import { Box, Typography, Divider } from "@mui/material"
 import RtEditor from "./editor"
 import RtPreviewer from "./previewer"
 

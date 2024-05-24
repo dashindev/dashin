@@ -1,8 +1,8 @@
 import React, { Dispatch } from "react"
-import Paper from "@material-ui/core/Paper"
-import Tabs from "@material-ui/core/Tabs"
-import Tab from "@material-ui/core/Tab"
-import Divider from "@material-ui/core/Divider"
+import Paper from "@mui/material/Paper"
+import Tabs from "@mui/material/Tabs"
+import Tab from "@mui/material/Tab"
+import Divider from "@mui/material/Divider"
 import { TFunction } from "i18next"
 
 export default function NoticeTabs({

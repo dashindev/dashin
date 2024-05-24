@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 
 import Table, { TableHead } from "@/components/Table"

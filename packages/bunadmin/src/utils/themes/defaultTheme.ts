@@ -1,5 +1,5 @@
-import { createTheme } from "@material-ui/core/styles"
-import red from "@material-ui/core/colors/red"
+import { createTheme } from "@mui/material/styles"
+import red from "@mui/material/colors/red"
 
 const iconColor = "#8f9bb3"
 const contentBg = "#EDF1F7"
@@ -7,7 +7,7 @@ const contentBoxBg = "#FFF"
 export const JSON_VIEW_BG = "rgba(143, 155, 179, 0.3)"
 const bodyBg = contentBg
 
-declare module "@material-ui/core/styles/createTheme" {
+declare module "@mui/material/styles/createTheme" {
   interface Theme {
     // add eva icon fill default value
     bunadmin: {

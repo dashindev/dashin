@@ -1,7 +1,7 @@
 import React from "react"
 import EvaIcon, { EvaIconProps } from "react-eva-icons"
 import { LocalDataRoute } from "../routes"
-import { Theme } from "@material-ui/core/styles"
+import { Theme } from "@mui/material/styles"
 
 interface Param {
   theme: Theme

@@ -2,13 +2,10 @@ import React from "react"
 
 import { MenuIcon as MenuIconName, MenuIconType } from "@/core/menu/types"
 import EvaIcon from "react-eva-icons"
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  useTheme
-} from "@material-ui/core/styles"
-import { Icon } from "@material-ui/core"
+import { createStyles, Theme, useTheme } from "@mui/material/styles"
+import { Icon } from "@mui/material"
+import { makeStyles } from "@mui/styles"
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

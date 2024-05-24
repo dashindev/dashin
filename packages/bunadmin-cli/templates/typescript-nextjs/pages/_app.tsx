@@ -3,7 +3,7 @@ import { Provider } from "react-redux"
 import { useTranslation } from "react-i18next"
 import { AppProps } from "next/app"
 import Head from "next/head"
-import { ThemeProvider, CssBaseline } from "@material-ui/core"
+import { ThemeProvider, CssBaseline } from "@mui/material"
 import { SnackbarProvider } from "notistack"
 import {
   useRouter,

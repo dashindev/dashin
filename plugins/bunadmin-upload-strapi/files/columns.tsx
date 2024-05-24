@@ -1,7 +1,7 @@
 import { Column } from "material-table"
 import Type from "./types"
 import React from "react"
-import { Button, Tooltip } from "@material-ui/core"
+import { Button, Tooltip } from "@mui/material"
 import { BunadminFile, ENV } from "@xbuilder/bunadmin"
 
 const prefix = ENV.UPLOAD_URL

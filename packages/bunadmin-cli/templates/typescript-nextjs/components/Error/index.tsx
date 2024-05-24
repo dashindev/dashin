@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button, Typography } from "@material-ui/core"
+import { Box, Button, Typography } from "@mui/material"
 import errorMessages from "./errorMessages"
 import { ErrorGetProps, ErrorMsg } from "./types"
 import DefaultLayout from "../DefaultLayout"

@@ -7,7 +7,7 @@ import { Columns } from "./columns"
 
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 import tableIcons from "@/components/Table/models/tableIcons"
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { Type } from "@/core/menu/types"

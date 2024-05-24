@@ -1,14 +1,14 @@
 import React, { useRef, useState } from "react"
 
 import { MTableToolbar } from "material-table"
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 
 import Table, { TableHead } from "@/components/Table"
 import tableIcons from "@/components/Table/models/tableIcons"
 import { Columns } from "./columns"
 import { Schema } from "./schema"
-import { Box, Button } from "@material-ui/core"
+import { Box, Button } from "@mui/material"
 import EvaIcon from "react-eva-icons"
 import { Type } from "./types"
 import MigrationDialogs from "./components/Dialog"

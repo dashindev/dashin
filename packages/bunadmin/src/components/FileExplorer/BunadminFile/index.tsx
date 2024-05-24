@@ -6,7 +6,7 @@ import {
   CircularProgress,
   createStyles,
   Theme
-} from "@material-ui/core"
+} from "@mui/material"
 import DropZone, { DropEvent, FileRejection } from "react-dropzone"
 import FilePreview from "../FilePreview"
 import styles from "./styles"
@@ -14,7 +14,7 @@ import BunadminFileProps, { BunadminFileType } from "../"
 import CardBottomArea from "./CardBottomArea"
 import { Translation } from "react-i18next"
 import { ENV } from "@/utils"
-import { makeStyles } from "@material-ui/styles"
+import { makeStyles } from "@mui/styles"
 
 export const upload_image = "/p/upload.svg"
 export const default_file = "/p/default_file.svg"

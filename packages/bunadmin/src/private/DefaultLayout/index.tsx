@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react"
 import clsx from "clsx"
-import Drawer from "@material-ui/core/Drawer"
-import Box from "@material-ui/core/Box"
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  useTheme
-} from "@material-ui/core/styles"
+import Drawer from "@mui/material/Drawer"
+import Box from "@mui/material/Box"
+import { createStyles, Theme, useTheme } from "@mui/material/styles"
+import { makeStyles } from "@mui/styles"
 import styles from "./styles"
 import LeftMenu from "../../components/LeftMenu"
 import TopBar from "../../components/TopBar"
-import { Container, Fade, useMediaQuery } from "@material-ui/core"
+import { Container, Fade, useMediaQuery } from "@mui/material"
 import { DefaultLayoutProps } from "@/components"
 import { ENV, store } from "@/utils"
 

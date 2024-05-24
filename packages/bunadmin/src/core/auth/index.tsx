@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 
 import Table, { TableHead } from "@/components/Table"
@@ -8,7 +8,7 @@ import tableIcons from "@/components/Table/models/tableIcons"
 import { Columns } from "./columns"
 import ConfirmDialog from "@/components/Dialog/ConfirmDialog"
 import { Type } from "./types"
-import { Box, Button } from "@material-ui/core"
+import { Box, Button } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { JSON_VIEW_BG } from "@/utils/themes/defaultTheme"
 import { BA_DB, IUser } from "@/utils/database"

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
-import MUIRichTextEditor from "mui-rte"
-import { MuiThemeProvider } from "@material-ui/core/styles"
+import { RichTextReadOnly } from "mui-tiptap"
+import StarterKit from "@tiptap/starter-kit"
+import { ThemeProvider } from "@mui/material/styles"
 import { defaultTheme } from "@xbuilder/bunadmin"
-import { convertFromHTML, ContentState, convertToRaw } from "draft-js"
 
 const newTheme = {
   ...defaultTheme,
@@ -30,22 +30,15 @@ export default function RtPreviewer(props: Props) {
 
   useEffect(() => {
     const html = props.value || ""
-    const contentHTML = convertFromHTML(html)
-    const state = ContentState.createFromBlockArray(
-      contentHTML.contentBlocks,
-      contentHTML.entityMap
-    )
-    const defaultContent = JSON.stringify(convertToRaw(state))
-    setContent(defaultContent)
+    setContent(html)
   }, [])
 
   return (
-    <MuiThemeProvider theme={newTheme}>
-      <MUIRichTextEditor
-        label="Start typing..."
-        defaultValue={content}
-        readOnly={true}
+    <ThemeProvider theme={newTheme}>
+      <RichTextReadOnly
+        content={content} // Initial content for the editor
+        extensions={[StarterKit]}
       />
-    </MuiThemeProvider>
+    </ThemeProvider>
   )
 }

@@ -6,7 +6,7 @@ import {
   TableDefaultProps as DefaultProps
 } from "@xbuilder/bunadmin"
 import { Query } from "material-table"
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 
 import { SchemaName, SchemaLabel, SchemaColumns } from "./plugin"
 import { useTranslation } from "react-i18next"

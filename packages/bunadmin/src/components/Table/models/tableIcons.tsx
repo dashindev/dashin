@@ -1,7 +1,7 @@
 import React from "react"
 import EvaIcon, { EvaSize } from "react-eva-icons"
 import { Icons } from "material-table"
-import { Icon } from "@material-ui/core"
+import { Icon } from "@mui/material"
 
 export default function tableIcons({ theme }: { theme: any }): Icons {
   const color: string = theme.bunadmin.iconColor

@@ -5,15 +5,10 @@ import React, {
   useRef,
   useState
 } from "react"
-import {
-  Button,
-  createStyles,
-  Drawer as MUIDrawer,
-  Theme
-} from "@material-ui/core"
+import { Button, createStyles, Drawer as MUIDrawer, Theme } from "@mui/material"
 import CSS from "csstype"
 import styles from "./styles"
-import { makeStyles } from "@material-ui/styles"
+import { makeStyles } from "@mui/styles"
 
 export interface DrawerProps {
   width?: number | string

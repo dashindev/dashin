@@ -9,11 +9,11 @@ import {
   Dialog,
   DialogActions,
   IconButton
-} from "@material-ui/core"
-import CloseIcon from "@material-ui/icons/Close"
-import ZoomInIcon from "@material-ui/icons/ZoomIn"
-import ZoomOutIcon from "@material-ui/icons/ZoomOut"
-import DownloadIcon from "@material-ui/icons/GetApp"
+} from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
+import ZoomInIcon from "@mui/icons-material/ZoomIn"
+import ZoomOutIcon from "@mui/icons-material/ZoomOut"
+import DownloadIcon from "@mui/icons-material/GetApp"
 import { useStyles } from "./styles"
 import { BunadminFileType } from "@/components"
 import {
@@ -22,7 +22,7 @@ import {
   isImage
 } from "@/components/FileExplorer/BunadminFile"
 import { ENV } from "@/utils"
-import { makeStyles } from "@material-ui/styles"
+import { makeStyles } from "@mui/styles"
 
 interface Props {
   preview: boolean

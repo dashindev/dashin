@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from "react"
-import { Button, CardActions, CardContent, IconButton } from "@material-ui/core"
-import ViewIcon from "@material-ui/icons/OpenInNew"
-import DeleteIcon from "@material-ui/icons/Delete"
+import { Button, CardActions, CardContent, IconButton } from "@mui/material"
+import ViewIcon from "@mui/icons-material/OpenInNew"
+import DeleteIcon from "@mui/icons-material/Delete"
 import { Translation } from "react-i18next"
 import { ConfirmDialog } from "@/components"
 

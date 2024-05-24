@@ -5,7 +5,7 @@ import {
   tableIcons,
   TableDefaultProps as DefaultProps
 } from "@xbuilder/bunadmin"
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 
 import { SchemaLabel, SchemaColumns } from "./plugin"
 import dataCtrl from "./controllers/dataCtrl"

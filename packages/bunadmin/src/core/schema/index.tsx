@@ -1,6 +1,6 @@
 import React from "react"
 
-import { useTheme } from "@material-ui/core/styles"
+import { useTheme } from "@mui/material/styles"
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 
 import Table, { TableHead } from "@/components/Table"
@@ -11,7 +11,7 @@ import { Type } from "./types"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { selectSchema } from "@/slices/schemaSlice"
-import { Box } from "@material-ui/core"
+import { Box } from "@mui/material"
 import { JSON_VIEW_BG } from "@/utils/themes/defaultTheme"
 
 export default function SchemaManagerContainer() {

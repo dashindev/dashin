@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
 
-import Divider from "@material-ui/core/Divider"
+import Divider from "@mui/material/Divider"
 import NestedList from "./NestedMenu"
 import SettingMenu from "./SettingMenu"
 import { Type } from "@/core/menu/types"

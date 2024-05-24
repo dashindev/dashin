@@ -1,5 +1,5 @@
 import React from "react"
-import { Container, Typography, Box, Link } from "@material-ui/core"
+import { Container, Typography, Box, Link } from "@mui/material"
 import { ENV, ProTip } from "../src"
 import DefaultLayout from "../src/private/DefaultLayout"
 

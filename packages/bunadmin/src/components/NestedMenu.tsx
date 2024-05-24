@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Theme, createStyles } from "@mui/material/styles"
+import { Theme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
@@ -16,23 +16,21 @@ import { useTranslation } from "react-i18next"
 import { SETTING_NAMES, specialPluginSlug } from "@/utils"
 import { BA_DB } from "@/utils/database"
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: "100%",
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
-      padding: 0
-    },
-    nested: {
-      paddingLeft: theme.spacing(5),
-      transition: "padding-left 0.5s ease"
-    },
-    expandIcon: {
-      color: theme.bunadmin.iconColor
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    width: "100%",
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+    padding: 0
+  },
+  nested: {
+    paddingLeft: theme.spacing(5),
+    transition: "padding-left 0.5s ease"
+  },
+  expandIcon: {
+    color: theme.bunadmin.iconColor
+  }
+}))
 
 interface Props {
   data: Type[]

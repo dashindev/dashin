@@ -1,6 +1,6 @@
 function strToArr(str?: string) {
   if (!str) return []
-  return str.split(/[ ,]+/)
+  return str.split(/[ ,]+/);
 }
 
 export const DEFAULT_AUTH_PLUGIN = "@xbuilder/bunadmin-auth-buncms"

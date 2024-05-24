@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-import { createStyles, useTheme } from "@mui/material/styles"
+import { useTheme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 
@@ -40,15 +40,13 @@ export default function NoticeContainer(props: Props) {
   const [CustomNotification, setCustomNotification] = useState()
   const [tab, setTab] = useState(0)
 
-  const useStyles = makeStyles(() =>
-    createStyles({
-      root: {
-        "& .MTableToolbar-title": {
-          display: "none"
-        }
+  const useStyles = makeStyles(() => ({
+    root: {
+      "& .MTableToolbar-title": {
+        display: "none"
       }
-    })
-  )
+    }
+  }))
   const classes = useStyles()
 
   useEffect(() => {

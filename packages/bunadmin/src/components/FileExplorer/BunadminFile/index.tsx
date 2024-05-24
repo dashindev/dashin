@@ -4,7 +4,6 @@ import {
   CardActionArea,
   CardMedia,
   CircularProgress,
-  createStyles,
   Theme
 } from "@mui/material"
 import DropZone, { DropEvent, FileRejection } from "react-dropzone"
@@ -60,7 +59,7 @@ export default function BunadminFile(props: BunadminFileProps) {
   }
 
   const classes = makeStyles((theme: Theme) => {
-    return createStyles(styles({ theme, id, width }))
+    return styles({ theme, id, width })
   })()
   const previewUrl = ENV.FILE_PREVIEW_URL
   const [uploading, setUploading] = React.useState(false),

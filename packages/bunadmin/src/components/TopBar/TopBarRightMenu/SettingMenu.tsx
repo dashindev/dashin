@@ -53,7 +53,7 @@ export default function SettingMenu() {
         aria-haspopup="true"
         onClick={handleMenu}
         color="inherit"
-      >
+        size="large">
         <EvaIcon
           name="settings-outline"
           size="medium"
@@ -101,5 +101,5 @@ export default function SettingMenu() {
         }}
       />
     </div>
-  )
+  );
 }

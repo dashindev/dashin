@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { AppProps } from "next/app"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { ThemeProvider, CssBaseline } from "@mui/material"
+import { ThemeProvider, Theme, StyledEngineProvider, CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack"
 import {
   defaultTheme,
@@ -20,6 +20,13 @@ import {
   PluginData
 } from "../src"
 import "../src/utils/i18n"
+
+
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
 
 const App = ({ Component, pageProps }: AppProps) => {
   const { i18n } = useTranslation()
@@ -80,16 +87,16 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   if (!ready) return <CubeSpinner />
 
-  return (
-    <>
-      <Head>
-        <title>Dashboard</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
-      </Head>
-      <Provider store={store}>
+  return <>
+    <Head>
+      <title>Dashboard</title>
+      <meta
+        name="viewport"
+        content="minimum-scale=1, initial-scale=1, width=device-width"
+      />
+    </Head>
+    <Provider store={store}>
+      <StyledEngineProvider injectFirst>
         <ThemeProvider theme={defaultTheme}>
           <CssBaseline />
           <SnackbarProvider
@@ -106,9 +113,9 @@ const App = ({ Component, pageProps }: AppProps) => {
           </SnackbarProvider>
           <Component {...pageProps} />
         </ThemeProvider>
-      </Provider>
-    </>
-  )
+      </StyledEngineProvider>
+    </Provider>
+  </>;
 }
 
 export default App

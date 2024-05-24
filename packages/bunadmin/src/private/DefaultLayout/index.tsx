@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import clsx from "clsx"
 import Drawer from "@mui/material/Drawer"
 import Box from "@mui/material/Box"
-import { createStyles, Theme, useTheme } from "@mui/material/styles"
+import { Theme, useTheme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import styles from "./styles"
 import LeftMenu from "../../components/LeftMenu"
@@ -24,7 +24,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   const [open, setOpen] = React.useState(true)
   const phoneVertical = useMediaQuery("(max-width:640px)")
   const classes = makeStyles((theme: Theme) =>
-    createStyles(styles({ theme, drawerOpen: open, phoneVertical }))
+    styles({ theme, drawerOpen: open, phoneVertical })
   )()
 
   const [NotifyTable, setNotifyTable] = useState<JSX.Element>()

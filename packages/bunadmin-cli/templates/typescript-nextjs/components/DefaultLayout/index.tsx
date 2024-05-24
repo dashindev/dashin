@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import clsx from "clsx"
 import { Box, Container, Drawer, Fade, useMediaQuery } from "@mui/material"
-import { createStyles, Theme, useTheme } from "@mui/material/styles"
+import { Theme, useTheme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import styles from "./styles"
 import {
@@ -18,7 +18,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   const [open, setOpen] = React.useState(true)
   const phoneVertical = useMediaQuery("(max-width:640px)")
   const classes = makeStyles((theme: Theme) =>
-    createStyles(styles({ theme, drawerOpen: open, phoneVertical }))
+    styles({ theme, drawerOpen: open, phoneVertical })
   )()
 
   const [notifyTable, setNotifyTable] = useState<JSX.Element>()

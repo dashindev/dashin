@@ -59,30 +59,38 @@ const defaultTheme = createTheme({
       letterSpacing: 0.8
     }
   },
-  overrides: {
+  components: {
     // component name
     MuiMenuItem: {
-      root: {
-        letterSpacing: 0.8
+      styleOverrides: {
+        root: {
+          letterSpacing: 0.8
+        }
       }
     },
     MuiListItem: {
-      button: {
-        borderLeft: "1px solid #fff",
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 10
+      styleOverrides: {
+        button: {
+          borderLeft: "1px solid #fff",
+          borderTopRightRadius: 10,
+          borderBottomRightRadius: 10
+        }
       }
     },
     MuiListItemIcon: {
-      root: {
-        color: iconColor,
-        minWidth: 35
+      styleOverrides: {
+        root: {
+          color: iconColor,
+          minWidth: 35
+        }
       }
     },
     MuiButton: {
-      containedPrimary: {
-        "&:hover": {
-          backgroundColor: "#598bff"
+      styleOverrides: {
+        containedPrimary: {
+          "&:hover": {
+            backgroundColor: "#598bff"
+          }
         }
       }
     },
@@ -150,21 +158,21 @@ const defaultTheme = createTheme({
           background: "#edf1f7",
           transition: "all ease-in-out 0.2s"
         },
-        "[class*=drawerClose] nav .MuiCollapse-container .MuiListItem-root .MuiListItemText-root span": {
+        "[class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemText-root span": {
           overflow: "visible",
           whiteSpace: "nowrap",
           transform: "translateX(0)",
           transition: "1s",
           minWidth: 50
         }, // text only
-        "[class*=drawerClose] nav .MuiCollapse-container .MuiListItem-root .MuiListItemText-root span:hover": {
+        "[class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemText-root span:hover": {
           transform: "translateX(calc(50px - 100%))"
         }, // text only
-        "[class*=drawerClose] nav .MuiCollapse-container .MuiListItem-root": {
+        "[class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root": {
           paddingLeft: 20,
           transition: "padding-left 0.5s ease"
         }, // child
-        "[class*=drawerClose] nav .MuiCollapse-container .MuiListItem-root .MuiListItemIcon-root+.MuiListItemText-root span": {
+        "[class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemIcon-root+.MuiListItemText-root span": {
           overflow: "hidden"
         } // text with icon
       }

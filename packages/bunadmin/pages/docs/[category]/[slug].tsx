@@ -8,13 +8,24 @@ import { MDXProvider } from "@mdx-js/react"
 import { ParsedUrlQuery } from "querystring"
 import { useRouter } from "next/router"
 import { defaultTheme, DynamicDocRoute, ENV } from "@/utils"
-import { createTheme, createStyles } from "@mui/material/styles"
-import { ThemeProvider, makeStyles } from "@mui/styles"
+import { createTheme } from "@mui/material/styles"
+import {
+  ThemeProvider,
+  Theme,
+  StyledEngineProvider,
+  makeStyles
+} from "@mui/styles"
 
 import PrismHighlight, { defaultProps } from "prism-react-renderer"
 import EvaIcon from "react-eva-icons"
 import DefaultLayout from "@/private/DefaultLayout"
 import Error from "@/private/Error"
+
+declare module "@mui/styles/defaultTheme" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
 // import prismTheme from "prism-react-renderer/themes/vsDark"
 const prismCss = "/assets/css/prism.css"
 
@@ -83,21 +94,23 @@ export default function DocsCategorySlug() {
         </title>
         {<link rel="stylesheet" href={prismCss} />}
       </Head>
-      <ThemeProvider theme={theme}>
-        <DefaultLayout leftMenu={{ data: menuData, offLeftSetting: true }}>
-          {slug ? (
-            <Box className={classes.DocsBox} p={3} pt={1}>
-              <DocsHeader />
-              <MDXProvider components={{ code: Code }}>
-                <DocsComponent />
-              </MDXProvider>
-              <DocsPagination />
-            </Box>
-          ) : (
-            <Error statusCode={404} hasLayout={false} />
-          )}
-        </DefaultLayout>
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <DefaultLayout leftMenu={{ data: menuData, offLeftSetting: true }}>
+            {slug ? (
+              <Box className={classes.DocsBox} p={3} pt={1}>
+                <DocsHeader />
+                <MDXProvider components={{ code: Code }}>
+                  <DocsComponent />
+                </MDXProvider>
+                <DocsPagination />
+              </Box>
+            ) : (
+              <Error statusCode={404} hasLayout={false} />
+            )}
+          </DefaultLayout>
+        </ThemeProvider>
+      </StyledEngineProvider>
     </>
   )
 
@@ -207,60 +220,58 @@ export default function DocsCategorySlug() {
   }
 
   function useStyles() {
-    return makeStyles(theme =>
-      createStyles({
-        DocsEditThis: {
-          position: "absolute",
-          top: theme.spacing(1)
+    return makeStyles(theme => ({
+      DocsEditThis: {
+        position: "absolute",
+        top: theme.spacing(1)
+      },
+      DocsBox: {
+        fontSize: 16,
+        "& h1": {
+          fontSize: 28
         },
-        DocsBox: {
-          fontSize: 16,
-          "& h1": {
-            fontSize: 28
-          },
-          "& h1, & h2": {
-            color: defaultTheme.palette.primary.main
-          },
-          "& h1, & h2, & h3, & h4, & h5": {
-            fontWeight: 400
-          },
-          "& em": {
-            opacity: 0.5
-          },
-          "& code": {
-            padding: "0.1em 0.2em",
-            backgroundColor: defaultTheme.palette.background.default,
-            border: "1px solid #e6eaf0",
-            borderRadius: "0.3rem",
-            color: defaultTheme.palette.primary.main
-          },
-          "& pre": {
-            fontSize: 14
-          },
-          "& .language-shell": {
-            background: "#e2e6f1"
-          }
+        "& h1, & h2": {
+          color: defaultTheme.palette.primary.main
         },
-        DocsPagination: {
-          marginTop: theme.spacing(3),
-          padding: theme.spacing(1),
-          backgroundColor: "#EDF1F7",
-          border: "1px solid #EEE",
+        "& h1, & h2, & h3, & h4, & h5": {
+          fontWeight: 400
+        },
+        "& em": {
+          opacity: 0.5
+        },
+        "& code": {
+          padding: "0.1em 0.2em",
+          backgroundColor: defaultTheme.palette.background.default,
+          border: "1px solid #e6eaf0",
           borderRadius: "0.3rem",
-          "& span": {
-            color: "#666",
-            fontSize: 16
-          },
-          "& h5": {
-            color: "#333",
-            fontSize: 18,
-            marginTop: theme.spacing(2),
-            marginBottom: 0,
-            fontWeight: 600
-          }
+          color: defaultTheme.palette.primary.main
+        },
+        "& pre": {
+          fontSize: 14
+        },
+        "& .language-shell": {
+          background: "#e2e6f1"
         }
-      })
-    )()
+      },
+      DocsPagination: {
+        marginTop: theme.spacing(3),
+        padding: theme.spacing(1),
+        backgroundColor: "#EDF1F7",
+        border: "1px solid #EEE",
+        borderRadius: "0.3rem",
+        "& span": {
+          color: "#666",
+          fontSize: 16
+        },
+        "& h5": {
+          color: "#333",
+          fontSize: 18,
+          marginTop: theme.spacing(2),
+          marginBottom: 0,
+          fontWeight: 600
+        }
+      }
+    }))()
   }
 }
 

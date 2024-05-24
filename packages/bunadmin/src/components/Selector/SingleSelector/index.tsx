@@ -1,25 +1,23 @@
 import React from "react"
-import { createStyles, Theme } from "@mui/material/styles"
+import { Theme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
-import Select from "@mui/material/Select"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
 import { Column, EditComponentProps } from "material-table"
 import { store } from "@/utils"
 import { selectTable, setTable, TableFilter } from "@/slices/tableSlice"
 import { useSelector } from "react-redux"
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 100
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2)
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 100
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2)
+  }
+}))
 
 type Props<RowData extends object> = {
   columnDef: Column<RowData>
@@ -61,7 +59,7 @@ export default function SingleSelector<RowData extends object>(
   if (columnDef.lookup) names = Object.values(columnDef.lookup)
   if (columnDef.lookup) keys = Object.keys(columnDef.lookup)
 
-  const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChange = async (event: SelectChangeEvent<string>) => {
     const selValue = event.target.value as string
     setSelectedName(selValue)
 
@@ -128,7 +126,7 @@ export default function SingleSelector<RowData extends object>(
           labelId="single-selector-label"
           id="single-selector"
           value={selectedName}
-          onChange={handleChange}
+          onChange={e => handleChange(e)}
         >
           {names.map((name, i) => (
             <MenuItem key={name} value={keys[i]}>

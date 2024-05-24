@@ -1,5 +1,5 @@
 import React from "react"
-import { createStyles, Theme } from "@mui/material/styles"
+import { Theme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import SvgIcon, { SvgIconProps } from "@mui/material/SvgIcon"
 import Typography from "@mui/material/Typography"
@@ -12,17 +12,15 @@ function LightBulbIcon(props: SvgIconProps | undefined) {
   )
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      margin: theme.spacing(6, 0, 3)
-    },
-    lightBulb: {
-      verticalAlign: "middle",
-      marginRight: theme.spacing(1)
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    margin: theme.spacing(6, 0, 3)
+  },
+  lightBulb: {
+    verticalAlign: "middle",
+    marginRight: theme.spacing(1)
+  }
+}))
 
 export default function ProTip() {
   const classes = useStyles()

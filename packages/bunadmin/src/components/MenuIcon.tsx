@@ -2,24 +2,21 @@ import React from "react"
 
 import { MenuIcon as MenuIconName, MenuIconType } from "@/core/menu/types"
 import EvaIcon from "react-eva-icons"
-import { createStyles, Theme, useTheme } from "@mui/material/styles"
+import { Theme, useTheme } from "@mui/material/styles"
 import { Icon } from "@mui/material"
 import { makeStyles } from "@mui/styles"
 
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      color: theme.bunadmin.iconColor,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
-    },
-    nested: {
-      paddingLeft: theme.spacing(4)
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    color: theme.bunadmin.iconColor,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  nested: {
+    paddingLeft: theme.spacing(4)
+  }
+}))
 
 interface Props {
   name?: string
@@ -40,7 +37,7 @@ export default function MenuIcon({ name, icon, icon_type }: Props) {
       )
     case "material":
       return (
-        <Icon fontSize="default" style={{ color: theme.bunadmin.iconColor }}>
+        <Icon fontSize="inherit" style={{ color: theme.bunadmin.iconColor }}>
           {icon}
         </Icon>
       )

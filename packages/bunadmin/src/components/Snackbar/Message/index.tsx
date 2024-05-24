@@ -31,7 +31,7 @@ type Props = {
   message: SnackbarMessage
 }
 
-const SnackMessage = React.forwardRef((props: Props, ref) => {
+const SnackMessage = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { t } = useTranslation()
   const notice = useSelector(selectNotice)
 
@@ -66,13 +66,14 @@ const SnackMessage = React.forwardRef((props: Props, ref) => {
 
   return (
     <Card
+      ref={ref}
+      component="div"
       style={{
         // theme.bunadmin.iconColor // theme.palette.primary.light
         background: colors[state.severity || "success"],
         transition: "width .2s ease-in-out"
       }}
       className={classes.card}
-      ref={ref}
     >
       <CardActions classes={{ root: classes.actionRoot }}>
         <Typography variant="subtitle2" className={classes.typography}>
@@ -89,6 +90,7 @@ const SnackMessage = React.forwardRef((props: Props, ref) => {
                   : classes.expand
               }
               onClick={handleExpandClick}
+              size="large"
             >
               <ExpandMoreIcon />
             </IconButton>
@@ -97,6 +99,7 @@ const SnackMessage = React.forwardRef((props: Props, ref) => {
             color="inherit"
             className={classes.expand}
             onClick={handleDismiss}
+            size="large"
           >
             <CloseIcon />
           </IconButton>
@@ -123,9 +126,5 @@ const SnackMessage = React.forwardRef((props: Props, ref) => {
     </Card>
   )
 })
-
-SnackMessage.propTypes = {
-  id: PropTypes.number.isRequired
-}
 
 export default SnackMessage

@@ -92,7 +92,7 @@ export function ListSelector({
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
       onChange={handleSelect}
-      getOptionSelected={option => option.id === (selected && selected.id)}
+      isOptionEqualToValue={option => option.id === (selected && selected.id)}
       getOptionLabel={getOptionLabel}
       value={selected}
       options={options}
@@ -117,7 +117,7 @@ export function ListSelector({
         />
       )}
     />
-  )
+  );
 
   function getOptionLabel(option: any) {
     if (!option) return undefined

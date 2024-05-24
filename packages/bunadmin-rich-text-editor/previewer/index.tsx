@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { RichTextReadOnly } from "mui-tiptap"
 import StarterKit from "@tiptap/starter-kit"
-import { ThemeProvider } from "@mui/material/styles"
+import { ThemeProvider, Theme, StyledEngineProvider } from "@mui/material/styles";
 import { defaultTheme } from "@xbuilder/bunadmin"
+
+
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
 
 const newTheme = {
   ...defaultTheme,
@@ -34,11 +41,13 @@ export default function RtPreviewer(props: Props) {
   }, [])
 
   return (
-    <ThemeProvider theme={newTheme}>
-      <RichTextReadOnly
-        content={content} // Initial content for the editor
-        extensions={[StarterKit]}
-      />
-    </ThemeProvider>
-  )
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={newTheme}>
+        <RichTextReadOnly
+          content={content} // Initial content for the editor
+          extensions={[StarterKit]}
+        />
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
 }

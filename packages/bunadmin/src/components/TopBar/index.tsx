@@ -69,7 +69,7 @@ export default function TopBar(props: TopBarProps) {
                 edge="start"
                 onClick={menuClick}
                 className={classes.menuButton}
-              >
+                size="large">
                 <EvaIcon
                   name="menu-2-outline"
                   size="medium"
@@ -111,5 +111,5 @@ export default function TopBar(props: TopBarProps) {
         </div>
       </Toolbar>
     </AppBar>
-  )
+  );
 }

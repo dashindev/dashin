@@ -147,7 +147,7 @@ export default function UserMenu(props: UserMenuProps) {
           aria-haspopup="true"
           onClick={handleMenu}
           color="inherit"
-        >
+          size="large">
           <EvaIcon
             name="shield-outline"
             size="medium"
@@ -197,5 +197,5 @@ export default function UserMenu(props: UserMenuProps) {
         <MenuItem onClick={onLogout}>{t("Logout")}</MenuItem>
       </Menu>
     </div>
-  )
+  );
 }

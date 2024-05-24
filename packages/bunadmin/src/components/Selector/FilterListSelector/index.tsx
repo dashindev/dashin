@@ -19,7 +19,7 @@ interface ListSelectProps<RowData extends object> {
   shortName: string
   schemaName: string
   querySer: (query: Query<any>) => Promise<any>
-  customKey?: string
+  customKey?: keyof OptionType
   variant?: "outlined"
 }
 
@@ -109,7 +109,7 @@ export default function FilterListSelector({
         setOpen(false)
       }}
       onChange={handleSelect}
-      getOptionSelected={option => option.id === (selected && selected.id)}
+      isOptionEqualToValue={option => option.id === (selected && selected.id)}
       getOptionLabel={option => (customKey ? option[customKey] : option.name)}
       value={selected}
       options={options}

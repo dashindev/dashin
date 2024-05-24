@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Theme, createStyles } from "@mui/material/styles"
+import { Theme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import Accordion from "@mui/material/Accordion"
 import AccordionDetails from "@mui/material/AccordionDetails"
@@ -10,41 +10,39 @@ import { AccordionActions, IconButton, Paper, Button } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Clear"
 import SortIcon from "@mui/icons-material/DragHandle"
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: "100%"
-    },
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      flexBasis: "33.33%",
-      flexShrink: 0
-    },
-    secondaryHeading: {
-      fontSize: theme.typography.pxToRem(15),
-      color: theme.palette.text.secondary
-    },
-    item: {
-      position: "relative"
-    },
-    actions: {
-      position: "absolute",
-      right: theme.spacing(5),
-      top: theme.spacing(0),
-      zIndex: theme.zIndex.drawer - 1,
-      minHeight: theme.spacing(6),
-      transition: "min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
-    },
-    actions_expanded: {
-      minHeight: theme.spacing(8)
-    },
-    addNewItem: {
-      marginTop: 1,
-      paddingTop: theme.spacing(2),
-      backgroundColor: "#FFF"
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    width: "100%"
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    flexBasis: "33.33%",
+    flexShrink: 0
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.text.secondary
+  },
+  item: {
+    position: "relative"
+  },
+  actions: {
+    position: "absolute",
+    right: theme.spacing(5),
+    top: theme.spacing(0),
+    zIndex: theme.zIndex.drawer - 1,
+    minHeight: theme.spacing(6),
+    transition: "min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
+  },
+  actions_expanded: {
+    minHeight: theme.spacing(8)
+  },
+  addNewItem: {
+    marginTop: 1,
+    paddingTop: theme.spacing(2),
+    backgroundColor: "#FFF"
+  }
+}))
 
 export type RepeaterDetailProps<T> = T & { index: number }
 

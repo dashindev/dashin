@@ -5,7 +5,12 @@ import React, {
   useRef,
   useState
 } from "react"
-import { Button, createStyles, Drawer as MUIDrawer, Theme } from "@mui/material"
+import {
+  Button,
+  ButtonOwnProps,
+  Drawer as MUIDrawer,
+  Theme
+} from "@mui/material"
 import CSS from "csstype"
 import styles from "./styles"
 import { makeStyles } from "@mui/styles"
@@ -15,7 +20,7 @@ export interface DrawerProps {
   height?: number | string
   direction?: "left" | "top" | "right" | "bottom"
   buttonTitle: string | JSX.Element
-  buttonColor?: "inherit" | "default" | "primary" | "secondary" | undefined
+  buttonColor?: ButtonOwnProps["color"]
   buttonVariant?: "text" | "outlined" | "contained"
   buttonSize?: "small" | "medium" | "large"
   buttonDisabled?: boolean
@@ -51,7 +56,7 @@ export default function Drawer({
   children
 }: DrawerProps) {
   const classes = makeStyles((theme: Theme) => {
-    return createStyles(styles({ theme, width, height }))
+    return styles({ theme, width, height })
   })()
   const [state, setState] = useState({ open: false })
   const contentRef: MutableRefObject<any | undefined> = useRef()

@@ -1,33 +1,31 @@
 import React from "react"
-import { createStyles, Theme } from "@mui/material/styles"
+import { Theme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import Input from "@mui/material/Input"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
-import Select from "@mui/material/Select"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
 import ListItemText from "@mui/material/ListItemText"
 import Checkbox from "@mui/material/Checkbox"
 import { Column } from "material-table"
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-      maxWidth: 200
-    },
-    chips: {
-      display: "flex",
-      flexWrap: "wrap"
-    },
-    chip: {
-      margin: 2
-    },
-    noLabel: {
-      marginTop: theme.spacing(3)
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    maxWidth: 200
+  },
+  chips: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  chip: {
+    margin: 2
+  },
+  noLabel: {
+    marginTop: theme.spacing(3)
+  }
+}))
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -63,7 +61,7 @@ export default function MultipleSelector(props: Props) {
     if (columnDef.lookup) names = Object.values(columnDef.lookup)
   }
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (event: SelectChangeEvent<string[]>) => {
     const selectedValues = event.target.value as string[]
     setSelectedName(selectedValues)
 
@@ -91,7 +89,7 @@ export default function MultipleSelector(props: Props) {
           id="demo-mutiple-checkbox"
           multiple
           value={selectedName}
-          onChange={handleChange}
+          onChange={e => handleChange(e)}
           input={<Input />}
           renderValue={selected => (selected as string[]).join(", ")}
           MenuProps={MenuProps}

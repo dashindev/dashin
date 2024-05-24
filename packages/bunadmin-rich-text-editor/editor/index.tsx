@@ -11,8 +11,15 @@ import {
 } from "mui-tiptap";
 import StarterKit from "@tiptap/starter-kit";
 import { EditComponentProps } from "material-table"
-import { ThemeProvider } from "@mui/material/styles"
+import { ThemeProvider, Theme, StyledEngineProvider } from "@mui/material/styles";
 import { defaultTheme } from "@xbuilder/bunadmin"
+
+
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
 
 const newTheme = {
   ...defaultTheme,
@@ -52,7 +59,7 @@ export default function RtEditor<T extends object>(props: Props<T>) {
   }, [])
 
   const handleClick = () => {
-    const html = rteRef.current?.editor?.getHTML()
+    const html = rteRef.current?.editor?.getHTML() || ""
     props.onChange(html)
     props.onRowDataChange({
       ...props.rowData,
@@ -62,25 +69,27 @@ export default function RtEditor<T extends object>(props: Props<T>) {
   }
 
   return (
-    <ThemeProvider theme={newTheme}>
-      <RichTextEditor
-        ref={rteRef}
-        content={content} // Initial content for the editor
-        extensions={[StarterKit]}
-        // Optionally include `renderControls` for a menu-bar atop the editor:
-        renderControls={() => (
-          <MenuControlsContainer>
-            <MenuSelectHeading />
-            <MenuDivider />
-            <MenuButtonBold />
-            <MenuButtonItalic />
-            {/* Add more controls of your choosing here */}
-          </MenuControlsContainer>
-        )}
-      />
-            <Button onClick={handleClick}>
-        Log HTML
-      </Button>
-    </ThemeProvider>
-  )
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={newTheme}>
+        <RichTextEditor
+          ref={rteRef}
+          content={content} // Initial content for the editor
+          extensions={[StarterKit]}
+          // Optionally include `renderControls` for a menu-bar atop the editor:
+          renderControls={() => (
+            <MenuControlsContainer>
+              <MenuSelectHeading />
+              <MenuDivider />
+              <MenuButtonBold />
+              <MenuButtonItalic />
+              {/* Add more controls of your choosing here */}
+            </MenuControlsContainer>
+          )}
+        />
+              <Button onClick={handleClick}>
+          Log HTML
+        </Button>
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
 }

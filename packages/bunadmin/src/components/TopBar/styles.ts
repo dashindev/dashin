@@ -1,9 +1,9 @@
-import { createStyles, Theme } from "@mui/material/styles"
+import { Theme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 
 export const HEADER_HEIGHT: number = 46
 export const topBarStyles = makeStyles((theme: Theme) => {
-  return createStyles({
+  return {
     appBar: {
       [theme.breakpoints.up("sm")]: {
         zIndex: theme.zIndex.drawer + 1
@@ -29,5 +29,5 @@ export const topBarStyles = makeStyles((theme: Theme) => {
       display: "flex",
       alignItems: "center"
     }
-  })
+  }
 })

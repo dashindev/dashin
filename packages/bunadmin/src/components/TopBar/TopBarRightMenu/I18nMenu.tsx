@@ -60,7 +60,7 @@ export default function I18nMenu() {
         aria-haspopup="true"
         onClick={handleMenu}
         color="inherit"
-      >
+        size="large">
         <EvaIcon
           name="globe-outline"
           size="medium"
@@ -94,5 +94,5 @@ export default function I18nMenu() {
         ))}
       </Menu>
     </div>
-  )
+  );
 }

@@ -27,7 +27,7 @@ export default function UploadConfirmDialog({
   const { t } = useTranslation()
   const [open, setOpen] = React.useState(false)
   const theme = useTheme()
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"))
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
 
   useEffect(() => {
     if (openModal < 1) return

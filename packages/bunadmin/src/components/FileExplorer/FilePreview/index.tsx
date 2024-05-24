@@ -5,7 +5,6 @@ import {
   CardActionArea,
   CardActions,
   CardMedia,
-  createStyles,
   Dialog,
   DialogActions,
   IconButton
@@ -40,7 +39,7 @@ export default function FilePreview({
   prefix
 }: Props) {
   const classes = makeStyles(() => {
-    return createStyles(useStyles)
+    return useStyles
   })()
   const [state, setState] = useState({ fullScreen: fullScreen })
 
@@ -92,18 +91,22 @@ export default function FilePreview({
           </Button>
 
           {isImage(url) && (
-            <IconButton aria-label="Preview" onClick={handleFullWidthChange}>
+            <IconButton
+              aria-label="Preview"
+              onClick={handleFullWidthChange}
+              size="large"
+            >
               {!state.fullScreen ? <ZoomInIcon /> : <ZoomOutIcon />}
             </IconButton>
           )}
 
           <a href={url} target="_blank" rel="noopener noreferrer">
-            <IconButton aria-label="Download">
+            <IconButton aria-label="Download" size="large">
               <DownloadIcon />
             </IconButton>
           </a>
 
-          <IconButton aria-label="Close" onClick={handleClose}>
+          <IconButton aria-label="Close" onClick={handleClose} size="large">
             <CloseIcon />
           </IconButton>
         </DialogActions>

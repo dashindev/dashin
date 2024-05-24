@@ -72,7 +72,7 @@ export default function NoticeMenu(props: Props) {
         aria-haspopup="true"
         onClick={handleMenu}
         color="inherit"
-      >
+        size="large">
         <Badge badgeContent={count} color="primary">
           <EvaIcon
             name="bell-outline"
@@ -83,5 +83,5 @@ export default function NoticeMenu(props: Props) {
       </IconButton>
       <NoticeContainer store={props.store} />
     </div>
-  )
+  );
 }

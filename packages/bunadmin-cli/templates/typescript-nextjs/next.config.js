@@ -33,5 +33,5 @@ module.exports = () => {
 
       return config
     }
-  }
+  };
 }

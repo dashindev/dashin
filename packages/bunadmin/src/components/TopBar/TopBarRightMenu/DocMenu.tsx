@@ -34,7 +34,7 @@ export default function DocMenu({
           })
         }
         color="inherit"
-      >
+        size="large">
         <EvaIcon
           name={isDoc ? "home-outline" : "book-outline"}
           size="medium"
@@ -42,5 +42,5 @@ export default function DocMenu({
         />
       </IconButton>
     </div>
-  )
+  );
 }

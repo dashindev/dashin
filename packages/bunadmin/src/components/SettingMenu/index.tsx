@@ -1,5 +1,5 @@
 import React from "react"
-import { Theme, createStyles, useTheme } from "@mui/material/styles"
+import { Theme, useTheme } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
@@ -14,22 +14,20 @@ import { useRouter } from "@/router"
 import { DynamicRoute } from "@/utils/routes"
 import { useTranslation } from "react-i18next"
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: "100%",
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper
-    },
-    nested: {
-      paddingLeft: theme.spacing(4),
-      transition: "padding-left 0.5s ease"
-    },
-    expandIcon: {
-      color: theme.bunadmin.iconColor
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    width: "100%",
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
+    transition: "padding-left 0.5s ease"
+  },
+  expandIcon: {
+    color: theme.bunadmin.iconColor
+  }
+}))
 
 export default function SettingMenu() {
   const { t } = useTranslation()

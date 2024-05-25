@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles"
-import red from "@mui/material/colors/red"
+import { red } from "@mui/material/colors"
 
 const iconColor = "#8f9bb3"
 const contentBg = "#EDF1F7"
@@ -96,86 +96,123 @@ const defaultTheme = createTheme({
     },
     // cssBaseLine
     MuiCssBaseline: {
-      // @ts-ignore
-      "@global": {
-        // body
-        background: {
-          default: bodyBg
-        },
-        img: {
-          width: "100%"
-        },
-        // scrollbar start
-        "*::-webkit-scrollbar": {
-          width: "8px"
-        },
-        "*::-webkit-scrollbar-track": {
-          "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
-        },
-        "*::-webkit-scrollbar-thumb": {
-          cursor: "pointer",
-          border: "2px solid white",
-          borderRadius: "4px",
-          backgroundColor: "rgba(0, 0, 0, .3)"
-        }, // scrollbar end
-        // eva icon
-        ".eva-hover": {
-          display: "inherit"
-        },
-        // MuiTable
-        ".MuiTable-root .MuiTableHead-root": {
-          display: "block"
-        },
-        ".MuiTable-root .MuiTableBody-root": {
-          display: "block",
-          overflowY: "scroll",
-          height: "calc(100vh - 310px)"
-        },
-        // fix MuiTableBody inside MuiDrawer
-        ".MuiDrawer-root .MuiTable-root .MuiTableBody-root": {
-          height: "calc(100vh - 255px)"
-        },
-        // MuiTable icon
-        ".MuiTable-root .MuiIconButton-root": {
-          color: iconColor
-        },
-        ".MuiTable-root .MuiIconButton-root.Mui-disabled": {
-          opacity: 0.5
-        },
-        // left menu
-        "[class*=drawerClose] nav .MuiListItem-root .MuiListItemText-root span": {
-          height: 0,
-          display: "inline-block",
-          overflow: "hidden"
-        }, // root
-        "nav .MuiList-root": {
-          paddingRight: 8
-        },
-        "nav .MuiListItem-button:hover, nav .MuiListItem-root.Mui-selected, nav .MuiListItem-root.Mui-selected:hover": {
-          borderLeft: "3px solid #36f",
-          borderTopRightRadius: 10,
-          borderBottomRightRadius: 10,
-          background: "#edf1f7",
-          transition: "all ease-in-out 0.2s"
-        },
-        "[class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemText-root span": {
-          overflow: "visible",
-          whiteSpace: "nowrap",
-          transform: "translateX(0)",
-          transition: "1s",
-          minWidth: 50
-        }, // text only
-        "[class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemText-root span:hover": {
-          transform: "translateX(calc(50px - 100%))"
-        }, // text only
-        "[class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root": {
-          paddingLeft: 20,
-          transition: "padding-left 0.5s ease"
-        }, // child
-        "[class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemIcon-root+.MuiListItemText-root span": {
-          overflow: "hidden"
-        } // text with icon
-      }
+      styleOverrides: theme => /*css*/ `
+
+        /* body */
+        body {
+            background: ${bodyBg};
+        }
+
+        img {
+            width: 100%;
+        }
+
+        /* scrollbar start */
+        *::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.00);
+        }
+
+        *::-webkit-scrollbar-thumb {
+            cursor: pointer;
+            border: 2px solid white;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, .3);
+        }
+
+        /* scrollbar end */
+
+        /* eva icon */
+        .eva-hover {
+            display: inherit;
+            font-size: 0;
+        }
+
+        /* Table */
+        .MuiTable-root .MuiTableHead-root {
+            display: block;
+        }
+
+        .MuiTable-root .MuiTableBody-root {
+            display: block;
+            overflow-y: scroll;
+            height: calc(100vh - 292px)
+        }
+
+        /* fix MuiTableBody inside MuiDrawer */
+        .MuiDrawer-root .MuiTable-root .MuiTableBody-root {
+            height: calc(100vh - 255px);
+        }
+
+        /* MuiTable icon */
+        .MuiTable-root .MuiIconButton-root {
+            color: ${iconColor};
+        }
+
+        .MuiTable-root .MuiIconButton-root.Mui-disabled {
+            opacity: 0.5;
+        }
+
+        /* table filter MuiOutlinedInput */
+        .MuiTable-root .MuiOutlinedInput-input {
+            padding: 8px 12px;
+        }
+
+        /* left menu */
+        [class*=drawerClose] nav .MuiListItem-root .MuiListItemText-root span {
+            height: 0;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        /* root */
+        nav .MuiList-root {
+            padding-right: 8px;
+            padding-top: 2px;
+        }
+
+        nav .MuiListItem-root {
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+
+        nav .MuiListItem-button:hover,
+        nav .MuiListItem-root.Mui-selected,
+        nav .MuiListItem-root.Mui-selected:hover {
+            border-left: 3px solid #36f;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            background: #edf1f7;
+            transition: all ease-in-out 0.2s;
+        }
+
+        [class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemText-root span {
+            overflow: visible;
+            white-space: nowrap;
+            transform: translateX(0);
+            transition: 1s;
+            min-width: 50px;
+        }
+
+        /* text only */
+        [class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemText-root span:hover {
+            transform: translateX(calc(50px - 100%));
+        }
+
+        [class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root {
+            padding-left: 20px;
+            transition: padding-left 0.5s ease;
+        }
+
+        /* child text with icon */
+        [class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemIcon-root+.MuiListItemText-root span {
+            overflow: hidden;
+        }
+
+`
     }
   }
 })

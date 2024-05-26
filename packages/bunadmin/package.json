@@ -1,6 +1,6 @@
 {
   "name": "@xbuilder/bunadmin",
-  "version": "1.5.0-beta.0.1",
+  "version": "1.5.0-beta.0.4",
   "description": "A simple graphql admin dashboard. Easy to expand with the flexible plugin. Graphql first, also supports api. Based on React, Redux, Material-UI, Formik, I18N.",
   "license": "Apache-2.0",
   "repository": {
@@ -43,7 +43,7 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.18",
     "@mui/styles": "^5.15.18",
-    "@reduxjs/toolkit": "^1.8.2",
+    "@reduxjs/toolkit": "1.8.4",
     "@xbuilder/bunadmin-auth-local": "^1.5.0-beta.0",
     "babel-loader": "^8.2.5",
     "clsx": "^1.1.1",
@@ -64,7 +64,7 @@
     "react-dropzone": "^14.2.1",
     "react-eva-icons": "0.0.8",
     "react-i18next": "^11.17.2",
-    "react-redux": "^8.0.2",
+    "react-redux": "8.0.4",
     "react-router-dom": "^6.23.1",
     "umi-request": "^1.4.0"
   },

@@ -27,6 +27,7 @@ type TopBarProps = {
   docsHome?: string
   removeLeft?: boolean
   appBarPros?: AppBarProps
+  logo?: React.ReactNode
   appendLeft?: React.ReactNode
   prependRight?: React.ReactNode
   appendRight?: React.ReactNode
@@ -37,6 +38,7 @@ export default function TopBar(props: TopBarProps) {
   const {
     menuClick,
     removeLeft,
+    logo,
     appendLeft,
     prependRight,
     appendRight,
@@ -69,7 +71,8 @@ export default function TopBar(props: TopBarProps) {
                 edge="start"
                 onClick={menuClick}
                 className={classes.menuButton}
-                size="large">
+                size="large"
+              >
                 <EvaIcon
                   name="menu-2-outline"
                   size="medium"
@@ -77,16 +80,22 @@ export default function TopBar(props: TopBarProps) {
                 />
               </IconButton>
             )}
-            <Button
-              variant={"text"}
-              size="medium"
-              color="primary"
-              onClick={() => {
-                router.push(!isDoc ? "/" : docsHome)
-              }}
-            >
-              {!isDoc ? ENV.SITE_NAME : ENV.SITE_NAME + " DOCS"}
-            </Button>
+            {logo ? (
+              logo
+            ) : (
+              <Button
+                id="header_logo"
+                variant={"text"}
+                size="medium"
+                color="primary"
+                onClick={() => {
+                  router.push(!isDoc ? "/" : docsHome)
+                }}
+              >
+                {!isDoc ? ENV.SITE_NAME : ENV.SITE_NAME + " DOCS"}
+              </Button>
+            )}
+
             {appendLeft}
           </div>
         )}
@@ -111,5 +120,5 @@ export default function TopBar(props: TopBarProps) {
         </div>
       </Toolbar>
     </AppBar>
-  );
+  )
 }

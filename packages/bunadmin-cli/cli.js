@@ -8,7 +8,7 @@ const meow = require("meow")
 const ui = importJsx("./lib/ui")
 
 const cli = meow(`
-	Create a new project (CRA or Next.js)
+	Create a new project (Vite or Next.js)
 	  $ bunadmin new {name}
 	  $ bunadmin new {name} --nextjs
 

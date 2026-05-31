@@ -90,6 +90,10 @@ export default defineConfig(({ mode }) => {
           replacement: r("../bunadmin-source-graphql/index.ts")
         },
         {
+          find: /^@xbuilder\/bunadmin-source-pocketbase$/,
+          replacement: r("../bunadmin-source-pocketbase/index.ts")
+        },
+        {
           find: /^@xbuilder\/bunadmin-rich-text-editor$/,
           replacement: r("../bunadmin-rich-text-editor/index.tsx")
         },
@@ -117,6 +121,14 @@ export default defineConfig(({ mode }) => {
         {
           find: /^@xbuilder\/bunadmin-auth-buncms$/,
           replacement: r("../../plugins/bunadmin-auth-buncms/index.ts")
+        },
+        {
+          find: /^@xbuilder\/bunadmin-auth-pocketbase\/(.*)/,
+          replacement: r("../../plugins/bunadmin-auth-pocketbase") + "/$1"
+        },
+        {
+          find: /^@xbuilder\/bunadmin-auth-pocketbase$/,
+          replacement: r("../../plugins/bunadmin-auth-pocketbase/index.ts")
         },
         {
           find: /^@xbuilder\/bunadmin-upload-strapi\/(.*)/,

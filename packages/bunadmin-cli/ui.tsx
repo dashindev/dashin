@@ -3,6 +3,7 @@ import { Text } from "ink"
 import newProject from "./commands/new"
 import newPlugin from "./commands/plugin"
 import newSchema from "./commands/schema"
+import newAi from "./commands/ai"
 import { BUNADMIN_CLI_PATH } from "./utils/config"
 import * as path from "path"
 
@@ -12,8 +13,9 @@ type UIProps = {
 }
 
 type State = {
-  command?: "new" | "plugin" | "schema" | "-v"
+  command?: "new" | "plugin" | "schema" | "ai" | "-v"
   errors?: string
+  message?: string
 }
 
 type PickOne<T> = {
@@ -70,6 +72,13 @@ const UI = (props: UIProps) => {
             updateState({ errors })
           }
           break
+        case "ai":
+          {
+            updateState({ command })
+            const res = await newAi(inputs, options)
+            setState(s => ({ ...s, errors: res.errors, message: res.message }))
+          }
+          break
         default:
           updateState({
             errors: "Command does not exist, please check help: bunadmin --help"
@@ -89,6 +98,12 @@ const UI = (props: UIProps) => {
       return (
         <Text color={state.errors ? "red" : "green"}>
           {state.errors || "done"}
+        </Text>
+      )
+    case "ai":
+      return (
+        <Text color={state.errors ? "red" : "green"}>
+          {state.errors || state.message || "done"}
         </Text>
       )
     default:

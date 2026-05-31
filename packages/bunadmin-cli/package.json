@@ -18,6 +18,7 @@
   "files": [
     "cli.js",
     "lib",
+    "ai",
     "templates"
   ],
   "dependencies": {

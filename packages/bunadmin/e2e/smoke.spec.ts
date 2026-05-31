@@ -28,16 +28,19 @@ test("app loads without console errors and reaches sign-in", async ({
 })
 
 test("sign in with default credentials", async ({ page }) => {
+  const errors: string[] = []
+  page.on("pageerror", e => errors.push(e.message))
+
   await page.goto("/")
   await page.waitForLoadState("networkidle")
 
-  const user = page.getByPlaceholder(/username/i)
-  if (await user.count()) {
-    await user.fill("admin")
-    await page.getByPlaceholder(/password/i).fill("bunadmin")
-    await page.getByRole("button", { name: /sign in/i }).click()
-    await page.waitForLoadState("networkidle")
-  }
-  // Reaching here without a thrown pageerror is the smoke assertion.
-  expect(true).toBeTruthy()
+  const user = page.locator('input[name="username"]')
+  await expect(user).toBeVisible({ timeout: 30_000 })
+  await user.fill("admin")
+  await page.locator('input[name="password"]').fill("bunadmin")
+  await page.locator('button[type="submit"]').click()
+  await page.waitForLoadState("networkidle")
+
+  // Sign-in submit must not throw a runtime error.
+  expect(errors, `errors after sign-in:\n${errors.join("\n")}`).toHaveLength(0)
 })

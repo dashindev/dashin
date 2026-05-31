@@ -14,15 +14,16 @@ test.describe("CRUD flow — /myblog/local", () => {
       if (m.type() === "error") errors.push(m.text())
     })
 
-    // Sign in
+    // Sign in — target fields by their stable `name` attr (i18n-independent;
+    // placeholder text is translated via t() and not reliable in CI).
     await page.goto("/")
     await page.waitForLoadState("networkidle")
 
-    const user = page.getByPlaceholder(/username/i)
+    const user = page.locator('input[name="username"]')
     await expect(user).toBeVisible({ timeout: 30_000 })
     await user.fill("admin")
-    await page.getByPlaceholder(/password/i).fill("bunadmin")
-    await page.getByRole("button", { name: /sign in/i }).click()
+    await page.locator('input[name="password"]').fill("bunadmin")
+    await page.locator('button[type="submit"]').click()
     await page.waitForLoadState("networkidle")
   })
 

@@ -24,14 +24,15 @@ export function findPlugins(paths: string): string[] {
   const countAuth = (
     activePlugins.find(item => /bunadmin-auth-/g.test(item)) || []
   ).length
+  const AUTH_PLUGIN =
+    process.env.VITE_AUTH_PLUGIN ||
+    process.env.REACT_APP_AUTH_PLUGIN ||
+    process.env.NEXT_PUBLIC_AUTH_PLUGIN
   if (countAuth > 1) {
     const newArr: string[] = []
     activePlugins.map(item => {
       if (
-        (process.env.REACT_APP_AUTH_PLUGIN &&
-          item.indexOf(process.env.REACT_APP_AUTH_PLUGIN) > -1) ||
-        (process.env.NEXT_PUBLIC_AUTH_PLUGIN &&
-          item.indexOf(process.env.NEXT_PUBLIC_AUTH_PLUGIN) > -1) ||
+        (AUTH_PLUGIN && item.indexOf(AUTH_PLUGIN) > -1) ||
         item.indexOf("bunadmin-auth-") < 0
       ) {
         newArr.push(item)
@@ -44,11 +45,12 @@ export function findPlugins(paths: string): string[] {
    * Handle ignored plugins
    */
   let ignoredArr: any[] = []
-  if (process.env.REACT_APP_IGNORED_PLUGINS) {
-    ignoredArr = process.env.REACT_APP_IGNORED_PLUGINS.split(/[ ,]+/)
-  }
-  if (process.env.NEXT_PUBLIC_IGNORED_PLUGINS) {
-    ignoredArr = process.env.NEXT_PUBLIC_IGNORED_PLUGINS.split(/[ ,]+/)
+  const IGNORED_PLUGINS =
+    process.env.VITE_IGNORED_PLUGINS ||
+    process.env.REACT_APP_IGNORED_PLUGINS ||
+    process.env.NEXT_PUBLIC_IGNORED_PLUGINS
+  if (IGNORED_PLUGINS) {
+    ignoredArr = IGNORED_PLUGINS.split(/[ ,]+/)
   }
   ignoredArr.map(item => {
     const ignoredRegx = new RegExp(item, "g")

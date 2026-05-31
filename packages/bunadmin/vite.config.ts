@@ -7,9 +7,13 @@ import path from "path"
  * Runs the bunadmin plugin generator BEFORE Vite scans the module graph,
  * so `.bunadmin/dynamic/**` exists when import.meta.glob resolves.
  */
-function bunadminGenerator(): Plugin {
+function bunadminGenerator(mode: string): Plugin {
   let ran = false
   const generate = () => {
+    // Make VITE_ env available to the Node-side generator (loadEnv does not
+    // populate process.env on its own).
+    const env = loadEnv(mode, __dirname, "VITE_")
+    for (const k of Object.keys(env)) process.env[k] = env[k]
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const bunadminPlugin = require("./plugin")
     return bunadminPlugin({
@@ -47,7 +51,7 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    plugins: [bunadminGenerator(), react()],
+    plugins: [bunadminGenerator(mode), react()],
     define,
     server: { port: 3000 },
     build: {

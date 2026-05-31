@@ -11,6 +11,8 @@ export interface Column<RowData extends object> {
   hidden?: boolean
   width?: number | string
   grouping?: boolean
+  defaultGroupOrder?: number
+  defaultSort?: "asc" | "desc"
   filtering?: boolean
   editable?: "always" | "onUpdate" | "onAdd" | "never"
   type?:

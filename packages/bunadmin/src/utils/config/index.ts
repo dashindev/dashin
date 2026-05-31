@@ -1,6 +1,6 @@
 function strToArr(str?: string) {
   if (!str) return []
-  return str.split(/[ ,]+/);
+  return str.split(/[ ,]+/)
 }
 
 export const DEFAULT_AUTH_PLUGIN = "@xbuilder/bunadmin-auth-buncms"
@@ -62,7 +62,7 @@ export const ENV: EnvTypes = {
   DB_VERSION:
     process.env.REACT_APP_DB_VERSION ||
     process.env.NEXT_PUBLIC_DB_VERSION ||
-    "BunadminDatabase",
+    "1",
   ON_I18N:
     process.env.REACT_APP_ON_I18N === "true" ||
     process.env.NEXT_PUBLIC_ON_I18N === "true" ||

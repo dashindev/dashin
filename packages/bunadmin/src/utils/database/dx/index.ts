@@ -17,9 +17,8 @@ export class BunadminDatabase extends Dexie {
 
   constructor() {
     super(ENV.DB_NAME)
-    this.version(ENV.DB_VERSION ? Number(ENV.DB_VERSION) : 1).stores(
-      BA_STORE_TABLES
-    )
+    const v = Number(ENV.DB_VERSION)
+    this.version(Number.isFinite(v) && v > 0 ? v : 1).stores(BA_STORE_TABLES)
   }
 }
 

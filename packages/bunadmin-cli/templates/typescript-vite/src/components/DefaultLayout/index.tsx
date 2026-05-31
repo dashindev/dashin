@@ -6,6 +6,7 @@ import {
   ENV,
   store
 } from "@xbuilder/bunadmin"
+import { importPlugin, hasPlugin } from "../../pluginRegistry"
 
 export default function DefaultLayout(props: DefaultLayoutProps) {
   const { children, leftMenu } = props
@@ -26,10 +27,9 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   useEffect(() => {
     ;(async () => {
       if (!ENV.NOTIFICATION_PLUGIN) return
-      const customNotificationPath = ENV.NOTIFICATION_PLUGIN
-      const { NotificationTable, notificationCount } = await import(
-        `../../plugins/${customNotificationPath}`
-      )
+      const p = ENV.NOTIFICATION_PLUGIN
+      if (!hasPlugin(p)) return
+      const { NotificationTable, notificationCount } = await importPlugin(p)
       if (!NotificationTable || !notificationCount) return
       setNotifyTable(NotificationTable)
       setNotifyCount(notificationCount)

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react"
 import { BunadminFileType, notice, OnDropProps } from "@xbuilder/bunadmin"
 import uploadFileSer from "../services/uploadFileSer"
-import { EditComponentProps } from "material-table"
+import { EditComponentProps } from "@xbuilder/bunadmin"
 
 interface Props extends OnDropProps {
   editProps?: EditComponentProps<any>

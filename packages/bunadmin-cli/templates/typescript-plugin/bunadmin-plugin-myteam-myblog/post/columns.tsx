@@ -1,4 +1,4 @@
-import { Column } from "material-table"
+import { Column } from "@xbuilder/bunadmin"
 import Type from "./types"
 import { TFunction } from 'i18next';
 import { RefObject } from "react";

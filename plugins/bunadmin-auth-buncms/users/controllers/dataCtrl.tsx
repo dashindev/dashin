@@ -1,7 +1,7 @@
 /**
  * Remote data controller
  */
-import { Query } from "material-table"
+import { Query } from "@xbuilder/bunadmin"
 import { notice } from "@xbuilder/bunadmin"
 import listSer from "../services/listSer"
 

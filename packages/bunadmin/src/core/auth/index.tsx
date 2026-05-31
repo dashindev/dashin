@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 
-import { useTheme } from "@mui/material/styles"
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 
 import Table, { TableHead } from "@/components/Table"
@@ -8,17 +7,16 @@ import tableIcons from "@/components/Table/models/tableIcons"
 import { Columns } from "./columns"
 import ConfirmDialog from "@/components/Dialog/ConfirmDialog"
 import { Type } from "./types"
-import { Box, Button } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { JSON_VIEW_BG } from "@/utils/themes/defaultTheme"
 import { BA_DB, IUser } from "@/utils/database"
 import { AuthPrimary, SETTING_NAMES } from "@/main"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 const Primary = AuthPrimary
 
 export default function AuthInfoContainer() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const [data, setData] = useState<IUser[]>([])
   const [selData, setSelData] = useState<Type[]>()
   const [modalState, setModalState] = useState({
@@ -72,34 +70,26 @@ export default function AuthInfoContainer() {
               render: rowData => {
                 if (!rowData.details) {
                   return (
-                    <div
-                      style={{
-                        color: "white",
-                        backgroundColor: theme.bunadmin.iconColor,
-                        padding: "10px 30px"
-                      }}
-                    >
+                    <div className="bg-icon-muted px-8 py-3 text-white">
                       {rowData.details || "EMPTY"}
                     </div>
                   )
                 } else {
                   return (
-                    <Box style={{ background: JSON_VIEW_BG }} p={2}>
+                    <div style={{ background: JSON_VIEW_BG }} className="p-4">
                       {rowData.details || ""}
-                    </Box>
+                    </div>
                   )
-                } // check columns
-              } // render
-            }, // item
+                }
+              }
+            },
             {
               icon: "sync_alt",
               render: rowData => {
                 return (
-                  <Box p={3}>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      color="primary"
+                  <div className="p-6">
+                    <button
+                      className="rounded border border-primary px-3 py-1 text-sm text-primary hover:bg-primary/10"
                       onClick={async () => {
                         const db = BA_DB
                         // Insert to setting: username
@@ -118,8 +108,8 @@ export default function AuthInfoContainer() {
                       }}
                     >
                       Switch to {rowData[Primary]}
-                    </Button>
-                  </Box>
+                    </button>
+                  </div>
                 )
               }
             }

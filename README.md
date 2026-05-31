@@ -1,6 +1,6 @@
 # BunAdmin
 
-**Bunadmin** is a scaffold to quickly build a `React` background management system. It is easy to use and can help you build a powerful background management panel. Techniques that need to be familiar **only include** `Material-UI` and `Material-Table`, if you have not used it before, don’t worry, you can spend very little time learning in actual use later.
+**Bunadmin** is a scaffold to quickly build a `React` background management system. It is easy to use and can help you build a powerful background management panel. Techniques that need to be familiar **only include** `Tailwind CSS` and `Headless UI`, if you have not used it before, don’t worry, you can spend very little time learning in actual use later.
 
 Bunadmin hopes to achieve as many function reuse as possible through simple development methods, so in each bunadmin project, **common functions have been built**, such as dynamic routing, multi-level menus, **permission control, data management**, search filtering and sorting, CRUD, **file management, message notification**, documenting your code, etc. You only need to build your own plugin to call it, and the bunadmin plugin is also easy to learn and use.
 
@@ -71,8 +71,9 @@ npx lerna publish from-package
 
 #### Thanks
 
-[material-ui](https://github.com/mui-org/material-ui)
-[material-table](https://github.com/mbrn/material-table)
+[tailwindcss](https://github.com/tailwindlabs/tailwindcss)
+[headlessui](https://github.com/tailwindlabs/headlessui)
+[tiptap](https://github.com/ueberdosis/tiptap)
 [next.js](https://github.com/zeit/next.js)
 [formik](https://github.com/jaredpalmer/formik)
 [ngx-admin](https://github.com/akveo/ngx-admin)

@@ -1,9 +1,14 @@
 import React from "react"
 import { Drawer } from "@/components"
-import { useStyles } from "./styles"
 import { TFunction } from "i18next"
 
-export const useFilesStyles = useStyles
+export const useFilesStyles = () => ({
+  files: "flex justify-center",
+  filesNoDrawer: "flex flex-wrap justify-start",
+  filesItem: "mr-6",
+  draggableList: "border-dashed border-primary flex flex-wrap",
+  draggableItem: "select-none p-0 m-0"
+})
 
 interface Props {
   t: TFunction
@@ -20,7 +25,7 @@ interface Props {
 }
 
 export default function FileDrawer(props: Props) {
-  const classes = useStyles()
+  const classes = useFilesStyles()
   const {
     t,
     viewMode,

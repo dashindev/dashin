@@ -1,24 +1,11 @@
 import React from "react"
-import Avatar from "@mui/material/Avatar"
-import Button from "@mui/material/Button"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Checkbox from "@mui/material/Checkbox"
-import Link from "@mui/material/Link"
-import Box from "@mui/material/Box"
-import Grid from "@mui/material/Grid"
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
-import Typography from "@mui/material/Typography"
-import { Form, Formik } from "formik"
-import { TextField } from "formik-mui"
-import { Grow, LinearProgress } from "@mui/material"
+import { Form, Formik, Field, ErrorMessage } from "formik"
 import validateController from "./controllers/validateController"
-import useStyles from "./styles"
 import submitController from "./controllers/submitController"
 import { Values } from "./types"
 import {
   ENV,
   AuthPrimary as Primary,
-  BunField,
   AnimatedRandomBG,
   useTranslation,
   useRouter
@@ -26,21 +13,19 @@ import {
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <p className="text-center text-[0.8125rem] text-gray-500">
       {"Copyright © "}
-      <Link color="inherit" href="#">
+      <a href="#" className="text-inherit hover:underline">
         {ENV.SITE_NAME}
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
+      </a>{" "}
+      {new Date().getFullYear()}.
+    </p>
   )
 }
 
 export default function SignInContainer() {
   const { t } = useTranslation("plugins")
   const router = useRouter()
-  const classes = useStyles()
 
   const handleOnSubmit = async (
     values: Values,
@@ -49,87 +34,79 @@ export default function SignInContainer() {
     await submitController({ t, values, setSubmitting, router })
   }
 
+  const fieldClass =
+    "mt-4 w-full rounded border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+
   return (
-    <>
-      <Grid container component="main" className={classes.root}>
-        {/* bg */}
-        <AnimatedRandomBG />
-        <div className={classes.loginArea}>
-          <Grow in addEndListener={() => null}>
-            <div className={classes.paper}>
-              <Avatar className={classes.avatar}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                {t("Sign in")}
-              </Typography>
-              <div className={classes.form}>
-                <Formik
-                  initialValues={{
-                    username: "",
-                    password: ""
-                  }}
-                  validate={values => validateController(values, t)}
-                  onSubmit={handleOnSubmit}
-                >
-                  {({ submitForm, isSubmitting }) => (
-                    <Form>
-                      <BunField
-                        component={TextField}
-                        name={Primary}
-                        type="text"
-                        label={t("Username")}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                      />
-                      <BunField
-                        component={TextField}
-                        type="password"
-                        label={t("Password")}
-                        name="password"
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                      />
-                      <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label={t("Remember me")}
-                      />
-                      {isSubmitting && <LinearProgress />}
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        disabled={isSubmitting}
-                        onClick={submitForm}
-                      >
-                        {t("Sign in")}
-                      </Button>
-                    </Form>
+    <div className="relative h-screen overflow-hidden">
+      <AnimatedRandomBG />
+      <div className="flex w-full items-center justify-center">
+        <div className="relative m-8 flex max-w-[400px] flex-col items-center bg-white/60 p-8">
+          <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/30 text-primary">
+            🔒
+          </div>
+          <h1 className="text-xl font-medium">{t("Sign in")}</h1>
+          <div className="mt-2 w-full">
+            <Formik
+              initialValues={{ [Primary]: "", password: "" }}
+              validate={values => validateController(values, t)}
+              onSubmit={handleOnSubmit}
+            >
+              {({ isSubmitting }) => (
+                <Form>
+                  <Field
+                    name={Primary}
+                    type="text"
+                    placeholder={t("Username")}
+                    className={fieldClass}
+                  />
+                  <ErrorMessage
+                    name={Primary}
+                    component="div"
+                    className="mt-1 text-xs text-danger"
+                  />
+                  <Field
+                    name="password"
+                    type="password"
+                    placeholder={t("Password")}
+                    className={fieldClass}
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="mt-1 text-xs text-danger"
+                  />
+                  <label className="mt-2 flex items-center gap-2 text-sm">
+                    <input type="checkbox" value="remember" />
+                    {t("Remember me")}
+                  </label>
+                  {isSubmitting && (
+                    <div className="mt-2 h-1 w-full animate-pulse rounded bg-primary/40" />
                   )}
-                </Formik>
-                <Grid container>
-                  <Grid item xs>
-                    <Link href="#" variant="body2">
-                      {t("Forgot password?")}
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link href="#" variant="body2">
-                      {t("Don't have an account? Sign Up")}
-                    </Link>
-                  </Grid>
-                </Grid>
-                <Box mt={5}>
-                  <Copyright />
-                </Box>
-              </div>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="mb-2 mt-6 w-full rounded bg-primary py-2.5 text-sm font-medium text-white hover:bg-primary/90 disabled:opacity-50"
+                  >
+                    {t("Sign in")}
+                  </button>
+                </Form>
+              )}
+            </Formik>
+            <div className="flex justify-between">
+              <a href="#" className="text-[0.8125rem] text-primary hover:underline">
+                {t("Forgot password?")}
+              </a>
+              <a href="#" className="text-[0.8125rem] text-primary hover:underline">
+                {t("Don't have an account? Sign Up")}
+              </a>
             </div>
-          </Grow>
+            <div className="mt-10">
+              <Copyright />
+            </div>
+          </div>
         </div>
-      </Grid>
-    </>
+      </div>
+    </div>
   )
 }

@@ -1,19 +1,10 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
-import {
-  Card,
-  CardActionArea,
-  CardMedia,
-  CircularProgress,
-  Theme
-} from "@mui/material"
 import DropZone, { DropEvent, FileRejection } from "react-dropzone"
 import FilePreview from "../FilePreview"
-import styles from "./styles"
 import BunadminFileProps, { BunadminFileType } from "../"
 import CardBottomArea from "./CardBottomArea"
 import { Translation } from "react-i18next"
 import { ENV } from "@/utils"
-import { makeStyles } from "@mui/styles"
 
 export const upload_image = "/p/upload.svg"
 export const default_file = "/p/default_file.svg"
@@ -58,9 +49,7 @@ export default function BunadminFile(props: BunadminFileProps) {
     url = file.url
   }
 
-  const classes = makeStyles((theme: Theme) => {
-    return styles({ theme, id, width })
-  })()
+  const rootWidth = width || 150
   const previewUrl = ENV.FILE_PREVIEW_URL
   const [uploading, setUploading] = React.useState(false),
     [imageUrl, setImageUrl] = React.useState(
@@ -108,7 +97,6 @@ export default function BunadminFile(props: BunadminFileProps) {
       id={id}
       uploading={uploading}
       setPreview={setPreview}
-      classes={classes}
       handleDelMedia={handleDelMedia}
     />
   )
@@ -131,7 +119,8 @@ export default function BunadminFile(props: BunadminFileProps) {
       {...ariaAttributes}
       {...htmlAttributes}
       key={fileKey}
-      className={`${className} ${classes.root}`}
+      className={className}
+      style={{ width: rootWidth }}
     >
       <FilePreview
         preview={preview}
@@ -140,10 +129,11 @@ export default function BunadminFile(props: BunadminFileProps) {
         prefix={prefix}
       />
 
-      <Card
-        className={classes.Card}
+      <div
+        className="relative border border-gray-200 rounded"
         style={{
-          ...(viewMode && mediaStyle),
+          margin: id ? "20px 0" : "20px 5px 20px 0",
+          ...(viewMode ? mediaStyle : {}),
           ...cardStyle
         }}
         onClick={() => id && viewMode && setPreview(true)}
@@ -162,11 +152,14 @@ export default function BunadminFile(props: BunadminFileProps) {
           }) => {
             if (!uploading) {
               return (
-                <CardActionArea disabled={viewMode && !id}>
+                <div className={viewMode && !id ? "pointer-events-none opacity-50" : "cursor-pointer"}>
                   {!viewMode && (
-                    <div {...getRootProps()} className={classes.DropZone}>
+                    <div
+                      {...getRootProps()}
+                      className="absolute inset-0 z-[1] flex items-center justify-center"
+                    >
                       {width && width >= 100 && (
-                        <div className={classes.UploadText}>
+                        <div className="text-white text-xs opacity-60 max-w-[100px] bg-black/50 rounded px-2 py-1 text-center" style={{ textShadow: "1px 1px 10px #fff" }}>
                           {!hideUploadTip &&
                             (!id
                               ? uploadText || <UploadText />
@@ -176,23 +169,19 @@ export default function BunadminFile(props: BunadminFileProps) {
                       <input {...getInputProps()} />
                     </div>
                   )}
-                  <CardMedia
-                    className={
-                      imageUrl === upload_image
-                        ? classes.DefaultUpload
-                        : undefined
-                    }
+                  <img
+                    className={imageUrl === upload_image ? "p-2.5" : ""}
                     style={{ ...mediaStyle, width, height: width || undefined }}
-                    component="img"
-                    image={handleImage(imageUrl)}
+                    src={handleImage(imageUrl)}
+                    alt=""
                   />
                   {!id && viewMode && <BottomComp />}
-                </CardActionArea>
+                </div>
               )
             } else {
               return (
                 <div
-                  className={classes.DropZone}
+                  className="absolute inset-0 z-[1] flex items-center justify-center"
                   style={{
                     ...mediaStyle,
                     width,
@@ -200,7 +189,11 @@ export default function BunadminFile(props: BunadminFileProps) {
                     position: "relative"
                   }}
                 >
-                  <CircularProgress />
+                  {/* Spinner */}
+                  <svg className="h-8 w-8 animate-spin text-primary" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                  </svg>
                 </div>
               )
             }
@@ -208,7 +201,7 @@ export default function BunadminFile(props: BunadminFileProps) {
         </DropZone>
 
         {!viewMode && (id || uploading) && <BottomComp />}
-      </Card>
+      </div>
     </div>
   )
 }

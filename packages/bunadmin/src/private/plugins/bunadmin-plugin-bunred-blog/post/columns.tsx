@@ -1,12 +1,12 @@
 import React from "react"
-import { Column } from "material-table"
+import { Column } from "@/components/Table/models/material-table-shim"
 import Type from "./types"
 import {
   PluginColumns,
   MultipleSelector,
   ListSelector
 } from "@xbuilder/bunadmin"
-import { Chip } from "@mui/material"
+
 import { ENUM_STATUS } from "./plugin"
 import { FileUploader } from "@xbuilder/bunadmin-upload-strapi"
 import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
@@ -29,9 +29,9 @@ export default ({ t }: PluginColumns): Column<Type>[] => [
     lookup: ENUM_STATUS(t),
     render: data =>
       data && data.status ? (
-        <Chip label={ENUM_STATUS(t)[data.status]} color="primary" />
+        <span className="inline-block rounded-full bg-primary px-2 py-0.5 text-xs text-white">{ENUM_STATUS(t)[data.status]}</span>
       ) : (
-        <Chip label={ENUM_STATUS(t)["Draft"]} color="primary" />
+        <span className="inline-block rounded-full bg-primary px-2 py-0.5 text-xs text-white">{ENUM_STATUS(t)["Draft"]}</span>
       ),
     filterComponent: props => (
       <MultipleSelector {...props} valueToLowerCase={false} />

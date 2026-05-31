@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "@/utils/store"
-import { Filter } from "material-table"
+import { Filter } from "@/components/Table/models/material-table-shim"
 
 export interface TableFilter {
   filterField?: string

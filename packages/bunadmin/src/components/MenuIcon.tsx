@@ -2,21 +2,6 @@ import React from "react"
 
 import { MenuIcon as MenuIconName, MenuIconType } from "@/core/menu/types"
 import EvaIcon from "react-eva-icons"
-import { Theme, useTheme } from "@mui/material/styles"
-import { Icon } from "@mui/material"
-import { makeStyles } from "@mui/styles"
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    color: theme.bunadmin.iconColor,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  nested: {
-    paddingLeft: theme.spacing(4)
-  }
-}))
 
 interface Props {
   name?: string
@@ -25,27 +10,24 @@ interface Props {
 }
 
 export default function MenuIcon({ name, icon, icon_type }: Props) {
-  const theme = useTheme()
-  const classes = useStyles()
-
   if (!icon || !icon_type) return <span>Icon</span>
 
   switch (icon_type) {
     case "eva":
       return (
-        <EvaIcon name={icon} size="large" fill={theme.bunadmin.iconColor} />
+        <EvaIcon name={icon} size="large" fill="#8f9bb3" />
       )
     case "material":
       return (
-        <Icon fontSize="inherit" style={{ color: theme.bunadmin.iconColor }}>
+        <span className="text-[#8f9bb3] text-xl flex items-center justify-center material-icons">
           {icon}
-        </Icon>
+        </span>
       )
     case "url":
       return (
-        <Icon className={classes.root}>
+        <span className="text-[#8f9bb3] flex items-center justify-center">
           <img alt={name} width={18} height={18} src={icon} />
-        </Icon>
+        </span>
       )
     default:
       return <span>Icon</span>

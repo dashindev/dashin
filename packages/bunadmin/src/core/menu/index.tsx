@@ -7,15 +7,15 @@ import { Columns } from "./columns"
 
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 import tableIcons from "@/components/Table/models/tableIcons"
-import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { Type } from "@/core/menu/types"
 import { selectNestedMenu } from "@/slices/nestedMenuSlice"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+
 export default function LocalLeftMenuContainer() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   let data = useSelector(selectNestedMenu)
   data = data.map((item: Type) => ({ ...item }))
 

@@ -1,6 +1,5 @@
 import React from "react"
 
-import { useTheme } from "@mui/material/styles"
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 
 import Table, { TableHead } from "@/components/Table"
@@ -11,12 +10,12 @@ import { Type } from "./types"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { selectSchema } from "@/slices/schemaSlice"
-import { Box } from "@mui/material"
 import { JSON_VIEW_BG } from "@/utils/themes/defaultTheme"
+
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 
 export default function SchemaManagerContainer() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   let data = useSelector(selectSchema)
   data = data.map((item: Type) => ({ ...item }))
 
@@ -46,13 +45,7 @@ export default function SchemaManagerContainer() {
               render: rowData => {
                 if (!rowData.columns) {
                   return (
-                    <div
-                      style={{
-                        color: "white",
-                        backgroundColor: theme.bunadmin.iconColor,
-                        padding: "10px 30px"
-                      }}
-                    >
+                    <div className="bg-icon-muted px-8 py-3 text-white">
                       {rowData.columns || rowData.customized
                         ? "CUSTOMIZED"
                         : "EMPTY"}
@@ -60,13 +53,13 @@ export default function SchemaManagerContainer() {
                   )
                 } else {
                   return (
-                    <Box style={{ background: JSON_VIEW_BG }} p={2}>
+                    <div style={{ background: JSON_VIEW_BG }} className="p-4">
                       {rowData.columns || ""}
-                    </Box>
+                    </div>
                   )
-                } // check columns
-              } // render
-            } // item
+                }
+              }
+            }
           ]}
         />
       </>

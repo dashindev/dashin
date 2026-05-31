@@ -1,7 +1,7 @@
 /**
  * Remote data controller
  */
-import { Query } from "material-table"
+import { Query } from "@xbuilder/bunadmin"
 import { ENV, request, storedToken } from "@xbuilder/bunadmin"
 import { SchemaName } from "../plugin"
 

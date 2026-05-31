@@ -1,7 +1,6 @@
 import React from "react"
 import { Drawer, DrawerProps } from "@xbuilder/bunadmin"
-import { EditComponentProps } from "material-table"
-import { Box, Typography, Divider } from "@mui/material"
+import { EditComponentProps } from "@xbuilder/bunadmin"
 import RtEditor from "./editor"
 import RtPreviewer from "./previewer"
 
@@ -27,12 +26,10 @@ export function RichTextEditor<T extends object>(
       direction="right"
       buttonTitle={title}
     >
-      <Box>
-        <Typography variant="h5" component="h1" gutterBottom>
-          {title}
-        </Typography>
-      </Box>
-      <Divider />
+      <div>
+        <h1 className="mb-2 text-xl font-medium">{title}</h1>
+      </div>
+      <hr className="border-gray-200" />
       {props.previewValue && <RtPreviewer value={props.previewValue} />}
       {props.editProps && <RtEditor {...props.editProps} />}
     </Drawer>

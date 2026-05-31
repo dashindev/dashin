@@ -1,6 +1,6 @@
 import React from "react"
 import { TFunction } from "i18next"
-import { EditComponentProps } from "material-table"
+import { EditComponentProps } from "@/components/Table/models/material-table-shim"
 import {
   DragDropContext,
   Droppable,

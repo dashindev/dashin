@@ -1,4 +1,5 @@
-import { Column } from "material-table"
+import React from "react"
+import { Column } from "@/components/Table/models/material-table-shim"
 import Type from "./types"
 
 export const columns = (): Column<Type>[] => [

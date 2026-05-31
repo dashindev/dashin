@@ -1,4 +1,4 @@
-import { Query } from "material-table"
+import { Query } from "@xbuilder/bunadmin"
 
 export interface DataCtrl extends EditableCtrl {
   query: Query<any>

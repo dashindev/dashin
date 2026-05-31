@@ -4,7 +4,7 @@
 import listSer from "../services/listSer"
 import { DataCtrl, ListService } from "../types"
 import { notice } from "@xbuilder/bunadmin"
-import { QueryResult } from "material-table"
+import { QueryResult } from "@xbuilder/bunadmin"
 
 export default async function dataCtrl<RowData extends object>({
   t,

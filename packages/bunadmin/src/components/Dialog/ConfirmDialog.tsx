@@ -1,12 +1,5 @@
 import React, { ReactElement, useEffect } from "react"
-import Button from "@mui/material/Button"
-import Dialog from "@mui/material/Dialog"
-import DialogActions from "@mui/material/DialogActions"
-import DialogContent from "@mui/material/DialogContent"
-import DialogContentText from "@mui/material/DialogContentText"
-import DialogTitle from "@mui/material/DialogTitle"
-import useMediaQuery from "@mui/material/useMediaQuery"
-import { useTheme } from "@mui/material/styles"
+import { Dialog } from "@headlessui/react"
 import { Translation } from "react-i18next"
 
 interface Interface {
@@ -29,17 +22,13 @@ export default function ConfirmDialog({
   agree
 }: Interface) {
   const [open, setOpen] = React.useState(false)
-  const theme = useTheme()
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
 
   useEffect(() => {
     if (openModal < 1) return
     setOpen(true)
   }, [openModal])
 
-  const handleClose = () => {
-    setOpen(false)
-  }
+  const handleClose = () => setOpen(false)
 
   const handleAgree = () => {
     doFunc()
@@ -47,26 +36,33 @@ export default function ConfirmDialog({
   }
 
   return (
-    <div>
-      <Dialog
-        fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
-        <DialogContent>
-          {content || <DialogContentText>{msg}</DialogContentText>}
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-            {disagree || <Translation>{t => t("Cancel")}</Translation>}
-          </Button>
-          <Button onClick={handleAgree} color="primary" autoFocus>
-            {agree || <Translation>{t => t("Confirm")}</Translation>}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog open={open} onClose={handleClose} className="relative z-[1300]">
+      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div className="fixed inset-0 flex items-center justify-center p-4 max-sm:p-0 max-sm:items-stretch">
+        <Dialog.Panel className="w-full max-w-sm rounded bg-white shadow-xl max-sm:max-w-none max-sm:rounded-none">
+          <Dialog.Title className="px-6 pt-5 text-lg font-semibold">
+            {title}
+          </Dialog.Title>
+          <div className="px-6 py-4 text-sm text-gray-600">
+            {content || <p>{msg}</p>}
+          </div>
+          <div className="flex justify-end gap-2 px-4 pb-3">
+            <button
+              autoFocus
+              onClick={handleClose}
+              className="rounded px-3 py-1.5 text-sm font-medium uppercase text-primary hover:bg-primary/10"
+            >
+              {disagree || <Translation>{t => t("Cancel")}</Translation>}
+            </button>
+            <button
+              onClick={handleAgree}
+              className="rounded px-3 py-1.5 text-sm font-medium uppercase text-primary hover:bg-primary/10"
+            >
+              {agree || <Translation>{t => t("Confirm")}</Translation>}
+            </button>
+          </div>
+        </Dialog.Panel>
+      </div>
+    </Dialog>
   )
 }

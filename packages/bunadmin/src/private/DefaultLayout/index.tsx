@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react"
-import clsx from "clsx"
-import Drawer from "@mui/material/Drawer"
-import Box from "@mui/material/Box"
-import { Theme, useTheme } from "@mui/material/styles"
-import { makeStyles } from "@mui/styles"
-import styles from "./styles"
 import LeftMenu from "../../components/LeftMenu"
 import TopBar from "../../components/TopBar"
-import { Container, Fade, useMediaQuery } from "@mui/material"
 import { DefaultLayoutProps } from "@/components"
 import { ENV, store } from "@/utils"
 
@@ -20,12 +13,16 @@ import { ENV, store } from "@/utils"
  */
 export default function DefaultLayout(props: DefaultLayoutProps) {
   const { children, leftMenu } = props
-  const theme = useTheme()
   const [open, setOpen] = React.useState(true)
-  const phoneVertical = useMediaQuery("(max-width:640px)")
-  const classes = makeStyles((theme: Theme) =>
-    styles({ theme, drawerOpen: open, phoneVertical })
-  )()
+  const [phoneVertical, setPhoneVertical] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width:640px)")
+    setPhoneVertical(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setPhoneVertical(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
 
   const [NotifyTable, setNotifyTable] = useState<JSX.Element>()
   const [notifyCount, setNotifyCount] = useState<() => Promise<number>>()
@@ -44,46 +41,39 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   }, [])
 
   return (
-    <div className={classes.root}>
+    <div className="h-screen bg-white">
       <TopBar
         store={store}
         menuClick={handleDrawerToggle}
         notificationCount={notifyCount}
         NotificationTable={NotifyTable}
       />
-      <Box display="flex">
+      <div className="flex">
         <nav aria-label="left menus">
-          <Drawer
-            PaperProps={{
-              elevation: 0
-            }}
-            variant="permanent"
-            className={clsx(classes.drawer, {
-              [classes.drawerOpen]: open,
-              [classes.drawerClose]: !open
-            })}
-            classes={{
-              paper: clsx(classes.pager, {
-                [classes.drawerOpen]: open,
-                [classes.drawerClose]: !open
-              })
-            }}
-            anchor={theme.direction === "rtl" ? "right" : "left"}
-            ModalProps={{
-              keepMounted: true // Better open performance on mobile.
-            }}
+          <aside
+            className={`relative whitespace-nowrap overflow-x-hidden transition-[width] duration-300 ease-in-out border-r-0 ${
+              open ? "w-[240px]" : "w-[57px] sm:w-[73px]"
+            }`}
           >
             <LeftMenu {...leftMenu} />
-          </Drawer>
+          </aside>
         </nav>
-        <Container className={classes.content}>
-          <Fade in>
-            <Box boxShadow={1} className={classes.contentBox}>
-              {children}
-            </Box>
-          </Fade>
-        </Container>
-      </Box>
+        <div
+          className="flex-grow p-[36px] bg-[#EDF1F7] rounded-tl-[10px]"
+          style={{
+            height: "calc(100vh - 46px)",
+            maxWidth: phoneVertical
+              ? "auto"
+              : open
+              ? "calc(100vw - 240px)"
+              : "calc(100vw - 73px)"
+          }}
+        >
+          <div className="bg-white overflow-hidden rounded-[10px] h-full shadow">
+            {children}
+          </div>
+        </div>
+      </div>
     </div>
   )
 

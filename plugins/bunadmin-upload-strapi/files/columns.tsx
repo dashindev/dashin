@@ -1,7 +1,7 @@
-import { Column } from "material-table"
+import { Column } from "@xbuilder/bunadmin"
 import Type from "./types"
 import React from "react"
-import { Button, Tooltip } from "@mui/material"
+
 import { BunadminFile, ENV } from "@xbuilder/bunadmin"
 
 const prefix = ENV.UPLOAD_URL
@@ -46,9 +46,7 @@ export default ({ t }: any) =>
       width: 115,
       editable: false,
       render: r => (
-        <Tooltip title={r.url} placement="top" arrow>
-          <Button>Show</Button>
-        </Tooltip>
+        <button title={r.url} className="text-primary hover:underline">Show</button>
       )
     },
     {

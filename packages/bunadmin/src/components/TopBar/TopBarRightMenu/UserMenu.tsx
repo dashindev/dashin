@@ -1,11 +1,5 @@
-import React, { ReactElement, useEffect, useState } from "react"
-import Button from "@mui/material/Button"
-import IconButton from "@mui/material/IconButton"
-import MenuItem from "@mui/material/MenuItem"
-import Menu from "@mui/material/Menu"
-import EvaIcon from "react-eva-icons"
-import { useTheme } from "@mui/material/styles"
-import Divider from "@mui/material/Divider"
+import React, { ReactElement, useEffect } from "react"
+import { Menu } from "@headlessui/react"
 import { DynamicRoute, LocalDataRoute, UserRoute } from "@/utils/routes"
 import { useRouter } from "@/router"
 import { Primary } from "@/core/auth/schema"
@@ -14,12 +8,8 @@ import { BA_DB } from "@/utils/database"
 import { SETTING_NAMES } from "@/utils"
 import { useLayoutReducer } from "@/slices/layoutSlice"
 
-interface State {
-  username: string | "Guest"
-}
-
 export type UserMenuProps = {
-  disableSwitch?: boolean // disable `switch account`
+  disableSwitch?: boolean
   prepend?: React.ReactNode
   append?: React.ReactNode
   LoginOverride?: () => ReactElement
@@ -28,18 +18,14 @@ export type UserMenuProps = {
   onLogout?: {
     func?: () => void
     funcOverride?: boolean
-    // do action after `logout`; default or undefined is `redirect`
     actionAfter?: "reload" | "none" | "redirect"
-    redirectTo?: string // redirect URL, default is `auth/sign-in`
+    redirectTo?: string
   }
 }
 
 export default function UserMenu(props: UserMenuProps) {
   const { t } = useTranslation()
-  const theme = useTheme()
   const router = useRouter()
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
   const {
     user: { username },
     isSignedIn,
@@ -59,12 +45,7 @@ export default function UserMenu(props: UserMenuProps) {
     })()
   }, [])
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = ({ route }: { route?: string }) => {
-    setAnchorEl(null)
+  const handleRoute = (route?: string) => {
     if (!route) return
     router.push(DynamicRoute, route)
   }
@@ -87,28 +68,21 @@ export default function UserMenu(props: UserMenuProps) {
       if (props.onLogout.funcOverride) return
     }
 
-    // Sign out
     signOut()
 
-    // renew user profile
-
     const db = BA_DB
-    // delete auth
     await db.users.delete(username)
-    // update username in setting
     await db.settings.put({
       name: Primary,
       value: undefined,
       updated_at: Date.now()
     })
-    // update role in setting
     await db.settings.put({
       name: SETTING_NAMES.role,
       value: undefined,
       updated_at: Date.now()
     })
 
-    handleClose({})
     if (!props.onLogout?.actionAfter || props.onLogout?.actionAfter == "none")
       return
 
@@ -124,78 +98,92 @@ export default function UserMenu(props: UserMenuProps) {
   }
 
   return (
-    // User Icon
     <div key={`isSignedIn_${isSignedIn}`}>
       {isSignedIn == false ? (
         props.LoginOverride ? (
           <props.LoginOverride />
         ) : (
-          <Button
-            color="primary"
-            variant="outlined"
-            size="small"
+          <button
+            className="ml-3 rounded border border-primary px-3 py-1 text-sm font-medium text-primary hover:bg-primary/10"
             onClick={onLogin}
-            style={{ marginLeft: 12 }}
           >
             Sign in
-          </Button>
+          </button>
         )
       ) : (
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="menu-appbar"
-          aria-haspopup="true"
-          onClick={handleMenu}
-          color="inherit"
-          size="large">
-          <EvaIcon
-            name="shield-outline"
-            size="medium"
-            fill={theme.bunadmin.iconColor}
-          />
-        </IconButton>
+        <Menu as="div" className="relative">
+          <Menu.Button className="inline-flex items-center justify-center rounded p-2 text-icon-muted hover:bg-gray-100">
+            {/* shield-outline */}
+            <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+            </svg>
+          </Menu.Button>
+          <Menu.Items className="absolute right-0 z-50 mt-1 w-56 origin-top-right rounded bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
+            <Menu.Item disabled>
+              {({ active }) => (
+                <div className="px-4 py-2 text-sm text-gray-400">
+                  <Trans
+                    i18nKey="Signed as $username"
+                    values={{
+                      name: username && username.substr(0, 20)
+                    }}
+                  />
+                </div>
+              )}
+            </Menu.Item>
+            {props.prepend}
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={onProfile}
+                  className={`${active ? "bg-gray-100" : ""} w-full px-4 py-2 text-left text-sm`}
+                >
+                  {t("Profile")}
+                </button>
+              )}
+            </Menu.Item>
+            <div className="my-1 border-t border-gray-200" />
+            {!props.disableSwitch && (
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={() => handleRoute(LocalDataRoute.auth)}
+                    className={`${active ? "bg-gray-100" : ""} w-full px-4 py-2 text-left text-sm`}
+                  >
+                    {t("Switch account")}
+                  </button>
+                )}
+              </Menu.Item>
+            )}
+            {!props.disableSwitch && (
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={onLogin}
+                    className={`${active ? "bg-gray-100" : ""} w-full px-4 py-2 text-left text-sm`}
+                  >
+                    {t("Add another account")}
+                  </button>
+                )}
+              </Menu.Item>
+            )}
+            {!props.disableSwitch && (
+              <div className="my-1 border-t border-gray-200" />
+            )}
+            {props.append}
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={onLogout}
+                  className={`${active ? "bg-gray-100" : ""} w-full px-4 py-2 text-left text-sm`}
+                >
+                  {t("Logout")}
+                </button>
+              )}
+            </Menu.Item>
+          </Menu.Items>
+        </Menu>
       )}
-
-      <Menu
-        id="menu-appbar"
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right"
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right"
-        }}
-        open={open}
-        onClose={() => handleClose({})}
-      >
-        <MenuItem disabled>
-          <Trans
-            i18nKey="Signed as $username"
-            values={{
-              name: username && username.substr(0, 20)
-            }}
-          />
-        </MenuItem>
-        {props.prepend}
-        <MenuItem onClick={onProfile}>{t("Profile")}</MenuItem>
-        <Divider />
-        {/* Switch user is not disabled */}
-        {!props.disableSwitch && (
-          <MenuItem onClick={() => handleClose({ route: LocalDataRoute.auth })}>
-            {t("Switch account")}
-          </MenuItem>
-        )}
-        {!props.disableSwitch && (
-          <MenuItem onClick={onLogin}>{t("Add another account")}</MenuItem>
-        )}
-        {!props.disableSwitch && <Divider />}
-
-        {props.append}
-        <MenuItem onClick={onLogout}>{t("Logout")}</MenuItem>
-      </Menu>
     </div>
-  );
+  )
 }

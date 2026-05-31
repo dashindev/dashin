@@ -1,8 +1,6 @@
 import React, { useState } from "react"
-import TextField from "@mui/material/TextField"
-import Autocomplete from "@mui/lab/Autocomplete"
-import CircularProgress from "@mui/material/CircularProgress"
-import { Column, Query } from "material-table"
+import { Combobox } from "@headlessui/react"
+import { Column, Query } from "@/components/Table/models/material-table-shim"
 import { notice } from "@/core"
 
 interface OptionType {
@@ -84,55 +82,73 @@ export default function FilterListSelector({
     setOptions(options)
   }
 
-  async function handleChange(e: {
-    target: { value: React.SetStateAction<string> }
-  }) {
+  async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setName(e.target.value)
     await dataCtrl()
   }
 
-  function handleSelect(_e: React.ChangeEvent<{}>, value: any) {
+  function handleSelect(value: any) {
     // @ts-ignore for columnDef.tableData
     onFilterChanged(columnDef.tableData.id, value ? value.id : undefined)
     setSelected(value)
   }
 
+  const displayValue = (option: OptionType | null) => {
+    if (!option) return ""
+    return customKey ? (option[customKey] as string) : option.name
+  }
+
   return (
-    <Autocomplete
-      id={`list-selector-${shortName}`}
-      style={{ width: width ? width : 135 }}
-      open={open}
-      onOpen={() => {
-        setOpen(true)
-      }}
-      onClose={() => {
-        setOpen(false)
-      }}
-      onChange={handleSelect}
-      isOptionEqualToValue={option => option.id === (selected && selected.id)}
-      getOptionLabel={option => (customKey ? option[customKey] : option.name)}
-      value={selected}
-      options={options}
-      loading={loading}
-      renderInput={params => (
-        <TextField
-          {...params}
-          label={label || undefined}
-          variant={variant || undefined}
-          onChange={handleChange}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            )
-          }}
-        />
-      )}
-    />
+    <div style={{ width: width ? width : 135 }}>
+      <Combobox value={selected || null} onChange={handleSelect}>
+        <div className="relative">
+          {label && (
+            <label className="absolute -top-2 left-2 bg-white px-1 text-xs text-gray-500">
+              {label}
+            </label>
+          )}
+          <div className="relative">
+            <Combobox.Input
+              className={`w-full py-2 pr-8 text-sm outline-none ${
+                variant === "outlined"
+                  ? "rounded border border-gray-300 px-3 focus:border-primary focus:ring-1 focus:ring-primary"
+                  : "border-b border-gray-300 bg-transparent focus:border-primary"
+              }`}
+              displayValue={displayValue}
+              onChange={handleChange}
+              onClick={() => setOpen(true)}
+              onBlur={() => setOpen(false)}
+            />
+            <span className="absolute inset-y-0 right-0 flex items-center pr-1">
+              {loading ? (
+                <svg className="h-5 w-5 animate-spin text-gray-400" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                </svg>
+              ) : (
+                <svg className="h-5 w-5 fill-current text-gray-400" viewBox="0 0 20 20">
+                  <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </span>
+          </div>
+          {open && options.length > 0 && (
+            <Combobox.Options static className="absolute z-10 mt-1 max-h-[230px] w-full overflow-auto rounded bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
+              {options.map(option => (
+                <Combobox.Option
+                  key={option.id}
+                  value={option}
+                  className={({ active }) =>
+                    `cursor-pointer select-none px-4 py-2 ${active ? "bg-primary/10" : ""}`
+                  }
+                >
+                  {customKey ? option[customKey] : option.name}
+                </Combobox.Option>
+              ))}
+            </Combobox.Options>
+          )}
+        </div>
+      </Combobox>
+    </div>
   )
 }

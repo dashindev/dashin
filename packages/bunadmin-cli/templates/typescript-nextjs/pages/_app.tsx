@@ -3,11 +3,9 @@ import { Provider } from "react-redux"
 import { useTranslation } from "react-i18next"
 import { AppProps } from "next/app"
 import Head from "next/head"
-import { ThemeProvider, Theme, StyledEngineProvider, CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack"
 import {
   useRouter,
-  defaultTheme,
   initData,
   store,
   Snackbar,
@@ -23,13 +21,6 @@ import {
 import "@xbuilder/bunadmin/lib/utils/i18n"
 import "../public/index.css"
 import { YOUR_DB } from "../utils/database"
-
-
-declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
-
 
 const App = ({ Component, pageProps }: AppProps) => {
   const { i18n } = useTranslation()
@@ -47,16 +38,6 @@ const App = ({ Component, pageProps }: AppProps) => {
       return null
     }
   }
-
-  useEffect(() => {
-    ;(async () => {
-      const jssStyles = document.querySelector("#jss-server-side")
-      if (jssStyles) {
-        // @ts-ignore
-        jssStyles.parentElement.removeChild(jssStyles)
-      }
-    })()
-  }, [])
 
   useEffect(() => {
     /**
@@ -106,30 +87,25 @@ const App = ({ Component, pageProps }: AppProps) => {
       />
     </Head>
     <Provider store={store}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={defaultTheme}>
-          <CssBaseline />
-          <SnackbarProvider
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right"
-            }}
-            autoHideDuration={2000}
-            content={(key, message) => (
-              <SnackMessage store={store} id={key} message={message} />
-            )}
-          >
-            <Snackbar />
-          </SnackbarProvider>
-          <Component
-            leftMenuData={leftMenuData}
-            isProtected={isProtected}
-            {...pageProps}
-          />
-        </ThemeProvider>
-      </StyledEngineProvider>
+      <SnackbarProvider
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right"
+        }}
+        autoHideDuration={2000}
+        content={(key, message) => (
+          <SnackMessage store={store} id={key} message={message} />
+        )}
+      >
+        <Snackbar />
+      </SnackbarProvider>
+      <Component
+        leftMenuData={leftMenuData}
+        isProtected={isProtected}
+        {...pageProps}
+      />
     </Provider>
-  </>;
+  </>
 }
 
 export default App

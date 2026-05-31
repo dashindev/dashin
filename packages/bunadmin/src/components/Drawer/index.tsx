@@ -5,32 +5,21 @@ import React, {
   useRef,
   useState
 } from "react"
-import {
-  Button,
-  ButtonOwnProps,
-  Drawer as MUIDrawer,
-  Theme
-} from "@mui/material"
 import CSS from "csstype"
-import styles from "./styles"
-import { makeStyles } from "@mui/styles"
 
 export interface DrawerProps {
   width?: number | string
   height?: number | string
   direction?: "left" | "top" | "right" | "bottom"
   buttonTitle: string | JSX.Element
-  buttonColor?: ButtonOwnProps["color"]
+  buttonColor?: "primary" | "secondary" | "inherit" | "success" | "error" | "info" | "warning"
   buttonVariant?: "text" | "outlined" | "contained"
   buttonSize?: "small" | "medium" | "large"
   buttonDisabled?: boolean
   buttonHidden?: boolean
   buttonStyle?: CSS.Properties
-  // switch toggleDrawer
   switchDrawer?: number
-  // run func when open drawer
   onOpen?: (p: { contentRef: React.MutableRefObject<any | undefined> }) => void
-  // run func when close drawer
   onClose?: (p: { contentRef: React.MutableRefObject<any | undefined> }) => void
   contentClassName?: string
   contentStyles?: CSS.Properties
@@ -55,9 +44,6 @@ export default function Drawer({
   contentStyles,
   children
 }: DrawerProps) {
-  const classes = makeStyles((theme: Theme) => {
-    return styles({ theme, width, height })
-  })()
   const [state, setState] = useState({ open: false })
   const contentRef: MutableRefObject<any | undefined> = useRef()
 
@@ -66,47 +52,67 @@ export default function Drawer({
   }, [switchDrawer])
 
   const toggleDrawer = useCallback(() => {
-    // handle function
     if (!state.open) {
       onOpen && setTimeout(() => onOpen({ contentRef }), 200)
     } else {
       onClose && setTimeout(() => onClose({ contentRef }), 200)
     }
-
     setState({ ...state, open: !state.open })
   }, [state.open])
+
+  const sizeClass = buttonSize === "small" ? "text-sm px-2 py-1" : buttonSize === "large" ? "text-lg px-5 py-3" : "px-4 py-2"
+  const variantClass = buttonVariant === "contained"
+    ? "bg-[#36f] text-white"
+    : buttonVariant === "outlined"
+    ? "border border-[#36f] text-[#36f]"
+    : "text-[#36f]"
+
+  const directionClasses: Record<string, string> = {
+    left: "inset-y-0 left-0",
+    right: "inset-y-0 right-0",
+    top: "inset-x-0 top-0",
+    bottom: "inset-x-0 bottom-0"
+  }
+  const translateHidden: Record<string, string> = {
+    left: "-translate-x-full",
+    right: "translate-x-full",
+    top: "-translate-y-full",
+    bottom: "translate-y-full"
+  }
+  const anchor = direction || "right"
 
   return (
     <>
       {!buttonHidden && (
-        <Button
-          variant={buttonVariant || "text"}
-          size={buttonSize || "medium"}
-          color={buttonColor || "primary"}
+        <button
+          className={`${sizeClass} ${variantClass} rounded ${buttonDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
           disabled={buttonDisabled}
           onClick={() => toggleDrawer()}
           style={buttonStyle}
         >
           {buttonTitle}
-        </Button>
+        </button>
       )}
-      <MUIDrawer
-        className={classes.drawer}
-        classes={{
-          paper: classes.drawerPaper
-        }}
-        anchor={direction || "right"}
-        open={state.open}
-        onClose={toggleDrawer}
+      {/* Backdrop */}
+      {state.open && (
+        <div
+          className="fixed inset-0 bg-black/50 z-[1200]"
+          onClick={toggleDrawer}
+        />
+      )}
+      {/* Drawer panel */}
+      <aside
+        className={`fixed z-[1300] bg-white transition-transform duration-300 ease-in-out ${directionClasses[anchor]} ${state.open ? "translate-x-0 translate-y-0" : translateHidden[anchor]}`}
+        style={{ width: width || "auto", height: height || "100%" }}
       >
         <div
           ref={contentRef}
-          className={contentClassName || classes.drawContent}
+          className={contentClassName || "flex-grow p-6"}
           style={{ ...contentStyles }}
         >
           {children}
         </div>
-      </MUIDrawer>
+      </aside>
     </>
   )
 }

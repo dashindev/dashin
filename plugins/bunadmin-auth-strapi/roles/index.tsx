@@ -5,7 +5,6 @@ import {
   tableIcons,
   TableDefaultProps as DefaultProps
 } from "@xbuilder/bunadmin"
-import { useTheme } from "@mui/material/styles"
 
 import { SchemaLabel, SchemaColumns } from "./plugin"
 import editableCtrl from "./controllers/editableCtrl"
@@ -13,9 +12,10 @@ import { useTranslation } from "@xbuilder/bunadmin"
 import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
 import listSer from "./services/listSer"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+
 export default function() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const tableRef = createRef()
 
   return (
@@ -26,11 +26,8 @@ export default function() {
         title={t(SchemaLabel)}
         columns={SchemaColumns({ t })}
         editable={editableCtrl({})}
-        // style
         style={DefaultProps.style}
-        // icons
         icons={tableIcons({ theme })}
-        // options
         options={{
           ...DefaultProps.options,
           filtering: false,
@@ -38,7 +35,6 @@ export default function() {
           sorting: false,
           search: false
         }}
-        // data
         data={async tableQuery =>
           await dataCtrl({
             t,

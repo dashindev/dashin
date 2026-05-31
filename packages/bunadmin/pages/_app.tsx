@@ -4,10 +4,8 @@ import { useTranslation } from "react-i18next"
 import { AppProps } from "next/app"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import { ThemeProvider, Theme, StyledEngineProvider, CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack"
 import {
-  defaultTheme,
   initData,
   store,
   Snackbar,
@@ -20,13 +18,6 @@ import {
   PluginData
 } from "../src"
 import "../src/utils/i18n"
-
-
-declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
-
 
 const App = ({ Component, pageProps }: AppProps) => {
   const { i18n } = useTranslation()
@@ -96,24 +87,19 @@ const App = ({ Component, pageProps }: AppProps) => {
       />
     </Head>
     <Provider store={store}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={defaultTheme}>
-          <CssBaseline />
-          <SnackbarProvider
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right"
-            }}
-            autoHideDuration={2000}
-            content={(key, message) => (
-              <SnackMessage id={key} message={message} />
-            )}
-          >
-            <Snackbar />
-          </SnackbarProvider>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </StyledEngineProvider>
+      <SnackbarProvider
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right"
+        }}
+        autoHideDuration={2000}
+        content={(key, message) => (
+          <SnackMessage id={key} message={message} />
+        )}
+      >
+        <Snackbar />
+      </SnackbarProvider>
+      <Component {...pageProps} />
     </Provider>
   </>;
 }

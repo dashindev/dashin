@@ -1,30 +1,29 @@
 import React from "react"
-import { Container, Typography, Box, Link } from "@mui/material"
 import { ENV, ProTip } from "@xbuilder/bunadmin"
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <p className="text-center text-sm text-gray-500">
       {"Copyright © "}
-      <Link color="inherit" href="#">
+      <a href="#" className="text-inherit hover:underline">
         {ENV.SITE_NAME}
-      </Link>{" "}
+      </a>{" "}
       {new Date().getFullYear()}
       {"."}
-    </Typography>
+    </p>
   )
 }
 
 export default function Index() {
   return (
-    <Container maxWidth="sm">
-      <Box p={3} my={4}>
-        <Typography variant="h4" component="h1" gutterBottom>
+    <div className="mx-auto max-w-xl">
+      <div className="my-8 p-6">
+        <h1 className="mb-2 text-2xl font-medium">
           Welcome to {ENV.SITE_NAME}
-        </Typography>
+        </h1>
         <ProTip />
         <Copyright />
-      </Box>
-    </Container>
+      </div>
+    </div>
   )
 }

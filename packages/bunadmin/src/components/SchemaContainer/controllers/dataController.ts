@@ -1,7 +1,7 @@
 /**
  * Remote data controller
  */
-import { Query, QueryResult } from "material-table"
+import { Query, QueryResult } from "@/components/Table/models/material-table-shim"
 import request from "@/utils/scripts/request"
 import { ENV } from "@/utils/config"
 

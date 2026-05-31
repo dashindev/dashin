@@ -1,12 +1,6 @@
-import AppBar, { AppBarProps } from "@mui/material/AppBar"
-import Toolbar from "@mui/material/Toolbar"
-import IconButton from "@mui/material/IconButton"
-import EvaIcon from "react-eva-icons"
 import React from "react"
 import { EnhancedStore, AnyAction } from "@reduxjs/toolkit"
 import { ThunkMiddlewareFor } from "@reduxjs/toolkit/src/getDefaultMiddleware"
-import { useTheme } from "@mui/material/styles"
-import { topBarStyles } from "./styles"
 import UserMenu from "./TopBarRightMenu/UserMenu"
 import SettingMenu from "./TopBarRightMenu/SettingMenu"
 import NoticeMenu from "./TopBarRightMenu/NoticeMenu"
@@ -16,17 +10,15 @@ import DocMenu from "./TopBarRightMenu/DocMenu"
 import { useRouter } from "@/router"
 import { DynamicDocRoute } from "@/utils/routes"
 import { NoticePlugin } from "@/utils"
-import { Button } from "@mui/material"
 import { UserMenuProps } from "./TopBarRightMenu/UserMenu"
 
-const useStyles = topBarStyles
+export const HEADER_HEIGHT: number = 46
 
 type TopBarProps = {
   store: EnhancedStore<any, AnyAction, [ThunkMiddlewareFor<any>]>
   menuClick: () => void
   docsHome?: string
   removeLeft?: boolean
-  appBarPros?: AppBarProps
   logo?: React.ReactNode
   appendLeft?: React.ReactNode
   prependRight?: React.ReactNode
@@ -41,66 +33,51 @@ export default function TopBar(props: TopBarProps) {
     logo,
     appendLeft,
     prependRight,
-    appendRight,
-    appBarPros
+    appendRight
   } = props
-  const classes = useStyles()
-  const theme = useTheme()
   const router = useRouter()
   const isDoc = router.route === DynamicDocRoute
   const docsHome = props.docsHome || "/docs/getting-started/introduction"
 
   return (
-    <AppBar
-      elevation={0}
-      color="inherit"
-      position="relative"
-      className={classes.appBar}
-      {...appBarPros}
-    >
-      <Toolbar
-        className={classes.toolbar}
-        classes={{ gutters: classes.gutters }}
+    <div className="relative z-[1201] border-b border-gray-200 bg-white">
+      <div
+        className="flex items-center justify-between pl-5"
+        style={{ minHeight: HEADER_HEIGHT }}
       >
         {!removeLeft && (
-          <div className={classes.leftBlock}>
+          <div className="flex items-center">
             {!isDoc && (
-              <IconButton
-                color="inherit"
+              <button
                 aria-label="open drawer"
-                edge="start"
                 onClick={menuClick}
-                className={classes.menuButton}
-                size="large"
+                className="inline-flex items-center justify-center rounded p-2 text-icon-muted hover:bg-gray-100"
               >
-                <EvaIcon
-                  name="menu-2-outline"
-                  size="medium"
-                  fill={theme.bunadmin.iconColor}
-                />
-              </IconButton>
+                {/* menu-2-outline icon */}
+                <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+                  <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+              </button>
             )}
             {logo ? (
               logo
             ) : (
-              <Button
+              <button
                 id="header_logo"
-                variant={"text"}
-                size="medium"
-                color="primary"
+                className="px-2 py-1 text-sm font-medium text-primary hover:bg-primary/10 rounded"
                 onClick={() => {
                   router.push(!isDoc ? "/" : docsHome)
                 }}
               >
                 {!isDoc ? ENV.SITE_NAME : ENV.SITE_NAME + " DOCS"}
-              </Button>
+              </button>
             )}
 
             {appendLeft}
           </div>
         )}
 
-        <div className={classes.rightBlock}>
+        <div className="flex items-center">
           {prependRight}
           {ENV.ON_I18N && <I18nMenu />}
           {ENV.ON_DOC && <DocMenu isDoc={isDoc} docsHome={docsHome} />}
@@ -118,7 +95,7 @@ export default function TopBar(props: TopBarProps) {
             </>
           )}
         </div>
-      </Toolbar>
-    </AppBar>
+      </div>
+    </div>
   )
 }

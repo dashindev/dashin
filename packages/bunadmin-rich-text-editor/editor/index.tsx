@@ -1,6 +1,8 @@
 import React, { useEffect } from "react"
 import { useEditor, EditorContent, Editor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
+import Link from "@tiptap/extension-link"
+import Image from "@tiptap/extension-image"
 import { EditComponentProps } from "@xbuilder/bunadmin"
 
 interface Props<T extends object> extends EditComponentProps<T> {}
@@ -55,13 +57,83 @@ function Toolbar({ editor }: { editor: Editor | null }) {
       >
         <i>I</i>
       </button>
+      <button
+        type="button"
+        className={btn(editor.isActive("bulletList"))}
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+      >
+        • List
+      </button>
+      <button
+        type="button"
+        className={btn(editor.isActive("orderedList"))}
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+      >
+        1. List
+      </button>
+      <button
+        type="button"
+        className={btn(editor.isActive("blockquote"))}
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+      >
+        Quote
+      </button>
+      <button
+        type="button"
+        className={btn(editor.isActive("codeBlock"))}
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+      >
+        Code
+      </button>
+      <button
+        type="button"
+        className={btn(editor.isActive("link"))}
+        onClick={() => {
+          const href = window.prompt("Enter URL")
+          if (href)
+            editor.chain().focus().extendMarkRange("link").setLink({ href }).run()
+        }}
+      >
+        Link
+      </button>
+      <button
+        type="button"
+        className={btn()}
+        onClick={() => editor.chain().focus().unsetLink().run()}
+      >
+        Unlink
+      </button>
+      <button
+        type="button"
+        className={btn()}
+        onClick={() => {
+          const src = window.prompt("Enter image URL")
+          if (src) editor.chain().focus().setImage({ src }).run()
+        }}
+      >
+        Image
+      </button>
+      <button
+        type="button"
+        className={btn()}
+        onClick={() => editor.chain().focus().undo().run()}
+      >
+        Undo
+      </button>
+      <button
+        type="button"
+        className={btn()}
+        onClick={() => editor.chain().focus().redo().run()}
+      >
+        Redo
+      </button>
     </div>
   )
 }
 
 export default function RtEditor<T extends object>(props: Props<T>) {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, Link.configure({ openOnClick: false }), Image],
     content: props.value || ""
   })
 

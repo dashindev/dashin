@@ -1,95 +1,95 @@
-import React, { useState,useEffect, useRef } from "react"
-import { Button } from "@mui/material";
-import {
-  MenuButtonBold,
-  MenuButtonItalic,
-  MenuControlsContainer,
-  MenuDivider,
-  MenuSelectHeading,
-  RichTextEditor,
-  type RichTextEditorRef,
-} from "mui-tiptap";
-import StarterKit from "@tiptap/starter-kit";
-import { EditComponentProps } from "material-table"
-import { ThemeProvider, Theme, StyledEngineProvider } from "@mui/material/styles";
-import { defaultTheme } from "@xbuilder/bunadmin"
-
-
-declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
-
-
-const newTheme = {
-  ...defaultTheme,
-  overrides: {
-    MUIRichTextEditor: {
-      root: {},
-      toolbar: {
-        overflowY: "scroll",
-        width: "100%",
-        height: 50,
-        borderBottom: `1px solid ${defaultTheme.palette.primary.main}`
-      },
-      editor: {
-        fontSize: 16,
-        height: "calc(100vh - 138px)",
-        overflow: "scroll"
-      }
-    },
-    MuiButtonBase: {
-      root: {
-        // hide save button in toolbar
-        "&#mui-editor-Save-button": { display: "none" }
-      }
-    }
-  }
-}
+import React, { useEffect } from "react"
+import { useEditor, EditorContent, Editor } from "@tiptap/react"
+import StarterKit from "@tiptap/starter-kit"
+import { EditComponentProps } from "@xbuilder/bunadmin"
 
 interface Props<T extends object> extends EditComponentProps<T> {}
 
+const btn = (active?: boolean) =>
+  `rounded px-2 py-1 text-sm ${
+    active ? "bg-primary text-white" : "hover:bg-content-bg"
+  }`
+
+function Toolbar({ editor }: { editor: Editor | null }) {
+  if (!editor) return null
+  return (
+    <div className="flex flex-wrap items-center gap-1 border-b border-primary p-2">
+      <select
+        className="rounded border border-gray-300 px-1 py-1 text-sm"
+        value={
+          editor.isActive("heading", { level: 1 })
+            ? "1"
+            : editor.isActive("heading", { level: 2 })
+            ? "2"
+            : editor.isActive("heading", { level: 3 })
+            ? "3"
+            : "0"
+        }
+        onChange={e => {
+          const v = e.target.value
+          if (v === "0") editor.chain().focus().setParagraph().run()
+          else
+            editor
+              .chain()
+              .focus()
+              .toggleHeading({ level: Number(v) as 1 | 2 | 3 })
+              .run()
+        }}
+      >
+        <option value="0">Paragraph</option>
+        <option value="1">Heading 1</option>
+        <option value="2">Heading 2</option>
+        <option value="3">Heading 3</option>
+      </select>
+      <button
+        type="button"
+        className={btn(editor.isActive("bold"))}
+        onClick={() => editor.chain().focus().toggleBold().run()}
+      >
+        <b>B</b>
+      </button>
+      <button
+        type="button"
+        className={btn(editor.isActive("italic"))}
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+      >
+        <i>I</i>
+      </button>
+    </div>
+  )
+}
+
 export default function RtEditor<T extends object>(props: Props<T>) {
-  const rteRef = useRef<RichTextEditorRef>(null);
-  const [content, setContent] = useState<string>("Start typing...")
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: props.value || ""
+  })
 
   useEffect(() => {
-    const html = props.value || ""
-    setContent(html)
-  }, [])
+    if (editor && props.value) editor.commands.setContent(props.value)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor])
 
   const handleClick = () => {
-    const html = rteRef.current?.editor?.getHTML() || ""
+    const html = editor?.getHTML() || ""
     props.onChange(html)
-    props.onRowDataChange({
-      ...props.rowData,
-      content: html
-    })
-    setContent(html)
+    props.onRowDataChange({ ...props.rowData, content: html })
   }
 
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={newTheme}>
-        <RichTextEditor
-          ref={rteRef}
-          content={content} // Initial content for the editor
-          extensions={[StarterKit]}
-          // Optionally include `renderControls` for a menu-bar atop the editor:
-          renderControls={() => (
-            <MenuControlsContainer>
-              <MenuSelectHeading />
-              <MenuDivider />
-              <MenuButtonBold />
-              <MenuButtonItalic />
-              {/* Add more controls of your choosing here */}
-            </MenuControlsContainer>
-          )}
-        />
-              <Button onClick={handleClick}>
-          Log HTML
-        </Button>
-      </ThemeProvider>
-    </StyledEngineProvider>
-  );
+    <div>
+      <Toolbar editor={editor} />
+      <EditorContent
+        editor={editor}
+        className="h-[calc(100vh-138px)] overflow-auto p-3 text-base [&_.ProseMirror]:outline-none"
+      />
+      <button
+        type="button"
+        onClick={handleClick}
+        className="m-2 rounded bg-primary px-3 py-1.5 text-sm text-white hover:bg-primary/90"
+      >
+        Save
+      </button>
+    </div>
+  )
 }

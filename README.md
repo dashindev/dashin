@@ -24,6 +24,29 @@ Display help for command
 
 [Read the Getting Started tutorial](http://blog.eg.bunadmin.com/docs/getting-started/introduction)
 
+## AI-assisted generation (BYOK)
+
+Point bunadmin at your backend and let AI generate a **validated** admin — cheap
+models work because output is checked against your real schema, not freeform code.
+
+```
+# schema -> validated admin table
+bunadmin ai generate --url <backend-url> --collection <name> --token <admin>
+
+# description -> validated theme
+bunadmin ai theme "dark mode with a purple accent"
+```
+
+Bring your own key: set `BUNADMIN_AI_PROVIDER` (openai | anthropic | ollama) +
+`BUNADMIN_AI_API_KEY`. Full guide: [`docs/ai/README.md`](docs/ai/README.md).
+
+## Backend connectors
+
+Swap data sources via plugins — same table/CRUD UI on any backend:
+**PocketBase** (`@xbuilder/bunadmin-source-pocketbase`), **Appwrite**
+(`@xbuilder/bunadmin-source-appwrite`), **Strapi**, **GraphQL**.
+See [`docs/pocketbase/`](docs/pocketbase/).
+
 ## Online demo
 
 [blog.eg.bunadmin.com](http://blog.eg.bunadmin.com/)

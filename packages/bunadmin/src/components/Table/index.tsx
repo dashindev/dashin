@@ -6,6 +6,16 @@ import {
   QueryResult,
   EditComponentProps
 } from "./models/material-table-shim"
+import {
+  Dir,
+  Editing,
+  defaultOperator,
+  operatorOptions,
+  display,
+  matchLocal,
+  buildGroupItems
+} from "./models/tableLogic"
+import Pagination from "./components/Pagination"
 import { TableDefaultProps as DefaultProps } from "./models/defaultProps"
 import { useTranslation } from "react-i18next"
 import { ENV, DynamicRoute } from "@/utils"
@@ -16,106 +26,6 @@ export function TableHead({ title }: { title?: string }) {
     document.title = `${title || "List"} - ${ENV.SITE_NAME}`
   }, [title])
   return <></>
-}
-
-type Dir = "asc" | "desc"
-type Editing<R> = { mode: "add" | "update"; data: R; original?: R } | null
-
-// Default filter operator per column type (material-table parity).
-function defaultOperator<R extends object>(c: Column<R>): string {
-  if (c.type === "numeric") return "="
-  if (c.type === "boolean") return "="
-  if (c.lookup) return "="
-  return "_cs=" // case-insensitive contains for free text
-}
-
-// Operators offered in the filter row, by column type.
-function operatorOptions<R extends object>(c: Column<R>): { v: string; label: string }[] {
-  if (c.type === "numeric")
-    return [
-      { v: "=", label: "=" },
-      { v: "!=", label: "≠" },
-      { v: ">", label: ">" },
-      { v: ">=", label: "≥" },
-      { v: "<", label: "<" },
-      { v: "<=", label: "≤" }
-    ]
-  if (c.type === "boolean" || c.lookup)
-    return [{ v: "=", label: "=" }]
-  return [
-    { v: "_cs=", label: "contains" },
-    { v: "=", label: "equals" },
-    { v: "_ncs=", label: "not contains" }
-  ]
-}
-
-// A3: group the given rows by the ordered group columns into a flat list of
-// render items (group header rows interleaved with their data rows).
-type GroupItem<R> =
-  | { kind: "group"; key: string; field: string; value: any; depth: number; count: number }
-  | { kind: "row"; key: string; row: R; index: number }
-
-function buildGroupItems<R extends object>(
-  rows: R[],
-  groupCols: Column<R>[]
-): GroupItem<R>[] {
-  const out: GroupItem<R>[] = []
-  const recurse = (subset: { row: R; index: number }[], depth: number, prefix: string) => {
-    if (depth >= groupCols.length) {
-      subset.forEach(s => out.push({ kind: "row", key: prefix, row: s.row, index: s.index }))
-      return
-    }
-    const field = groupCols[depth].field as string
-    const buckets = new Map<any, { row: R; index: number }[]>()
-    subset.forEach(s => {
-      const v = (s.row as any)[field]
-      if (!buckets.has(v)) buckets.set(v, [])
-      buckets.get(v)!.push(s)
-    })
-    buckets.forEach((items, value) => {
-      const key = `${prefix}/${field}:${value}`
-      out.push({ kind: "group", key, field, value, depth, count: items.length })
-      recurse(items, depth + 1, key)
-    })
-  }
-  recurse(rows.map((row, index) => ({ row, index })), 0, "")
-  return out
-}
-
-function display<R extends object>(col: Column<R>, row: R) {
-  if (col.render) return col.render(row)
-  const v = (row as any)[col.field as string]
-  if (col.type === "boolean") return v ? "✓" : "✗"
-  if ((col.type === "datetime" || col.type === "date") && v)
-    return new Date(v).toLocaleString()
-  return v as any
-}
-
-// Local-data filtering predicate for a given operator.
-function matchLocal(cell: any, operator: string, value: any): boolean {
-  const s = String(cell ?? "").toLowerCase()
-  const q = String(value ?? "").toLowerCase()
-  switch (operator) {
-    case "=":
-      return Array.isArray(value)
-        ? value.map(String).includes(String(cell))
-        : s === q
-    case "!=":
-      return s !== q
-    case ">":
-      return Number(cell) > Number(value)
-    case ">=":
-      return Number(cell) >= Number(value)
-    case "<":
-      return Number(cell) < Number(value)
-    case "<=":
-      return Number(cell) <= Number(value)
-    case "_ncs=":
-      return !s.includes(q)
-    case "_cs=":
-    default:
-      return s.includes(q)
-  }
 }
 
 export default function Table<RowData extends object>(
@@ -665,15 +575,14 @@ export default function Table<RowData extends object>(
         </table>
       </div>
 
-      <div className="flex items-center justify-end gap-4 px-4 py-2 text-sm text-gray-600">
-        <span>{from}-{to} of {totalCount}</span>
-        <div className="flex gap-1">
-          <button onClick={() => goto(0)} disabled={page === 0} className="rounded px-2 py-1 disabled:opacity-30">«</button>
-          <button onClick={() => goto(page - 1)} disabled={page === 0} className="rounded px-2 py-1 disabled:opacity-30">‹</button>
-          <button onClick={() => goto(page + 1)} disabled={page >= pageCount - 1} className="rounded px-2 py-1 disabled:opacity-30">›</button>
-          <button onClick={() => goto(pageCount - 1)} disabled={page >= pageCount - 1} className="rounded px-2 py-1 disabled:opacity-30">»</button>
-        </div>
-      </div>
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        from={from}
+        to={to}
+        total={totalCount}
+        goto={goto}
+      />
     </div>
   )
 }

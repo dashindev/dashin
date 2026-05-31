@@ -12,7 +12,7 @@ interface Props {
 
 export default function dataToGql({ data, nulls, enums }: Props) {
   const fields: string[] = []
-  Object.keys(data).map(key => {
+  Object.keys(data).forEach(key => {
     const value = data[key]
     const valueType = typeof value
 
@@ -61,7 +61,7 @@ export function filtersToWhere({
     ? `${search.key}: {${search.operator}: ${search.value}},`
     : ""
 
-  filters.map(item => {
+  filters.forEach(item => {
     let value = item.value
     const valueType = typeof value
 

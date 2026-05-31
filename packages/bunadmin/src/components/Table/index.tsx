@@ -21,6 +21,67 @@ export function TableHead({ title }: { title?: string }) {
 type Dir = "asc" | "desc"
 type Editing<R> = { mode: "add" | "update"; data: R; original?: R } | null
 
+// Default filter operator per column type (material-table parity).
+function defaultOperator<R extends object>(c: Column<R>): string {
+  if (c.type === "numeric") return "="
+  if (c.type === "boolean") return "="
+  if (c.lookup) return "="
+  return "_cs=" // case-insensitive contains for free text
+}
+
+// Operators offered in the filter row, by column type.
+function operatorOptions<R extends object>(c: Column<R>): { v: string; label: string }[] {
+  if (c.type === "numeric")
+    return [
+      { v: "=", label: "=" },
+      { v: "!=", label: "≠" },
+      { v: ">", label: ">" },
+      { v: ">=", label: "≥" },
+      { v: "<", label: "<" },
+      { v: "<=", label: "≤" }
+    ]
+  if (c.type === "boolean" || c.lookup)
+    return [{ v: "=", label: "=" }]
+  return [
+    { v: "_cs=", label: "contains" },
+    { v: "=", label: "equals" },
+    { v: "_ncs=", label: "not contains" }
+  ]
+}
+
+// A3: group the given rows by the ordered group columns into a flat list of
+// render items (group header rows interleaved with their data rows).
+type GroupItem<R> =
+  | { kind: "group"; key: string; field: string; value: any; depth: number; count: number }
+  | { kind: "row"; key: string; row: R; index: number }
+
+function buildGroupItems<R extends object>(
+  rows: R[],
+  groupCols: Column<R>[]
+): GroupItem<R>[] {
+  const out: GroupItem<R>[] = []
+  const recurse = (subset: { row: R; index: number }[], depth: number, prefix: string) => {
+    if (depth >= groupCols.length) {
+      subset.forEach(s => out.push({ kind: "row", key: prefix, row: s.row, index: s.index }))
+      return
+    }
+    const field = groupCols[depth].field as string
+    const buckets = new Map<any, { row: R; index: number }[]>()
+    subset.forEach(s => {
+      const v = (s.row as any)[field]
+      if (!buckets.has(v)) buckets.set(v, [])
+      buckets.get(v)!.push(s)
+    })
+    buckets.forEach((items, value) => {
+      const key = `${prefix}/${field}:${value}`
+      out.push({ kind: "group", key, field, value, depth, count: items.length })
+      recurse(items, depth + 1, key)
+    })
+  }
+  recurse(rows.map((row, index) => ({ row, index })), 0, "")
+  return out
+}
+
 function display<R extends object>(col: Column<R>, row: R) {
   if (col.render) return col.render(row)
   const v = (row as any)[col.field as string]
@@ -28,6 +89,33 @@ function display<R extends object>(col: Column<R>, row: R) {
   if ((col.type === "datetime" || col.type === "date") && v)
     return new Date(v).toLocaleString()
   return v as any
+}
+
+// Local-data filtering predicate for a given operator.
+function matchLocal(cell: any, operator: string, value: any): boolean {
+  const s = String(cell ?? "").toLowerCase()
+  const q = String(value ?? "").toLowerCase()
+  switch (operator) {
+    case "=":
+      return Array.isArray(value)
+        ? value.map(String).includes(String(cell))
+        : s === q
+    case "!=":
+      return s !== q
+    case ">":
+      return Number(cell) > Number(value)
+    case ">=":
+      return Number(cell) >= Number(value)
+    case "<":
+      return Number(cell) < Number(value)
+    case "<=":
+      return Number(cell) <= Number(value)
+    case "_ncs=":
+      return !s.includes(q)
+    case "_cs=":
+    default:
+      return s.includes(q)
+  }
 }
 
 export default function Table<RowData extends object>(
@@ -60,8 +148,22 @@ export default function Table<RowData extends object>(
   const [orderBy, setOrderBy] = useState<Column<RowData> | undefined>()
   const [orderDir, setOrderDir] = useState<Dir>("asc")
   const [filters, setFilters] = useState<Record<number, any>>({})
+  const [operators, setOperators] = useState<Record<number, string>>({})
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
   const [editing, setEditing] = useState<Editing<RowData>>(null)
   const [selected, setSelected] = useState<Set<number>>(new Set())
+
+  // Columns participating in grouping (defaultGroupOrder set), ordered.
+  const groupCols = useMemo(
+    () =>
+      (cols.filter(c => c.defaultGroupOrder !== undefined) as Column<RowData>[])
+        .sort((a, b) => (a.defaultGroupOrder! - b.defaultGroupOrder!)),
+    [cols]
+  )
+  const grouping = !!options?.grouping && groupCols.length > 0
+
+  const opOf = (c: Column<RowData>) =>
+    operators[c.tableData!.id] ?? defaultOperator(c)
 
   const buildQuery = useCallback(
     (p: number): Query<RowData> => ({
@@ -71,14 +173,18 @@ export default function Table<RowData extends object>(
       orderBy,
       orderDirection: orderDir,
       filters: cols
-        .filter(c => filters[c.tableData!.id] !== undefined && filters[c.tableData!.id] !== "")
+        .filter(
+          c =>
+            filters[c.tableData!.id] !== undefined &&
+            filters[c.tableData!.id] !== ""
+        )
         .map(c => ({
           column: { field: c.field },
-          operator: "=",
+          operator: operators[c.tableData!.id] ?? defaultOperator(c),
           value: filters[c.tableData!.id]
         })) as any
     }),
-    [pageSize, search, orderBy, orderDir, filters, cols]
+    [pageSize, search, orderBy, orderDir, filters, operators, cols]
   )
 
   const loadRemote = useCallback(
@@ -107,7 +213,7 @@ export default function Table<RowData extends object>(
   useEffect(() => {
     if (isRemote) loadRemote(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, orderBy, orderDir, filters])
+  }, [search, orderBy, orderDir, filters, operators])
 
   // local: derive filtered/sorted/paged rows
   useEffect(() => {
@@ -115,12 +221,10 @@ export default function Table<RowData extends object>(
     let r = [...allRows]
     cols.forEach(c => {
       const fv = filters[c.tableData!.id]
-      if (fv !== undefined && fv !== "" && c.field)
-        r = r.filter(row =>
-          String((row as any)[c.field as string] ?? "")
-            .toLowerCase()
-            .includes(String(fv).toLowerCase())
-        )
+      if (fv !== undefined && fv !== "" && c.field) {
+        const op = operators[c.tableData!.id] ?? defaultOperator(c)
+        r = r.filter(row => matchLocal((row as any)[c.field as string], op, fv))
+      }
     })
     if (search)
       r = r.filter(row =>
@@ -185,6 +289,27 @@ export default function Table<RowData extends object>(
     reload()
   }
 
+  // A2: bulk operations over the current page's selected rows.
+  const selectedRows = useMemo(
+    () => rows.filter((_, i) => selected.has(i)),
+    [rows, selected]
+  )
+  const clearSelection = () => setSelected(new Set())
+  const bulkDelete = async () => {
+    if (!editable?.onRowDelete) return
+    for (const r of selectedRows) await editable.onRowDelete(r)
+    clearSelection()
+    reload()
+  }
+  const bulkUpdate = async () => {
+    if (!editable?.onBulkUpdate) return
+    const changes: Record<number, { oldData: RowData; newData: RowData }> = {}
+    selectedRows.forEach((r, i) => (changes[i] = { oldData: r, newData: r }))
+    await editable.onBulkUpdate(changes)
+    clearSelection()
+    reload()
+  }
+
   const canAdd = !!editable?.onRowAdd
   const hasRowActions = !!(editable?.onRowUpdate || editable?.onRowDelete)
   const hasDetail = !!detailPanel
@@ -225,59 +350,213 @@ export default function Table<RowData extends object>(
   const freeActions = (actions || []).filter(
     (a): a is any => typeof a !== "function" && (a as any).isFreeAction
   )
+  // Non-free actions operate on the current selection (material-table parity).
+  const bulkActions = (actions || []).filter(
+    (a): a is any => typeof a !== "function" && !(a as any).isFreeAction
+  )
+  const selectedCount = selected.size
+
+  // Shared data-row renderer (used by both flat and grouped rendering).
+  const renderRow = (row: RowData, ri: number) => {
+    const isEditing = editing?.mode === "update" && editing.original === row
+    return (
+      <React.Fragment key={ri}>
+        <tr
+          className={`border-b border-gray-100 hover:bg-content-bg ${
+            onRowClick ? "cursor-pointer" : ""
+          }`}
+          onClick={onRowClick ? e => onRowClick(e, row) : undefined}
+        >
+          {hasDetail && (
+            <td className="px-4 py-2">
+              <button
+                onClick={e => {
+                  e.stopPropagation()
+                  setExpanded(expanded === ri ? null : ri)
+                }}
+                className="text-icon-muted hover:text-primary"
+              >
+                {expanded === ri ? "▾" : "▸"}
+              </button>
+            </td>
+          )}
+          {showSelection && (
+            <td className="px-4 py-2" onClick={e => e.stopPropagation()}>
+              <input
+                type="checkbox"
+                checked={selected.has(ri)}
+                onChange={() =>
+                  setSelected(s => {
+                    const n = new Set(s)
+                    n.has(ri) ? n.delete(ri) : n.add(ri)
+                    return n
+                  })
+                }
+                className="h-4 w-4 rounded border-gray-300 text-primary"
+              />
+            </td>
+          )}
+          {cols.map(c => (
+            <td key={c.tableData!.id} className="px-4 py-2">
+              {isEditing ? editCell(c, editing!.data) : display(c, row)}
+            </td>
+          ))}
+          {hasRowActions && (
+            <td className="px-4 py-2 whitespace-nowrap" onClick={e => e.stopPropagation()}>
+              {isEditing ? (
+                <>
+                  <button onClick={save} className="mr-2 text-primary" title={t("saveTooltip")}>✓</button>
+                  <button onClick={cancel} className="text-icon-muted" title={t("cancelTooltip")}>✕</button>
+                </>
+              ) : (
+                <>
+                  {editable?.onRowUpdate && (
+                    <button onClick={() => startEdit(row)} className="mr-2 text-icon-muted hover:text-primary" title={t("editTooltip")}>✎</button>
+                  )}
+                  {editable?.onRowDelete && (
+                    <button onClick={() => remove(row)} className="text-icon-muted hover:text-danger" title={t("deleteTooltip")}>🗑</button>
+                  )}
+                </>
+              )}
+            </td>
+          )}
+        </tr>
+        {hasDetail && expanded === ri && (
+          <tr className="border-b border-gray-100 bg-content-bg/30">
+            <td colSpan={colSpan} className="px-4 py-2">
+              {renderDetail(row)}
+            </td>
+          </tr>
+        )}
+      </React.Fragment>
+    )
+  }
+
+  // A3: grouped render items for the current page (when grouping active).
+  const groupItems = grouping ? buildGroupItems(rows, groupCols) : []
+  const toggleGroup = (key: string) =>
+    setCollapsedGroups(s => {
+      const n = new Set(s)
+      n.has(key) ? n.delete(key) : n.add(key)
+      return n
+    })
+  // A group's rows are hidden if it (or any ancestor prefix) is collapsed.
+  const isHiddenByCollapse = (key: string) =>
+    [...collapsedGroups].some(ck => key.startsWith(ck))
 
   return (
     <div id="bunadmin-table" className="rounded bg-content-box">
       {/* toolbar */}
-      <div className="flex items-center justify-between gap-3 px-4 py-3">
-        <h2 className="text-base font-semibold">{title}</h2>
-        <div className="flex items-center gap-2">
-          {showSearch && (
-            <input
-              placeholder={t("searchPlaceholder")}
-              value={search}
-              onChange={e => {
-                setPage(0)
-                setSearch(e.target.value)
-              }}
-              className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-primary focus:outline-none"
-            />
-          )}
-          {canAdd && (
+      {showSelection && selectedCount > 0 ? (
+        <div className="flex items-center justify-between gap-3 bg-primary/10 px-4 py-3">
+          <span className="text-sm font-medium">
+            {t("nRowsSelected").replace("{0}", String(selectedCount))}
+          </span>
+          <div className="flex items-center gap-2">
+            {editable?.onBulkUpdate && (
+              <button
+                onClick={bulkUpdate}
+                className="rounded px-3 py-1 text-sm text-primary hover:bg-primary/10"
+              >
+                {t("editTooltip")}
+              </button>
+            )}
+            {editable?.onRowDelete && (
+              <button
+                onClick={bulkDelete}
+                className="rounded px-3 py-1 text-sm text-danger hover:bg-danger/10"
+              >
+                {t("deleteTooltip")}
+              </button>
+            )}
+            {bulkActions.map((a, i) => (
+              <button
+                key={i}
+                title={a.tooltip}
+                onClick={e => {
+                  a.onClick(e, selectedRows)
+                  clearSelection()
+                }}
+                className="rounded p-1.5 text-icon-muted hover:bg-content-bg"
+              >
+                {typeof a.icon === "function" ? a.icon() : "•"}
+              </button>
+            ))}
             <button
-              onClick={startAdd}
-              title={t("addTooltip")}
-              className="rounded bg-primary px-3 py-1 text-sm text-white hover:bg-primary/90"
-            >
-              +
-            </button>
-          )}
-          {freeActions.map((a, i) => (
-            <button
-              key={i}
-              title={a.tooltip}
-              onClick={e => a.onClick(e, rows)}
+              onClick={clearSelection}
               className="rounded p-1.5 text-icon-muted hover:bg-content-bg"
             >
-              {typeof a.icon === "function" ? a.icon() : "•"}
+              ✕
             </button>
-          ))}
-          <button
-            title={t("Refresh Data")}
-            onClick={() => router.push(DynamicRoute, `/${qGroup}/${qName}`)}
-            className="rounded p-1.5 text-icon-muted hover:bg-content-bg"
-          >
-            ⟳
-          </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex items-center justify-between gap-3 px-4 py-3">
+          <h2 className="text-base font-semibold">{title}</h2>
+          <div className="flex items-center gap-2">
+            {showSearch && (
+              <input
+                placeholder={t("searchPlaceholder")}
+                value={search}
+                onChange={e => {
+                  setPage(0)
+                  setSearch(e.target.value)
+                }}
+                className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-primary focus:outline-none"
+              />
+            )}
+            {canAdd && (
+              <button
+                onClick={startAdd}
+                title={t("addTooltip")}
+                className="rounded bg-primary px-3 py-1 text-sm text-white hover:bg-primary/90"
+              >
+                +
+              </button>
+            )}
+            {freeActions.map((a, i) => (
+              <button
+                key={i}
+                title={a.tooltip}
+                onClick={e => a.onClick(e, rows)}
+                className="rounded p-1.5 text-icon-muted hover:bg-content-bg"
+              >
+                {typeof a.icon === "function" ? a.icon() : "•"}
+              </button>
+            ))}
+            <button
+              title={t("Refresh Data")}
+              onClick={() => router.push(DynamicRoute, `/${qGroup}/${qName}`)}
+              className="rounded p-1.5 text-icon-muted hover:bg-content-bg"
+            >
+              ⟳
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-gray-200 text-left">
               {hasDetail && <th className="w-8 px-4 py-2" />}
-              {showSelection && <th className="w-8 px-4 py-2" />}
+              {showSelection && (
+                <th className="w-8 px-4 py-2">
+                  <input
+                    type="checkbox"
+                    aria-label="select all"
+                    checked={rows.length > 0 && selected.size === rows.length}
+                    onChange={() =>
+                      setSelected(s =>
+                        s.size === rows.length
+                          ? new Set()
+                          : new Set(rows.map((_, i) => i))
+                      )
+                    }
+                    className="h-4 w-4 rounded border-gray-300 text-primary"
+                  />
+                </th>
+              )}
               {cols.map(c => (
                 <th
                   key={c.tableData!.id}
@@ -300,13 +579,34 @@ export default function Table<RowData extends object>(
                     {c.filtering === false ? null : c.filterComponent ? (
                       c.filterComponent({ columnDef: c, onFilterChanged })
                     ) : (
-                      <input
-                        className="w-full rounded border border-gray-300 px-2 py-1 text-xs focus:border-primary focus:outline-none"
-                        onChange={e => {
-                          setPage(0)
-                          onFilterChanged(c.tableData!.id, e.target.value)
-                        }}
-                      />
+                      <div className="flex items-center gap-1">
+                        {operatorOptions(c).length > 1 && (
+                          <select
+                            value={opOf(c)}
+                            onChange={e =>
+                              setOperators(o => ({
+                                ...o,
+                                [c.tableData!.id]: e.target.value
+                              }))
+                            }
+                            className="rounded border border-gray-300 bg-content-bg px-1 py-1 text-xs text-gray-500 focus:border-primary focus:outline-none"
+                          >
+                            {operatorOptions(c).map(o => (
+                              <option key={o.v} value={o.v}>
+                                {o.label}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                        <input
+                          type={c.type === "numeric" ? "number" : "text"}
+                          className="w-full rounded border border-gray-300 px-2 py-1 text-xs focus:border-primary focus:outline-none"
+                          onChange={e => {
+                            setPage(0)
+                            onFilterChanged(c.tableData!.id, e.target.value)
+                          }}
+                        />
+                      </div>
                     )}
                   </td>
                 ))}
@@ -335,79 +635,31 @@ export default function Table<RowData extends object>(
               <tr><td colSpan={colSpan} className="px-4 py-8 text-center text-icon-muted">…</td></tr>
             ) : rows.length === 0 ? (
               <tr><td colSpan={colSpan} className="px-4 py-8 text-center text-icon-muted">{t("emptyDataSourceMessage")}</td></tr>
-            ) : (
-              rows.map((row, ri) => {
-                const isEditing = editing?.mode === "update" && editing.original === row
-                return (
-                  <React.Fragment key={ri}>
-                  <tr
-                    className={`border-b border-gray-100 hover:bg-content-bg ${onRowClick ? "cursor-pointer" : ""}`}
-                    onClick={onRowClick ? e => onRowClick(e, row) : undefined}
-                  >
-                    {hasDetail && (
-                      <td className="px-4 py-2">
-                        <button
-                          onClick={e => {
-                            e.stopPropagation()
-                            setExpanded(expanded === ri ? null : ri)
-                          }}
-                          className="text-icon-muted hover:text-primary"
-                        >
-                          {expanded === ri ? "▾" : "▸"}
-                        </button>
-                      </td>
-                    )}
-                    {showSelection && (
-                      <td className="px-4 py-2" onClick={e => e.stopPropagation()}>
-                        <input
-                          type="checkbox"
-                          checked={selected.has(ri)}
-                          onChange={() =>
-                            setSelected(s => {
-                              const n = new Set(s)
-                              n.has(ri) ? n.delete(ri) : n.add(ri)
-                              return n
-                            })
-                          }
-                          className="h-4 w-4 rounded border-gray-300 text-primary"
-                        />
-                      </td>
-                    )}
-                    {cols.map(c => (
-                      <td key={c.tableData!.id} className="px-4 py-2">
-                        {isEditing ? editCell(c, editing!.data) : display(c, row)}
-                      </td>
-                    ))}
-                    {hasRowActions && (
-                      <td className="px-4 py-2 whitespace-nowrap" onClick={e => e.stopPropagation()}>
-                        {isEditing ? (
-                          <>
-                            <button onClick={save} className="mr-2 text-primary" title={t("saveTooltip")}>✓</button>
-                            <button onClick={cancel} className="text-icon-muted" title={t("cancelTooltip")}>✕</button>
-                          </>
-                        ) : (
-                          <>
-                            {editable?.onRowUpdate && (
-                              <button onClick={() => startEdit(row)} className="mr-2 text-icon-muted hover:text-primary" title={t("editTooltip")}>✎</button>
-                            )}
-                            {editable?.onRowDelete && (
-                              <button onClick={() => remove(row)} className="text-icon-muted hover:text-danger" title={t("deleteTooltip")}>🗑</button>
-                            )}
-                          </>
-                        )}
-                      </td>
-                    )}
-                  </tr>
-                  {hasDetail && expanded === ri && (
-                    <tr className="border-b border-gray-100 bg-content-bg/30">
-                      <td colSpan={colSpan} className="px-4 py-2">
-                        {renderDetail(row)}
+            ) : grouping ? (
+              groupItems.map(item =>
+                item.kind === "group" ? (
+                  isHiddenByCollapse(
+                    item.key.slice(0, item.key.lastIndexOf("/"))
+                  ) ? null : (
+                    <tr key={item.key} className="bg-content-bg/60">
+                      <td
+                        colSpan={colSpan}
+                        className="cursor-pointer select-none px-4 py-2 font-medium"
+                        style={{ paddingLeft: 16 + item.depth * 20 }}
+                        onClick={() => toggleGroup(item.key)}
+                      >
+                        {collapsedGroups.has(item.key) ? "▸" : "▾"}{" "}
+                        {String(item.value)}{" "}
+                        <span className="text-icon-muted">({item.count})</span>
                       </td>
                     </tr>
-                  )}
-                  </React.Fragment>
+                  )
+                ) : isHiddenByCollapse(item.key) ? null : (
+                  renderRow(item.row, item.index)
                 )
-              })
+              )
+            ) : (
+              rows.map((row, ri) => renderRow(row, ri))
             )}
           </tbody>
         </table>

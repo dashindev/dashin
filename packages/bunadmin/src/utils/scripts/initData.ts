@@ -105,7 +105,7 @@ export default async function initData({
      * Add i18n resource
      */
     let pathObj: any
-    schemas.map(({ team, group }: SchemaType) => {
+    schemas.forEach(({ team, group }: SchemaType) => {
       if (!pathObj) pathObj = {}
       if (!group) return
       /**
@@ -131,7 +131,7 @@ async function initPluginsData(
      */
     const schemaData: SchemaType[] = []
     const menuData: MenuType[] = []
-    pluginsData.map(data => {
+    pluginsData.forEach(data => {
       const item = data as SchemaType & MenuType
       !item.ignore_schema &&
         schemaData.push({

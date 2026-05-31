@@ -94,6 +94,10 @@ export default defineConfig(({ mode }) => {
           replacement: r("../bunadmin-source-pocketbase/index.ts")
         },
         {
+          find: /^@xbuilder\/bunadmin-source-appwrite$/,
+          replacement: r("../bunadmin-source-appwrite/index.ts")
+        },
+        {
           find: /^@xbuilder\/bunadmin-rich-text-editor$/,
           replacement: r("../bunadmin-rich-text-editor/index.tsx")
         },

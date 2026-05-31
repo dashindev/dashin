@@ -1,24 +1,11 @@
 name: CI
 
+# Manual-only: CI runs ONLY when triggered by hand (Actions tab → Run workflow,
+# or `gh workflow run ci.yml`). No automatic runs on push/PR — avoids spend on
+# every commit. Run it deliberately before merging.
 on:
-  push:
-    branches: [master]
-    paths-ignore:
-      - "**/*.md"
-      - "docs/**"
-      - ".gitignore"
-      - "LICENSE"
-  pull_request:
-    branches: [master]
-    paths-ignore:
-      - "**/*.md"
-      - "docs/**"
-      - ".gitignore"
-      - "LICENSE"
-  workflow_dispatch: {} # allow manual runs
+  workflow_dispatch: {}
 
-# Cancel superseded runs: pushing repeatedly to a branch/PR keeps only the
-# latest run instead of running CI for every intermediate push (cost control).
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -45,11 +32,10 @@ jobs:
         working-directory: packages/bunadmin
         run: yarn build
 
-  # Heavy job (installs Playwright browsers): run on PRs only — the PR already
-  # validates a branch before it reaches master, so re-running on the master
-  # merge is redundant spend.
+  # Heavy job (installs Playwright browsers). Manual-only like the rest; runs
+  # when CI is triggered by hand.
   e2e:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -45,6 +45,21 @@ describe("display", () => {
   it("returns raw value otherwise", () => {
     expect(display({ field: "n" } as any, { n: "hi" })).toBe("hi")
   })
+  it("renders lookup columns as a status pill element", () => {
+    const out: any = display(
+      { field: "status", lookup: { Published: "Published" } } as any,
+      { status: "Published" }
+    )
+    // React element (span pill), not a raw string
+    expect(out && typeof out === "object").toBe(true)
+    expect(out.type).toBe("span")
+    expect(JSON.stringify(out.props)).toContain("Published")
+  })
+  it("formats datetime", () => {
+    const out = display({ field: "d", type: "date" } as any, { d: "2020-01-01T00:00:00Z" })
+    expect(typeof out).toBe("string")
+    expect(String(out).length).toBeGreaterThan(0)
+  })
 })
 
 describe("matchLocal", () => {
@@ -52,6 +67,13 @@ describe("matchLocal", () => {
     expect(matchLocal("Alpha", "_cs=", "lph")).toBe(true)
     expect(matchLocal("Alpha", "_ncs=", "zzz")).toBe(true)
     expect(matchLocal("Alpha", "_ncs=", "lph")).toBe(false)
+  })
+  it("not-equal + boundary comparisons", () => {
+    expect(matchLocal("a", "!=", "b")).toBe(true)
+    expect(matchLocal("a", "!=", "a")).toBe(false)
+    expect(matchLocal(5, ">=", 5)).toBe(true)
+    expect(matchLocal(5, "<=", 5)).toBe(true)
+    expect(matchLocal(5, "<", 5)).toBe(false)
   })
   it("numeric comparisons", () => {
     expect(matchLocal(5, ">", 3)).toBe(true)

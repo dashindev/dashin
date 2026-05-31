@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Loader2 } from "lucide-react"
 import DropZone, { DropEvent, FileRejection } from "react-dropzone"
 import FilePreview from "../FilePreview"
 import BunadminFileProps, { BunadminFileType } from "../"
@@ -190,10 +191,7 @@ export default function BunadminFile(props: BunadminFileProps) {
                   }}
                 >
                   {/* Spinner */}
-                  <svg className="h-8 w-8 animate-spin text-primary" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                  </svg>
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
               )
             }

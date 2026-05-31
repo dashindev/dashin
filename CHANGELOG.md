@@ -1,5 +1,31 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- **AI-assisted admin generation** (BYOK, validated): `bunadmin ai generate`
+  (backend schema → validated table definition) and `bunadmin ai theme`
+  (description → validated `{preset,mode,overrides}` theme). Providers:
+  OpenAI-compatible / Anthropic / Ollama. See `docs/ai/README.md`.
+- **Design-token system + theme presets** (`classic`, `modern` default) with
+  light/dark via CSS variables; `applyPreset()` runtime entrypoint; theme toggle.
+- **Slotted layout registry** + opt-in regions (KPI stat band with sparklines,
+  sidebar footer) — a constrained, validated, AI-composable design space.
+- **PocketBase** data-source + auth plugins; **Appwrite** data-source connector
+  (`@xbuilder/bunadmin-source-appwrite`).
+- Pre-commit secret-scan hook (`scripts/pre-commit.sh`, install via
+  `scripts/install-hooks.sh`).
+
+### Changed
+- Icons migrated from unmaintained `react-eva-icons` to **lucide-react** (via a
+  drop-in `EvaIcon` adapter; topbar/selectors/repeater/file-explorer SVGs too).
+- UI fully tokenized for dark mode; bunadmin-3 visual refresh (gradient brand,
+  section headers, status pills).
+- `@xbuilder/bunadmin` no longer hard-depends on auth-local (loaded dynamically).
+
+### Notes
+- Test suite: 88 app + plugin/connector + AI validator tests.
+
 ## 1.6.0-beta.0
 
 ### BREAKING CHANGES — Migrated UI from Material-UI to Tailwind CSS

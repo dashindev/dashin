@@ -7,7 +7,7 @@ interface Props {
 
 const Bar = ({ w }: { w?: string }) => (
   <div
-    className="my-2 h-4 animate-pulse rounded bg-gray-200"
+    className="my-2 h-4 animate-pulse rounded bg-content-bg"
     style={{ width: w || "100%" }}
   />
 )

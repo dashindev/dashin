@@ -48,7 +48,7 @@ export default function Repeater({
           >
             {deletable && (
               <button
-                className="p-1 text-gray-500 hover:text-danger"
+                className="p-1 text-icon-muted hover:text-danger"
                 aria-label="delete"
                 onClick={() => {
                   if (!onDelete) return
@@ -66,7 +66,7 @@ export default function Repeater({
               </button>
             )}
             {sortable && (
-              <button className="p-1 text-gray-500" aria-label="sort">
+              <button className="p-1 text-icon-muted" aria-label="sort">
                 {/* DragHandle icon */}
                 <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
                   <path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z" />
@@ -85,12 +85,12 @@ export default function Repeater({
                 ? handleKeyPoints(item, titleKey) || title || i + 1
                 : title || i + 1}
             </span>
-            <span className="flex-1 text-sm text-gray-500">
+            <span className="flex-1 text-sm text-icon-muted">
               {(summaryKey && handleKeyPoints(item, summaryKey)) || summary}
             </span>
             {/* ExpandMore icon */}
             <svg
-              className={`h-5 w-5 fill-current text-gray-400 transition-transform ${
+              className={`h-5 w-5 fill-current text-icon-muted transition-transform ${
                 expanded === i ? "rotate-180" : ""
               }`}
               viewBox="0 0 24 24"
@@ -107,7 +107,7 @@ export default function Repeater({
       ))}
 
       <button
-        className="mt-px w-full rounded bg-white pt-4 pb-3 text-sm font-medium uppercase text-primary hover:bg-primary/10"
+        className="mt-px w-full rounded bg-content-box pt-4 pb-3 text-sm font-medium uppercase text-primary hover:bg-primary/10"
         onClick={() => {
           if (!onCreate) return
           onCreate()

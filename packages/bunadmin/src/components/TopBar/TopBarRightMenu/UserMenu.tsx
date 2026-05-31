@@ -112,16 +112,16 @@ export default function UserMenu(props: UserMenuProps) {
         )
       ) : (
         <Menu as="div" className="relative">
-          <Menu.Button className="inline-flex items-center justify-center rounded p-2 text-icon-muted hover:bg-gray-100">
+          <Menu.Button className="inline-flex items-center justify-center rounded p-2 text-icon-muted hover:bg-primary/10">
             {/* shield-outline */}
             <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
               <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
             </svg>
           </Menu.Button>
-          <Menu.Items className="absolute right-0 z-50 mt-1 w-56 origin-top-right rounded bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
+          <Menu.Items className="absolute right-0 z-50 mt-1 w-56 origin-top-right rounded bg-content-box py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
             <Menu.Item disabled>
               {({ active }) => (
-                <div className="px-4 py-2 text-sm text-gray-400">
+                <div className="px-4 py-2 text-sm text-icon-muted">
                   <Trans
                     i18nKey="Signed as $username"
                     values={{
@@ -136,19 +136,19 @@ export default function UserMenu(props: UserMenuProps) {
               {({ active }) => (
                 <button
                   onClick={onProfile}
-                  className={`${active ? "bg-gray-100" : ""} w-full px-4 py-2 text-left text-sm`}
+                  className={`${active ? "bg-content-bg" : ""} w-full px-4 py-2 text-left text-sm`}
                 >
                   {t("Profile")}
                 </button>
               )}
             </Menu.Item>
-            <div className="my-1 border-t border-gray-200" />
+            <div className="my-1 border-t border-bn-border" />
             {!props.disableSwitch && (
               <Menu.Item>
                 {({ active }) => (
                   <button
                     onClick={() => handleRoute(LocalDataRoute.auth)}
-                    className={`${active ? "bg-gray-100" : ""} w-full px-4 py-2 text-left text-sm`}
+                    className={`${active ? "bg-content-bg" : ""} w-full px-4 py-2 text-left text-sm`}
                   >
                     {t("Switch account")}
                   </button>
@@ -160,7 +160,7 @@ export default function UserMenu(props: UserMenuProps) {
                 {({ active }) => (
                   <button
                     onClick={onLogin}
-                    className={`${active ? "bg-gray-100" : ""} w-full px-4 py-2 text-left text-sm`}
+                    className={`${active ? "bg-content-bg" : ""} w-full px-4 py-2 text-left text-sm`}
                   >
                     {t("Add another account")}
                   </button>
@@ -168,14 +168,14 @@ export default function UserMenu(props: UserMenuProps) {
               </Menu.Item>
             )}
             {!props.disableSwitch && (
-              <div className="my-1 border-t border-gray-200" />
+              <div className="my-1 border-t border-bn-border" />
             )}
             {props.append}
             <Menu.Item>
               {({ active }) => (
                 <button
                   onClick={onLogout}
-                  className={`${active ? "bg-gray-100" : ""} w-full px-4 py-2 text-left text-sm`}
+                  className={`${active ? "bg-content-bg" : ""} w-full px-4 py-2 text-left text-sm`}
                 >
                   {t("Logout")}
                 </button>

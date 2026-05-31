@@ -65,11 +65,7 @@ export default defineConfig(({ mode }) => {
             react: ["react", "react-dom", "react-router-dom"],
             redux: ["@reduxjs/toolkit", "react-redux"],
             dexie: ["dexie", "dexie-export-import"],
-            tiptap: [
-              "@tiptap/core",
-              "@tiptap/react",
-              "@tiptap/starter-kit"
-            ],
+            tiptap: ["@tiptap/core", "@tiptap/react", "@tiptap/starter-kit"],
             i18n: ["i18next", "react-i18next"]
           }
         }
@@ -141,9 +137,9 @@ export default defineConfig(({ mode }) => {
         "**/node_modules/**",
         "**/lib/**",
         "**/dist/**",
+        "**/e2e/**",
         "src/App.spec.tsx"
       ]
     }
   }
 })
-

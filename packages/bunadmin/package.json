@@ -25,6 +25,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "e2e": "playwright test",
     "typecheck": "tsc -p tsconfig.app.json",
     "prettier": "prettier --write  --no-semi src/** pages/** plugins/** test/**",
     "tsc:watch": "ttsc -w -p tsconfig.pack.json",
@@ -55,6 +56,7 @@
     "umi-request": "^1.4.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.45.0",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^15.0.7",
     "@types/jest": "^26.0.15",

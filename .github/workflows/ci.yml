@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      # Build all package lib/ (the plugin generator requires it)
+      - run: yarn tsc:build
+      - name: App type-check
+        working-directory: packages/bunadmin
+        run: yarn typecheck
+      - name: Unit tests (Vitest)
+        working-directory: packages/bunadmin
+        run: yarn test
+      - name: Production build (Vite)
+        working-directory: packages/bunadmin
+        run: yarn build
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn tsc:build
+      - name: Install Playwright browsers
+        working-directory: packages/bunadmin
+        run: npx playwright install --with-deps chromium
+      - name: E2E smoke (Playwright)
+        working-directory: packages/bunadmin
+        run: yarn e2e

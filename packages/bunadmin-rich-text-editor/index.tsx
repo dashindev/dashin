@@ -1,8 +1,13 @@
-import React from "react"
+import React, { Suspense, lazy } from "react"
 import { Drawer, DrawerProps } from "@xbuilder/bunadmin"
 import { EditComponentProps } from "@xbuilder/bunadmin"
-import RtEditor from "./editor"
-import RtPreviewer from "./previewer"
+
+// Lazy so the heavy @tiptap bundle is only loaded when a drawer actually opens.
+// Typed loosely (any props) because React.lazy collapses the editor's generic.
+const RtEditor = lazy(() => import("./editor")) as React.ComponentType<any>
+const RtPreviewer = lazy(() => import("./previewer")) as React.ComponentType<{
+  value: string
+}>
 
 interface EditProps<T extends object> extends EditComponentProps<T> {}
 
@@ -30,8 +35,10 @@ export function RichTextEditor<T extends object>(
         <h1 className="mb-2 text-xl font-medium">{title}</h1>
       </div>
       <hr className="border-gray-200" />
-      {props.previewValue && <RtPreviewer value={props.previewValue} />}
-      {props.editProps && <RtEditor {...props.editProps} />}
+      <Suspense fallback={<div className="p-3 text-sm text-gray-400">…</div>}>
+        {props.previewValue && <RtPreviewer value={props.previewValue} />}
+        {props.editProps && <RtEditor {...props.editProps} />}
+      </Suspense>
     </Drawer>
   )
 }

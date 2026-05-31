@@ -22,7 +22,7 @@ const CardBottomArea = ({
   })
 
   return <>
-    <div className="absolute bottom-0 z-[2] w-full h-9 bg-white/50">
+    <div className="absolute bottom-0 z-[2] w-full h-9 bg-content-box/50">
       <div className="flex justify-evenly w-full p-0">
         {!id ? (
           <button disabled className="text-primary text-sm opacity-50 cursor-not-allowed">

@@ -66,11 +66,11 @@ const SnackMessage = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         </div>
       </div>
       {expanded && state.content && (
-        <div className="bg-white p-4 text-gray-800">
+        <div className="bg-content-box p-4 text-foreground">
           <p className="mb-2">{state.content}</p>
           <button
             onClick={() => props.store.dispatch(toggleNotifyDrawer())}
-            className="flex items-center text-sm text-gray-400 hover:text-gray-600"
+            className="flex items-center text-sm text-icon-muted hover:text-icon-muted"
           >
             <span className="pr-1">↗</span>
             {t("Open List")}

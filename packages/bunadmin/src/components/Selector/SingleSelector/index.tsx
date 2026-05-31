@@ -108,17 +108,17 @@ export default function SingleSelector<RowData extends object>(
       <div className="m-1 min-w-[100px]">
         <Listbox value={selectedName} onChange={handleChange}>
           <div className="relative">
-            <Listbox.Button className="relative w-full cursor-pointer border-b border-gray-300 bg-transparent py-2 pr-8 text-left text-sm focus:border-primary focus:outline-none">
+            <Listbox.Button className="relative w-full cursor-pointer border-b border-bn-border bg-transparent py-2 pr-8 text-left text-sm focus:border-primary focus:outline-none">
               <span className="block truncate">
                 {names[keys.indexOf(selectedName)] || "\u00A0"}
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
-                <svg className="h-5 w-5 fill-current text-gray-400" viewBox="0 0 20 20">
+                <svg className="h-5 w-5 fill-current text-icon-muted" viewBox="0 0 20 20">
                   <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
             </Listbox.Button>
-            <Listbox.Options className="absolute z-10 mt-1 max-h-[230px] w-full overflow-auto rounded bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
+            <Listbox.Options className="absolute z-10 mt-1 max-h-[230px] w-full overflow-auto rounded bg-content-box py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
               {names.map((name, i) => (
                 <Listbox.Option
                   key={name}

@@ -38,11 +38,11 @@ export default function UploadConfirmDialog({
     <Dialog open={open} onClose={handleClose} className="relative z-[1300]">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4 max-sm:p-0 max-sm:items-stretch">
-        <Dialog.Panel className="w-full max-w-sm rounded bg-white shadow-xl max-sm:max-w-none max-sm:rounded-none">
+        <Dialog.Panel className="w-full max-w-sm rounded bg-content-box shadow-xl max-sm:max-w-none max-sm:rounded-none">
           <Dialog.Title className="px-6 pt-5 text-lg font-semibold">
             {title}
           </Dialog.Title>
-          <div className="px-6 py-4 text-sm text-gray-600">
+          <div className="px-6 py-4 text-sm text-icon-muted">
             <p>{msg}</p>
           </div>
           <div className="flex justify-end gap-2 px-4 pb-3">

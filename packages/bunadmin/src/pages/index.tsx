@@ -3,7 +3,7 @@ import { ENV, ProTip } from "@xbuilder/bunadmin"
 
 function Copyright() {
   return (
-    <p className="text-center text-sm text-gray-500">
+    <p className="text-center text-sm text-icon-muted">
       {"Copyright © "}
       <a href="#" className="text-inherit hover:underline">
         {ENV.SITE_NAME}

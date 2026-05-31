@@ -102,7 +102,7 @@ export default function Drawer({
       )}
       {/* Drawer panel */}
       <aside
-        className={`fixed z-[1300] bg-white transition-transform duration-300 ease-in-out ${directionClasses[anchor]} ${state.open ? "translate-x-0 translate-y-0" : translateHidden[anchor]}`}
+        className={`fixed z-[1300] bg-content-box transition-transform duration-300 ease-in-out ${directionClasses[anchor]} ${state.open ? "translate-x-0 translate-y-0" : translateHidden[anchor]}`}
         style={{ width: width || "auto", height: height || "100%" }}
       >
         <div

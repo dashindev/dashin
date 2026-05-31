@@ -48,7 +48,7 @@ export default function FilePreview({
     <Dialog open={preview} onClose={handleClose} className="relative z-[1300]">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className={`fixed inset-0 flex items-center justify-center ${state.fullScreen ? "" : "p-4"}`}>
-        <Dialog.Panel className={`bg-white shadow-xl flex flex-col ${state.fullScreen ? "w-full h-full" : "max-w-3xl max-h-[90vh] rounded"}`}>
+        <Dialog.Panel className={`bg-content-box shadow-xl flex flex-col ${state.fullScreen ? "w-full h-full" : "max-w-3xl max-h-[90vh] rounded"}`}>
           {/* Image area */}
           <div
             className="flex-1 flex items-center justify-center overflow-auto cursor-pointer"
@@ -62,7 +62,7 @@ export default function FilePreview({
             />
           </div>
           {/* Actions */}
-          <div className="flex items-center justify-center gap-2 p-2 border-t border-gray-100">
+          <div className="flex items-center justify-center gap-2 p-2 border-t border-bn-border">
             <button onClick={handleClose} className="text-primary text-sm px-2 py-1 hover:bg-primary/10 rounded">
               {display_name || created_at}
             </button>
@@ -71,7 +71,7 @@ export default function FilePreview({
               <button
                 aria-label="Preview"
                 onClick={handleFullWidthChange}
-                className="p-1 rounded hover:bg-gray-100"
+                className="p-1 rounded hover:bg-primary/10"
               >
                 {!state.fullScreen ? (
                   /* ZoomIn icon */
@@ -84,13 +84,13 @@ export default function FilePreview({
             )}
 
             <a href={url} target="_blank" rel="noopener noreferrer">
-              <button aria-label="Download" className="p-1 rounded hover:bg-gray-100">
+              <button aria-label="Download" className="p-1 rounded hover:bg-primary/10">
                 {/* Download icon */}
                 <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
               </button>
             </a>
 
-            <button aria-label="Close" onClick={handleClose} className="p-1 rounded hover:bg-gray-100">
+            <button aria-label="Close" onClick={handleClose} className="p-1 rounded hover:bg-primary/10">
               {/* Close icon */}
               <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
             </button>

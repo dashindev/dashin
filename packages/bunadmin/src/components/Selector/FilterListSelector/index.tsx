@@ -103,7 +103,7 @@ export default function FilterListSelector({
       <Combobox value={selected || null} onChange={handleSelect}>
         <div className="relative">
           {label && (
-            <label className="absolute -top-2 left-2 bg-white px-1 text-xs text-gray-500">
+            <label className="absolute -top-2 left-2 bg-content-box px-1 text-xs text-icon-muted">
               {label}
             </label>
           )}
@@ -111,8 +111,8 @@ export default function FilterListSelector({
             <Combobox.Input
               className={`w-full py-2 pr-8 text-sm outline-none ${
                 variant === "outlined"
-                  ? "rounded border border-gray-300 px-3 focus:border-primary focus:ring-1 focus:ring-primary"
-                  : "border-b border-gray-300 bg-transparent focus:border-primary"
+                  ? "rounded border border-bn-border px-3 focus:border-primary focus:ring-1 focus:ring-primary"
+                  : "border-b border-bn-border bg-transparent focus:border-primary"
               }`}
               displayValue={displayValue}
               onChange={handleChange}
@@ -121,19 +121,19 @@ export default function FilterListSelector({
             />
             <span className="absolute inset-y-0 right-0 flex items-center pr-1">
               {loading ? (
-                <svg className="h-5 w-5 animate-spin text-gray-400" viewBox="0 0 24 24" fill="none">
+                <svg className="h-5 w-5 animate-spin text-icon-muted" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
                 </svg>
               ) : (
-                <svg className="h-5 w-5 fill-current text-gray-400" viewBox="0 0 20 20">
+                <svg className="h-5 w-5 fill-current text-icon-muted" viewBox="0 0 20 20">
                   <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               )}
             </span>
           </div>
           {open && options.length > 0 && (
-            <Combobox.Options static className="absolute z-10 mt-1 max-h-[230px] w-full overflow-auto rounded bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
+            <Combobox.Options static className="absolute z-10 mt-1 max-h-[230px] w-full overflow-auto rounded bg-content-box py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
               {options.map(option => (
                 <Combobox.Option
                   key={option.id}

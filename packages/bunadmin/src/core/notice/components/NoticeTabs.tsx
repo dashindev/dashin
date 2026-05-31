@@ -11,13 +11,13 @@ export default function NoticeTabs({
   setTab: Dispatch<number>
 }) {
   return (
-    <div className="bg-white shadow-sm">
+    <div className="bg-content-box shadow-sm">
       <div className="flex" role="tablist" aria-label="core notice tabs">
         <button
           className={`px-4 py-2 text-sm font-medium border-b-2 ${
             tab === 0
               ? "border-primary text-primary"
-              : "border-transparent text-gray-500 hover:text-gray-700"
+              : "border-transparent text-icon-muted hover:text-foreground"
           }`}
           onClick={() => setTab(0)}
           role="tab"
@@ -29,7 +29,7 @@ export default function NoticeTabs({
           className={`px-4 py-2 text-sm font-medium border-b-2 ${
             tab === 1
               ? "border-primary text-primary"
-              : "border-transparent text-gray-500 hover:text-gray-700"
+              : "border-transparent text-icon-muted hover:text-foreground"
           }`}
           onClick={() => setTab(1)}
           role="tab"
@@ -38,7 +38,7 @@ export default function NoticeTabs({
           {String(t("Online Notifications"))}
         </button>
       </div>
-      <hr className="border-gray-200" />
+      <hr className="border-bn-border" />
     </div>
   )
 }

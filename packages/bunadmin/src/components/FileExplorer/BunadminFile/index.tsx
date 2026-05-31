@@ -130,7 +130,7 @@ export default function BunadminFile(props: BunadminFileProps) {
       />
 
       <div
-        className="relative border border-gray-200 rounded"
+        className="relative border border-bn-border rounded"
         style={{
           margin: id ? "20px 0" : "20px 5px 20px 0",
           ...(viewMode ? mediaStyle : {}),

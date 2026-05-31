@@ -7,6 +7,7 @@ import {
   withoutLayout,
   MenuType
 } from "../../src"
+import { LAYOUT_A } from "@/utils/themes/layouts"
 import PluginTable from "../../src/private/PluginTable"
 import DefaultLayout from "../../src/private/DefaultLayout"
 import Error from "../../src/private/Error"
@@ -50,8 +51,33 @@ const DynamicGroupNamePage = ({
 
   if (withoutLayout(group, name)) return render
 
+  // Modern layout (mockup-3): KPI stat band + stats sidebar footer + labeled buttons.
+  const layout = {
+    ...LAYOUT_A,
+    statBand: true,
+    sidebarFooter: "upgrade" as const,
+    buttons: "labeled" as const
+  }
+  const stats = [
+    { label: "Total Posts", value: "128", delta: "All time posts", trend: "neutral" as const, spark: [4, 6, 5, 8, 7, 9, 11] },
+    { label: "Published", value: "45", delta: "35.2% of total", trend: "up" as const, spark: [2, 3, 5, 4, 6, 7, 8] },
+    { label: "Pending", value: "28", delta: "21.9% of total", trend: "neutral" as const, spark: [3, 2, 4, 3, 5, 4, 6] },
+    { label: "Rejected", value: "21", delta: "16.4% of total", trend: "down" as const, spark: [5, 4, 3, 4, 2, 3, 2] }
+  ]
+
   return (
-    <DefaultLayout leftMenu={{ data: leftMenuData }}>{render}</DefaultLayout>
+    <DefaultLayout
+      leftMenu={{ data: leftMenuData }}
+      layout={layout}
+      stats={stats}
+      sidebarUpgrade={{
+        title: "BunAdmin Pro",
+        description: "Unlock advanced features and premium components.",
+        cta: "Upgrade Now"
+      }}
+    >
+      {render}
+    </DefaultLayout>
   )
 }
 

@@ -419,9 +419,9 @@ export default function Table<RowData extends object>(
               <button
                 onClick={startAdd}
                 title={t("addTooltip")}
-                className="rounded bg-primary px-3 py-1 text-sm text-white hover:bg-primary/90"
+                className="inline-flex items-center gap-1 rounded-bn bg-primary-gradient px-3 py-1.5 text-sm text-primary-foreground shadow-sm hover:opacity-90 transition-opacity"
               >
-                +
+                <span className="text-base leading-none">+</span> {t("New")}
               </button>
             )}
             {freeActions.map((a, i) => (

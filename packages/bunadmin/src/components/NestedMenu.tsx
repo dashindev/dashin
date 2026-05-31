@@ -105,6 +105,9 @@ export default function NestedList({ data }: Props): any {
 
   return (
     <>
+      <div className="px-4 pt-4 pb-1 text-[11px] font-semibold tracking-wider text-icon-muted uppercase">
+        Main
+      </div>
       {data
         .filter(item => item.parent === "")
         .map(item => {
@@ -120,7 +123,7 @@ export default function NestedList({ data }: Props): any {
           return (
             <ul key={name} className="w-full max-w-[360px] bg-sidebar p-0 list-none">
               <li
-                className={`flex items-center px-4 py-2 cursor-pointer rounded-bn hover:bg-primary/10 ${slug === `/${qGroup}/${qName}` ? "bg-primary/10 text-primary" : "text-foreground"}`}
+                className={`flex items-center mx-2 px-3 py-2 cursor-pointer rounded-bn hover:bg-primary/10 ${slug === `/${qGroup}/${qName}` ? "bg-primary/10 text-primary font-medium" : "text-foreground"}`}
                 onClick={() => handleClick({ name, slug })}
               >
                 <span className="mr-3 flex items-center">

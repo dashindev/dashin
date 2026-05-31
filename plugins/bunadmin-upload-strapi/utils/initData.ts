@@ -13,7 +13,7 @@ export default {
       icon_type: "eva",
       icon: "cloud-upload-outline",
       rank: "100",
-      role: process.env.REACT_APP_UPLOAD_STRAPI_ROLE
+      role: process.env.VITE_UPLOAD_STRAPI_ROLE
     }
   ] as IPluginData[]
 }

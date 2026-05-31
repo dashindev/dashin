@@ -1,4 +1,4 @@
-/// <reference types="react-scripts" />
+/// <reference types="vite/client" />
 declare module "react-eva-icons" {
   export type EvaSize = "small" | "medium" | "large" | "xlarge"
 

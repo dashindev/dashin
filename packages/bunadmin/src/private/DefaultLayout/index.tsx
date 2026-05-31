@@ -3,6 +3,7 @@ import LeftMenu from "../../components/LeftMenu"
 import TopBar from "../../components/TopBar"
 import { DefaultLayoutProps } from "@/components"
 import { ENV, store } from "@/utils"
+import { importPlugin, hasPlugin } from "@/utils/pluginRegistry"
 
 /**
  * !DO NOT export DefaultLayout in @xbuilder/bunadmin
@@ -30,10 +31,9 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   useEffect(() => {
     ;(async () => {
       if (!ENV.NOTIFICATION_PLUGIN) return
-      const customNotificationPath = ENV.NOTIFICATION_PLUGIN
-      const { NotificationTable, notificationCount } = await import(
-        `../../.bunadmin/dynamic/${customNotificationPath}`
-      )
+      const p = ENV.NOTIFICATION_PLUGIN
+      if (!hasPlugin(p)) return
+      const { NotificationTable, notificationCount } = await importPlugin(p)
       if (!NotificationTable || !notificationCount) return
       setNotifyTable(NotificationTable)
       setNotifyCount(notificationCount)

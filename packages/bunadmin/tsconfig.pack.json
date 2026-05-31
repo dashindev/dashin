@@ -14,17 +14,19 @@
       }
     ]
   },
+  "include": ["src"],
   "exclude": [
     "index.ts",
     "node_modules",
     "lib",
     "pages",
-    "src/private",
+    "src/.bunadmin",
     "src/App.spec.tsx",
     "src/App.tsx",
     "src/index.tsx",
     "src/serviceWorker.ts",
-    "src/pages",
-    "src/private"
+    "src/pages/**",
+    "src/private/**",
+    "src/utils/pluginRegistry.ts"
   ]
 }

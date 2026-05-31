@@ -15,6 +15,12 @@ import { SnackbarProvider } from "notistack"
 import { CubeSpinner, Snackbar, SnackMessage } from "./components"
 import { useTranslation } from "react-i18next"
 import { MenuType } from "@/core"
+import {
+  getDynamicIndex,
+  getPluginsDataJson,
+  getPluginsDataTs,
+  requirePlugin
+} from "@/utils/pluginRegistry"
 
 const HTTP404 = lazy(() => import("./pages/404"))
 const GroupName = lazy(() => import("./pages/[group]-[name]"))
@@ -26,14 +32,6 @@ const App = () => {
   const [initialized, setInitialized] = useState(false)
   const [isProtected, setIsProtected] = useState(false)
   const [leftMenuData, setLeftMenuData] = useState<MenuType[]>([])
-
-  function requirePlugin(path: string) {
-    try {
-      return require(`./.bunadmin/dynamic/${path}`)
-    } catch (err) {
-      return null
-    }
-  }
 
   useEffect(() => {
     ;(async () => {
@@ -52,23 +50,18 @@ const App = () => {
     if (asPath === DynamicRoute || asPath === DynamicDocRoute) return
     ;(async () => {
       const authPluginName =
-        process.env.REACT_APP_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
+        process.env.VITE_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
       if (!authPluginName || authPluginName == "")
         throw new Error("auth plugin name is required, please set in .env file")
 
-      const dynamicIndex: {
-        default: { [pluginName: string]: IAuthPlugin }
-      } = await import(`./.bunadmin/dynamic`)
-
-      const authPlugin = dynamicIndex.default[authPluginName] as
+      const authPlugin = getDynamicIndex()[authPluginName] as
         | IAuthPlugin
         | undefined
       if (!authPlugin) throw new Error("auth plugin is required")
 
-      let pluginsData: PluginData[] = require("./.bunadmin/dynamic/pluginsData.json")
-      const plugins = require("./.bunadmin/dynamic/pluginsData")
-      if (plugins && plugins.data)
-        pluginsData = [...pluginsData, ...plugins.data]
+      let pluginsData: PluginData[] = getPluginsDataJson()
+      const extra = getPluginsDataTs()
+      if (extra && extra.length) pluginsData = [...pluginsData, ...extra]
 
       /**
        * Initialization data

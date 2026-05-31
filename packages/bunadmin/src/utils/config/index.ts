@@ -27,78 +27,32 @@ type EnvTypes = {
   ON_NOTIFICATION_INTERVAL_COUNT: boolean
 }
 
+// VITE_* env. Read via process.env so this file also compiles to CJS lib/
+// (Vite's `define` statically replaces process.env.VITE_* at build/dev).
+const v = (key: string): string | undefined =>
+  (process.env as any)[`VITE_${key}`]
+
 export const ENV: EnvTypes = {
-  SITE_NAME:
-    process.env.REACT_APP_SITE_NAME ||
-    process.env.NEXT_PUBLIC_SITE_NAME ||
-    "BunAdmin",
-  AUTH_PLUGIN:
-    process.env.REACT_APP_AUTH_PLUGIN ||
-    process.env.NEXT_PUBLIC_AUTH_PLUGIN ||
-    DEFAULT_AUTH_PLUGIN,
-  MAIN_URL: process.env.REACT_APP_MAIN_URL || process.env.NEXT_PUBLIC_MAIN_URL,
-  AUTH_URL:
-    process.env.REACT_APP_AUTH_URL ||
-    process.env.REACT_APP_MAIN_URL ||
-    process.env.NEXT_PUBLIC_AUTH_URL ||
-    process.env.NEXT_PUBLIC_MAIN_URL,
-  UPLOAD_URL:
-    process.env.REACT_APP_UPLOAD_URL ||
-    process.env.REACT_APP_AUTH_URL ||
-    process.env.REACT_APP_MAIN_URL ||
-    process.env.NEXT_PUBLIC_UPLOAD_URL ||
-    process.env.NEXT_PUBLIC_AUTH_URL ||
-    process.env.NEXT_PUBLIC_MAIN_URL,
-  FILE_PREVIEW_URL:
-    process.env.REACT_APP_FILE_PREVIEW_URL ||
-    process.env.NEXT_PUBLIC_FILE_PREVIEW_URL,
-  SITE_URLS:
-    strToArr(process.env.REACT_APP_SITE_URLS) ||
-    strToArr(process.env.NEXT_PUBLIC_SITE_URLS),
-  DB_NAME:
-    process.env.REACT_APP_DB_NAME ||
-    process.env.NEXT_PUBLIC_DB_NAME ||
-    "BunadminDatabase",
-  DB_VERSION:
-    process.env.REACT_APP_DB_VERSION ||
-    process.env.NEXT_PUBLIC_DB_VERSION ||
-    "1",
-  ON_I18N:
-    process.env.REACT_APP_ON_I18N === "true" ||
-    process.env.NEXT_PUBLIC_ON_I18N === "true" ||
-    false,
-  ON_SETTING:
-    process.env.REACT_APP_ON_SETTING === "true" ||
-    process.env.NEXT_PUBLIC_ON_SETTING === "true" ||
-    false,
-  ON_DOC:
-    process.env.REACT_APP_ON_DOC === "true" ||
-    process.env.NEXT_PUBLIC_ON_DOC === "true" ||
-    false,
-  I18N_CODE:
-    process.env.REACT_APP_I18N_CODE ||
-    process.env.NEXT_PUBLIC_I18N_CODE ||
-    "en",
-  ON_MOCK:
-    process.env.REACT_APP_ON_MOCK === "true" ||
-    process.env.NEXT_PUBLIC_ON_MOCK === "true" ||
-    false,
-  REACT_APP_IGNORED_PLUGINS:
-    strToArr(process.env.REACT_APP_IGNORED_PLUGINS) ||
-    strToArr(process.env.NEXT_PUBLIC_IGNORED_PLUGINS),
-  PATHS_WITHOUT_LAYOUT:
-    strToArr(process.env.REACT_APP_PATHS_WITHOUT_LAYOUT) ||
-    strToArr(process.env.NEXT_PUBLIC_PATHS_WITHOUT_LAYOUT),
-  PATHS_WITHOUT_AUTH:
-    strToArr(process.env.REACT_APP_PATHS_WITHOUT_AUTH) ||
-    strToArr(process.env.NEXT_PUBLIC_PATHS_WITHOUT_AUTH),
-  NOTIFICATION_PLUGIN:
-    process.env.REACT_APP_NOTIFICATION_PLUGIN ||
-    process.env.NEXT_PUBLIC_NOTIFICATION_PLUGIN,
+  SITE_NAME: v("SITE_NAME") || "BunAdmin",
+  AUTH_PLUGIN: v("AUTH_PLUGIN") || DEFAULT_AUTH_PLUGIN,
+  MAIN_URL: v("MAIN_URL"),
+  AUTH_URL: v("AUTH_URL") || v("MAIN_URL"),
+  UPLOAD_URL: v("UPLOAD_URL") || v("AUTH_URL") || v("MAIN_URL"),
+  FILE_PREVIEW_URL: v("FILE_PREVIEW_URL"),
+  SITE_URLS: strToArr(v("SITE_URLS")),
+  DB_NAME: v("DB_NAME") || "BunadminDatabase",
+  DB_VERSION: v("DB_VERSION") || "1",
+  ON_I18N: v("ON_I18N") === "true",
+  ON_SETTING: v("ON_SETTING") === "true",
+  ON_DOC: v("ON_DOC") === "true",
+  I18N_CODE: v("I18N_CODE") || "en",
+  ON_MOCK: v("ON_MOCK") === "true",
+  REACT_APP_IGNORED_PLUGINS: strToArr(v("IGNORED_PLUGINS")),
+  PATHS_WITHOUT_LAYOUT: strToArr(v("PATHS_WITHOUT_LAYOUT")),
+  PATHS_WITHOUT_AUTH: strToArr(v("PATHS_WITHOUT_AUTH")),
+  NOTIFICATION_PLUGIN: v("NOTIFICATION_PLUGIN"),
   ON_NOTIFICATION_INTERVAL_COUNT:
-    process.env.REACT_APP_OFF_NOTIFICATION_INTERVAL_COUNT === "true" ||
-    process.env.NEXT_PUBLIC_OFF_NOTIFICATION_INTERVAL_COUNT === "true" ||
-    false
+    v("OFF_NOTIFICATION_INTERVAL_COUNT") === "true"
 }
 
 export const SETTING_NAMES = {

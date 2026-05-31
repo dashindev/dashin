@@ -1,16 +1,17 @@
 import React from "react"
 import { render, screen, fireEvent, within } from "@testing-library/react"
+import { describe, it, expect, vi } from "vitest"
 import Table from "../index"
 import { Column } from "../models/material-table-shim"
 
 // --- mocks: isolate Table from router / i18n / env ---
-jest.mock("@/router", () => ({
-  useRouter: () => ({ query: { group: "g", name: "n" }, push: jest.fn() })
+vi.mock("@/router", () => ({
+  useRouter: () => ({ query: { group: "g", name: "n" }, push: vi.fn() })
 }))
-jest.mock("react-i18next", () => ({
+vi.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (k: string) => k })
 }))
-jest.mock("@/utils", () => ({ ENV: { SITE_NAME: "Test" }, DynamicRoute: "/d" }))
+vi.mock("@/utils", () => ({ ENV: { SITE_NAME: "Test" }, DynamicRoute: "/d" }))
 
 interface Row {
   id: number
@@ -61,7 +62,7 @@ describe("Table", () => {
   })
 
   it("invokes onRowDelete callback", () => {
-    const onRowDelete = jest.fn().mockResolvedValue(undefined)
+    const onRowDelete = vi.fn().mockResolvedValue(undefined)
     render(
       <Table<Row>
         columns={columns}
@@ -75,7 +76,7 @@ describe("Table", () => {
   })
 
   it("calls remote query function with page/pageSize", () => {
-    const query = jest
+    const query = vi
       .fn()
       .mockResolvedValue({ data: [], totalCount: 0, page: 0 })
     render(<Table<Row> columns={columns} data={query} options={baseOptions} />)

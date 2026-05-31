@@ -32,8 +32,7 @@ const data: IPluginData[] = [
     icon: "person-outline",
     rank: "100",
     role:
-      process.env.REACT_APP_AUTH_STRAPI_ROLE ||
-      process.env.NEXT_PUBLIC_AUTH_STRAPI_ROLE ||
+      process.env.VITE_AUTH_STRAPI_ROLE ||
       "Admin,Reviewer"
   },
   {
@@ -47,8 +46,7 @@ const data: IPluginData[] = [
     icon: "people-outline",
     rank: "100",
     role:
-      process.env.REACT_APP_AUTH_STRAPI_ROLE ||
-      process.env.NEXT_PUBLIC_AUTH_STRAPI_ROLE ||
+      process.env.VITE_AUTH_STRAPI_ROLE ||
       "Admin,Reviewer"
   }
 ]

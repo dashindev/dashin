@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { X, GripHorizontal, ChevronDown } from "lucide-react"
 
 export type RepeaterDetailProps<T> = T & { index: number }
 
@@ -60,17 +61,13 @@ export default function Repeater({
                 }}
               >
                 {/* Clear/Delete icon */}
-                <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                </svg>
+                <X className="h-5 w-5" />
               </button>
             )}
             {sortable && (
               <button className="p-1 text-icon-muted" aria-label="sort">
                 {/* DragHandle icon */}
-                <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-                  <path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z" />
-                </svg>
+                <GripHorizontal className="h-5 w-5" />
               </button>
             )}
           </div>
@@ -89,14 +86,7 @@ export default function Repeater({
               {(summaryKey && handleKeyPoints(item, summaryKey)) || summary}
             </span>
             {/* ExpandMore icon */}
-            <svg
-              className={`h-5 w-5 fill-current text-icon-muted transition-transform ${
-                expanded === i ? "rotate-180" : ""
-              }`}
-              viewBox="0 0 24 24"
-            >
-              <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
-            </svg>
+            <ChevronDown className={`h-5 w-5 text-icon-muted transition-transform ${expanded === i ? "rotate-180" : ""}`} />
           </button>
 
           {/* Accordion detail */}

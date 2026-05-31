@@ -2,10 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Design tokens — mirror src/utils/themes/tokens.ts. :root = light, .dark = dark. */
+@layer base {
+  :root {
+    --bn-bg: #edf1f7;
+    --bn-surface: #ffffff;
+    --bn-sidebar: #ffffff;
+    --bn-foreground: #1f2937;
+    --bn-muted: #8f9bb3;
+    --bn-border: #e5e9f2;
+    --bn-primary: #3366ff;
+    --bn-primary-foreground: #ffffff;
+    --bn-success: #00d68f;
+    --bn-warning: #ffaa00;
+    --bn-danger: #ff1744;
+    --bn-radius: 10px;
+  }
+  .dark {
+    --bn-bg: #0a0e17;
+    --bn-surface: #121826;
+    --bn-sidebar: #0d1117;
+    --bn-foreground: #e5e7eb;
+    --bn-muted: #8f9bb3;
+    --bn-border: #1f2937;
+    --bn-primary: #6366f1;
+    --bn-primary-foreground: #ffffff;
+    --bn-success: #22c55e;
+    --bn-warning: #f59e0b;
+    --bn-danger: #f43f5e;
+    --bn-radius: 10px;
+  }
+}
+
 /* Global base styles migrated from the former MUI CssBaseline overrides. */
 @layer base {
   body {
-    background: #edf1f7;
+    background: var(--bn-bg);
+    color: var(--bn-foreground);
   }
   img {
     width: 100%;

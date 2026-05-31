@@ -19,7 +19,7 @@ export default function Pagination({
 }: Props) {
   const btn = "rounded px-2 py-1 disabled:opacity-30"
   return (
-    <div className="flex items-center justify-end gap-4 px-4 py-2 text-sm text-gray-600">
+    <div className="flex items-center justify-end gap-4 px-4 py-2 text-sm text-icon-muted">
       <span>
         {from}-{to} of {total}
       </span>

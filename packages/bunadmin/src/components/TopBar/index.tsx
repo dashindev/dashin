@@ -7,6 +7,7 @@ import NoticeMenu from "./TopBarRightMenu/NoticeMenu"
 import I18nMenu from "@/components/TopBar/TopBarRightMenu/I18nMenu"
 import { ENV } from "@/utils/config"
 import DocMenu from "./TopBarRightMenu/DocMenu"
+import ThemeToggle from "./TopBarRightMenu/ThemeToggle"
 import { useRouter } from "@/router"
 import { DynamicDocRoute } from "@/utils/routes"
 import { NoticePlugin } from "@/utils"
@@ -40,7 +41,7 @@ export default function TopBar(props: TopBarProps) {
   const docsHome = props.docsHome || "/docs/getting-started/introduction"
 
   return (
-    <div className="relative z-[1201] border-b border-gray-200 bg-white">
+    <div className="relative z-[1201] border-b border-bn-border bg-sidebar">
       <div
         className="flex items-center justify-between pl-5"
         style={{ minHeight: HEADER_HEIGHT }}
@@ -51,7 +52,7 @@ export default function TopBar(props: TopBarProps) {
               <button
                 aria-label="open drawer"
                 onClick={menuClick}
-                className="inline-flex items-center justify-center rounded p-2 text-icon-muted hover:bg-gray-100"
+                className="inline-flex items-center justify-center rounded p-2 text-icon-muted hover:bg-primary/10"
               >
                 {/* menu-2-outline icon */}
                 <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
@@ -79,6 +80,7 @@ export default function TopBar(props: TopBarProps) {
 
         <div className="flex items-center">
           {prependRight}
+          <ThemeToggle />
           {ENV.ON_I18N && <I18nMenu />}
           {ENV.ON_DOC && <DocMenu isDoc={isDoc} docsHome={docsHome} />}
           {!isDoc && (

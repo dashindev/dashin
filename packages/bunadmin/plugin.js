@@ -166,7 +166,7 @@ export const data: IPluginData[] = [${arrayLine}]
         if (!fs.existsSync(saveNamePath)) {
           fs.mkdirSync(saveNamePath)
         }
-        const saveNameContent = `export { default } from "${pluginName}/lib/${dataItem["name"]}"`
+        const saveNameContent = `export { default } from "${pluginName}/${dataItem["name"]}"`
         fs.writeFile(`${saveNamePath}/index.js`, saveNameContent, e => {
           if (e) console.error("could not generate plugin schema: " + e)
         })

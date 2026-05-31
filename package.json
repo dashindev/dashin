@@ -2,6 +2,7 @@
   "license": "Apache-2.0",
   "private": true,
   "author": "Xbuilder Team",
+  "packageManager": "yarn@1.22.22",
   "workspaces": [
     "packages/*",
     "plugins/*"
@@ -19,21 +20,20 @@
   },
   "devDependencies": {
     "@esbuild/linux-x64": "0.21.5",
+    "@nx/nx-linux-x64-gnu": "22.7.5",
     "@rollup/rollup-linux-x64-gnu": "^4.60.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.0",
     "jsdom": "^24.1.0",
-    "lerna": "^5.1.4",
+    "lerna": "^9.0.7",
     "postcss": "^8.4.0",
-    "turbo": "^1.6.2",
+    "turbo": "^2.9.16",
     "vite": "^5.4.0",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^1.6.0"
   },
-  "resolutions": {
-    "react-error-overlay": "6.0.9"
-  },
+  "resolutions": {},
   "engines": {
     "npm": ">=10.0.0 <11.0.0",
     "node": ">=20.0.0 <21.0.0"

@@ -43,3 +43,7 @@ pluginsData.json
 package-lock.json
 
 # BunAdmin END
+
+# lerna
+lerna-debug.log
+.nx

@@ -76,17 +76,62 @@ export default defineConfig(({ mode }) => {
       }
     },
     optimizeDeps: {
-      include: ["@xbuilder/bunadmin-auth-local"]
+      include: []
     },
     resolve: {
-      alias: {
-        "@": r("src"),
-        "@xbuilder/bunadmin-source-strapi": r("../bunadmin-source-strapi/index.ts"),
-        "@xbuilder/bunadmin-source-graphql": r("../bunadmin-source-graphql/index.ts"),
-        "@xbuilder/bunadmin-rich-text-editor": r("../bunadmin-rich-text-editor/index.tsx"),
-        "@xbuilder/bunadmin-upload-strapi": r("../../plugins/bunadmin-upload-strapi/index.ts"),
-        "@xbuilder/bunadmin": r("src")
-      }
+      alias: [
+        { find: /^@\/(.*)/, replacement: r("src") + "/$1" },
+        { find: "@", replacement: r("src") },
+        // Map workspace packages to their TS source so Vite (dev + build) gets
+        // clean ESM for both bare imports and deep subpaths (e.g. the generated
+        // schema's `<pkg>/sign-in`). Avoids CJS lib/ interop issues.
+        {
+          find: /^@xbuilder\/bunadmin-source-strapi$/,
+          replacement: r("../bunadmin-source-strapi/index.ts")
+        },
+        {
+          find: /^@xbuilder\/bunadmin-source-graphql$/,
+          replacement: r("../bunadmin-source-graphql/index.ts")
+        },
+        {
+          find: /^@xbuilder\/bunadmin-rich-text-editor$/,
+          replacement: r("../bunadmin-rich-text-editor/index.tsx")
+        },
+        // dir-mapped: bare -> index.ts (Vite resolves), subpath -> source file
+        {
+          find: /^@xbuilder\/bunadmin-auth-local\/(.*)/,
+          replacement: r("../../plugins/bunadmin-auth-local") + "/$1"
+        },
+        {
+          find: /^@xbuilder\/bunadmin-auth-local$/,
+          replacement: r("../../plugins/bunadmin-auth-local/index.ts")
+        },
+        {
+          find: /^@xbuilder\/bunadmin-auth-strapi\/(.*)/,
+          replacement: r("../../plugins/bunadmin-auth-strapi") + "/$1"
+        },
+        {
+          find: /^@xbuilder\/bunadmin-auth-strapi$/,
+          replacement: r("../../plugins/bunadmin-auth-strapi/index.ts")
+        },
+        {
+          find: /^@xbuilder\/bunadmin-auth-buncms\/(.*)/,
+          replacement: r("../../plugins/bunadmin-auth-buncms") + "/$1"
+        },
+        {
+          find: /^@xbuilder\/bunadmin-auth-buncms$/,
+          replacement: r("../../plugins/bunadmin-auth-buncms/index.ts")
+        },
+        {
+          find: /^@xbuilder\/bunadmin-upload-strapi\/(.*)/,
+          replacement: r("../../plugins/bunadmin-upload-strapi") + "/$1"
+        },
+        {
+          find: /^@xbuilder\/bunadmin-upload-strapi$/,
+          replacement: r("../../plugins/bunadmin-upload-strapi/index.ts")
+        },
+        { find: /^@xbuilder\/bunadmin$/, replacement: r("src") }
+      ]
     },
     test: {
       globals: true,

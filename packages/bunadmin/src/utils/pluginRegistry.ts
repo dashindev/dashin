@@ -1,5 +1,6 @@
-// @ts-nocheck — Vite-only module: import.meta.glob is not valid under the
-// package's CJS tsc build. Vite resolves/transforms this from source.
+// @ts-nocheck — import.meta.glob is Vite-only and is invalid under this package's
+// CJS `tsc:build` (module: commonjs). The app is type-checked separately via
+// `yarn typecheck` (tsconfig.app.json, module: esnext). Vite builds this from source.
 /**
  * Vite plugin registry — replaces webpack-era dynamic require()/import(`${var}`)
  * with statically-analyzable import.meta.glob maps. The generated

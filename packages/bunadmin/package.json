@@ -25,6 +25,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.app.json",
     "prettier": "prettier --write  --no-semi src/** pages/** plugins/** test/**",
     "tsc:watch": "ttsc -w -p tsconfig.pack.json",
     "tsc:clean": "tsc --build --clean",

@@ -58,6 +58,21 @@ export default defineConfig(({ mode }) => {
       commonjsOptions: {
         transformMixedEsModules: true,
         include: [/node_modules/, /\/lib\//]
+      },
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            react: ["react", "react-dom", "react-router-dom"],
+            redux: ["@reduxjs/toolkit", "react-redux"],
+            dexie: ["dexie", "dexie-export-import"],
+            tiptap: [
+              "@tiptap/core",
+              "@tiptap/react",
+              "@tiptap/starter-kit"
+            ],
+            i18n: ["i18next", "react-i18next"]
+          }
+        }
       }
     },
     optimizeDeps: {

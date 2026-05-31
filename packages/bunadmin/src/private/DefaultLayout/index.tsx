@@ -59,7 +59,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
             className={`relative whitespace-nowrap overflow-x-hidden transition-[width] duration-300 ease-in-out border-r-0 bg-sidebar flex flex-col ${
               open ? "w-[240px]" : "w-[57px] sm:w-[73px]"
             }`}
-            style={{ height: "calc(100vh - 46px)" }}
+            style={{ height: "calc(100vh - 64px)" }}
           >
             <LeftMenu
               {...leftMenu}
@@ -82,7 +82,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
         <div
           className="flex-grow p-[36px] bg-content-bg rounded-tl-bn overflow-auto"
           style={{
-            height: "calc(100vh - 46px)",
+            height: "calc(100vh - 64px)",
             maxWidth: phoneVertical
               ? "auto"
               : open

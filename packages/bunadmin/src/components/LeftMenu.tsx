@@ -29,9 +29,15 @@ const LeftMenu = ({
       {prepend}
       {leftMenuData && <NestedList data={leftMenuData} />}
       {appendNested}
-      {!hideDivider && <hr className="mt-2 border-gray-200" />}
       {prependSetting}
-      {!offLeftSetting && ENV.ON_SETTING && <SettingMenu />}
+      {!offLeftSetting && ENV.ON_SETTING && (
+        <>
+          <div className="px-4 pt-4 pb-1 text-[11px] font-semibold tracking-wider text-icon-muted uppercase">
+            System
+          </div>
+          <SettingMenu />
+        </>
+      )}
       {append}
     </>
   )

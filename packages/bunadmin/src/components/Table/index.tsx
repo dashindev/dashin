@@ -250,7 +250,7 @@ export default function Table<RowData extends object>(
     }
     return (
       <input
-        className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:border-primary focus:outline-none"
+        className="w-full rounded border border-bn-border px-2 py-1 text-sm focus:border-primary focus:outline-none"
         value={(data as any)[field] ?? ""}
         onChange={e => setField(field, e.target.value)}
       />
@@ -272,7 +272,7 @@ export default function Table<RowData extends object>(
     return (
       <React.Fragment key={ri}>
         <tr
-          className={`border-b border-gray-100 hover:bg-content-bg ${
+          className={`border-b border-bn-border hover:bg-content-bg ${
             onRowClick ? "cursor-pointer" : ""
           }`}
           onClick={onRowClick ? e => onRowClick(e, row) : undefined}
@@ -302,7 +302,7 @@ export default function Table<RowData extends object>(
                     return n
                   })
                 }
-                className="h-4 w-4 rounded border-gray-300 text-primary"
+                className="h-4 w-4 rounded border-bn-border text-primary"
               />
             </td>
           )}
@@ -332,7 +332,7 @@ export default function Table<RowData extends object>(
           )}
         </tr>
         {hasDetail && expanded === ri && (
-          <tr className="border-b border-gray-100 bg-content-bg/30">
+          <tr className="border-b border-bn-border bg-content-bg/30">
             <td colSpan={colSpan} className="px-4 py-2">
               {renderDetail(row)}
             </td>
@@ -412,16 +412,16 @@ export default function Table<RowData extends object>(
                   setPage(0)
                   setSearch(e.target.value)
                 }}
-                className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-primary focus:outline-none"
+                className="rounded border border-bn-border px-2 py-1 text-sm focus:border-primary focus:outline-none"
               />
             )}
             {canAdd && (
               <button
                 onClick={startAdd}
                 title={t("addTooltip")}
-                className="rounded bg-primary px-3 py-1 text-sm text-white hover:bg-primary/90"
+                className="inline-flex items-center gap-1 rounded-bn bg-primary-gradient px-3 py-1.5 text-sm text-primary-foreground shadow-sm hover:opacity-90 transition-opacity"
               >
-                +
+                <span className="text-base leading-none">+</span> {t("New")}
               </button>
             )}
             {freeActions.map((a, i) => (
@@ -448,7 +448,7 @@ export default function Table<RowData extends object>(
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
-            <tr className="border-b border-gray-200 text-left">
+            <tr className="border-b border-bn-border text-left">
               {hasDetail && <th className="w-8 px-4 py-2" />}
               {showSelection && (
                 <th className="w-8 px-4 py-2">
@@ -463,7 +463,7 @@ export default function Table<RowData extends object>(
                           : new Set(rows.map((_, i) => i))
                       )
                     }
-                    className="h-4 w-4 rounded border-gray-300 text-primary"
+                    className="h-4 w-4 rounded border-bn-border text-primary"
                   />
                 </th>
               )}
@@ -471,17 +471,17 @@ export default function Table<RowData extends object>(
                 <th
                   key={c.tableData!.id}
                   style={{ width: c.width }}
-                  className="cursor-pointer select-none px-4 py-2 font-semibold text-gray-600"
+                  className="cursor-pointer select-none px-4 py-2 font-semibold text-icon-muted"
                   onClick={() => toggleSort(c)}
                 >
                   {c.title}
                   {orderBy?.field === c.field && (orderDir === "asc" ? " ▲" : " ▼")}
                 </th>
               ))}
-              {hasRowActions && <th className="px-4 py-2 font-semibold text-gray-600">{t("actions")}</th>}
+              {hasRowActions && <th className="px-4 py-2 font-semibold text-icon-muted">{t("actions")}</th>}
             </tr>
             {showFiltering && (
-              <tr className="border-b border-gray-100">
+              <tr className="border-b border-bn-border">
                 {hasDetail && <td className="px-4 py-1" />}
                 {showSelection && <td className="px-4 py-1" />}
                 {cols.map(c => (
@@ -499,7 +499,7 @@ export default function Table<RowData extends object>(
                                 [c.tableData!.id]: e.target.value
                               }))
                             }
-                            className="rounded border border-gray-300 bg-content-bg px-1 py-1 text-xs text-gray-500 focus:border-primary focus:outline-none"
+                            className="rounded border border-bn-border bg-content-bg px-1 py-1 text-xs text-icon-muted focus:border-primary focus:outline-none"
                           >
                             {operatorOptions(c).map(o => (
                               <option key={o.v} value={o.v}>
@@ -510,7 +510,7 @@ export default function Table<RowData extends object>(
                         )}
                         <input
                           type={c.type === "numeric" ? "number" : "text"}
-                          className="w-full rounded border border-gray-300 px-2 py-1 text-xs focus:border-primary focus:outline-none"
+                          className="w-full rounded border border-bn-border px-2 py-1 text-xs focus:border-primary focus:outline-none"
                           onChange={e => {
                             setPage(0)
                             onFilterChanged(c.tableData!.id, e.target.value)
@@ -527,7 +527,7 @@ export default function Table<RowData extends object>(
           <tbody>
             {/* add row */}
             {editing?.mode === "add" && (
-              <tr className="border-b border-gray-100 bg-content-bg/50">
+              <tr className="border-b border-bn-border bg-content-bg/50">
                 {hasDetail && <td className="px-4 py-2" />}
                 {showSelection && <td className="px-4 py-2" />}
                 {cols.map(c => (

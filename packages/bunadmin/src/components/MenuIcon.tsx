@@ -10,26 +10,24 @@ interface Props {
 }
 
 export default function MenuIcon({ name, icon, icon_type }: Props) {
-  if (!icon || !icon_type) return <span>Icon</span>
+  if (!icon || !icon_type) return <span className="text-icon-muted">•</span>
 
   switch (icon_type) {
     case "eva":
-      return (
-        <EvaIcon name={icon} size="large" fill="#8f9bb3" />
-      )
+      return <EvaIcon name={icon} size="medium" fill="currentColor" />
     case "material":
       return (
-        <span className="text-[#8f9bb3] text-xl flex items-center justify-center material-icons">
+        <span className="text-icon-muted text-xl flex items-center justify-center material-icons">
           {icon}
         </span>
       )
     case "url":
       return (
-        <span className="text-[#8f9bb3] flex items-center justify-center">
+        <span className="text-icon-muted flex items-center justify-center">
           <img alt={name} width={18} height={18} src={icon} />
         </span>
       )
     default:
-      return <span>Icon</span>
+      return <span className="text-icon-muted">•</span>
   }
 }

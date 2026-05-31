@@ -10,11 +10,17 @@ import {
   Hash,
   Lock,
   User,
+  Users,
   FilePlus,
+  FileText,
   Pencil,
   Trash2,
   Search,
   X,
+  Send,
+  Box,
+  Paperclip,
+  Code,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
@@ -59,7 +65,24 @@ const MAP: Record<string, LucideIcon> = {
   "arrow-ios-forward": ChevronRight,
   "arrowhead-left": ChevronsLeft,
   "arrowhead-right": ChevronsRight,
-  "arrow-ios-downward-outline": ChevronDown
+  "arrow-ios-downward-outline": ChevronDown,
+  // menu icons
+  "file-text-outline": FileText,
+  "person-outline": User,
+  "people-outline": Users,
+  "paper-plane-outline": Send,
+  "cube-outline": Box,
+  "attach-outline": Paperclip,
+  code: Code,
+  refresh: RefreshCw,
+  "refresh-outline": RefreshCw,
+  delete: Trash2,
+  "trash-outline": Trash2,
+  "edit-outline": Pencil,
+  "file-add-outline": FilePlus,
+  "settings-2-outline": Settings,
+  "menu-2-outline": Layers,
+  "globe-outline": Box
 }
 
 const SIZE_PX: Record<string, number> = { small: 16, medium: 20, large: 24 }

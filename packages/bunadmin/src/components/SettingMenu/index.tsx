@@ -20,16 +20,16 @@ export default function SettingMenu() {
   }
 
   return (
-    <ul className="w-full max-w-[360px] bg-white list-none p-0">
+    <ul className="w-full max-w-[360px] bg-sidebar list-none p-0">
       <li
-        className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100"
+        className="flex items-center mx-2 px-3 py-2 cursor-pointer rounded-bn text-foreground hover:bg-primary/10"
         onClick={handleClick}
       >
         <span className="mr-3 flex items-center">
-          <EvaIcon name="settings-outline" size="large" fill="#8f9bb3" />
+          <EvaIcon name="settings-outline" size="medium" fill="currentColor" />
         </span>
         <span className="flex-1 text-sm">{t("Setting")}</span>
-        <span className="text-[#8f9bb3]">
+        <span className="text-icon-muted">
           {open ? (
             <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
           ) : (
@@ -42,7 +42,7 @@ export default function SettingMenu() {
           {settingMenus().map((item, index) => (
             <li
               key={index}
-              className={`flex items-center pl-10 pr-4 py-2 cursor-pointer transition-[padding-left] duration-500 ease-in-out hover:bg-gray-100 ${item.route === `/${qGroup}/${qName}` ? "bg-gray-200" : ""}`}
+              className={`flex items-center mx-2 pl-9 pr-3 py-2 cursor-pointer rounded-bn transition-[padding-left] duration-500 ease-in-out hover:bg-primary/10 ${item.route === `/${qGroup}/${qName}` ? "bg-primary/10 text-primary font-medium" : "text-foreground"}`}
               onClick={() => handleRoute({ route: item.route })}
             >
               {item.icon && <span className="mr-3 flex items-center">{item.icon}</span>}

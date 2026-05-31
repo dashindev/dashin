@@ -1,3 +1,4 @@
+import React from "react"
 import { Column } from "./material-table-shim"
 
 export type Dir = "asc" | "desc"
@@ -47,6 +48,18 @@ export function operatorOptions<R extends object>(
   ]
 }
 
+/** Map a status-ish value to pill color classes. */
+function statusPillClass(value: string): string {
+  const v = String(value).toLowerCase()
+  if (/(publish|active|approved|success|done|complete)/.test(v))
+    return "bg-success/15 text-success"
+  if (/(pending|draft|review|waiting)/.test(v))
+    return "bg-warning/15 text-warning"
+  if (/(reject|error|failed|inactive|banned)/.test(v))
+    return "bg-danger/15 text-danger"
+  return "bg-primary/10 text-primary"
+}
+
 /** Display value for a cell (render fn, or typed formatting). */
 export function display<R extends object>(col: Column<R>, row: R) {
   if (col.render) return col.render(row)
@@ -54,6 +67,22 @@ export function display<R extends object>(col: Column<R>, row: R) {
   if (col.type === "boolean") return v ? "✓" : "✗"
   if ((col.type === "datetime" || col.type === "date") && v)
     return new Date(v).toLocaleString()
+  // Lookup columns (status/category) render as colored pills (mockup-3).
+  if ((col as any).lookup && v !== undefined && v !== null && v !== "") {
+    const label = ((col as any).lookup[v] as string) ?? v
+    return React.createElement(
+      "span",
+      {
+        className: `inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusPillClass(
+          String(v)
+        )}`
+      },
+      React.createElement("span", {
+        className: "h-1.5 w-1.5 rounded-full bg-current opacity-70"
+      }),
+      String(label)
+    )
+  }
   return v as any
 }
 

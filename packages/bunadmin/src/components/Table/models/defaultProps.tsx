@@ -1,4 +1,4 @@
-import { MaterialTableProps } from "material-table"
+import { MaterialTableProps } from "./material-table-shim"
 import EvaIcon from "react-eva-icons"
 import React from "react"
 

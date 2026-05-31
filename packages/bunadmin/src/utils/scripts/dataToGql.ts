@@ -1,4 +1,4 @@
-import { Filter } from "material-table"
+import { Filter } from "@/components/Table/models/material-table-shim"
 
 /**
  * Material Table Data to Gql string

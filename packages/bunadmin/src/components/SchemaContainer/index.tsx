@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useRouter } from "@/router"
-import { Column } from "material-table"
+import { Column } from "@/components/Table/models/material-table-shim"
 import { editableController, TableHead, Table, ErrorProps } from "@/components"
 import { TableDefaultProps as DefaultProps } from "../Table/models/defaultProps"
 import tableIcons from "../Table/models/tableIcons"
 import { Type } from "@/core/schema/types"
-import { useTheme } from "@mui/material/styles"
 import { LocalDataRoute } from "@/utils/routes"
 import dataController from "./controllers/dataController"
 import columnsController from "./controllers/columnsController"
@@ -14,6 +13,8 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { selectSchema } from "@/slices/schemaSlice"
 import { PluginTableProps, specialPluginGroup } from "@/utils"
+
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 
 interface Interface {
   group: string
@@ -38,7 +39,6 @@ export default function SchemaContainer<RowData extends object>({
   isAuthPath
 }: Props) {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const router = useRouter()
   const { group, name } = (router.query as unknown) as Interface
   const [ready, setReady] = useState(false)
@@ -76,7 +76,7 @@ export default function SchemaContainer<RowData extends object>({
 
   if (notFound)
     return (
-      <div style={{ display: "flex" }}>
+      <div className="flex">
         <Error
           statusCode={404}
           hasLayout={false}

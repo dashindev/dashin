@@ -1,4 +1,4 @@
-import { Localization } from "material-table"
+import { Localization } from "./models/material-table-shim"
 
 type props = {
   t?: any

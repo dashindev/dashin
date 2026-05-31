@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { ChevronsUpDown, Loader2 } from "lucide-react"
 import { Combobox } from "@headlessui/react"
 import { Column, Query } from "@/components/Table/models/material-table-shim"
 import { notice } from "@/core"
@@ -121,14 +122,9 @@ export default function FilterListSelector({
             />
             <span className="absolute inset-y-0 right-0 flex items-center pr-1">
               {loading ? (
-                <svg className="h-5 w-5 animate-spin text-icon-muted" viewBox="0 0 24 24" fill="none">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                </svg>
+                <Loader2 className="h-5 w-5 animate-spin text-icon-muted" />
               ) : (
-                <svg className="h-5 w-5 fill-current text-icon-muted" viewBox="0 0 20 20">
-                  <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <ChevronsUpDown className="h-5 w-5 text-icon-muted" />
               )}
             </span>
           </div>

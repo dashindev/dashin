@@ -1,4 +1,5 @@
 import React from "react"
+import { ChevronsUpDown } from "lucide-react"
 import { Listbox } from "@headlessui/react"
 import { Column, EditComponentProps } from "@/components/Table/models/material-table-shim"
 import { store } from "@/utils"
@@ -113,9 +114,7 @@ export default function SingleSelector<RowData extends object>(
                 {names[keys.indexOf(selectedName)] || "\u00A0"}
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
-                <svg className="h-5 w-5 fill-current text-icon-muted" viewBox="0 0 20 20">
-                  <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <ChevronsUpDown className="h-5 w-5 text-icon-muted" />
               </span>
             </Listbox.Button>
             <Listbox.Options className="absolute z-10 mt-1 max-h-[230px] w-full overflow-auto rounded bg-content-box py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">

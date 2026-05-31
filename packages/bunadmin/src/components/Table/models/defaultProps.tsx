@@ -1,6 +1,4 @@
 import { MaterialTableProps } from "./material-table-shim"
-import EvaIcon from "react-eva-icons"
-import React from "react"
 
 export const TableDefaultProps: MaterialTableProps<any> = {
   // default placeholder
@@ -33,13 +31,7 @@ export const TableDefaultProps: MaterialTableProps<any> = {
     selection: true,
     pageSize: 10,
     pageSizeOptions: [10, 25, 50, 100]
-  },
-  // actions
-  actions: [
-    {
-      tooltip: "Remove All Selected Users",
-      icon: () => <EvaIcon name="trash-2-outline" size="large" fill="gray" />,
-      onClick: (_evt, _data) => alert("Bulk delete rows not supported yet.")
-    }
-  ]
+  }
+  // Bulk delete is handled natively by the Table's selection toolbar
+  // (wires to editable.onRowDelete) — no placeholder action needed.
 }

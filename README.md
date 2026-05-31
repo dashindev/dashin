@@ -1,6 +1,6 @@
 # BunAdmin
 
-**Bunadmin** is a scaffold to quickly build a `React` background management system. It is easy to use and can help you build a powerful background management panel. Techniques that need to be familiar **only include** `Tailwind CSS` and `Headless UI`, if you have not used it before, don’t worry, you can spend very little time learning in actual use later.
+**Bunadmin** is a scaffold to quickly build a `React` background management system. It is easy to use and can help you build a powerful background management panel. The app is powered by **Vite**, styled with **Tailwind CSS** + **Headless UI**, and uses **TipTap** for rich-text editing. If you have not used these before, don't worry — you can learn them quickly during actual use.
 
 Bunadmin hopes to achieve as many function reuse as possible through simple development methods, so in each bunadmin project, **common functions have been built**, such as dynamic routing, multi-level menus, **permission control, data management**, search filtering and sorting, CRUD, **file management, message notification**, documenting your code, etc. You only need to build your own plugin to call it, and the bunadmin plugin is also easy to learn and use.
 
@@ -45,20 +45,39 @@ Display help for command
 git clone git@github.com:xbuilder/bunadmin.git
 
 yarn
+yarn tsc:build        # required once — builds all package lib/ for the plugin generator
 yarn tsc:watch
 yarn dev
 
-# minium command
+# minimum command
 $ yarn workspace @xbuilder/bunadmin tsc:watch
 $ yarn workspace @xbuilder/bunadmin-auth-local tsc:watch
 
 $ yarn dev
 ```
 
-[http://localhost:3000](http://localhost:3000)
+The dev server (Vite) runs at [http://localhost:3000](http://localhost:3000).
 
 - Username: `admin`
 - Password: `bunadmin`
+
+### Scripts
+
+Inside `packages/bunadmin`:
+
+| Command          | Description           |
+| ---------------- | --------------------- |
+| `yarn dev`       | Vite dev server       |
+| `yarn build`     | Vite production build |
+| `yarn test`      | Vitest                |
+| `yarn typecheck` | tsc app type-check    |
+
+From the repo root:
+
+| Command                | Description                |
+| ---------------------- | -------------------------- |
+| `yarn tsc:build`       | Build all packages (lerna) |
+| `yarn turbo:tsc:build` | Build all packages (turbo) |
 
 ## Lerna (publish packages)
 
@@ -74,7 +93,7 @@ npx lerna publish from-package
 [tailwindcss](https://github.com/tailwindlabs/tailwindcss)
 [headlessui](https://github.com/tailwindlabs/headlessui)
 [tiptap](https://github.com/ueberdosis/tiptap)
-[next.js](https://github.com/zeit/next.js)
+[vite](https://github.com/vitejs/vite)
 [formik](https://github.com/jaredpalmer/formik)
 [ngx-admin](https://github.com/akveo/ngx-admin)
 [ant-design-pro](https://github.com/ant-design/ant-design-pro)

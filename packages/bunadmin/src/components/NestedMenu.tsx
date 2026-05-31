@@ -118,9 +118,9 @@ export default function NestedList({ data }: Props): any {
           const hasChildren = data.filter(i => i.parent === name).length > 0
 
           return (
-            <ul key={name} className="w-full max-w-[360px] bg-white p-0 list-none">
+            <ul key={name} className="w-full max-w-[360px] bg-sidebar p-0 list-none">
               <li
-                className={`flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100 ${slug === `/${qGroup}/${qName}` ? "bg-gray-200" : ""}`}
+                className={`flex items-center px-4 py-2 cursor-pointer rounded-bn hover:bg-primary/10 ${slug === `/${qGroup}/${qName}` ? "bg-primary/10 text-primary" : "text-foreground"}`}
                 onClick={() => handleClick({ name, slug })}
               >
                 <span className="mr-3 flex items-center">
@@ -128,7 +128,7 @@ export default function NestedList({ data }: Props): any {
                 </span>
                 <span className="flex-1 text-sm">{t(label || name)}</span>
                 {hasChildren && (
-                  <span className="text-[#8f9bb3] text-sm">
+                  <span className="text-icon-muted text-sm">
                     {open[name] ? (
                       <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
                     ) : (
@@ -154,7 +154,7 @@ export default function NestedList({ data }: Props): any {
                       return (
                         <li
                           key={name}
-                          className={`pl-10 pr-4 py-2 cursor-pointer transition-[padding-left] duration-500 ease-in-out hover:bg-gray-100 ${isSelected ? "bg-gray-200" : ""}`}
+                          className={`pl-10 pr-4 py-2 cursor-pointer rounded-bn transition-[padding-left] duration-500 ease-in-out hover:bg-primary/10 ${isSelected ? "bg-primary/10 text-primary" : "text-foreground"}`}
                           onClick={() => handleClick({ name, slug })}
                         >
                           <span className="text-sm">{t(label || name)}</span>

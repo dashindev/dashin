@@ -9,7 +9,7 @@ import { useRouter } from "next/router"
 import { defaultTheme, DynamicDocRoute, ENV } from "@/utils"
 
 import PrismHighlight, { defaultProps } from "prism-react-renderer"
-import EvaIcon from "react-eva-icons"
+import { EvaIcon } from "@xbuilder/bunadmin"
 import DefaultLayout from "@/private/DefaultLayout"
 import Error from "@/private/Error"
 

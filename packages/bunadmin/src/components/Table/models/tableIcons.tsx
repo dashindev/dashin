@@ -1,5 +1,5 @@
 import React from "react"
-import EvaIcon from "react-eva-icons"
+import EvaIcon from "../../EvaIcon"
 import { Icons } from "./material-table-shim"
 
 /**

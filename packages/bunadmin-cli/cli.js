@@ -28,6 +28,10 @@ const cli = meow(`
 	  $ bunadmin ai generate --url <pocketbase-url> --collection <name> [--token <admin>] [--out <dir>]
 	  Set BUNADMIN_AI_PROVIDER (openai|anthropic|ollama) + BUNADMIN_AI_API_KEY,
 	  or pass --mock '<json>' for a dry run. Output is validated against the live schema.
+
+	Generate an admin THEME from a description (AI, bring-your-own-key)
+	  $ bunadmin ai theme "dark mode with a purple accent" [--out <dir>]
+	  Emits a validated { preset, mode, overrides } theme config for applyPreset().
 `)
 
 render(

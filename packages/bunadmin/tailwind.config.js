@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: [
     "./src/**/*.{ts,tsx}",
     "./pages/**/*.{ts,tsx}",
@@ -9,13 +10,25 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // mapped from src/utils/themes/defaultTheme.ts
-        primary: "#36f",
-        secondary: "#00d68f",
-        danger: "#ff1744",
-        "content-bg": "#EDF1F7",
-        "content-box": "#FFF",
-        "icon-muted": "#8f9bb3"
+        // Token-driven (var() mirrors src/utils/themes/tokens.ts + tailwind.css).
+        primary: "var(--bn-primary)",
+        "primary-foreground": "var(--bn-primary-foreground)",
+        secondary: "var(--bn-success)",
+        success: "var(--bn-success)",
+        warning: "var(--bn-warning)",
+        danger: "var(--bn-danger)",
+        "content-bg": "var(--bn-bg)",
+        "content-box": "var(--bn-surface)",
+        sidebar: "var(--bn-sidebar)",
+        foreground: "var(--bn-foreground)",
+        "icon-muted": "var(--bn-muted)",
+        "bn-border": "var(--bn-border)"
+      },
+      borderRadius: {
+        bn: "var(--bn-radius)"
+      },
+      backgroundImage: {
+        "primary-gradient": "var(--bn-primary-gradient)"
       }
     }
   },

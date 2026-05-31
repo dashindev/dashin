@@ -3,8 +3,25 @@ name: CI
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - ".gitignore"
+      - "LICENSE"
   pull_request:
     branches: [master]
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - ".gitignore"
+      - "LICENSE"
+  workflow_dispatch: {} # allow manual runs
+
+# Cancel superseded runs: pushing repeatedly to a branch/PR keeps only the
+# latest run instead of running CI for every intermediate push (cost control).
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-test:
@@ -28,7 +45,11 @@ jobs:
         working-directory: packages/bunadmin
         run: yarn build
 
+  # Heavy job (installs Playwright browsers): run on PRs only — the PR already
+  # validates a branch before it reaches master, so re-running on the master
+  # merge is redundant spend.
   e2e:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

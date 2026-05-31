@@ -1,5 +1,5 @@
 import React from "react"
-import EvaIcon, { EvaIconProps } from "react-eva-icons"
+import EvaIcon, { EvaIconProps } from "../../components/EvaIcon"
 import { LocalDataRoute } from "../routes"
 
 interface Res {

@@ -6,6 +6,24 @@ export interface SignInParamsType {
 }
 
 /**
+ * Map a PocketBase auth-with-password response to bunadmin's expected shape.
+ * Pure (no network) so it's unit-testable.
+ */
+export function mapPbAuth(res: any, fallbackUsername?: string) {
+  if (!res || !res.token || !res.record) {
+    return { errors: res || "Sign in failed" }
+  }
+  return {
+    id: res.record.id,
+    token: res.token,
+    user: {
+      username: res.record.username || res.record.email || fallbackUsername,
+      role: res.record.role || "user"
+    }
+  }
+}
+
+/**
  * PocketBase auth: POST /api/collections/users/auth-with-password
  *   body { identity, password } -> { token, record }
  * Mapped to bunadmin's expected shape { id, token, user }.
@@ -19,16 +37,5 @@ export default async function userSignInService(params: SignInParamsType) {
     data: { identity: username, password }
   })
 
-  if (!res || !res.token || !res.record) {
-    return { errors: res || "Sign in failed" }
-  }
-
-  return {
-    id: res.record.id,
-    token: res.token,
-    user: {
-      username: res.record.username || res.record.email || username,
-      role: res.record.role || "user"
-    }
-  }
+  return mapPbAuth(res, username)
 }

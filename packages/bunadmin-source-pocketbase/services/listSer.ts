@@ -5,6 +5,7 @@
  */
 import { ENV, request, storedToken } from "@xbuilder/bunadmin"
 import { ListService } from "../types"
+import { buildFilter, buildSort } from "./filter"
 
 export default async function listSer<RowData extends object>({
   tableQuery,
@@ -21,21 +22,8 @@ export default async function listSer<RowData extends object>({
     pageSize
   } = tableQuery
 
-  // Build the PocketBase `filter` expression, e.g. status='Published' && name~'a'
-  const clauses: string[] = []
-  filters.forEach(({ column: { field }, operator, value }) => {
-    if (!field || value === undefined || value === "") return
-    clauses.push(buildClause(String(field), operator as string, value))
-  })
-  if (searchWords) clauses.push(`${searchField}~'${escape(searchWords)}'`)
-  const filter = clauses.join(" && ")
-
-  // PocketBase sort: `field` (asc) / `-field` (desc)
-  const sortField =
-    (orderBy && orderBy.field && orderBy.field.toString()) || "created"
-  const sort = orderBy
-    ? `${orderDirection === "desc" ? "-" : ""}${sortField}`
-    : "-created"
+  const filter = buildFilter(filters as any, searchWords, searchField)
+  const sort = buildSort(orderBy, orderDirection)
 
   const token = await storedToken()
 
@@ -55,35 +43,5 @@ export default async function listSer<RowData extends object>({
     data: data.items || [],
     totalCount: data.totalItems || 0,
     errors: data.code && data.code >= 400 ? data : undefined
-  }
-}
-
-function escape(v: any): string {
-  return String(v).replace(/'/g, "\\'")
-}
-
-/** Map a bunadmin column operator to a PocketBase filter clause. */
-function buildClause(field: string, operator: string, value: any): string {
-  const v = escape(value)
-  switch (operator) {
-    case "!=":
-      return `${field}!='${v}'`
-    case ">":
-      return `${field}>${Number(value)}`
-    case ">=":
-      return `${field}>=${Number(value)}`
-    case "<":
-      return `${field}<${Number(value)}`
-    case "<=":
-      return `${field}<=${Number(value)}`
-    case "_ncs=":
-    case "_nc=":
-      return `${field}!~'${v}'`
-    case "=":
-      return `${field}='${v}'`
-    case "_cs=":
-    case "_c=":
-    default:
-      return `${field}~'${v}'`
   }
 }

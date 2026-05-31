@@ -34,10 +34,20 @@ export { default as ProTip } from "./ProTip"
 export { default as LeftMenu } from "./LeftMenu"
 export { default as NestedList } from "./NestedMenu"
 export { default as TopBar } from "./TopBar"
+export { default as StatBand } from "./regions/StatBand"
+export { default as SidebarFooter } from "./regions/SidebarFooter"
+export type { Stat } from "./regions/StatBand"
 
 export interface DefaultLayoutProps {
   children?: any
   leftMenu?: LeftMenuProps
+  /** Layout selection + opt-in regions (see utils/themes/layouts). */
+  layout?: import("@/utils/themes/layouts").LayoutConfig
+  /** KPI cards for the optional stat band (layout.statBand). */
+  stats?: import("./regions/StatBand").Stat[]
+  /** Data for the sidebar footer slot (layout.sidebarFooter). */
+  sidebarStats?: import("./regions/StatBand").Stat[]
+  sidebarUpgrade?: import("./regions/SidebarFooter").SidebarFooterProps["upgrade"]
 }
 
 export interface ErrorProps {

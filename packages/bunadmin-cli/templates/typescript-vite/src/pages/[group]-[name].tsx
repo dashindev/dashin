@@ -5,13 +5,23 @@ import {
   SchemaContainer,
   withoutLayout,
   useRouter,
+  DEFAULT_AUTH_PLUGIN,
   MenuType
 } from "@xbuilder/bunadmin"
 import PluginTable from "../components/PluginTable"
 import DefaultLayout from "../components/DefaultLayout"
 import Error from "../components/Error"
 import Index from "./index"
-import { SignIn as AuthComponent } from "@xbuilder/bunadmin-auth-local"
+import { getDynamicIndex } from "../pluginRegistry"
+
+// Auth sign-in component is resolved from the configured auth plugin
+// (VITE_AUTH_PLUGIN) via the registry — no hardcoded plugin import.
+function AuthComponent() {
+  const name = process.env.VITE_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
+  const plugin = getDynamicIndex()[name]
+  const SignIn = plugin && plugin.SignIn
+  return SignIn ? <SignIn /> : null
+}
 
 const DynamicGroupNamePage = ({
   leftMenuData,

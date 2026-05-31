@@ -52,7 +52,7 @@ export default function SidebarFooter({
       {upgrade.cta && (
         <button
           onClick={upgrade.onClick}
-          className="mt-3 w-full rounded-bn bg-primary text-primary-foreground text-sm py-2 hover:opacity-90 transition-opacity"
+          className="mt-3 w-full rounded-bn bg-primary-gradient text-primary-foreground text-sm py-2 hover:opacity-90 transition-opacity"
         >
           {upgrade.cta}
         </button>

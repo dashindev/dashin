@@ -19,6 +19,12 @@ describe("StatBand", () => {
     const { container } = render(<StatBand stats={[]} />)
     expect(container.firstChild).toBeNull()
   })
+  it("renders a sparkline svg when spark data is provided", () => {
+    const { container } = render(
+      <StatBand stats={[{ label: "Published", value: 45, spark: [1, 4, 2, 6, 5], trend: "up" }]} />
+    )
+    expect(container.querySelector("svg")).toBeTruthy()
+  })
 })
 
 describe("SidebarFooter", () => {

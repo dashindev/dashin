@@ -74,9 +74,13 @@ export function getPluginNames(packageJson: string): string[] {
 
   try {
     const content = b.toString()
-    const obj: { [k: string]: string } = JSON.parse(content)
+    const obj: {
+      dependencies?: { [k: string]: string }
+      devDependencies?: { [k: string]: string }
+    } = JSON.parse(content)
 
-    pluginNames = Object.keys(obj.dependencies || {}).filter(k => {
+    const allDeps = { ...obj.dependencies, ...obj.devDependencies }
+    pluginNames = Object.keys(allDeps).filter(k => {
       const matchPlugins = [
         "bunadmin-auth",
         "bunadmin-upload",

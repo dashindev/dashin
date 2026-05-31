@@ -49,11 +49,11 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.2.1",
-    "react-eva-icons": "0.0.8",
     "react-i18next": "^11.17.2",
     "react-redux": "8.0.4",
     "react-router-dom": "^6.30.2",
-    "umi-request": "^1.4.0"
+    "umi-request": "^1.4.0",
+    "lucide-react": "^0.294.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.45.0",

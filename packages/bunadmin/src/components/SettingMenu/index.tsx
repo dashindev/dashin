@@ -1,5 +1,5 @@
 import React from "react"
-import EvaIcon from "react-eva-icons"
+import EvaIcon from "../EvaIcon"
 import { settingMenus } from "@/utils/config/settingMenus"
 import { useRouter } from "@/router"
 import { DynamicRoute } from "@/utils/routes"

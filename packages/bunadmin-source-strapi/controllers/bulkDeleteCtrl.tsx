@@ -2,7 +2,7 @@ import React from "react"
 import { Action } from "@xbuilder/bunadmin"
 import { BulkDeleteProps } from "@xbuilder/bunadmin"
 // @ts-ignore
-import EvaIcon from "react-eva-icons"
+import { EvaIcon } from "@xbuilder/bunadmin"
 import bulkDeleteSer from "../services/bulkDeleteSer"
 
 export default function bulkDeleteCtrl<RowData extends object>(

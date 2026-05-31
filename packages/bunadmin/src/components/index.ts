@@ -37,6 +37,8 @@ export { default as TopBar } from "./TopBar"
 export { default as StatBand } from "./regions/StatBand"
 export { default as SidebarFooter } from "./regions/SidebarFooter"
 export type { Stat } from "./regions/StatBand"
+export { default as EvaIcon } from "./EvaIcon"
+export type { EvaIconProps } from "./EvaIcon"
 
 export interface DefaultLayoutProps {
   children?: any

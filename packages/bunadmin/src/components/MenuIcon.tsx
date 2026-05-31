@@ -1,7 +1,7 @@
 import React from "react"
 
 import { MenuIcon as MenuIconName, MenuIconType } from "@/core/menu/types"
-import EvaIcon from "react-eva-icons"
+import EvaIcon from "./EvaIcon"
 
 interface Props {
   name?: string

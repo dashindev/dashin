@@ -5,7 +5,6 @@ import {
   tableIcons,
   TableDefaultProps as DefaultProps
 } from "@xbuilder/bunadmin"
-import { useTheme } from "@mui/material/styles"
 
 import { SchemaLabel, SchemaColumns, SchemaName } from "./plugin"
 import { useTranslation } from "@xbuilder/bunadmin"
@@ -16,9 +15,10 @@ import {
 } from "@xbuilder/bunadmin-source-strapi"
 import Type from "./types"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+
 export default function Post() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const tableRef = createRef()
 
   return (

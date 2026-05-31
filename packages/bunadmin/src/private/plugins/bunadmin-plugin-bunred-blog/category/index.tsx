@@ -5,8 +5,7 @@ import {
   tableIcons,
   TableDefaultProps as DefaultProps
 } from "@xbuilder/bunadmin"
-import { Query } from "material-table"
-import { useTheme } from "@mui/material/styles"
+import { Query } from "@/components/Table/models/material-table-shim"
 
 import { SchemaName, SchemaLabel, SchemaColumns } from "./plugin"
 import { useTranslation } from "react-i18next"
@@ -17,9 +16,10 @@ import {
 } from "@xbuilder/bunadmin-source-strapi"
 import Type from "./types"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+
 export default function() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const tableRef = createRef()
 
   return (

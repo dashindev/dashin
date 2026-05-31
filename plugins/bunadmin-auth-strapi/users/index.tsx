@@ -6,7 +6,6 @@ import {
   TableDefaultProps as DefaultProps,
   notice
 } from "@xbuilder/bunadmin"
-import { useTheme } from "@mui/material/styles"
 
 import { SchemaLabel, SchemaColumns, SchemaName } from "./plugin"
 import editableCtrl from "./controllers/editableCtrl"
@@ -15,9 +14,10 @@ import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
 import listSer from "../roles/services/listSer"
 import { IRole } from "../utils/types"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+
 export default function<RowData extends object>() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const tableRef = createRef()
   const [roleLookup, setRoleLookup] = useState({})
 
@@ -49,16 +49,12 @@ export default function<RowData extends object>() {
         title={t(SchemaLabel)}
         columns={SchemaColumns({ t, roleLookup })}
         editable={editableCtrl({})}
-        // style
         style={DefaultProps.style}
-        // icons
         icons={tableIcons({ theme })}
-        // options
         options={{
           ...DefaultProps.options,
           filtering: true
         }}
-        // data
         data={async tableQuery => {
           const data = await dataCtrl({
             t,

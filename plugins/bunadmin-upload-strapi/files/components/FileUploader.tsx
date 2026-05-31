@@ -6,7 +6,7 @@ import {
   Uploader,
   OnDropProps
 } from "@xbuilder/bunadmin"
-import { EditComponentProps } from "material-table"
+import { EditComponentProps } from "@xbuilder/bunadmin"
 import { DropResult } from "react-beautiful-dnd"
 import { IFile } from "../../utils/types/file"
 import uploadMediaCtrl from "../controllers/uploadMediaCtrl"

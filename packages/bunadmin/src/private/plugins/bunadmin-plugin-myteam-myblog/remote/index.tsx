@@ -1,5 +1,4 @@
 import React, { createRef } from "react"
-import { useTheme } from "@mui/material/styles"
 import {
   Table,
   TableHead,
@@ -10,9 +9,10 @@ import {
 } from "@xbuilder/bunadmin"
 import { SchemaLabel, SchemaColumns } from "./plugin"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+
 export default function Post() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const tableRef = createRef()
 
   return (

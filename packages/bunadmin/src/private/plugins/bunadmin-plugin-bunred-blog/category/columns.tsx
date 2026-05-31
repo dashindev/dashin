@@ -1,5 +1,5 @@
 import React from "react"
-import { Column } from "material-table"
+import { Column } from "@/components/Table/models/material-table-shim"
 import Type from "./types"
 import { SchemaName } from "./plugin"
 import { ListSelector, PluginColumns } from "@xbuilder/bunadmin"

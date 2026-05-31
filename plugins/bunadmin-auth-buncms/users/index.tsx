@@ -5,15 +5,15 @@ import {
   tableIcons,
   TableDefaultProps as DefaultProps
 } from "@xbuilder/bunadmin"
-import { useTheme } from "@mui/material/styles"
 
 import { SchemaLabel, SchemaColumns } from "./plugin"
 import dataCtrl from "./controllers/dataCtrl"
 import { useTranslation } from "react-i18next"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+
 export default function list() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const tableRef = createRef()
 
   return (
@@ -23,16 +23,12 @@ export default function list() {
         tableRef={tableRef}
         title={t(SchemaLabel)}
         columns={SchemaColumns({ t })}
-        // style
         style={DefaultProps.style}
-        // icons
         icons={tableIcons({ theme })}
-        // options
         options={{
           ...DefaultProps.options,
           filtering: true
         }}
-        // data
         data={async query => await dataCtrl(query)}
       />
     </>

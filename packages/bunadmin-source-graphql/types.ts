@@ -1,4 +1,4 @@
-import { Query } from "material-table"
+import { Query } from "@xbuilder/bunadmin"
 import { TFunction } from "i18next"
 import { ListServiceRes } from "@xbuilder/bunadmin"
 

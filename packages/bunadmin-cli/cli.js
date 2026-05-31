@@ -23,6 +23,11 @@ const cli = meow(`
 	Create a schema
 	  $ bunadmin schema [name]
 	  (Run in the plugin directory: plugins/bunadmin-plugin-[team]-[group]/)
+
+	Generate an admin table from a backend schema (AI, bring-your-own-key)
+	  $ bunadmin ai generate --url <pocketbase-url> --collection <name> [--token <admin>] [--out <dir>]
+	  Set BUNADMIN_AI_PROVIDER (openai|anthropic|ollama) + BUNADMIN_AI_API_KEY,
+	  or pass --mock '<json>' for a dry run. Output is validated against the live schema.
 `)
 
 render(

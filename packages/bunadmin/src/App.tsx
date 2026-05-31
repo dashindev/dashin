@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Provider } from "react-redux"
 import {
   DEFAULT_AUTH_PLUGIN,
-  defaultTheme,
   DynamicDocRoute,
   DynamicRoute,
   IAuthPlugin,
@@ -12,21 +11,10 @@ import {
   store,
   UserRoute
 } from "./utils"
-import {
-  CssBaseline,
-  ThemeProvider,
-  Theme,
-  StyledEngineProvider
-} from "@mui/material"
 import { SnackbarProvider } from "notistack"
 import { CubeSpinner, Snackbar, SnackMessage } from "./components"
 import { useTranslation } from "react-i18next"
 import { MenuType } from "@/core"
-
-declare module "@mui/styles/defaultTheme" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
 
 const HTTP404 = lazy(() => import("./pages/404"))
 const GroupName = lazy(() => import("./pages/[group]-[name]"))
@@ -119,38 +107,33 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={defaultTheme}>
-          <CssBaseline />
-          <SnackbarProvider
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right"
-            }}
-            autoHideDuration={2000}
-            content={(key, message) => (
-              <SnackMessage store={store} id={key} message={message} />
-            )}
-          >
-            <Snackbar />
-          </SnackbarProvider>
-          <BrowserRouter>
-            <Suspense fallback={<CubeSpinner />}>
-              <Routes>
-                <Route
-                  path={"/"}
-                  Component={() => <GroupName leftMenuData={leftMenuData} />}
-                />
-                <Route
-                  path={"/:group/:name"}
-                  Component={() => <GroupName leftMenuData={leftMenuData} />}
-                />
-                <Route path="*" Component={HTTP404} />
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </ThemeProvider>
-      </StyledEngineProvider>
+      <SnackbarProvider
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right"
+        }}
+        autoHideDuration={2000}
+        content={(key, message) => (
+          <SnackMessage store={store} id={key} message={message} />
+        )}
+      >
+        <Snackbar />
+      </SnackbarProvider>
+      <BrowserRouter>
+        <Suspense fallback={<CubeSpinner />}>
+          <Routes>
+            <Route
+              path={"/"}
+              Component={() => <GroupName leftMenuData={leftMenuData} />}
+            />
+            <Route
+              path={"/:group/:name"}
+              Component={() => <GroupName leftMenuData={leftMenuData} />}
+            />
+            <Route path="*" Component={HTTP404} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
     </Provider>
   )
 }

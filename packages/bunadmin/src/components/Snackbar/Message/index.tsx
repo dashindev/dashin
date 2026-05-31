@@ -1,21 +1,8 @@
 import React, { useState } from "react"
 import { EnhancedStore, AnyAction } from "@reduxjs/toolkit"
 import { ThunkMiddlewareFor } from "@reduxjs/toolkit/src/getDefaultMiddleware"
-import PropTypes from "prop-types"
 import { SnackbarKey, SnackbarMessage, useSnackbar } from "notistack"
-import Collapse from "@mui/material/Collapse"
-import Paper from "@mui/material/Paper"
-import Typography from "@mui/material/Typography"
-import Card from "@mui/material/Card"
-import CardActions from "@mui/material/CardActions"
-import Button from "@mui/material/Button"
-import IconButton from "@mui/material/IconButton"
-import CloseIcon from "@mui/icons-material/Close"
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
-import CheckCircleIcon from "@mui/icons-material/OpenInNew"
-import { useStyles } from "./styles"
 import { SeverityType } from "@/core/notice/types"
-import { useTheme } from "@mui/material/styles"
 import { useSelector } from "react-redux"
 import { selectNotice, toggleNotifyDrawer } from "@/slices/noticeSlice"
 import { useTranslation } from "react-i18next"
@@ -31,23 +18,19 @@ type Props = {
   message: SnackbarMessage
 }
 
+const gradients: Record<string, string> = {
+  success: "from-green-400/90 to-gray-300/90",
+  error: "from-red-400/90 to-gray-300/90",
+  warning: "from-amber-400/90 to-gray-300/90",
+  info: "from-sky-400/90 to-gray-300/90"
+}
+
 const SnackMessage = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { t } = useTranslation()
   const notice = useSelector(selectNotice)
-
-  const theme = useTheme()
-  const classes = useStyles()
   const { closeSnackbar } = useSnackbar()
   const [expanded, setExpanded] = useState(false)
   const [state, setState] = useState<State>({})
-
-  const colors = {
-    none: null,
-    success: `linear-gradient(45deg, ${theme.palette.success.light} 30%, rgba(200, 200, 200, 0.88) 125%)`,
-    error: `linear-gradient(45deg, ${theme.palette.error.light} 30%, rgba(200, 200, 200, 0.88) 125%)`,
-    warning: `linear-gradient(45deg, ${theme.palette.warning.light} 30%, rgba(200, 200, 200, 0.88) 125%)`,
-    info: `linear-gradient(45deg, ${theme.palette.info.light} 30%, rgba(200, 200, 200, 0.88) 125%)`
-  }
 
   React.useEffect(() => {
     setState({
@@ -56,74 +39,45 @@ const SnackMessage = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     })
   }, [notice])
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded)
-  }
-
-  const handleDismiss = () => {
-    closeSnackbar(props.id)
-  }
+  const handleDismiss = () => closeSnackbar(props.id)
 
   return (
-    <Card
+    <div
       ref={ref}
-      component="div"
-      style={{
-        // theme.bunadmin.iconColor // theme.palette.primary.light
-        background: colors[state.severity || "success"],
-        transition: "width .2s ease-in-out"
-      }}
-      className={classes.card}
+      className={`min-w-[344px] max-w-[400px] rounded bg-gradient-to-br text-white shadow-md ${
+        gradients[state.severity || "success"]
+      }`}
     >
-      <CardActions classes={{ root: classes.actionRoot }}>
-        <Typography variant="subtitle2" className={classes.typography}>
-          {props.message}
-        </Typography>
-        <div className={classes.icons}>
+      <div className="flex items-center justify-between py-2 pl-4 pr-2">
+        <span className="text-sm font-bold">{props.message}</span>
+        <div className="flex">
           {state.content && (
-            <IconButton
+            <button
               aria-label="Show more"
-              color="inherit"
-              className={
-                expanded
-                  ? `${classes.expand} ${classes.expandOpen}`
-                  : classes.expand
-              }
-              onClick={handleExpandClick}
-              size="large"
+              onClick={() => setExpanded(!expanded)}
+              className={`p-2 transition-transform ${expanded ? "rotate-180" : ""}`}
             >
-              <ExpandMoreIcon />
-            </IconButton>
+              ⌄
+            </button>
           )}
-          <IconButton
-            color="inherit"
-            className={classes.expand}
-            onClick={handleDismiss}
-            size="large"
-          >
-            <CloseIcon />
-          </IconButton>
+          <button onClick={handleDismiss} className="p-2">
+            ✕
+          </button>
         </div>
-      </CardActions>
-      <Collapse
-        in={expanded}
-        timeout="auto"
-        unmountOnExit
-        addEndListener={undefined}
-      >
-        <Paper className={classes.collapse}>
-          <Typography gutterBottom>{state.content}</Typography>
-          <Button
-            size="small"
-            className={classes.button}
+      </div>
+      {expanded && state.content && (
+        <div className="bg-white p-4 text-gray-800">
+          <p className="mb-2">{state.content}</p>
+          <button
             onClick={() => props.store.dispatch(toggleNotifyDrawer())}
+            className="flex items-center text-sm text-gray-400 hover:text-gray-600"
           >
-            <CheckCircleIcon className={classes.checkIcon} />
+            <span className="pr-1">↗</span>
             {t("Open List")}
-          </Button>
-        </Paper>
-      </Collapse>
-    </Card>
+          </button>
+        </div>
+      )}
+    </div>
   )
 })
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import { Type } from "@/core/menu/types"
-import { Box, Link, Button } from "@mui/material"
 import dynamic from "next/dynamic"
 import TableSkeleton from "@/components/Table/components/TableSkeleton"
 import Head from "next/head"
@@ -8,31 +7,17 @@ import { MDXProvider } from "@mdx-js/react"
 import { ParsedUrlQuery } from "querystring"
 import { useRouter } from "next/router"
 import { defaultTheme, DynamicDocRoute, ENV } from "@/utils"
-import { createTheme } from "@mui/material/styles"
-import {
-  ThemeProvider,
-  Theme,
-  StyledEngineProvider,
-  makeStyles
-} from "@mui/styles"
 
 import PrismHighlight, { defaultProps } from "prism-react-renderer"
 import EvaIcon from "react-eva-icons"
 import DefaultLayout from "@/private/DefaultLayout"
 import Error from "@/private/Error"
 
-declare module "@mui/styles/defaultTheme" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
-
-// import prismTheme from "prism-react-renderer/themes/vsDark"
 const prismCss = "/assets/css/prism.css"
 
 const REMOTE_BRANCH = "https://github.com/xbuilder/bunadmin/blob/master"
 
 export default function DocsCategorySlug() {
-  const classes = useStyles()
   const router = useRouter()
   const { category, slug } = router.query as ParsedUrlQuery
   const [pagination, setPagination] = useState<PaginationType>({})
@@ -94,86 +79,92 @@ export default function DocsCategorySlug() {
         </title>
         {<link rel="stylesheet" href={prismCss} />}
       </Head>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={theme}>
-          <DefaultLayout leftMenu={{ data: menuData, offLeftSetting: true }}>
-            {slug ? (
-              <Box className={classes.DocsBox} p={3} pt={1}>
-                <DocsHeader />
-                <MDXProvider components={{ code: Code }}>
-                  <DocsComponent />
-                </MDXProvider>
-                <DocsPagination />
-              </Box>
-            ) : (
-              <Error statusCode={404} hasLayout={false} />
-            )}
-          </DefaultLayout>
-        </ThemeProvider>
-      </StyledEngineProvider>
+      <DefaultLayout leftMenu={{ data: menuData, offLeftSetting: true }}>
+        {slug ? (
+          <div className="docs-box p-6 pt-2 text-base [&_code]:rounded [&_code]:border [&_code]:border-gray-200 [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-primary [&_em]:opacity-50 [&_h1,&_h2]:text-primary [&_h1,&_h2,&_h3,&_h4,&_h5]:font-normal [&_h1]:text-[28px] [&_pre]:text-sm [&_.language-shell]:bg-[#e2e6f1]">
+            <DocsHeader />
+            <MDXProvider components={{ code: Code }}>
+              <DocsComponent />
+            </MDXProvider>
+            <DocsPagination />
+          </div>
+        ) : (
+          <Error statusCode={404} hasLayout={false} />
+        )}
+      </DefaultLayout>
     </>
   )
 
   function DocsHeader() {
     return (
-      <Box position="relative" display="flex" justifyContent="flex-end">
-        <Button
-          className={classes.DocsEditThis}
-          component="a"
+      <div className="relative flex justify-end">
+        <a
           href={
             REMOTE_BRANCH +
             `/plugins/${bunadminDocPath}/${category}/${slug}.mdx`
           }
           target="_blank"
           rel="noopener nofollow"
-          size="small"
+          className="absolute top-2 text-sm text-primary hover:underline"
         >
           Edit this page
-        </Button>
-      </Box>
+        </a>
+      </div>
     )
   }
 
   function DocsPagination() {
     return (
-      <Box
-        className={classes.DocsPagination}
-        display="flex"
-        justifyContent="space-between"
-      >
-        <Link href="#" onClick={() => pagePush(pagination.previous)}>
+      <div className="mt-6 flex justify-between rounded border border-gray-200 bg-[#EDF1F7] p-2">
+        <a
+          href="#"
+          onClick={e => {
+            e.preventDefault()
+            pagePush(pagination.previous)
+          }}
+        >
           {pagination.previous ? (
-            <Box display="flex" alignItems="center">
+            <div className="flex items-center">
               <EvaIcon
                 name="arrow-ios-back-outline"
                 size="xlarge"
                 fill="gray"
               />
-              <Box ml={1}>
-                <span>PREVIOUS</span>
-                <h5>{pagination.previous.title}</h5>
-              </Box>
-            </Box>
+              <div className="ml-2">
+                <span className="text-base text-gray-500">PREVIOUS</span>
+                <h5 className="mb-0 mt-2 text-lg font-semibold text-gray-800">
+                  {pagination.previous.title}
+                </h5>
+              </div>
+            </div>
           ) : (
-            <Box />
+            <div />
           )}
-        </Link>
+        </a>
         {pagination.next && (
-          <Link href="#" onClick={() => pagePush(pagination.next)}>
-            <Box display="flex" alignItems="center">
-              <Box mr={1} textAlign="right">
-                <span>NEXT</span>
-                <h5>{pagination.next.title}</h5>
-              </Box>
+          <a
+            href="#"
+            onClick={e => {
+              e.preventDefault()
+              pagePush(pagination.next)
+            }}
+          >
+            <div className="flex items-center">
+              <div className="mr-2 text-right">
+                <span className="text-base text-gray-500">NEXT</span>
+                <h5 className="mb-0 mt-2 text-lg font-semibold text-gray-800">
+                  {pagination.next.title}
+                </h5>
+              </div>
               <EvaIcon
                 name="arrow-ios-forward-outline"
                 size="xlarge"
                 fill="gray"
               />
-            </Box>
-          </Link>
+            </div>
+          </a>
         )}
-      </Box>
+      </div>
     )
   }
 
@@ -205,73 +196,6 @@ export default function DocsCategorySlug() {
         )}
       </PrismHighlight>
     )
-  }
-
-  function theme() {
-    return createTheme({
-      ...defaultTheme,
-      typography: {
-        fontSize: 14,
-        h1: {
-          fontWeight: 500
-        }
-      }
-    })
-  }
-
-  function useStyles() {
-    return makeStyles(theme => ({
-      DocsEditThis: {
-        position: "absolute",
-        top: theme.spacing(1)
-      },
-      DocsBox: {
-        fontSize: 16,
-        "& h1": {
-          fontSize: 28
-        },
-        "& h1, & h2": {
-          color: defaultTheme.palette.primary.main
-        },
-        "& h1, & h2, & h3, & h4, & h5": {
-          fontWeight: 400
-        },
-        "& em": {
-          opacity: 0.5
-        },
-        "& code": {
-          padding: "0.1em 0.2em",
-          backgroundColor: defaultTheme.palette.background.default,
-          border: "1px solid #e6eaf0",
-          borderRadius: "0.3rem",
-          color: defaultTheme.palette.primary.main
-        },
-        "& pre": {
-          fontSize: 14
-        },
-        "& .language-shell": {
-          background: "#e2e6f1"
-        }
-      },
-      DocsPagination: {
-        marginTop: theme.spacing(3),
-        padding: theme.spacing(1),
-        backgroundColor: "#EDF1F7",
-        border: "1px solid #EEE",
-        borderRadius: "0.3rem",
-        "& span": {
-          color: "#666",
-          fontSize: 16
-        },
-        "& h5": {
-          color: "#333",
-          fontSize: 18,
-          marginTop: theme.spacing(2),
-          marginBottom: 0,
-          fontWeight: 600
-        }
-      }
-    }))()
   }
 }
 

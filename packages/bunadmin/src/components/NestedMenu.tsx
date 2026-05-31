@@ -1,36 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { Theme } from "@mui/material/styles"
-import { makeStyles } from "@mui/styles"
-import List from "@mui/material/List"
-import ListItem from "@mui/material/ListItem"
-import ListItemIcon from "@mui/material/ListItemIcon"
-import ListItemText from "@mui/material/ListItemText"
-import Collapse from "@mui/material/Collapse"
 import { Type } from "@/core/menu/types"
 import MenuIcon from "./MenuIcon"
 import { useRouter } from "@/router"
 import { DynamicRoute, DynamicDocRoute } from "@/utils/routes"
-import ExpandLess from "@mui/icons-material/ExpandLess"
-import ExpandMore from "@mui/icons-material/ExpandMore"
 import { useTranslation } from "react-i18next"
 import { SETTING_NAMES, specialPluginSlug } from "@/utils"
 import { BA_DB } from "@/utils/database"
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-    padding: 0
-  },
-  nested: {
-    paddingLeft: theme.spacing(5),
-    transition: "padding-left 0.5s ease"
-  },
-  expandIcon: {
-    color: theme.bunadmin.iconColor
-  }
-}))
 
 interface Props {
   data: Type[]
@@ -40,7 +15,6 @@ export default function NestedList({ data }: Props): any {
   const { t } = useTranslation("plugins")
   const router = useRouter()
   let { group: qGroup = "", name: qName } = router.query
-  const classes = useStyles()
   const [open, setOpen] = useState({} as { [key: string]: boolean })
   const [currentRole, setCurrentRole] = useState("")
   const [parentMenus, setParentMenus] = useState<string[]>([])
@@ -52,12 +26,10 @@ export default function NestedList({ data }: Props): any {
   }
 
   useEffect(() => {
-    // set default opened parent
     if (typeof qGroup === "object") return
     const parent = qGroup.replace("docs/", "")
     handleOpen({ name: parent })
     ;(async () => {
-      // query role from bunadmin_setting
       const db = BA_DB
       const settingRes = await db.settings
         .where("name")
@@ -66,7 +38,6 @@ export default function NestedList({ data }: Props): any {
       const role = (settingRes && settingRes.value) || ""
       setCurrentRole(role)
     })()
-    // mapping menu data
     const parentTmp: string[] = []
     data.map(item => {
       if (item.parent && item.parent !== "" && !parentTmp.includes(item.parent))
@@ -74,7 +45,6 @@ export default function NestedList({ data }: Props): any {
     })
     setParentMenus(parentTmp)
 
-    // Open the root menu of the selected submenu
     if (selectedRootName) {
       setOpen({
         ...open,
@@ -102,7 +72,6 @@ export default function NestedList({ data }: Props): any {
         if (router.route === DynamicDocRoute) {
           return router.push(DynamicDocRoute, slug)
         }
-
         router.push(DynamicRoute, slug)
       } else {
         router.push(slug)
@@ -114,28 +83,21 @@ export default function NestedList({ data }: Props): any {
 
   if (data.length === 0) return null
 
-  // sorting
   data = [...data]
   data = data.sort(function(a, b) {
     return Number(b.rank) - Number(a.rank)
   })
 
-  // handing role
   function isAllowedRole(currentRole: string, allowedRole: string): boolean {
     const currentRoles: string[] = currentRole.split(",")
     const allowedRoles: string[] = allowedRole.split(",")
 
     for (let i = 0; i < currentRoles.length; i++) {
-      // both are Array
       if (allowedRoles.includes(currentRoles[i])) return true
-      // currentRole is Array, allowedRole is String
       if (allowedRole === currentRoles[i]) return true
     }
 
-    // currentRole is String, allowedRole is Array
     if (allowedRoles.includes(currentRole)) return true
-
-    // both are String
     if (allowedRole && allowedRole !== currentRole) return false
 
     return false
@@ -148,43 +110,38 @@ export default function NestedList({ data }: Props): any {
         .map(item => {
           const { name, label, icon, icon_type, role } = item
 
-          // Check the role
           if (role && !isAllowedRole(currentRole, role)) return null
 
           let { slug } = item
           if (slug) slug = specialPluginSlug(slug)
 
+          const hasChildren = data.filter(i => i.parent === name).length > 0
+
           return (
-            <List key={name} component="nav" className={classes.root}>
-              <ListItem
-                button
-                selected={slug === `/${qGroup}/${qName}`}
+            <ul key={name} className="w-full max-w-[360px] bg-white p-0 list-none">
+              <li
+                className={`flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100 ${slug === `/${qGroup}/${qName}` ? "bg-gray-200" : ""}`}
                 onClick={() => handleClick({ name, slug })}
               >
-                <ListItemIcon>
+                <span className="mr-3 flex items-center">
                   <MenuIcon name={name} icon={icon} icon_type={icon_type} />
-                </ListItemIcon>
-                <ListItemText primary={t(label || name)} />
-                {/* Expand Icon */}
-                {data.filter(item => item.parent === name).length > 0 &&
-                  (open[name] ? (
-                    <ExpandLess
-                      fontSize="small"
-                      className={classes.expandIcon}
-                    />
-                  ) : (
-                    <ExpandMore
-                      fontSize="small"
-                      className={classes.expandIcon}
-                    />
-                  ))}
-              </ListItem>
+                </span>
+                <span className="flex-1 text-sm">{t(label || name)}</span>
+                {hasChildren && (
+                  <span className="text-[#8f9bb3] text-sm">
+                    {open[name] ? (
+                      <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+                    ) : (
+                      <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+                    )}
+                  </span>
+                )}
+              </li>
               {/* Collapse */}
-              <Collapse in={open[name]} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  {/* Submenus */}
+              {hasChildren && (
+                <ul className={`list-none p-0 overflow-hidden transition-all duration-300 ${open[name] ? "max-h-96" : "max-h-0"}`}>
                   {data
-                    .filter(item => item.parent === name)
+                    .filter(i => i.parent === name)
                     .map(item => {
                       const { name, label, parent } = item
                       let { slug } = item
@@ -195,20 +152,18 @@ export default function NestedList({ data }: Props): any {
                         setSelectedRootName(parent)
 
                       return (
-                        <ListItem
+                        <li
                           key={name}
-                          button
-                          className={classes.nested}
-                          selected={isSelected}
+                          className={`pl-10 pr-4 py-2 cursor-pointer transition-[padding-left] duration-500 ease-in-out hover:bg-gray-100 ${isSelected ? "bg-gray-200" : ""}`}
                           onClick={() => handleClick({ name, slug })}
                         >
-                          <ListItemText primary={t(label || name)} />
-                        </ListItem>
+                          <span className="text-sm">{t(label || name)}</span>
+                        </li>
                       )
                     })}
-                </List>
-              </Collapse>
-            </List>
+                </ul>
+              )}
+            </ul>
           )
         })}
     </>

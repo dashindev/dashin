@@ -1,35 +1,15 @@
-import { createTheme } from "@mui/material/styles"
-import { red } from "@mui/material/colors"
-
+/**
+ * Plain theme object (MUI createTheme removed).
+ * Keeps the `bunadmin` namespace and a minimal `palette` shape that the
+ * remaining consumers read (e.g. _document theme-color, tableIcons iconColor).
+ * Visual styling now lives in Tailwind (see src/tailwind.css + tailwind.config.js).
+ */
 const iconColor = "#8f9bb3"
 const contentBg = "#EDF1F7"
 const contentBoxBg = "#FFF"
 export const JSON_VIEW_BG = "rgba(143, 155, 179, 0.3)"
-const bodyBg = contentBg
 
-declare module "@mui/material/styles/createTheme" {
-  interface Theme {
-    // add eva icon fill default value
-    bunadmin: {
-      iconColor: string
-      contentBg: string
-      contentBoxBg: string
-      jsonViewBg: string
-    }
-  }
-  // allow configuration using `createTheme`
-  interface ThemeOptions {
-    bunadmin?: {
-      iconColor?: string
-      contentBg?: string
-      contentBoxBg?: string
-      jsonViewBg?: string
-    }
-  }
-}
-
-// Create a defaultTheme instance.
-const defaultTheme = createTheme({
+const defaultTheme = {
   bunadmin: {
     iconColor,
     contentBg,
@@ -37,186 +17,13 @@ const defaultTheme = createTheme({
     jsonViewBg: JSON_VIEW_BG
   },
   palette: {
-    primary: {
-      main: "#36f"
-    },
-    secondary: {
-      main: "#00d68f"
-    },
-    error: {
-      main: red.A400
-    },
-    background: {
-      default: bodyBg
-    }
-  },
-  typography: {
-    fontFamily:
-      '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
-    body1: {
-      fontSize: ".8125rem",
-      fontWeight: 600,
-      letterSpacing: 0.8
-    }
-  },
-  components: {
-    // component name
-    MuiMenuItem: {
-      styleOverrides: {
-        root: {
-          letterSpacing: 0.8
-        }
-      }
-    },
-    MuiListItem: {
-      styleOverrides: {
-        button: {
-          borderLeft: "1px solid #fff",
-          borderTopRightRadius: 10,
-          borderBottomRightRadius: 10
-        }
-      }
-    },
-    MuiListItemIcon: {
-      styleOverrides: {
-        root: {
-          color: iconColor,
-          minWidth: 35
-        }
-      }
-    },
-    MuiButton: {
-      styleOverrides: {
-        containedPrimary: {
-          "&:hover": {
-            backgroundColor: "#598bff"
-          }
-        }
-      }
-    },
-    // cssBaseLine
-    MuiCssBaseline: {
-      styleOverrides: theme => /*css*/ `
-
-        /* body */
-        body {
-            background: ${bodyBg};
-        }
-
-        img {
-            width: 100%;
-        }
-
-        /* scrollbar start */
-        *::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        *::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.00);
-        }
-
-        *::-webkit-scrollbar-thumb {
-            cursor: pointer;
-            border: 2px solid white;
-            border-radius: 4px;
-            background-color: rgba(0, 0, 0, .3);
-        }
-
-        /* scrollbar end */
-
-        /* eva icon */
-        .eva-hover {
-            display: inherit;
-            font-size: 0;
-        }
-
-        /* Table */
-        .MuiTable-root .MuiTableHead-root {
-            display: block;
-        }
-
-        .MuiTable-root .MuiTableBody-root {
-            display: block;
-            overflow-y: scroll;
-            height: calc(100vh - 292px)
-        }
-
-        /* fix MuiTableBody inside MuiDrawer */
-        .MuiDrawer-root .MuiTable-root .MuiTableBody-root {
-            height: calc(100vh - 255px);
-        }
-
-        /* MuiTable icon */
-        .MuiTable-root .MuiIconButton-root {
-            color: ${iconColor};
-        }
-
-        .MuiTable-root .MuiIconButton-root.Mui-disabled {
-            opacity: 0.5;
-        }
-
-        /* table filter MuiOutlinedInput */
-        .MuiTable-root .MuiOutlinedInput-input {
-            padding: 8px 12px;
-        }
-
-        /* left menu */
-        [class*=drawerClose] nav .MuiListItem-root .MuiListItemText-root span {
-            height: 0;
-            display: inline-block;
-            overflow: hidden;
-        }
-
-        /* root */
-        nav .MuiList-root {
-            padding-right: 8px;
-            padding-top: 2px;
-        }
-
-        nav .MuiListItem-root {
-            padding-top: 4px;
-            padding-bottom: 4px;
-        }
-
-        nav .MuiListItem-button:hover,
-        nav .MuiListItem-root.Mui-selected,
-        nav .MuiListItem-root.Mui-selected:hover {
-            border-left: 3px solid #36f;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            background: #edf1f7;
-            transition: all ease-in-out 0.2s;
-        }
-
-        [class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemText-root span {
-            overflow: visible;
-            white-space: nowrap;
-            transform: translateX(0);
-            transition: 1s;
-            min-width: 50px;
-        }
-
-        /* text only */
-        [class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemText-root span:hover {
-            transform: translateX(calc(50px - 100%));
-        }
-
-        [class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root {
-            padding-left: 20px;
-            transition: padding-left 0.5s ease;
-        }
-
-        /* child text with icon */
-        [class*=drawerClose] nav .MuiCollapse-root .MuiListItem-root .MuiListItemIcon-root+.MuiListItemText-root span {
-            overflow: hidden;
-        }
-
-`
-    }
+    primary: { main: "#36f" },
+    secondary: { main: "#00d68f" },
+    error: { main: "#ff1744" },
+    background: { default: contentBg }
   }
-})
+}
 
-defaultTheme.shadows[1] = "0 0.5rem 1rem 0 rgba(44,51,73,.1)"
+export type DefaultTheme = typeof defaultTheme
 
 export default defaultTheme

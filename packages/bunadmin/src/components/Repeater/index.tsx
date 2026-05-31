@@ -1,57 +1,13 @@
 import React, { useState } from "react"
-import { Theme } from "@mui/material/styles"
-import { makeStyles } from "@mui/styles"
-import Accordion from "@mui/material/Accordion"
-import AccordionDetails from "@mui/material/AccordionDetails"
-import AccordionSummary from "@mui/material/AccordionSummary"
-import Typography from "@mui/material/Typography"
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
-import { AccordionActions, IconButton, Paper, Button } from "@mui/material"
-import DeleteIcon from "@mui/icons-material/Clear"
-import SortIcon from "@mui/icons-material/DragHandle"
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    width: "100%"
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: "33.33%",
-    flexShrink: 0
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
-  },
-  item: {
-    position: "relative"
-  },
-  actions: {
-    position: "absolute",
-    right: theme.spacing(5),
-    top: theme.spacing(0),
-    zIndex: theme.zIndex.drawer - 1,
-    minHeight: theme.spacing(6),
-    transition: "min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
-  },
-  actions_expanded: {
-    minHeight: theme.spacing(8)
-  },
-  addNewItem: {
-    marginTop: 1,
-    paddingTop: theme.spacing(2),
-    backgroundColor: "#FFF"
-  }
-}))
 
 export type RepeaterDetailProps<T> = T & { index: number }
 
 interface RepeaterProps<T> {
   data: any[]
-  title?: string // item title or
-  titleKey?: string // key of item title, if existed will overwrite title
-  summary?: string // item summary
-  summaryKey?: string // key of item summary, if existed will overwrite summary
+  title?: string
+  titleKey?: string
+  summary?: string
+  summaryKey?: string
   detail(props: RepeaterDetailProps<T>, index: number): JSX.Element
   deletable?: boolean
   onCreate?: () => void
@@ -71,30 +27,28 @@ export default function Repeater({
   onCreate,
   onDelete
 }: RepeaterProps<any>) {
-  const classes = useStyles()
   const [expanded, setExpanded] = useState<number | false>(false)
 
   const handleChange = (panel: number) => (
-    _event: React.ChangeEvent<{}>,
+    _event: React.MouseEvent,
     isExpanded: boolean
   ) => {
     setExpanded(isExpanded ? panel : false)
   }
 
   return (
-    <div className={classes.root}>
+    <div className="w-full">
       {data.map((item = {}, i) => (
-        <Paper key={i} className={classes.item}>
-          <AccordionActions
-            className={
-              expanded === i
-                ? `${classes.actions} ${classes.actions_expanded}`
-                : classes.actions
-            }
+        <div key={i} className="relative rounded shadow mb-2">
+          {/* Actions row */}
+          <div
+            className={`absolute right-10 top-0 z-10 flex items-center ${
+              expanded === i ? "min-h-[64px]" : "min-h-[48px]"
+            } transition-all`}
           >
             {deletable && (
-              <IconButton
-                size="small"
+              <button
+                className="p-1 text-gray-500 hover:text-danger"
                 aria-label="delete"
                 onClick={() => {
                   if (!onDelete) return
@@ -105,38 +59,55 @@ export default function Repeater({
                   }
                 }}
               >
-                <DeleteIcon fontSize="small" />
-              </IconButton>
+                {/* Clear/Delete icon */}
+                <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+              </button>
             )}
             {sortable && (
-              <IconButton size="small" aria-label="sort">
-                <SortIcon fontSize="small" />
-              </IconButton>
+              <button className="p-1 text-gray-500" aria-label="sort">
+                {/* DragHandle icon */}
+                <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                  <path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z" />
+                </svg>
+              </button>
             )}
-          </AccordionActions>
-          <Accordion expanded={expanded === i} onChange={handleChange(i)}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1bh-content"
-              id="panel1bh-header"
+          </div>
+
+          {/* Accordion header */}
+          <button
+            className="flex w-full items-center px-4 py-3 text-left"
+            onClick={(e) => handleChange(i)(e, expanded !== i)}
+          >
+            <span className="flex-shrink-0 basis-1/3 text-sm font-medium">
+              {titleKey
+                ? handleKeyPoints(item, titleKey) || title || i + 1
+                : title || i + 1}
+            </span>
+            <span className="flex-1 text-sm text-gray-500">
+              {(summaryKey && handleKeyPoints(item, summaryKey)) || summary}
+            </span>
+            {/* ExpandMore icon */}
+            <svg
+              className={`h-5 w-5 fill-current text-gray-400 transition-transform ${
+                expanded === i ? "rotate-180" : ""
+              }`}
+              viewBox="0 0 24 24"
             >
-              <Typography className={classes.heading}>
-                {titleKey
-                  ? handleKeyPoints(item, titleKey) || title || i + 1
-                  : title || i + 1}
-              </Typography>
-              <Typography className={classes.secondaryHeading}>
-                {(summaryKey && handleKeyPoints(item, summaryKey)) || summary}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>{detail({ ...item }, i)}</AccordionDetails>
-          </Accordion>
-        </Paper>
+              <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
+            </svg>
+          </button>
+
+          {/* Accordion detail */}
+          {expanded === i && (
+            <div className="px-4 pb-4">{detail({ ...item }, i)}</div>
+          )}
+        </div>
       ))}
-      <Button
-        className={classes.addNewItem}
-        fullWidth={true}
-        color="primary"
+
+      <button
+        className="mt-px w-full rounded bg-white pt-4 pb-3 text-sm font-medium uppercase text-primary hover:bg-primary/10"
         onClick={() => {
           if (!onCreate) return
           onCreate()
@@ -144,7 +115,7 @@ export default function Repeater({
         }}
       >
         ADD NEW ITEM
-      </Button>
+      </button>
     </div>
   )
 

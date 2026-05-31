@@ -1,20 +1,20 @@
 import React from "react"
-import { withSnackbar, WithSnackbarProps } from "notistack"
+import { useSnackbar } from "notistack"
 import { useSelector } from "react-redux"
 import { selectNotice } from "@/slices/noticeSlice"
 
-function Snackbar(props: WithSnackbarProps) {
+export default function Snackbar() {
   const notice = useSelector(selectNotice)
+  const { enqueueSnackbar } = useSnackbar()
 
   React.useEffect(() => {
     if (notice.title === "init-notice") return
 
-    props.enqueueSnackbar(notice.title, {
+    enqueueSnackbar(notice.title, {
       variant: notice.severity || "success"
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notice.key])
 
   return null
 }
-
-export default withSnackbar(Snackbar)

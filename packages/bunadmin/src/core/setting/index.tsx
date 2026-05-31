@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 
-import { useTheme } from "@mui/material/styles"
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 
 import Table, { TableHead } from "@/components/Table"
@@ -10,9 +9,10 @@ import { Schema } from "./schema"
 import { useTranslation } from "react-i18next"
 import { BA_DB, ISetting } from "@/utils/database"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+
 export default function AuthInfoContainer() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const [data, setData] = useState<ISetting[]>([])
 
   React.useEffect(() => {

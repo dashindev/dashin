@@ -1,11 +1,6 @@
 import React from "react"
 import EvaIcon, { EvaIconProps } from "react-eva-icons"
 import { LocalDataRoute } from "../routes"
-import { Theme } from "@mui/material/styles"
-
-interface Param {
-  theme: Theme
-}
 
 interface Res {
   name: string
@@ -13,39 +8,27 @@ interface Res {
   icon: React.ReactElement<EvaIconProps>
 }
 
-export const settingMenus = ({ theme }: Param) =>
+export const settingMenus = (_opts?: any) =>
   [
     {
       name: "Menu Setting",
       route: LocalDataRoute.leftMenu,
       icon: (
-        <EvaIcon
-          name="link-outline"
-          size="large"
-          fill={theme.bunadmin.iconColor}
-        />
+        <EvaIcon name="link-outline" size="large" fill="#8f9bb3" />
       )
     },
     {
       name: "Schema Manager",
       route: LocalDataRoute.schema,
       icon: (
-        <EvaIcon
-          name="layers-outline"
-          size="large"
-          fill={theme.bunadmin.iconColor}
-        />
+        <EvaIcon name="layers-outline" size="large" fill="#8f9bb3" />
       )
     },
     {
       name: "Data Migration",
       route: LocalDataRoute.migration,
       icon: (
-        <EvaIcon
-          name="sync-outline"
-          size="large"
-          fill={theme.bunadmin.iconColor}
-        />
+        <EvaIcon name="sync-outline" size="large" fill="#8f9bb3" />
       )
     }
   ] as Res[]

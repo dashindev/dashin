@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react"
 
-import { useTheme } from "@mui/material/styles"
-import { makeStyles } from "@mui/styles"
 import { TableDefaultProps as DefaultProps } from "@/components/Table/models/defaultProps"
 
 import Table, { TableHead } from "@/components/Table"
@@ -21,6 +19,8 @@ import { BA_DB, INotification } from "@/utils/database"
 import { EnhancedStore, AnyAction } from "@reduxjs/toolkit"
 import { ThunkMiddlewareFor } from "@reduxjs/toolkit/dist/getDefaultMiddleware"
 
+const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+
 type Props = {
   store: EnhancedStore<any, AnyAction, [ThunkMiddlewareFor<any>]>
   drawerWidth?: string
@@ -28,7 +28,6 @@ type Props = {
 
 export default function NoticeContainer(props: Props) {
   const { t } = useTranslation("table")
-  const theme = useTheme()
   const notice = useSelector(selectNotice)
   const [data, setData] = useState<INotification[]>([])
   const [selData, setSelData] = useState<Type[]>()
@@ -39,15 +38,6 @@ export default function NoticeContainer(props: Props) {
   })
   const [CustomNotification, setCustomNotification] = useState()
   const [tab, setTab] = useState(0)
-
-  const useStyles = makeStyles(() => ({
-    root: {
-      "& .MTableToolbar-title": {
-        display: "none"
-      }
-    }
-  }))
-  const classes = useStyles()
 
   useEffect(() => {
     ;(async () => {
@@ -84,7 +74,7 @@ export default function NoticeContainer(props: Props) {
       buttonHidden
       switchDrawer={notice.showDrawer}
     >
-      <div className={CustomNotification && classes.root}>
+      <div className={CustomNotification ? "[&_.MTableToolbar-title]:hidden" : ""}>
         <>
           <TableHead title={t(Schema.title)} />
           {CustomNotification && <NoticeTabs t={t} tab={tab} setTab={setTab} />}
@@ -121,13 +111,7 @@ export default function NoticeContainer(props: Props) {
               // detailPanel
               detailPanel={rowData => {
                 return (
-                  <div
-                    style={{
-                      color: "white",
-                      backgroundColor: theme.bunadmin.iconColor,
-                      padding: "10px 30px"
-                    }}
-                  >
+                  <div className="bg-icon-muted px-8 py-3 text-white">
                     {rowData.content || "CONTENT IS EMPTY"}
                   </div>
                 )

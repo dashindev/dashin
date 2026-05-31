@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { EnhancedStore, AnyAction } from "@reduxjs/toolkit"
 import { ThunkMiddlewareFor } from "@reduxjs/toolkit/src/getDefaultMiddleware"
-import IconButton from "@mui/material/IconButton"
-import EvaIcon from "react-eva-icons"
-import { useTheme } from "@mui/material/styles"
-import Badge from "@mui/material/Badge"
 import { ENV, NoticePlugin } from "@/utils"
 import NoticeContainer from "@/core/notice"
 import { toggleNotifyDrawer } from "@/slices/noticeSlice"
@@ -14,8 +10,6 @@ type Props = {
 } & NoticePlugin
 
 export default function NoticeMenu(props: Props) {
-  const theme = useTheme()
-
   const [intervalID, setIntervalID] = useState<NodeJS.Timeout>()
   const ref = React.useRef()
   const [count, setCount] = useState(0)
@@ -25,7 +19,6 @@ export default function NoticeMenu(props: Props) {
   }
 
   async function queryCount() {
-    // Handle dynamic import `plugins`
     const { notificationCount }: NoticePlugin = props
     try {
       if (!notificationCount) return
@@ -44,7 +37,6 @@ export default function NoticeMenu(props: Props) {
 
   useEffect(() => {
     if (!ENV.ON_NOTIFICATION_INTERVAL_COUNT) {
-      // Disabling interval counting is helpful for debugging or reducing server load
       return
     }
 
@@ -59,29 +51,29 @@ export default function NoticeMenu(props: Props) {
       await queryCount()
     }, 3000)
 
-    // cache intervalID
     setIntervalID(id)
   }, [ref.current])
 
   return (
-    // Notice Icon
     <div>
-      <IconButton
+      <button
         aria-label="account of current user"
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleMenu}
-        color="inherit"
-        size="large">
-        <Badge badgeContent={count} color="primary">
-          <EvaIcon
-            name="bell-outline"
-            size="medium"
-            fill={theme.bunadmin.iconColor}
-          />
-        </Badge>
-      </IconButton>
+        className="relative inline-flex items-center justify-center rounded p-2 text-icon-muted hover:bg-gray-100"
+      >
+        {/* bell-outline */}
+        <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+        </svg>
+        {count > 0 && (
+          <span className="absolute top-0.5 right-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white">
+            {count}
+          </span>
+        )}
+      </button>
       <NoticeContainer store={props.store} />
     </div>
-  );
+  )
 }

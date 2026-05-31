@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react"
 
-import Divider from "@mui/material/Divider"
 import NestedList from "./NestedMenu"
 import SettingMenu from "./SettingMenu"
 import { Type } from "@/core/menu/types"
@@ -30,7 +29,7 @@ const LeftMenu = ({
       {prepend}
       {leftMenuData && <NestedList data={leftMenuData} />}
       {appendNested}
-      {!hideDivider && <Divider style={{ marginTop: 8 }} />}
+      {!hideDivider && <hr className="mt-2 border-gray-200" />}
       {prependSetting}
       {!offLeftSetting && ENV.ON_SETTING && <SettingMenu />}
       {append}

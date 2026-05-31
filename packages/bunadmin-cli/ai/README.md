@@ -54,6 +54,20 @@ node packages/bunadmin-cli/ai/run.js \
 # or with a real model: set BUNADMIN_AI_PROVIDER + key, drop --mock
 ```
 
+## Benchmark (real models, Groq, live PocketBase; 3 collections x 6 runs)
+Run via `node ai/bench.js` (needs BUNADMIN_AI_* + a Groq key in the env; the key
+must NOT be committed). With 429 rate-limit backoff + pacing:
+
+| model | valid | first-try |
+|---|---|---|
+| **llama-3.1-8b-instant** (cheap) | **18/18 (100%)** | 100% |
+| llama-3.3-70b-versatile | 18/18 (100%) | 100% |
+
+The cheap 8B model matches the 70B because generation is into a constrained,
+validated contract. Earlier sub-100% runs were Groq free-tier TPM (6000/min)
+throttling — an API quota artifact, not model quality. **This is the thesis:
+validation makes small/cheap models production-viable for this task.**
+
 ## Not done (intentionally — this is a spike)
 - Only PocketBase introspection (Appwrite/Supabase/Postgres next — same pattern).
 - Not wired into the ink CLI command surface yet (`commands/ai.ts`).

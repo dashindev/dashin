@@ -53,16 +53,30 @@ function getProvider(env = process.env) {
             (provider === "ollama"
               ? "http://localhost:11434/v1"
               : "https://api.openai.com/v1")
-          const res = await post(
-            `${base}/chat/completions`,
-            key ? { Authorization: `Bearer ${key}` } : {},
-            {
-              model: model || (provider === "ollama" ? "qwen2.5-coder" : "gpt-4o-mini"),
-              messages: [{ role: "user", content: prompt }],
-              temperature: 0
+          const payload = {
+            model: model || (provider === "ollama" ? "qwen2.5-coder" : "gpt-4o-mini"),
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0
+          }
+          // retry on 429 (rate limit), honoring server back-off, up to 3x
+          for (let attempt = 0; attempt < 3; attempt++) {
+            const res = await post(
+              `${base}/chat/completions`,
+              key ? { Authorization: `Bearer ${key}` } : {},
+              payload
+            )
+            const content =
+              res.choices && res.choices[0] && res.choices[0].message.content
+            if (content) return content
+            const msg = res.error && res.error.message
+            const wait = msg && msg.match(/try again in ([\d.]+)s/)
+            if (res.error && /rate limit/i.test(msg || "")) {
+              await new Promise(r => setTimeout(r, ((wait && +wait[1]) || 3) * 1000 + 250))
+              continue
             }
-          )
-          return res.choices[0].message.content
+            return ""
+          }
+          return ""
         }
         case "anthropic": {
           const res = await post(

@@ -22,19 +22,33 @@ function buildPrompt(schema) {
     "",
     "Output JSON shape:",
     '{ "columns": [ { "title": string, "field": <one of the real field names>,',
-    '  "type"?: "numeric", "lookup"?: { value: label } } ] }',
-    "Include every field. For select fields, set lookup using the field values.",
-    "Return ONLY JSON, no prose."
+    '  "type"?: "numeric", "lookup"?: { <value>: <label>, ... } } ] }',
+    "Rules:",
+    "- Exactly ONE column per field. Never duplicate a field.",
+    "- `lookup` is a flat object mapping each allowed value to its own label.",
+    '  For a select field with values ["Draft","Published"], lookup MUST be:',
+    '    { "Draft": "Draft", "Published": "Published" }',
+    '  (NOT { "value": ..., "label": ... }).',
+    "- Use `type:\"numeric\"` only for number fields.",
+    "- Include every field exactly once. Return ONLY JSON, no prose."
   ].join("\n")
 }
 
 function extractJson(text) {
   if (!text) return null
-  const m = text.match(/\{[\s\S]*\}/)
+  // strip ```json ... ``` fences if present
+  let t = text.trim()
+  const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/i)
+  if (fence) t = fence[1].trim()
   try {
-    return JSON.parse(m ? m[0] : text)
+    return JSON.parse(t)
   } catch (e) {
-    return null
+    const m = t.match(/\{[\s\S]*\}/)
+    try {
+      return JSON.parse(m ? m[0] : t)
+    } catch (e2) {
+      return null
+    }
   }
 }
 

@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "rootDir": ".",
+    "types": ["vite/client", "vitest/globals"]
+  },
+  "include": ["src"]
+}

@@ -1,6 +1,13 @@
 import { describe, it, expect } from "vitest"
 import { resolveLayout, getLayout, LAYOUT_A } from "../layouts"
-import { tokensToCssVars, darkTokens } from "../tokens"
+import {
+  tokensToCssVars,
+  darkTokens,
+  getPreset,
+  themePresets,
+  DEFAULT_PRESET,
+  applyPreset
+} from "../tokens"
 
 describe("resolveLayout", () => {
   it("returns Layout A baseline by default", () => {
@@ -46,6 +53,29 @@ describe("tokensToCssVars", () => {
   it("maps a full dark token set", () => {
     const vars = tokensToCssVars(darkTokens)
     expect(vars["--bn-bg"]).toBe(darkTokens.bg)
-    expect(Object.keys(vars)).toHaveLength(12)
+    expect(Object.keys(vars)).toHaveLength(13)
+  })
+})
+
+describe("theme presets", () => {
+  it("default preset is modern", () => {
+    expect(DEFAULT_PRESET).toBe("modern")
+    expect(getPreset().id).toBe("modern")
+  })
+  it("registry has classic + modern, each with light+dark", () => {
+    expect(Object.keys(themePresets)).toEqual(["classic", "modern"])
+    expect(themePresets.modern.light.primaryGradient).toContain("gradient")
+    expect(themePresets.classic.dark.bg).toBeTruthy()
+  })
+  it("getPreset falls back to default for unknown id", () => {
+    expect(getPreset("nope").id).toBe("modern")
+  })
+  it("applyPreset writes CSS vars + toggles .dark on <html>", () => {
+    applyPreset("modern", "dark")
+    const root = document.documentElement
+    expect(root.classList.contains("dark")).toBe(true)
+    expect(root.style.getPropertyValue("--bn-bg")).toBe(themePresets.modern.dark.bg)
+    applyPreset("modern", "light")
+    expect(root.classList.contains("dark")).toBe(false)
   })
 })

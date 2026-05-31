@@ -26,6 +26,9 @@ module.exports = {
       },
       borderRadius: {
         bn: "var(--bn-radius)"
+      },
+      backgroundImage: {
+        "primary-gradient": "var(--bn-primary-gradient)"
       }
     }
   },

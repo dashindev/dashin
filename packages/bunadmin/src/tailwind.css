@@ -2,35 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design tokens — mirror src/utils/themes/tokens.ts. :root = light, .dark = dark. */
+/* Design tokens — mirror src/utils/themes/tokens.ts (default preset: "modern").
+   :root = modern light, .dark = modern dark. */
 @layer base {
   :root {
-    --bn-bg: #edf1f7;
+    --bn-bg: #f8fafc;
     --bn-surface: #ffffff;
     --bn-sidebar: #ffffff;
-    --bn-foreground: #1f2937;
-    --bn-muted: #8f9bb3;
-    --bn-border: #e5e9f2;
-    --bn-primary: #3366ff;
+    --bn-foreground: #1e293b;
+    --bn-muted: #94a3b8;
+    --bn-border: #eef2f7;
+    --bn-primary: #6366f1;
+    --bn-primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
     --bn-primary-foreground: #ffffff;
-    --bn-success: #00d68f;
-    --bn-warning: #ffaa00;
-    --bn-danger: #ff1744;
-    --bn-radius: 10px;
+    --bn-success: #10b981;
+    --bn-warning: #f59e0b;
+    --bn-danger: #ef4444;
+    --bn-radius: 12px;
   }
   .dark {
-    --bn-bg: #0a0e17;
-    --bn-surface: #121826;
-    --bn-sidebar: #0d1117;
+    --bn-bg: #0a0e1a;
+    --bn-surface: #111729;
+    --bn-sidebar: #0a0e1a;
     --bn-foreground: #e5e7eb;
-    --bn-muted: #8f9bb3;
-    --bn-border: #1f2937;
-    --bn-primary: #6366f1;
+    --bn-muted: #64748b;
+    --bn-border: #1e293b;
+    --bn-primary: #818cf8;
+    --bn-primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
     --bn-primary-foreground: #ffffff;
-    --bn-success: #22c55e;
-    --bn-warning: #f59e0b;
-    --bn-danger: #f43f5e;
-    --bn-radius: 10px;
+    --bn-success: #34d399;
+    --bn-warning: #fbbf24;
+    --bn-danger: #f87171;
+    --bn-radius: 12px;
   }
 }
 

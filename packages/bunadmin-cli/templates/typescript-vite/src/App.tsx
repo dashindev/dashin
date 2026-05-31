@@ -1,6 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect } from "react"
-import { Route, Switch } from "react-router-dom"
-import { Router } from "react-router"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Provider } from "react-redux"
 import {
   DEFAULT_AUTH_PLUGIN,
@@ -17,13 +16,16 @@ import {
   MenuType
 } from "@xbuilder/bunadmin"
 import { SnackbarProvider } from "notistack"
-import { createBrowserHistory } from "history"
+import {
+  getDynamicIndex,
+  getPluginsDataJson,
+  getPluginsDataTs,
+  requirePlugin
+} from "./pluginRegistry"
 import { YOUR_DB } from "./utils/database"
 
 const HTTP404 = lazy(() => import("./pages/404"))
 const GroupName = lazy(() => import("./pages/[group]-[name]"))
-
-const history = createBrowserHistory()
 
 const App = () => {
   const asPath = window.location.pathname
@@ -33,33 +35,18 @@ const App = () => {
   const [isProtected, setIsProtected] = useState(false)
   const [leftMenuData, setLeftMenuData] = useState<MenuType[]>([])
 
-  function requirePlugin(path: string) {
-    try {
-      return require(`./.bunadmin/dynamic/${path}`)
-    } catch (err) {
-      return null
-    }
-  }
-
   useEffect(() => {
-    /**
-     * Waiting for dynamic route
-     */
     if (asPath === DynamicRoute || asPath === DynamicDocRoute) return
     ;(async () => {
       const authPluginName =
-        process.env.REACT_APP_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
-      const authPlugin: IAuthPlugin = await import(
-        `./.bunadmin/dynamic/${authPluginName}`
-      )
-      let pluginsData: PluginData[] = require("./.bunadmin/dynamic/pluginsData.json")
-      const plugins = require("./.bunadmin/dynamic/pluginsData")
-      if (plugins && plugins.data)
-        pluginsData = [...pluginsData, ...plugins.data]
+        process.env.VITE_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
+      const authPlugin = getDynamicIndex()[authPluginName] as IAuthPlugin
+      if (!authPlugin) throw new Error("auth plugin is required")
 
-      /**
-       * Initialization data
-       */
+      let pluginsData: PluginData[] = getPluginsDataJson()
+      const extra = getPluginsDataTs()
+      if (extra && extra.length) pluginsData = [...pluginsData, ...extra]
+
       const initDataRes = await initData({
         i18n,
         authPlugin,
@@ -83,10 +70,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <SnackbarProvider
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right"
-        }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
         autoHideDuration={2000}
         content={(key, message) => (
           <SnackMessage store={store} id={key} message={message} />
@@ -94,22 +78,31 @@ const App = () => {
       >
         <Snackbar />
       </SnackbarProvider>
-      <Router history={history}>
+      <BrowserRouter>
         <Suspense fallback={<CubeSpinner />}>
-          <Switch>
+          <Routes>
             <Route
-              path={["/:group/:name", "/"]}
-              component={() => (
+              path={"/"}
+              Component={() => (
                 <GroupName
                   leftMenuData={leftMenuData}
                   isProtected={isProtected}
                 />
               )}
             />
-            <Route path="*" component={HTTP404} />
-          </Switch>
+            <Route
+              path={"/:group/:name"}
+              Component={() => (
+                <GroupName
+                  leftMenuData={leftMenuData}
+                  isProtected={isProtected}
+                />
+              )}
+            />
+            <Route path="*" Component={HTTP404} />
+          </Routes>
         </Suspense>
-      </Router>
+      </BrowserRouter>
     </Provider>
   )
 }

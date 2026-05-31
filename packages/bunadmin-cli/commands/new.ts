@@ -7,7 +7,7 @@ export default async function newProject(
   name = "my-dashboard",
   options = { nextjs: false }
 ): Promise<undefined | string> {
-  let sourceFolder = path.resolve(BUNADMIN_CLI_PATH, "templates/typescript-cra")
+  let sourceFolder = path.resolve(BUNADMIN_CLI_PATH, "templates/typescript-vite")
   if (options.nextjs) {
     sourceFolder = path.resolve(
       BUNADMIN_CLI_PATH,

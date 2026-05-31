@@ -1,18 +1,13 @@
 import React from "react"
 import Document, { Html, Head, Main, NextScript } from "next/document"
-import { ServerStyleSheets } from "@mui/material/styles"
-import { defaultTheme, ENV } from "@xbuilder/bunadmin"
+import { ENV } from "@xbuilder/bunadmin"
 
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang={ENV.I18N_CODE}>
         <Head>
-          {/* PWA primary color */}
-          <meta
-            name="theme-color"
-            content={defaultTheme.palette.primary.main}
-          />
+          <meta name="theme-color" content="#3366ff" />
         </Head>
         <body>
           <Main />
@@ -24,25 +19,5 @@ export default class MyDocument extends Document {
 }
 
 MyDocument.getInitialProps = async ctx => {
-  // Render app and page and get the context of the page with collected side effects.
-  const sheets = new ServerStyleSheets()
-  const originalRenderPage = ctx.renderPage
-
-  ctx.renderPage = () =>
-    originalRenderPage({
-      enhanceApp: App => props => {
-        return sheets.collect(<App {...props} />)
-      }
-    })
-
-  const initialProps = await Document.getInitialProps(ctx)
-
-  return {
-    ...initialProps,
-    // Styles fragment is rendered after the app and page rendering finish.
-    styles: [
-      ...React.Children.toArray(initialProps.styles),
-      sheets.getStyleElement()
-    ]
-  }
+  return await Document.getInitialProps(ctx)
 }

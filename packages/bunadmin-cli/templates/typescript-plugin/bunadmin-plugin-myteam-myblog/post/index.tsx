@@ -1,5 +1,4 @@
 import React, { createRef } from "react"
-import { useTheme } from "@mui/material/styles"
 import {
   Table,
   TableHead,
@@ -13,7 +12,7 @@ import Type from "./types"
 
 export default function Post() {
   const { t } = useTranslation("table")
-  const theme = useTheme()
+  const theme = { bunadmin: { iconColor: "#8f9bb3" } }
   const tableRef = createRef()
 
   return (

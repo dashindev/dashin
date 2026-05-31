@@ -4,7 +4,6 @@ import { Router } from "react-router"
 import { Provider } from "react-redux"
 import {
   DEFAULT_AUTH_PLUGIN,
-  defaultTheme,
   DynamicDocRoute,
   DynamicRoute,
   IAuthPlugin,
@@ -17,17 +16,9 @@ import {
   useTranslation,
   MenuType
 } from "@xbuilder/bunadmin"
-import { CssBaseline, ThemeProvider, Theme, StyledEngineProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack"
 import { createBrowserHistory } from "history"
 import { YOUR_DB } from "./utils/database"
-
-
-declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
-
 
 const HTTP404 = lazy(() => import("./pages/404"))
 const GroupName = lazy(() => import("./pages/[group]-[name]"))
@@ -49,16 +40,6 @@ const App = () => {
       return null
     }
   }
-
-  useEffect(() => {
-    ;(async () => {
-      const jssStyles = document.querySelector("#jss-server-side")
-      if (jssStyles) {
-        // @ts-ignore
-        jssStyles.parentElement.removeChild(jssStyles)
-      }
-    })()
-  }, [])
 
   useEffect(() => {
     /**
@@ -101,41 +82,36 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={defaultTheme}>
-          <CssBaseline />
-          <SnackbarProvider
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right"
-            }}
-            autoHideDuration={2000}
-            content={(key, message) => (
-              <SnackMessage store={store} id={key} message={message} />
-            )}
-          >
-            <Snackbar />
-          </SnackbarProvider>
-          <Router history={history}>
-            <Suspense fallback={<CubeSpinner />}>
-              <Switch>
-                <Route
-                  path={["/:group/:name", "/"]}
-                  component={() => (
-                    <GroupName
-                      leftMenuData={leftMenuData}
-                      isProtected={isProtected}
-                    />
-                  )}
+      <SnackbarProvider
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right"
+        }}
+        autoHideDuration={2000}
+        content={(key, message) => (
+          <SnackMessage store={store} id={key} message={message} />
+        )}
+      >
+        <Snackbar />
+      </SnackbarProvider>
+      <Router history={history}>
+        <Suspense fallback={<CubeSpinner />}>
+          <Switch>
+            <Route
+              path={["/:group/:name", "/"]}
+              component={() => (
+                <GroupName
+                  leftMenuData={leftMenuData}
+                  isProtected={isProtected}
                 />
-                <Route path="*" component={HTTP404} />
-              </Switch>
-            </Suspense>
-          </Router>
-        </ThemeProvider>
-      </StyledEngineProvider>
+              )}
+            />
+            <Route path="*" component={HTTP404} />
+          </Switch>
+        </Suspense>
+      </Router>
     </Provider>
-  );
+  )
 }
 
 export default App

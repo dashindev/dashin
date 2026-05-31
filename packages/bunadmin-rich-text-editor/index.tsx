@@ -3,8 +3,11 @@ import { Drawer, DrawerProps } from "@xbuilder/bunadmin"
 import { EditComponentProps } from "@xbuilder/bunadmin"
 
 // Lazy so the heavy @tiptap bundle is only loaded when a drawer actually opens.
-const RtEditor = lazy(() => import("./editor"))
-const RtPreviewer = lazy(() => import("./previewer"))
+// Typed loosely (any props) because React.lazy collapses the editor's generic.
+const RtEditor = lazy(() => import("./editor")) as React.ComponentType<any>
+const RtPreviewer = lazy(() => import("./previewer")) as React.ComponentType<{
+  value: string
+}>
 
 interface EditProps<T extends object> extends EditComponentProps<T> {}
 

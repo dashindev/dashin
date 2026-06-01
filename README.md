@@ -65,7 +65,7 @@ See [`docs/pocketbase/`](docs/pocketbase/).
 ## Development
 
 ```shell script
-git clone git@github.com:xbuilder/bunadmin.git
+git clone git@github.com:xbuilder/dashin.git
 
 yarn
 yarn tsc:build        # required once — builds all package lib/ for the plugin generator

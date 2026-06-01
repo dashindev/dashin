@@ -72,6 +72,30 @@ async function main() {
   )
   console.log("posts collection:", coll.ok ? "created" : `skip (${coll.status})`)
 
+  // products collection (second schema → demonstrates multi-level menus)
+  const prodColl = await api(
+    "/api/collections",
+    {
+      method: "POST",
+      body: {
+        name: "products",
+        type: "base",
+        listRule: "",
+        viewRule: "",
+        createRule: "",
+        updateRule: "",
+        deleteRule: "",
+        schema: [
+          { name: "name", type: "text", required: true },
+          { name: "price", type: "number", required: true },
+          { name: "in_stock", type: "bool" }
+        ]
+      }
+    },
+    token
+  )
+  console.log("products collection:", prodColl.ok ? "created" : `skip (${prodColl.status})`)
+
   // demo user
   const user = await api(
     "/api/collections/users/records",
@@ -103,6 +127,21 @@ async function main() {
       token
     )
     console.log(`post ${i}:`, r.ok ? "created" : `skip (${r.status})`)
+  }
+
+  // sample products
+  const products = [
+    { name: "Widget", price: 9.99, in_stock: true },
+    { name: "Gadget", price: 24.99, in_stock: true },
+    { name: "Thingamajig", price: 4.99, in_stock: false }
+  ]
+  for (const p of products) {
+    const r = await api(
+      "/api/collections/products/records",
+      { method: "POST", body: p },
+      token
+    )
+    console.log(`product ${p.name}:`, r.ok ? "created" : `skip (${r.status})`)
   }
   console.log("\nDone. Set your bunadmin .env:")
   console.log("  VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase")

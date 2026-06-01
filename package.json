@@ -18,6 +18,7 @@
     "turbo:test": "turbo run test",
     "turbo:lint": "turbo run lint",
     "turbo:dev": "turbo run dev",
+    "docs:dev": "npm run dev --prefix docs",
     "docs:contributors": "bash scripts/gen-docs-contributors.sh"
   },
   "devDependencies": {

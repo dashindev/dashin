@@ -1,0 +1,21 @@
+# bunadmin flagship demo — PocketBase backend (docker alternative to start.sh).
+#   docker compose up        # serves PocketBase on :8090
+#   then: node ../../docs/pocketbase/seed.js   (PB_URL=http://127.0.0.1:8090)
+# Uses a community PocketBase image; pin a digest for production use.
+services:
+  pocketbase:
+    image: ghcr.io/muchobien/pocketbase:0.22.21
+    container_name: bunadmin-demo-pb
+    ports:
+      - "8090:8090"
+    volumes:
+      - pb_data:/pb_data
+    command: ["serve", "--http=0.0.0.0:8090"]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8090/api/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pb_data:

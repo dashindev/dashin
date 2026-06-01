@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import DropZone, { DropEvent, FileRejection } from "react-dropzone"
 import FilePreview from "../FilePreview"
-import BunadminFileProps, { BunadminFileType } from "../"
+import DashinFileProps, { DashinFileType } from "../"
 import CardBottomArea from "./CardBottomArea"
 import { Translation } from "react-i18next"
 import { ENV } from "@/utils"
@@ -12,14 +12,14 @@ export const default_file = "/p/default_file.svg"
 
 export interface OnDropProps {
   droppedFiles: any[]
-  existedFile?: BunadminFileType
+  existedFile?: DashinFileType
   rejectedFiles?: FileRejection[]
   event?: DropEvent
   prefix?: string
   setImageUrl?: Dispatch<SetStateAction<string>>
 }
 
-export default function BunadminFile(props: BunadminFileProps) {
+export default function DashinFile(props: DashinFileProps) {
   const {
     fileKey,
     className,
@@ -68,7 +68,7 @@ export default function BunadminFile(props: BunadminFileProps) {
     acceptedFiles: File[],
     rejectedFiles: FileRejection[],
     event: DropEvent,
-    existedFile?: BunadminFileType
+    existedFile?: DashinFileType
   ) => {
     setUploading(true)
     if (onDrop) {

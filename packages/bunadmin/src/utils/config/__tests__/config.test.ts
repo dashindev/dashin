@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest"
 import { ENV, DEFAULT_AUTH_PLUGIN, SETTING_NAMES } from "../index"
 
 describe("config ENV", () => {
-  it("SITE_NAME is a non-empty string (falls back to BunAdmin if unset)", () => {
+  it("SITE_NAME is a non-empty string (falls back to Dashin if unset)", () => {
     expect(typeof ENV.SITE_NAME).toBe("string")
     expect(ENV.SITE_NAME.length).toBeGreaterThan(0)
   })

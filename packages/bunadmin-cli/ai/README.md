@@ -41,7 +41,7 @@ introspect (ground truth)  ->  LLM (BYOK/cheap)  ->  VALIDATE  ->  emit schema f
 
 ## BYOK by default
 `provider.js` supports `openai` / `anthropic` / `ollama` / any OpenAI-compatible
-base URL via env (`BUNADMIN_AI_PROVIDER`, `_API_KEY`, `_MODEL`, `_BASE_URL`).
+base URL via env (`DASHIN_AI_PROVIDER`, `_API_KEY`, `_MODEL`, `_BASE_URL`).
 The product never resells tokens at launch: users bring a key or point at a
 cheap/self-hosted endpoint. A managed tier (cheap models + this validation layer,
 priced on convenience) is the later revenue layer.
@@ -51,11 +51,11 @@ priced on convenience) is the later revenue layer.
 node packages/bunadmin-cli/ai/run.js \
   --url http://127.0.0.1:8090 --collection posts --token <admin-token> \
   --mock '{"columns":[{"field":"id"},{"field":"name"},{"field":"status"},{"field":"views"}]}'
-# or with a real model: set BUNADMIN_AI_PROVIDER + key, drop --mock
+# or with a real model: set DASHIN_AI_PROVIDER + key, drop --mock
 ```
 
 ## Benchmark (real models, Groq, live PocketBase; 3 collections x 6 runs)
-Run via `node ai/bench.js` (needs BUNADMIN_AI_* + a Groq key in the env; the key
+Run via `node ai/bench.js` (needs DASHIN_AI_* + a Groq key in the env; the key
 must NOT be committed). With 429 rate-limit backoff + pacing:
 
 | model | valid | first-try |

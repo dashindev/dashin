@@ -39,7 +39,7 @@ const zh = {
   },
   table: {
     /**
-     * Bunadmin core fields
+     * Dashin core fields
      */
     // menu
     "Menu Manager": "菜单配置",
@@ -87,7 +87,7 @@ const zh = {
     "Are you sure you want to import and overwrite the database?":
       "你确认要导入并覆盖数据库吗?",
     // setting
-    "Bunadmin Setting": "BunAdmin 参数",
+    "Dashin Setting": "Dashin 参数",
     Value: "参数值",
     // notice
     "SUCCESS!": "成功！",

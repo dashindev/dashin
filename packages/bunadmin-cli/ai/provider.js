@@ -3,8 +3,8 @@
  * Anthropic via user's own key) OR cheap/self-hosted (Ollama, any OpenAI-
  * compatible base URL). The product never resells tokens; users bring a key
  * or point at a cheap endpoint. Config via env:
- *   BUNADMIN_AI_PROVIDER = openai | anthropic | ollama | mock
- *   BUNADMIN_AI_API_KEY, BUNADMIN_AI_MODEL, BUNADMIN_AI_BASE_URL
+ *   DASHIN_AI_PROVIDER = openai | anthropic | ollama | mock
+ *   DASHIN_AI_API_KEY, DASHIN_AI_MODEL, DASHIN_AI_BASE_URL
  *
  * complete(prompt) -> raw model text (expected to be JSON).
  */
@@ -37,9 +37,9 @@ function post(url, headers, body) {
 }
 
 function getProvider(env = process.env) {
-  const provider = env.BUNADMIN_AI_PROVIDER || "mock"
-  const key = env.BUNADMIN_AI_API_KEY
-  const model = env.BUNADMIN_AI_MODEL
+  const provider = env.DASHIN_AI_PROVIDER || "mock"
+  const key = env.DASHIN_AI_API_KEY
+  const model = env.DASHIN_AI_MODEL
 
   return {
     name: provider,
@@ -49,7 +49,7 @@ function getProvider(env = process.env) {
         case "ollama": {
           // OpenAI-compatible chat completions (Ollama exposes this too)
           const base =
-            env.BUNADMIN_AI_BASE_URL ||
+            env.DASHIN_AI_BASE_URL ||
             (provider === "ollama"
               ? "http://localhost:11434/v1"
               : "https://api.openai.com/v1")
@@ -80,7 +80,7 @@ function getProvider(env = process.env) {
         }
         case "anthropic": {
           const res = await post(
-            (env.BUNADMIN_AI_BASE_URL || "https://api.anthropic.com") +
+            (env.DASHIN_AI_BASE_URL || "https://api.anthropic.com") +
               "/v1/messages",
             { "x-api-key": key, "anthropic-version": "2023-06-01" },
             {

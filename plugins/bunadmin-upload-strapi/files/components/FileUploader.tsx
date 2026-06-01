@@ -2,7 +2,7 @@ import React, { useState, useEffect, RefObject } from "react"
 import { TFunction } from "i18next"
 import {
   ENV,
-  BunadminFileType,
+  DashinFileType,
   Uploader,
   OnDropProps
 } from "@dashin-dev/dashin"
@@ -33,11 +33,11 @@ export default function FileUploader({
   noDrawer?: boolean
   maximum?: number
 }) {
-  const [files, setFiles] = useState<BunadminFileType[]>([])
+  const [files, setFiles] = useState<DashinFileType[]>([])
   if (!prefix && !ENV.ON_MOCK) prefix = ENV.UPLOAD_URL
 
   useEffect(() => {
-    const tmp: BunadminFileType[] = []
+    const tmp: DashinFileType[] = []
     if (Array.isArray(data)) {
       data.map(item => {
         tmp.push({
@@ -77,8 +77,8 @@ export default function FileUploader({
     })
   }
 
-  async function onDel({ file }: { file: BunadminFileType }) {
-    const tmp: BunadminFileType[] = []
+  async function onDel({ file }: { file: DashinFileType }) {
+    const tmp: DashinFileType[] = []
     files.map(item => {
       if (item.id !== file.id) tmp.push(item)
     })

@@ -1,9 +1,9 @@
 import { SETTING_NAMES, ENV } from "@/main"
-import { BunadminDatabase } from "."
+import { DashinDatabase } from "."
 
 export default async function dxInitData(
-  db: BunadminDatabase
-): Promise<BunadminDatabase> {
+  db: DashinDatabase
+): Promise<DashinDatabase> {
   const settings = db.settings
   const findInitData = await settings
     .where("name")

@@ -4,7 +4,7 @@ import newProject from "./commands/new"
 import newPlugin from "./commands/plugin"
 import newSchema from "./commands/schema"
 import newAi from "./commands/ai"
-import { BUNADMIN_CLI_PATH } from "./utils/config"
+import { DASHIN_CLI_PATH } from "./utils/config"
 import * as path from "path"
 
 type UIProps = {
@@ -40,7 +40,7 @@ const UI = (props: UIProps) => {
 
   useEffect(() => {
     ;(async () => {
-      const packagePath = path.resolve(BUNADMIN_CLI_PATH, "package.json")
+      const packagePath = path.resolve(DASHIN_CLI_PATH, "package.json")
 
       if (!command && options.v) {
         const packageJson = require(packagePath).version

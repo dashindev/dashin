@@ -1,19 +1,19 @@
 import React, { Dispatch, SetStateAction, useState } from "react"
 import { ZoomIn, ZoomOut, Download, X } from "lucide-react"
 import { Dialog } from "@headlessui/react"
-import { BunadminFileType } from "@/components"
+import { DashinFileType } from "@/components"
 import {
   default_file,
   handleImage,
   isImage
-} from "@/components/FileExplorer/BunadminFile"
+} from "@/components/FileExplorer/DashinFile"
 import { ENV } from "@/utils"
 
 interface Props {
   preview: boolean
   setPreview: Dispatch<SetStateAction<boolean>>
   fullScreen?: boolean
-  file?: BunadminFileType
+  file?: DashinFileType
   prefix?: string
 }
 

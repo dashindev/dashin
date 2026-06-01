@@ -39,7 +39,7 @@ const en = {
   },
   table: {
     /**
-     * Bunadmin core
+     * Dashin core
      */
     // menu
     "Menu Manager": "Menu Manager",
@@ -87,7 +87,7 @@ const en = {
     "Are you sure you want to import and overwrite the database?":
       "Are you sure you want to import and overwrite the database?",
     // setting
-    "Bunadmin Setting": "Bunadmin Parameters",
+    "Dashin Setting": "Dashin Parameters",
     Value: "Value",
     // notice
     "SUCCESS!": "SUCCESS!",

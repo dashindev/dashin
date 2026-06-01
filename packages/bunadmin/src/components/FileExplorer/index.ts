@@ -1,16 +1,16 @@
 import { AriaAttributes, HTMLAttributes } from "react"
 
-import { OnDropProps as IOnDropProps } from "./BunadminFile"
+import { OnDropProps as IOnDropProps } from "./DashinFile"
 export type OnDropProps = IOnDropProps
 
-export { default as BunadminFile } from "./BunadminFile"
+export { default as DashinFile } from "./DashinFile"
 
 export { default as FilePreview } from "./FilePreview"
 export { default as FileDrawer, useFilesStyles } from "./FileDrawer"
 
 export { default as Uploader } from "./Uploader"
 
-export type BunadminFileType = {
+export type DashinFileType = {
   id?: string
   file_name?: string
   url?: string
@@ -18,7 +18,7 @@ export type BunadminFileType = {
   created_at?: string
 }
 
-export default interface BunadminFileProps {
+export default interface DashinFileProps {
   fileKey?: string | number
   className?: string
   ariaAttributes?: AriaAttributes
@@ -28,7 +28,7 @@ export default interface BunadminFileProps {
   uploadText?: string
   replaceText?: string
 
-  file?: BunadminFileType
+  file?: DashinFileType
   title?: string
   width?: number
   prefix?: string

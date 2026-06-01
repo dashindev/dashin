@@ -31,7 +31,7 @@ seeds demo collections (`posts`, `products`) + a `demo` user.
 ```bash
 bunadmin new my-admin && cd my-admin
 # .env: VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase, VITE_AUTH_URL=http://127.0.0.1:8090
-export BUNADMIN_AI_PROVIDER=openai BUNADMIN_AI_API_KEY=sk-... BUNADMIN_AI_MODEL=gpt-4o-mini
+export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
 bunadmin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin-token>
 yarn dev
 ```
@@ -77,7 +77,7 @@ serves on `http://127.0.0.1:3001`.
 ```bash
 bunadmin new my-admin && cd my-admin
 # .env: VITE_AUTH_PLUGIN=@dashin-dev/auth-payload, VITE_AUTH_URL=http://127.0.0.1:3001
-export BUNADMIN_AI_PROVIDER=openai BUNADMIN_AI_API_KEY=sk-... BUNADMIN_AI_MODEL=gpt-4o-mini
+export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
 bunadmin ai generate --url http://127.0.0.1:3001 --collection posts --token <admin-token>
 yarn dev
 ```

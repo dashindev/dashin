@@ -4,7 +4,7 @@
 # Idea
 /.idea/workspace.xml
 
-# BunAdmin
+# Dashin
 dist
 *.tgz
 yarn.lock

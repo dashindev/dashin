@@ -42,9 +42,9 @@ module.exports = async ({
     await del(dynamicPath)
   }
 
-  const dotBunadminPath = dynamicPath.replace("dynamic", "")
-  if (!fs.existsSync(dotBunadminPath)) {
-    fs.mkdirSync(dotBunadminPath)
+  const dotDashinPath = dynamicPath.replace("dynamic", "")
+  if (!fs.existsSync(dotDashinPath)) {
+    fs.mkdirSync(dotDashinPath)
   }
   if (!fs.existsSync(dynamicPath)) {
     fs.mkdirSync(dynamicPath)

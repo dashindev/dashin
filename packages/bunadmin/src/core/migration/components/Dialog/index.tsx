@@ -3,7 +3,7 @@ import ConfirmDialog from "@/components/Dialog/ConfirmDialog"
 import { fsDownload } from "@/utils/scripts/fs"
 import UploadConfirmDialog from "@/components/Dialog/UploadCustomDialog"
 import { BA_DB } from "@/utils"
-import { BunadminDatabase, notice } from "@/main"
+import { DashinDatabase, notice } from "@/main"
 import { debug } from "util"
 
 let dxIEModule
@@ -24,7 +24,7 @@ interface Interface {
     msg: string
   }
   tableRef?: React.RefObject<any>
-  db?: BunadminDatabase
+  db?: DashinDatabase
 }
 
 export default function MigrationDialogs({

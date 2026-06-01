@@ -55,7 +55,7 @@ async function aiTheme(opts) {
   if (!description) return { errors: 'need a description, e.g. ai theme "dark, purple accent"' }
 
   const provider = getProvider(
-    mock ? { ...process.env, BUNADMIN_AI_PROVIDER: "mock", __MOCK_RESPONSE: mock } : process.env
+    mock ? { ...process.env, DASHIN_AI_PROVIDER: "mock", __MOCK_RESPONSE: mock } : process.env
   )
   const prompt = buildThemePrompt(description)
   let attempts = 0

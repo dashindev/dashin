@@ -4,10 +4,10 @@
 # Idea
 /.idea/workspace.xml
 
-# BunAdmin
+# Dashin
 lib
 *.tgz
 yarn.lock
 
-# Bunadmin CLI
+# Dashin CLI
 .tmp

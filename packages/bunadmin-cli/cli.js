@@ -26,7 +26,7 @@ const cli = meow(`
 
 	Generate an admin table from a backend schema (AI, bring-your-own-key)
 	  $ dashin ai generate --url <pocketbase-url> --collection <name> [--token <admin>] [--out <dir>]
-	  Set BUNADMIN_AI_PROVIDER (openai|anthropic|ollama) + BUNADMIN_AI_API_KEY,
+	  Set DASHIN_AI_PROVIDER (openai|anthropic|ollama) + DASHIN_AI_API_KEY,
 	  or pass --mock '<json>' for a dry run. Output is validated against the live schema.
 
 	Generate an admin THEME from a description (AI, bring-your-own-key)

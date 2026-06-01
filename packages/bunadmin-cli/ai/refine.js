@@ -97,7 +97,7 @@ async function aiRefine(opts) {
 
   // LLM path: same validate-and-retry contract as generate.
   const provider = getProvider(
-    mock ? { ...process.env, BUNADMIN_AI_PROVIDER: "mock", __MOCK_RESPONSE: mock } : process.env
+    mock ? { ...process.env, DASHIN_AI_PROVIDER: "mock", __MOCK_RESPONSE: mock } : process.env
   )
   const prompt = buildRefinePrompt(schema, columns, instruction)
   let attempts = 0

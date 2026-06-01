@@ -1,5 +1,5 @@
 import request from "umi-request"
-import { BunadminFileType, ENV, storedToken } from "@dashin-dev/dashin"
+import { DashinFileType, ENV, storedToken } from "@dashin-dev/dashin"
 import { IFile } from "../../utils/types/file"
 
 type Resp = IFile[]
@@ -14,7 +14,7 @@ type Options = {
 export default async function uploadFileSer(
   data: any,
   options?: Options,
-  existedFile?: BunadminFileType
+  existedFile?: DashinFileType
 ): Promise<Resp> {
   const token = await storedToken()
 

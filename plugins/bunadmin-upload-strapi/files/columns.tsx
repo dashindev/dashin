@@ -2,7 +2,7 @@ import { Column } from "@dashin-dev/dashin"
 import Type from "./types"
 import React from "react"
 
-import { BunadminFile, ENV } from "@dashin-dev/dashin"
+import { DashinFile, ENV } from "@dashin-dev/dashin"
 
 const prefix = ENV.UPLOAD_URL
 
@@ -22,7 +22,7 @@ export default ({ t }: any) =>
       filtering: false,
       editable: false,
       render: rowData => (
-        <BunadminFile
+        <DashinFile
           width={80}
           viewMode={true}
           prefix={prefix}

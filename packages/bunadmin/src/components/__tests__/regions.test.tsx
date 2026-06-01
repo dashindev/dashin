@@ -36,10 +36,10 @@ describe("SidebarFooter", () => {
     render(
       <SidebarFooter
         variant="upgrade"
-        upgrade={{ title: "BunAdmin Pro", description: "Unlock more", cta: "Upgrade Now" }}
+        upgrade={{ title: "Dashin Pro", description: "Unlock more", cta: "Upgrade Now" }}
       />
     )
-    expect(screen.getByText("BunAdmin Pro")).toBeTruthy()
+    expect(screen.getByText("Dashin Pro")).toBeTruthy()
     expect(screen.getByText("Upgrade Now")).toBeTruthy()
   })
   it("variant=stats renders the overview list", () => {

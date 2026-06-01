@@ -11,8 +11,8 @@ import {
   ResponderProvided
 } from "react-beautiful-dnd"
 import {
-  BunadminFile,
-  BunadminFileType,
+  DashinFile,
+  DashinFileType,
   FileDrawer,
   useFilesStyles,
   UploaderOnDrop,
@@ -34,7 +34,7 @@ export default function Uploader({
   maximum
 }: {
   t: TFunction
-  files: BunadminFileType[]
+  files: DashinFileType[]
   viewMode?: boolean
   prefix?: string
   buttonTitlePreview?: string
@@ -79,7 +79,7 @@ export default function Uploader({
                         provided.draggableProps.style
                       )}
                     >
-                      <BunadminFile
+                      <DashinFile
                         key={i}
                         className={classes.filesItem}
                         ariaAttributes={{
@@ -109,7 +109,7 @@ export default function Uploader({
   }
 
   const UploadArea = () => (
-    <BunadminFile
+    <DashinFile
       className="upload-files"
       width={width || 100}
       prefix={prefix}

@@ -8,7 +8,7 @@ import { resolve } from "path"
  */
 const homePath = process.env.APPDATA || process.env.HOME + "/.local/share"
 
-export const BUNADMIN_CLI_PATH =
+export const DASHIN_CLI_PATH =
   process.platform == "darwin"
     ? "/usr/local/lib/node_modules/bunadmin-cli"
     : resolve(homePath, "npm/node_modules/bunadmin-cli")

@@ -78,7 +78,7 @@ const DynamicGroupNamePage = ({
       layout={layout}
       stats={stats}
       sidebarUpgrade={{
-        title: "BunAdmin Pro",
+        title: "Dashin Pro",
         description: "Unlock advanced features and premium components.",
         cta: "Upgrade Now"
       }}

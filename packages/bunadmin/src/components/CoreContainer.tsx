@@ -4,11 +4,11 @@ import LocalLeftMenuContainer from "@/core/menu"
 import MigrationContainer from "@/core/migration"
 import SchemaManagerContainer from "@/core/schema"
 import AuthInfoContainer from "@/core/auth"
-import BunadminSettingContainer from "@/core/setting"
-import { BunadminDatabase } from ".."
+import DashinSettingContainer from "@/core/setting"
+import { DashinDatabase } from ".."
 
 type Props = {
-  db?: BunadminDatabase
+  db?: DashinDatabase
 }
 
 export default function CoreContainer({ db }: Props) {
@@ -31,7 +31,7 @@ export default function CoreContainer({ db }: Props) {
       container = <AuthInfoContainer />
       break
     case "setting":
-      container = <BunadminSettingContainer />
+      container = <DashinSettingContainer />
   }
 
   return <>{container}</>

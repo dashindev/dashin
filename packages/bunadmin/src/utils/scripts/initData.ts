@@ -8,7 +8,7 @@ import { Type } from "@/core/schema/types"
 import addResource from "@/utils/scripts/addResource"
 import { i18n } from "i18next"
 import dxInitData from "../database/dx/dxInitData"
-import { BA_DB, BunadminDatabase } from "../database"
+import { BA_DB, DashinDatabase } from "../database"
 
 type Props = {
   i18n: i18n
@@ -18,7 +18,7 @@ type Props = {
   requirePlugin: (path: string) => any
   initialized: boolean
   setInitialized: Dispatch<SetStateAction<boolean>>
-  dbOverride?: BunadminDatabase // override database
+  dbOverride?: DashinDatabase // override database
 }
 
 export default async function initData({

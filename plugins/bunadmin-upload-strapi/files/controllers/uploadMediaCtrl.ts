@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { BunadminFileType, notice, OnDropProps } from "@dashin-dev/dashin"
+import { DashinFileType, notice, OnDropProps } from "@dashin-dev/dashin"
 import uploadFileSer from "../services/uploadFileSer"
 import { EditComponentProps } from "@dashin-dev/dashin"
 
@@ -7,9 +7,9 @@ interface Props extends OnDropProps {
   editProps?: EditComponentProps<any>
   setImageUrl?: Dispatch<SetStateAction<string>>
   uploadPrefix?: string
-  setFiles?: Dispatch<SetStateAction<BunadminFileType[]>>
-  files?: BunadminFileType[]
-  existedFile?: BunadminFileType
+  setFiles?: Dispatch<SetStateAction<DashinFileType[]>>
+  files?: DashinFileType[]
+  existedFile?: DashinFileType
 }
 
 export default async function uploadMediaCtrl({
@@ -38,7 +38,7 @@ export default async function uploadMediaCtrl({
       setImageUrl && setImageUrl(prefix + res[0].url)
       files = [...files, ...res]
     } else {
-      const respFiles: BunadminFileType[] = []
+      const respFiles: DashinFileType[] = []
       res.map(file =>
         respFiles.push({
           url: file.url,

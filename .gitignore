@@ -24,7 +24,7 @@ out
 .idea/workspace.xml
 .idea/vcs.xml
 
-# BunAdmin START
+# Dashin START
 /packages/bunadmin/.env*.*
 /packages/bunadmin/deploy*.sh
 
@@ -42,7 +42,7 @@ pluginsData.json
 
 package-lock.json
 
-# BunAdmin END
+# Dashin END
 
 # lerna
 lerna-debug.log

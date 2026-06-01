@@ -10,12 +10,12 @@ import EvaIcon from "../../components/EvaIcon"
 import { Type } from "./types"
 import MigrationDialogs from "./components/Dialog"
 import { useTranslation } from "react-i18next"
-import { BA_DB, BunadminDatabase } from "@/utils/database"
+import { BA_DB, DashinDatabase } from "@/utils/database"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 const primaryColor = "#3366ff"
 
-export default function MigrationContainer({ db }: { db?: BunadminDatabase }) {
+export default function MigrationContainer({ db }: { db?: DashinDatabase }) {
   const tableRef = useRef(null)
   const { t } = useTranslation("table")
   const [selData, setSelData] = useState({

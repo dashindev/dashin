@@ -112,7 +112,7 @@ async function aiGenerate(opts) {
 
   // 2 + 3. Generate -> validate, retry once on hallucination
   const provider = getProvider(
-    mock ? { ...process.env, BUNADMIN_AI_PROVIDER: "mock", __MOCK_RESPONSE: mock } : process.env
+    mock ? { ...process.env, DASHIN_AI_PROVIDER: "mock", __MOCK_RESPONSE: mock } : process.env
   )
   const prompt = buildPrompt(schema)
   let attempts = 0

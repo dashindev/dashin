@@ -37,14 +37,14 @@ const v = (key: string): string | undefined =>
   (process.env as any)[`VITE_${key}`]
 
 export const ENV: EnvTypes = {
-  SITE_NAME: v("SITE_NAME") || "BunAdmin",
+  SITE_NAME: v("SITE_NAME") || "Dashin",
   AUTH_PLUGIN: v("AUTH_PLUGIN") || DEFAULT_AUTH_PLUGIN,
   MAIN_URL: v("MAIN_URL"),
   AUTH_URL: v("AUTH_URL") || v("MAIN_URL"),
   UPLOAD_URL: v("UPLOAD_URL") || v("AUTH_URL") || v("MAIN_URL"),
   FILE_PREVIEW_URL: v("FILE_PREVIEW_URL"),
   SITE_URLS: strToArr(v("SITE_URLS")),
-  DB_NAME: v("DB_NAME") || "BunadminDatabase",
+  DB_NAME: v("DB_NAME") || "DashinDatabase",
   DB_VERSION: v("DB_VERSION") || "1",
   ON_I18N: v("ON_I18N") === "true",
   ON_SETTING: v("ON_SETTING") === "true",

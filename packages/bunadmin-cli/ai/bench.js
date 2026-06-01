@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Benchmark: real-model pass-rate through the validator.
- * Usage: node ai/bench.js   (reads BUNADMIN_AI_* + PB token from env/args)
+ * Usage: node ai/bench.js   (reads DASHIN_AI_* + PB token from env/args)
  * The investor metric: what % of generations on a CHEAP model end up valid.
  */
 const { introspectPocketbase } = require("./introspect")
@@ -54,10 +54,10 @@ const sleep = ms => new Promise(r => setTimeout(r, ms))
   for (const c of COLLECTIONS) schemas[c] = await introspectPocketbase(PB, c, token)
 
   for (const model of MODELS) {
-    process.env.BUNADMIN_AI_PROVIDER = "openai"
-    process.env.BUNADMIN_AI_BASE_URL = "https://api.groq.com/openai/v1"
-    process.env.BUNADMIN_AI_API_KEY = process.env.GROQ_API_KEY
-    process.env.BUNADMIN_AI_MODEL = model
+    process.env.DASHIN_AI_PROVIDER = "openai"
+    process.env.DASHIN_AI_BASE_URL = "https://api.groq.com/openai/v1"
+    process.env.DASHIN_AI_API_KEY = process.env.GROQ_API_KEY
+    process.env.DASHIN_AI_MODEL = model
     const provider = getProvider()
 
     let pass = 0, total = 0, firstTry = 0

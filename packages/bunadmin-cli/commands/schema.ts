@@ -1,11 +1,11 @@
 import copyFolder from "../utils/copy-folder"
 import replaceInFile from "../utils/replace-in-file"
-import { BUNADMIN_CLI_PATH } from "../utils/config"
+import { DASHIN_CLI_PATH } from "../utils/config"
 const path = require("path")
 const fs = require("fs")
 
 const sourceFolder = path.resolve(
-  BUNADMIN_CLI_PATH,
+  DASHIN_CLI_PATH,
   "templates/typescript-plugin/bunadmin-plugin-myteam-myblog/post"
 )
 

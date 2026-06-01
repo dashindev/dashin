@@ -8,7 +8,7 @@ export const BA_STORE_TABLES = {
   notifications: "id"
 }
 
-export class BunadminDatabase extends Dexie {
+export class DashinDatabase extends Dexie {
   // Declare implicit table properties.
   // (just to inform Typescript. Instanciated by Dexie in stores() method)
   settings!: Dexie.Table<ISetting, string> // number = type of the primkey
@@ -45,6 +45,6 @@ export interface INotification {
   created_at: number
 }
 
-export const BA_DB = new BunadminDatabase()
+export const BA_DB = new DashinDatabase()
 export * from "./dxInitData"
 export { default as Dexie } from "dexie"

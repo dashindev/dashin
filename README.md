@@ -37,8 +37,8 @@ dashin ai generate --url <backend-url> --collection <name> --token <admin>
 dashin ai theme "dark mode with a purple accent"
 ```
 
-Bring your own key: set `BUNADMIN_AI_PROVIDER` (openai | anthropic | ollama) +
-`BUNADMIN_AI_API_KEY`. Full guide: [`docs/ai/README.md`](docs/ai/README.md).
+Bring your own key: set `DASHIN_AI_PROVIDER` (openai | anthropic | ollama) +
+`DASHIN_AI_API_KEY`. Full guide: [`docs/ai/README.md`](docs/ai/README.md).
 
 ## Backend connectors
 

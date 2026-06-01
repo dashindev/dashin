@@ -165,6 +165,23 @@ export default defineConfig(({ mode }) => {
       globals: true,
       environment: "jsdom",
       setupFiles: ["./src/setupTests.ts"],
+      coverage: {
+        provider: "v8",
+        reporter: ["text-summary"],
+        // Exclude non-logic glue / generated / type-only files from the metric.
+        exclude: [
+          "**/node_modules/**",
+          "**/lib/**",
+          "**/dist/**",
+          "**/e2e/**",
+          "**/__tests__/**",
+          "**/*.d.ts",
+          "**/.bunadmin/**",
+          "src/setupTests.ts",
+          "src/index.tsx",
+          "src/main.ts"
+        ]
+      },
       exclude: [
         "**/node_modules/**",
         "**/lib/**",

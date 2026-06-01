@@ -32,6 +32,10 @@ const cli = meow(`
 	Generate an admin THEME from a description (AI, bring-your-own-key)
 	  $ bunadmin ai theme "dark mode with a purple accent" [--out <dir>]
 	  Emits a validated { preset, mode, overrides } theme config for applyPreset().
+
+	Refine an existing generated admin with a natural-language instruction
+	  $ bunadmin ai refine "make views numeric" --url <url> --collection <name> --columns '<json>'
+	  Updated columns are re-validated against the live schema before re-emitting.
 `)
 
 render(

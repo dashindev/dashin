@@ -6,6 +6,8 @@ const path = require("path")
 const { aiGenerate } = require(path.resolve(__dirname, "../../ai/generate"))
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { aiTheme } = require(path.resolve(__dirname, "../../ai/theme"))
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { aiRefine } = require(path.resolve(__dirname, "../../ai/refine"))
 
 export default async function newAi(
   inputs: string[],
@@ -41,5 +43,29 @@ export default async function newAi(
     }
   }
 
-  return { errors: `Unknown ai subcommand "${sub || ""}". Try: bunadmin ai generate | bunadmin ai theme` }
+  if (sub === "refine") {
+    let columns
+    try {
+      columns = options.columns ? JSON.parse(options.columns) : undefined
+    } catch (e) {
+      return { errors: "--columns must be a JSON array of the current columns" }
+    }
+    const res = await aiRefine({
+      url: options.url,
+      collection: options.collection,
+      token: options.token,
+      columns,
+      instruction: inputs[2] || options.instruction,
+      out: options.out || ".",
+      mock: options.mock
+    })
+    if (res.errors) return { errors: res.errors }
+    return {
+      message: `[${res.mode}] refined (valid after ${res.attempts} attempt(s)) -> ${res.outPath}`
+    }
+  }
+
+  return {
+    errors: `Unknown ai subcommand "${sub || ""}". Try: bunadmin ai generate | theme | refine`
+  }
 }

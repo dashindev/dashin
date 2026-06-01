@@ -47,3 +47,8 @@ package-lock.json
 # lerna
 lerna-debug.log
 .nx
+
+# real env files (use .env.example)
+.env
+.env.development
+.env.production

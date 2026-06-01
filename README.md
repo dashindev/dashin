@@ -22,7 +22,7 @@ Create a schema
 Display help for command
 `$ dashin --help`
 
-[Read the Getting Started tutorial](http://blog.eg.bunadmin.com/docs/getting-started/introduction)
+[Read the Getting Started tutorial](https://dashin.dev/guide/getting-started)
 
 ## AI-assisted generation (BYOK)
 
@@ -49,12 +49,12 @@ See [`docs/pocketbase/`](docs/pocketbase/).
 
 ## Online demo
 
-[blog.eg.bunadmin.com](http://blog.eg.bunadmin.com/)
+[dashin.dev](https://dashin.dev/)
 
 - Username: `admin`
 - Password: `bunadmin`
 
-[More details](http://blog.eg.bunadmin.com/docs/getting-started/remote-data)
+[More details](https://dashin.dev/guide/demo)
 
 ## Screenshot
 

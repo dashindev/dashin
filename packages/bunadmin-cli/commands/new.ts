@@ -20,6 +20,14 @@ export default async function newProject(
   errors = await copyFolder(sourceFolder, targetFolder)
   if (errors) return errors
 
+  // materialize a working .env from the committed .env.example
+  const fs = require("fs")
+  const envExample = path.resolve(targetFolder, ".env.example")
+  const envFile = path.resolve(targetFolder, ".env")
+  if (fs.existsSync(envExample) && !fs.existsSync(envFile)) {
+    fs.copyFileSync(envExample, envFile)
+  }
+
   // replace {project name} in file: `package.json`
   const packageFile = path.resolve(targetFolder, "package.json")
   return await replaceInFile(packageFile, "dashin-typescript", name)

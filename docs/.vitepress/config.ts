@@ -16,7 +16,8 @@ export default defineConfig({
     "appwrite/README.md": "appwrite/index.md",
     "supabase/README.md": "supabase/index.md",
     "directus/README.md": "directus/index.md",
-    "payload/README.md": "payload/index.md"
+    "payload/README.md": "payload/index.md",
+    "turso/README.md": "turso/index.md"
   },
 
   themeConfig: {
@@ -57,7 +58,8 @@ export default defineConfig({
           { text: "Appwrite", link: "/appwrite/" },
           { text: "Supabase / Postgres", link: "/supabase/" },
           { text: "Directus", link: "/directus/" },
-          { text: "Payload", link: "/payload/" }
+          { text: "Payload", link: "/payload/" },
+          { text: "Turso / libSQL", link: "/turso/" }
         ]
       },
       {

@@ -110,6 +110,10 @@ export default defineConfig(({ mode }) => {
           replacement: r("../bunadmin-source-payload/index.ts")
         },
         {
+          find: /^@xbuilder\/bunadmin-source-turso$/,
+          replacement: r("../bunadmin-source-turso/index.ts")
+        },
+        {
           find: /^@xbuilder\/bunadmin-rich-text-editor$/,
           replacement: r("../bunadmin-rich-text-editor/index.tsx")
         },

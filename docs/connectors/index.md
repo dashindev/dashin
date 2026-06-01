@@ -13,6 +13,7 @@ Swap the connector import to change backends — the table UI is unchanged.
 | [Supabase / Postgres](/supabase/) | `@xbuilder/bunadmin-source-supabase` | PostgREST |
 | [Directus](/directus/) | `@xbuilder/bunadmin-source-directus` | REST `/items` |
 | [Payload](/payload/) | `@xbuilder/bunadmin-source-payload` | REST `/api` |
+| [Turso / libSQL](/turso/) | `@xbuilder/bunadmin-source-turso` | SQLite over HTTP (SQL) |
 | Strapi | `@xbuilder/bunadmin-source-strapi` | REST |
 | GraphQL | `@xbuilder/bunadmin-source-graphql` | any GraphQL API |
 

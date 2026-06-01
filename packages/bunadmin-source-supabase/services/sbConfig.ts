@@ -2,7 +2,7 @@ import { ENV, storedToken } from "@xbuilder/bunadmin"
 
 // Supabase anon/service key (from VITE_* env, surfaced on ENV).
 export const SUPABASE_KEY =
-  (ENV as any).SUPABASE_KEY || (ENV as any).SUPABASE_ANON_KEY || ""
+  ENV.SUPABASE_KEY || ""
 
 /** PostgREST endpoint for a table. */
 export function tablePath(table: string): string {

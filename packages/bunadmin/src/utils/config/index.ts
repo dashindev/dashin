@@ -25,6 +25,10 @@ type EnvTypes = {
   PATHS_WITHOUT_AUTH: string[]
   NOTIFICATION_PLUGIN?: string
   ON_NOTIFICATION_INTERVAL_COUNT: boolean
+  // Connector config (read by source-* plugins)
+  SUPABASE_KEY?: string
+  APPWRITE_PROJECT?: string
+  APPWRITE_DATABASE?: string
 }
 
 // VITE_* env. Read via process.env so this file also compiles to CJS lib/
@@ -52,7 +56,11 @@ export const ENV: EnvTypes = {
   PATHS_WITHOUT_AUTH: strToArr(v("PATHS_WITHOUT_AUTH")),
   NOTIFICATION_PLUGIN: v("NOTIFICATION_PLUGIN"),
   ON_NOTIFICATION_INTERVAL_COUNT:
-    v("OFF_NOTIFICATION_INTERVAL_COUNT") === "true"
+    v("OFF_NOTIFICATION_INTERVAL_COUNT") === "true",
+  // Connector config
+  SUPABASE_KEY: v("SUPABASE_KEY") || v("SUPABASE_ANON_KEY"),
+  APPWRITE_PROJECT: v("APPWRITE_PROJECT") || v("PROJECT_ID"),
+  APPWRITE_DATABASE: v("APPWRITE_DATABASE") || v("DATABASE_ID")
 }
 
 export const SETTING_NAMES = {

@@ -1,28 +1,62 @@
 # Appwrite Connector
 
-`@xbuilder/bunadmin-source-appwrite` — use Appwrite as the data source for any
-bunadmin schema (list/CRUD/bulk via Appwrite's Databases API).
+`@xbuilder/bunadmin-source-appwrite` — use [Appwrite](https://appwrite.io)
+Databases as the data source for any bunadmin schema (list / filter / sort /
+CRUD / bulk), reusing the same table UI.
+
+## Install
 
 ```bash
 yarn add @xbuilder/bunadmin-source-appwrite
 ```
 
-```tsx
-import { dataCtrl, editableCtrl } from "@xbuilder/bunadmin-source-appwrite"
+## Configure (`.env`)
 
-<Table
-  columns={columns}
-  data={query => dataCtrl({ t, tableQuery: query, path: "<collectionId>" })}
-  editable={editableCtrl({ t, SchemaName: "<collectionId>" })}
-/>
+```
+VITE_AUTH_URL=https://<region>.cloud.appwrite.io
+VITE_APPWRITE_PROJECT=<your-project-id>
+VITE_APPWRITE_DATABASE=<your-database-id>   # defaults to "default"
 ```
 
-Configure via `.env` (`VITE_*`): the Appwrite endpoint (`VITE_AUTH_URL`), project,
-and database id.
+These are surfaced on bunadmin's `ENV` (`ENV.APPWRITE_PROJECT`,
+`ENV.APPWRITE_DATABASE`) and sent as the `X-Appwrite-Project` header; the stored
+auth token is sent as `X-Appwrite-JWT`.
 
-::: warning
-Full environment-variable wiring + an end-to-end walkthrough are being finalized
-(verifying how `VITE_*` keys surface to the connector). See the
-[source-appwrite package](https://github.com/Chris533/bunadmin/tree/master/packages/bunadmin-source-appwrite)
-meanwhile.
-:::
+## Use in a schema
+
+```tsx
+import { Table, TableHead, tableIcons, TableDefaultProps as DP, useTranslation } from "@xbuilder/bunadmin"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-appwrite"
+
+export default function Posts() {
+  const { t } = useTranslation("table")
+  const SchemaName = "posts" // Appwrite collectionId
+  return (
+    <Table
+      columns={columns}
+      data={query => dataCtrl({ t, tableQuery: query, path: SchemaName })}
+      editable={editableCtrl({ t, SchemaName })}
+      actions={[bulkDeleteCtrl({ t, SchemaName, tableRef })]}
+      options={{ ...DP.options, filtering: true }}
+    />
+  )
+}
+```
+
+## How filters map
+
+bunadmin table operators → Appwrite query JSON
+(`/v1/databases/{db}/collections/{col}/documents?queries[]=`):
+
+| Table operator | Appwrite query |
+| --- | --- |
+| `=` | `equal` |
+| `!=` | `notEqual` |
+| contains | `search` |
+| `>` `>=` `<` `<=` | `greaterThan` / `greaterThanEqual` / `lessThan` / `lessThanEqual` |
+| sort | `orderAsc` / `orderDesc` |
+| pagination | `limit` + `offset` |
+
+## Notes
+- Rows use Appwrite's `$id`; create wraps fields as `{ documentId: "unique()", data }`.
+- Collection permissions must allow the signed-in user to read/write.

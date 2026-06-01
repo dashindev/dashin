@@ -13,7 +13,7 @@ hero:
       link: /ai/
     - theme: alt
       text: View on GitHub
-      link: https://github.com/Chris533/dashin
+      link: https://github.com/dashindev/dashin
 features:
   - title: AI-assisted, validated
     details: "`ai generate` / `ai theme` / `ai refine` — the AI fills a constrained, validated contract, never freeform code. Bring your own key."

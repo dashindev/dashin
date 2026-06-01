@@ -1,18 +1,18 @@
 # Flagship Demo
 
 Boot a real backend, seed data, and generate a working admin — in minutes. The
-runnable demo lives in [`examples/pocketbase-demo`](https://github.com/Chris533/dashin/tree/master/examples/pocketbase-demo).
+runnable demo lives in [`examples/pocketbase-demo`](https://github.com/dashindev/dashin/tree/master/examples/pocketbase-demo).
 
 Runnable demos exist for every connector — pick your backend:
 
 | Backend | Example | Start |
 | --- | --- | --- |
-| PocketBase | [`examples/pocketbase-demo`](https://github.com/Chris533/dashin/tree/master/examples/pocketbase-demo) | `./start.sh` |
-| Payload + SQLite | [`examples/payload-demo`](https://github.com/Chris533/dashin/tree/master/examples/payload-demo) | `./start.sh` |
-| Supabase / Postgres | [`examples/supabase-demo`](https://github.com/Chris533/dashin/tree/master/examples/supabase-demo) | `./start.sh` |
-| Appwrite | [`examples/appwrite-demo`](https://github.com/Chris533/dashin/tree/master/examples/appwrite-demo) | `./start.sh` |
-| Directus | [`examples/directus-demo`](https://github.com/Chris533/dashin/tree/master/examples/directus-demo) | `docker compose up -d` |
-| Turso / libSQL | [`examples/turso-demo`](https://github.com/Chris533/dashin/tree/master/examples/turso-demo) | `./start.sh` |
+| PocketBase | [`examples/pocketbase-demo`](https://github.com/dashindev/dashin/tree/master/examples/pocketbase-demo) | `./start.sh` |
+| Payload + SQLite | [`examples/payload-demo`](https://github.com/dashindev/dashin/tree/master/examples/payload-demo) | `./start.sh` |
+| Supabase / Postgres | [`examples/supabase-demo`](https://github.com/dashindev/dashin/tree/master/examples/supabase-demo) | `./start.sh` |
+| Appwrite | [`examples/appwrite-demo`](https://github.com/dashindev/dashin/tree/master/examples/appwrite-demo) | `./start.sh` |
+| Directus | [`examples/directus-demo`](https://github.com/dashindev/dashin/tree/master/examples/directus-demo) | `docker compose up -d` |
+| Turso / libSQL | [`examples/turso-demo`](https://github.com/dashindev/dashin/tree/master/examples/turso-demo) | `./start.sh` |
 
 ## One command
 
@@ -82,7 +82,7 @@ bunadmin ai generate --url http://127.0.0.1:3001 --collection posts --token <adm
 yarn dev
 ```
 
-Or drop in the pre-built [`example-admin.tsx`](https://github.com/Chris533/dashin/tree/master/examples/payload-demo/example-admin.tsx) — no AI key needed.
+Or drop in the pre-built [`example-admin.tsx`](https://github.com/dashindev/dashin/tree/master/examples/payload-demo/example-admin.tsx) — no AI key needed.
 
 ### Credentials (Payload)
 - Payload admin: `admin@bunadmin.test` / `bunadmin123`

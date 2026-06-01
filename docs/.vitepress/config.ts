@@ -27,7 +27,7 @@ export default defineConfig({
       { text: "Features", link: "/features/tables" },
       { text: "AI Generation", link: "/ai/" },
       { text: "Connectors", link: "/connectors/" },
-      { text: "GitHub", link: "https://github.com/Chris533/dashin" }
+      { text: "GitHub", link: "https://github.com/dashindev/dashin" }
     ],
     sidebar: [
       {
@@ -68,7 +68,7 @@ export default defineConfig({
       }
     ],
     socialLinks: [
-      { icon: "github", link: "https://github.com/Chris533/dashin" }
+      { icon: "github", link: "https://github.com/dashindev/dashin" }
     ],
     search: { provider: "local" }
   }

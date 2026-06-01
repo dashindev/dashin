@@ -1,28 +1,63 @@
 # Supabase / Postgres Connector
 
-`@xbuilder/bunadmin-source-supabase` — use Supabase (PostgREST) as the data source
-for any bunadmin schema. Same table/CRUD UI, backed by your Postgres tables.
+`@xbuilder/bunadmin-source-supabase` — use [Supabase](https://supabase.com)
+(PostgREST) as the data source for any bunadmin schema. Same table UI, backed by
+your Postgres tables.
+
+## Install
 
 ```bash
 yarn add @xbuilder/bunadmin-source-supabase
 ```
 
-```tsx
-import { dataCtrl, editableCtrl } from "@xbuilder/bunadmin-source-supabase"
+## Configure (`.env`)
 
-<Table
-  columns={columns}
-  data={query => dataCtrl({ t, tableQuery: query, path: "<table>" })}
-  editable={editableCtrl({ t, SchemaName: "<table>" })}
-/>
+```
+VITE_MAIN_URL=https://<project-ref>.supabase.co
+VITE_SUPABASE_KEY=<anon-or-service-key>      # or VITE_SUPABASE_ANON_KEY
 ```
 
-Filters map to PostgREST (`col=eq.value`, `ilike`, comparisons), with `order`,
-`limit`/`offset`, and `apikey` + `Authorization: Bearer` headers.
+Surfaced on `ENV.SUPABASE_KEY` and sent as the `apikey` header; the stored auth
+token (or the key) is sent as `Authorization: Bearer …`. Requests go to
+`/rest/v1/{table}`.
 
-::: warning
-Full environment-variable wiring (`SUPABASE_KEY` etc.) + an end-to-end walkthrough
-are being finalized. See the
-[source-supabase package](https://github.com/Chris533/bunadmin/tree/master/packages/bunadmin-source-supabase)
-meanwhile.
-:::
+## Use in a schema
+
+```tsx
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-supabase"
+
+export default function Posts() {
+  const { t } = useTranslation("table")
+  const SchemaName = "posts" // Postgres table name
+  return (
+    <Table
+      columns={columns}
+      data={query => dataCtrl({ t, tableQuery: query, path: SchemaName })}
+      editable={editableCtrl({ t, SchemaName })}
+      actions={[bulkDeleteCtrl({ t, SchemaName, tableRef })]}
+      options={{ ...DP.options, filtering: true }}
+    />
+  )
+}
+```
+
+## How filters map
+
+bunadmin table operators → PostgREST `column=operator.value`:
+
+| Table operator | PostgREST |
+| --- | --- |
+| `=` | `eq.value` |
+| `!=` | `neq.value` |
+| contains | `ilike.*value*` |
+| not contains | `not.ilike.*value*` |
+| `>` `>=` `<` `<=` | `gt.` / `gte.` / `lt.` / `lte.` |
+| sort | `order=col.asc\|desc` |
+| pagination | `limit` + `offset` |
+
+Total count uses `Prefer: count=exact`. Row ops target `?id=eq.<id>`.
+
+## Notes
+- Row-Level Security must permit the key/user; the anon key + RLS policies is the
+  typical setup. A service key bypasses RLS — use only in trusted contexts.
+- Primary key assumed `id` (override via `primaryKey` in update/delete props).

@@ -1,8 +1,8 @@
 import { ENV, storedToken } from "@xbuilder/bunadmin"
 
-export const PROJECT = (ENV as any).APPWRITE_PROJECT || (ENV as any).PROJECT_ID
+export const PROJECT = ENV.APPWRITE_PROJECT
 export const DATABASE =
-  (ENV as any).APPWRITE_DATABASE || (ENV as any).DATABASE_ID || "default"
+  ENV.APPWRITE_DATABASE || "default"
 
 /** Common Appwrite headers (project + JWT) for a request. */
 export async function awHeaders(): Promise<Record<string, string>> {

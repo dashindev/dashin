@@ -8,8 +8,8 @@ import { ListService } from "../types"
 import { buildQueries } from "./filter"
 
 // Appwrite needs a project id + database id (from VITE_* env, surfaced on ENV).
-const PROJECT = (ENV as any).APPWRITE_PROJECT || (ENV as any).PROJECT_ID
-const DATABASE = (ENV as any).APPWRITE_DATABASE || (ENV as any).DATABASE_ID || "default"
+const PROJECT = ENV.APPWRITE_PROJECT
+const DATABASE = ENV.APPWRITE_DATABASE || "default"
 
 export default async function listSer<RowData extends object>({
   tableQuery,

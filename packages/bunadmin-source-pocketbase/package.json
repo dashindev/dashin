@@ -11,7 +11,7 @@
     "@xbuilder/bunadmin": "^1.6.0-beta.0",
     "prettier": "1.19.1",
     "typescript": "4.8.3",
-    "vitest": "^1.6.0"
+    "vitest": "^4.1.0"
   },
   "scripts": {
     "tsc:watch": "tsc -w",

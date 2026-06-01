@@ -1,0 +1,9 @@
+# Code owners — auto-requests review + catalogs area maintainers.
+# Docs area owner(s). Add doc maintainers here as the community grows.
+/docs/                 @Chris533
+/docs/CONTRIBUTORS.md  @Chris533
+
+# Connectors (the new data sources) — keep their docs + code owners aligned.
+/packages/bunadmin-source-pocketbase/  @Chris533
+/packages/bunadmin-source-appwrite/    @Chris533
+/packages/bunadmin-source-supabase/    @Chris533

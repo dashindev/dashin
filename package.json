@@ -17,7 +17,8 @@
     "turbo:build": "turbo run build",
     "turbo:test": "turbo run test",
     "turbo:lint": "turbo run lint",
-    "turbo:dev": "turbo run dev"
+    "turbo:dev": "turbo run dev",
+    "docs:contributors": "bash scripts/gen-docs-contributors.sh"
   },
   "devDependencies": {
     "@esbuild/linux-x64": "0.21.5",

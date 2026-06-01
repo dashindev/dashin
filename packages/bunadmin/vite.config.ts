@@ -102,6 +102,10 @@ export default defineConfig(({ mode }) => {
           replacement: r("../bunadmin-source-supabase/index.ts")
         },
         {
+          find: /^@xbuilder\/bunadmin-source-directus$/,
+          replacement: r("../bunadmin-source-directus/index.ts")
+        },
+        {
           find: /^@xbuilder\/bunadmin-rich-text-editor$/,
           replacement: r("../bunadmin-rich-text-editor/index.tsx")
         },

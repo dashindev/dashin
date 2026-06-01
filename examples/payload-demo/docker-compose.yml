@@ -1,0 +1,21 @@
+# bunadmin Payload demo — Docker alternative to start.sh.
+#   docker compose up        # serves Payload on :3001
+services:
+  payload:
+    build: .
+    container_name: bunadmin-demo-payload
+    ports:
+      - "3001:3000"
+    environment:
+      - PAYLOAD_SECRET=bunadmin-demo-secret-change-me
+      - DATABASE_URL=file:/app/data.db
+    volumes:
+      - payload_data:/app
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/posts"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  payload_data:

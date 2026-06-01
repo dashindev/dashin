@@ -1,0 +1,26 @@
+# bunadmin Directus demo.
+#   docker compose up -d        # serves Directus on :8055
+# Uses SQLite (file-backed) — no external DB needed.
+services:
+  directus:
+    image: directus/directus:11
+    container_name: bunadmin-demo-directus
+    ports:
+      - "8055:8055"
+    environment:
+      - KEY=bunadmin-demo-key-change-me
+      - SECRET=bunadmin-demo-secret-change-me
+      - DB_CLIENT=sqlite3
+      - DB_FILENAME=/directus/database/data.db
+      - ADMIN_EMAIL=admin@bunadmin.test
+      - ADMIN_PASSWORD=bunadmin123
+    volumes:
+      - directus_db:/directus/database
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8055/server/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  directus_db:

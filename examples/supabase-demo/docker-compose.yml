@@ -1,0 +1,13 @@
+# bunadmin Supabase demo.
+# The Supabase CLI manages its own multi-container stack — prefer ./start.sh.
+# This file is a thin convenience wrapper around the CLI.
+#   docker compose up        # runs `supabase start`
+services:
+  supabase:
+    image: node:20-alpine
+    container_name: bunadmin-demo-supabase
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["npx", "supabase", "start"]

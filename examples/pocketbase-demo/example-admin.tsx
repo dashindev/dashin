@@ -1,10 +1,14 @@
 /**
- * Worked example: a `posts` page backed by PocketBase via
- * @xbuilder/bunadmin-source-pocketbase.
+ * Flagship worked example — the `posts` schema of a multi-schema PocketBase
+ * plugin (paired with `example-products.tsx` + `example-menu.ts`).
  *
- * Drop this into a bunadmin project's plugin (e.g. src/plugins/bunadmin-plugin-
- * myteam-blog/posts/index.tsx) and register it like any other schema plugin.
- * Requires a PocketBase `posts` collection (see docs/pocketbase/seed.js).
+ * Demonstrates plugin-level features: filtering/search, inline CRUD, **bulk
+ * delete**, a status-pill `lookup`, a numeric column, and a custom `render`.
+ *
+ * The surrounding shell (KPI stat band, modern layout, dark-mode toggle, i18n)
+ * is provided automatically by `bunadmin new` on every list view — no code here.
+ *
+ * Drop into src/plugins/bunadmin-plugin-xbuilder-blog/posts/index.tsx.
  */
 import React, { createRef } from "react"
 import {
@@ -15,7 +19,11 @@ import {
   useTranslation,
   Column
 } from "@xbuilder/bunadmin"
-import { dataCtrl, editableCtrl } from "@xbuilder/bunadmin-source-pocketbase"
+import {
+  dataCtrl,
+  editableCtrl,
+  bulkDeleteCtrl
+} from "@xbuilder/bunadmin-source-pocketbase"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 
@@ -34,7 +42,13 @@ const columns = ({ t }: { t: any }): Column<Post>[] => [
     field: "status",
     lookup: { Draft: "Draft", Published: "Published" }
   },
-  { title: t("Views"), field: "views", type: "numeric" }
+  {
+    title: t("Views"),
+    field: "views",
+    type: "numeric",
+    // custom cell renderer — flag popular posts
+    render: (row: Post) => (row.views >= 100 ? `🔥 ${row.views}` : row.views)
+  }
 ]
 
 export default function Posts() {
@@ -44,10 +58,10 @@ export default function Posts() {
 
   return (
     <>
-      <TableHead title="Posts" />
+      <TableHead title={t("Posts")} />
       <Table<Post>
         tableRef={tableRef}
-        title="Posts"
+        title={t("Posts")}
         columns={columns({ t })}
         style={DefaultProps.style}
         icons={tableIcons({ theme })}
@@ -56,6 +70,8 @@ export default function Posts() {
         data={query => dataCtrl({ t, tableQuery: query, path: SchemaName })}
         // Inline create / update / delete via PocketBase
         editable={editableCtrl({ t, SchemaName })}
+        // Bulk "delete selected" toolbar action
+        actions={[bulkDeleteCtrl({ SchemaName, t, tableRef })]}
       />
     </>
   )

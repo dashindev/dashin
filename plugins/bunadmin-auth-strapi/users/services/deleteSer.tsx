@@ -1,6 +1,6 @@
 import Type from "../types"
 import { SchemaName } from "../plugin"
-import { ENV, request, storedToken, notice } from "@xbuilder/bunadmin"
+import { ENV, request, storedToken, notice } from "@dashin-dev/dashin"
 
 export default async function deleteSer(oldData: Type) {
   const token = await storedToken()

@@ -56,7 +56,7 @@ cat <<EOF
 Next — in another terminal:
   bunadmin new my-admin && cd my-admin
   # .env:
-  #   VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-supabase
+  #   VITE_AUTH_PLUGIN=@dashin-dev/auth-supabase
   #   VITE_MAIN_URL=${API_URL}
   #   VITE_SUPABASE_KEY=${ANON_KEY}
   yarn dev

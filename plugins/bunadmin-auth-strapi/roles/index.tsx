@@ -4,12 +4,12 @@ import {
   TableHead,
   tableIcons,
   TableDefaultProps as DefaultProps
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 import { SchemaLabel, SchemaColumns } from "./plugin"
 import editableCtrl from "./controllers/editableCtrl"
-import { useTranslation } from "@xbuilder/bunadmin"
-import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
+import { useTranslation } from "@dashin-dev/dashin"
+import { dataCtrl } from "@dashin-dev/source-strapi"
 import listSer from "./services/listSer"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }

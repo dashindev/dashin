@@ -4,7 +4,7 @@ import {
   TableHead,
   tableIcons,
   TableDefaultProps as DefaultProps
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import { Query } from "@/components/Table/models/material-table-shim"
 
 import { SchemaName, SchemaLabel, SchemaColumns } from "./plugin"
@@ -13,7 +13,7 @@ import {
   bulkDeleteCtrl,
   dataCtrl,
   editableCtrl
-} from "@xbuilder/bunadmin-source-strapi"
+} from "@dashin-dev/source-strapi"
 import Type from "./types"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }

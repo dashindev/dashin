@@ -3,8 +3,8 @@
  */
 import listSer from "../services/listSer"
 import { DataCtrl, ListService } from "../types"
-import { notice } from "@xbuilder/bunadmin"
-import { QueryResult } from "@xbuilder/bunadmin"
+import { notice } from "@dashin-dev/dashin"
+import { QueryResult } from "@dashin-dev/dashin"
 
 export default async function dataCtrl<RowData extends object>({
   t,

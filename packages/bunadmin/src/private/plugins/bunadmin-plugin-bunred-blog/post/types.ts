@@ -1,4 +1,4 @@
-import { IFile } from "@xbuilder/bunadmin-upload-strapi"
+import { IFile } from "@dashin-dev/upload-strapi"
 import ICategory from "../category/types"
 
 export default interface Type {

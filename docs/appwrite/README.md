@@ -1,13 +1,13 @@
 # Appwrite Connector
 
-`@xbuilder/bunadmin-source-appwrite` — use [Appwrite](https://appwrite.io)
+`@dashin-dev/source-appwrite` — use [Appwrite](https://appwrite.io)
 Databases as the data source for any bunadmin schema (list / filter / sort /
 CRUD / bulk), reusing the same table UI.
 
 ## Install
 
 ```bash
-yarn add @xbuilder/bunadmin-source-appwrite
+yarn add @dashin-dev/source-appwrite
 ```
 
 ## Configure (`.env`)
@@ -25,8 +25,8 @@ auth token is sent as `X-Appwrite-JWT`.
 ## Use in a schema
 
 ```tsx
-import { Table, TableHead, tableIcons, TableDefaultProps as DP, useTranslation } from "@xbuilder/bunadmin"
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-appwrite"
+import { Table, TableHead, tableIcons, TableDefaultProps as DP, useTranslation } from "@dashin-dev/dashin"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-appwrite"
 
 export default function Posts() {
   const { t } = useTranslation("table")

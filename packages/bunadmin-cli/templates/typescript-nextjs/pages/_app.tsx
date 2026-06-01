@@ -17,8 +17,8 @@ import {
   DEFAULT_AUTH_PLUGIN,
   PluginData,
   MenuType
-} from "@xbuilder/bunadmin"
-import "@xbuilder/bunadmin/lib/utils/i18n"
+} from "@dashin-dev/dashin"
+import "@dashin-dev/dashin/lib/utils/i18n"
 import "../public/index.css"
 import { YOUR_DB } from "../utils/database"
 

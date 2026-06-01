@@ -1,8 +1,8 @@
-import { Column } from "@xbuilder/bunadmin"
+import { Column } from "@dashin-dev/dashin"
 import Type from "./types"
 import React from "react"
 
-import { BunadminFile, ENV } from "@xbuilder/bunadmin"
+import { BunadminFile, ENV } from "@dashin-dev/dashin"
 
 const prefix = ENV.UPLOAD_URL
 

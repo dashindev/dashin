@@ -1,8 +1,8 @@
 /**
  * Remote data controller
  */
-import { Query } from "@xbuilder/bunadmin"
-import { ENV, request, storedToken } from "@xbuilder/bunadmin"
+import { Query } from "@dashin-dev/dashin"
+import { ENV, request, storedToken } from "@dashin-dev/dashin"
 import { SchemaName } from "../plugin"
 
 export default async function listSer<RowData extends object>(

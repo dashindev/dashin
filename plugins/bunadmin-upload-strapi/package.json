@@ -1,5 +1,5 @@
 {
-  "name": "@xbuilder/bunadmin-upload-strapi",
+  "name": "@dashin-dev/upload-strapi",
   "version": "1.6.0-beta.0",
   "license": "Apache-2.0",
   "main": "lib/index.js",

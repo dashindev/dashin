@@ -1,12 +1,12 @@
 # Payload Connector
 
-`@xbuilder/bunadmin-source-payload` — use [Payload CMS](https://payloadcms.com) as
+`@dashin-dev/source-payload` — use [Payload CMS](https://payloadcms.com) as
 the data source (list / filter / sort / CRUD / bulk via the REST API).
 
 ## Install
 
 ```bash
-yarn add @xbuilder/bunadmin-source-payload
+yarn add @dashin-dev/source-payload
 ```
 
 ## Configure (`.env`)
@@ -20,7 +20,7 @@ Auth uses the bunadmin stored token as `Authorization: Bearer …`.
 ## Use in a schema
 
 ```tsx
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-payload"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-payload"
 
 <Table
   columns={columns}

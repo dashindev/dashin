@@ -7,8 +7,8 @@ detail — backed by any [connector](/connectors/).
 ## Minimal example
 
 ```tsx
-import { Table, TableHead, tableIcons, TableDefaultProps as DP, useTranslation } from "@xbuilder/bunadmin"
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-pocketbase"
+import { Table, TableHead, tableIcons, TableDefaultProps as DP, useTranslation } from "@dashin-dev/dashin"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-pocketbase"
 
 export default function Posts() {
   const { t } = useTranslation("table")

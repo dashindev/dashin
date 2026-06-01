@@ -9,7 +9,7 @@ import { useRouter } from "next/router"
 import { defaultTheme, DynamicDocRoute, ENV } from "@/utils"
 
 import PrismHighlight, { defaultProps } from "prism-react-renderer"
-import { EvaIcon } from "@xbuilder/bunadmin"
+import { EvaIcon } from "@dashin-dev/dashin"
 import DefaultLayout from "@/private/DefaultLayout"
 import Error from "@/private/Error"
 
@@ -23,7 +23,7 @@ export default function DocsCategorySlug() {
   const [pagination, setPagination] = useState<PaginationType>({})
   const [menuData, setMenuData] = useState<Type[]>([])
 
-  const bunadminDocPath = "@xbuilder/bunadmin-docs"
+  const bunadminDocPath = "@dashin-dev/docs"
 
   useEffect(() => {
     ;(async () => {

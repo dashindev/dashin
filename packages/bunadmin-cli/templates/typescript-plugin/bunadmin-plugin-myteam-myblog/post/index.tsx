@@ -6,7 +6,7 @@ import {
   TableDefaultProps as DefaultProps,
   useTranslation,
   notice
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import { SchemaLabel, SchemaColumns } from "./plugin"
 import Type from "./types"
 

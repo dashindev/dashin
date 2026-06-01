@@ -5,13 +5,13 @@ import {
   PluginColumns,
   MultipleSelector,
   ListSelector
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 import { ENUM_STATUS } from "./plugin"
-import { FileUploader } from "@xbuilder/bunadmin-upload-strapi"
-import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
+import { FileUploader } from "@dashin-dev/upload-strapi"
+import { dataCtrl } from "@dashin-dev/source-strapi"
 import { SchemaName } from "../category/plugin"
-import { RichTextEditor } from "@xbuilder/bunadmin-rich-text-editor"
+import { RichTextEditor } from "@dashin-dev/rich-text-editor"
 
 export default ({ t }: PluginColumns): Column<Type>[] => [
   {

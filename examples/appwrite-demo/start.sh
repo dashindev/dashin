@@ -31,7 +31,7 @@ Next steps (one-time, in the Appwrite console):
 Then — in another terminal:
   bunadmin new my-admin && cd my-admin
   # .env:
-  #   VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-appwrite
+  #   VITE_AUTH_PLUGIN=@dashin-dev/auth-appwrite
   #   VITE_AUTH_URL=http://127.0.0.1:8080
   #   VITE_APPWRITE_PROJECT=<your-project-id>
   #   VITE_APPWRITE_DATABASE=<your-database-id>

@@ -1,14 +1,14 @@
-# Using PocketBase with BunAdmin
+# Using PocketBase with Dashin
 
 [PocketBase](https://pocketbase.io) is a single-binary backend (auth + collections
 + REST API, embedded SQLite) — a zero-build way to run a real auth + CMS backend
-for a BunAdmin project.
+for a Dashin project.
 
-BunAdmin ships two plugins for it:
+Dashin ships two plugins for it:
 
-- **`@xbuilder/bunadmin-source-pocketbase`** — data source (list/add/update/delete/
+- **`@dashin-dev/source-pocketbase`** — data source (list/add/update/delete/
   bulk) mapping the table query to PocketBase's REST API.
-- **`@xbuilder/bunadmin-auth-pocketbase`** — auth plugin (sign-in via
+- **`@dashin-dev/auth-pocketbase`** — auth plugin (sign-in via
   `users` collection).
 
 ## 1. Run PocketBase
@@ -33,19 +33,19 @@ node docs/pocketbase/seed.js
 Creates a `posts` collection, a demo user (`demo` / `bunadmin123`), and a few
 records. Override with `PB_URL`, `PB_ADMIN`, `PB_ADMIN_PW` env vars.
 
-## 3. Point your BunAdmin project at it
+## 3. Point your Dashin project at it
 
 In your project's `.env`:
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase
+VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase
 VITE_AUTH_URL=http://127.0.0.1:8090
 ```
 
 Install the plugins:
 
 ```bash
-yarn add @xbuilder/bunadmin-auth-pocketbase @xbuilder/bunadmin-source-pocketbase
+yarn add @dashin-dev/auth-pocketbase @dashin-dev/source-pocketbase
 ```
 
 ## 4. Render a collection as a table
@@ -54,7 +54,7 @@ See [`example-posts.tsx`](./example-posts.tsx) for a complete `posts` page.
 The key wiring:
 
 ```tsx
-import { dataCtrl, editableCtrl } from "@xbuilder/bunadmin-source-pocketbase"
+import { dataCtrl, editableCtrl } from "@dashin-dev/source-pocketbase"
 
 <Table
   columns={columns}

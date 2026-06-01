@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react"
-import { Drawer, DrawerProps } from "@xbuilder/bunadmin"
-import { EditComponentProps } from "@xbuilder/bunadmin"
+import { Drawer, DrawerProps } from "@dashin-dev/dashin"
+import { EditComponentProps } from "@dashin-dev/dashin"
 
 // Lazy so the heavy @tiptap bundle is only loaded when a drawer actually opens.
 // Typed loosely (any props) because React.lazy collapses the editor's generic.

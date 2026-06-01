@@ -1,4 +1,4 @@
-import { EditableCtrl, ENV, request, notice } from "@xbuilder/bunadmin"
+import { EditableCtrl, ENV, request, notice } from "@dashin-dev/dashin"
 import { awHeaders, docPath } from "./awConfig"
 
 interface Props<RowData> extends EditableCtrl {

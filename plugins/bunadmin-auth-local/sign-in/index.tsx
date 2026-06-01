@@ -8,7 +8,7 @@ import {
   AnimatedRandomBG,
   useTranslation,
   useRouter
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 function Copyright() {
   return (

@@ -2,7 +2,7 @@ import initData from "./utils/initData"
 export * from "./utils/types"
 
 import SignIn from "./sign-in"
-import { IAuthPlugin } from "@xbuilder/bunadmin"
+import { IAuthPlugin } from "@dashin-dev/dashin"
 
 export { initData, SignIn }
 

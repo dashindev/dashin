@@ -7,7 +7,7 @@ import {
   useRouter,
   DEFAULT_AUTH_PLUGIN,
   MenuType
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import PluginTable from "../components/PluginTable"
 import DefaultLayout from "../components/DefaultLayout"
 import Error from "../components/Error"

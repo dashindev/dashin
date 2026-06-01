@@ -4,7 +4,7 @@
  * (table/column names) can't be parameters, so they're validated against a
  * strict pattern and quoted. Testable core of the connector.
  */
-import { Filter } from "@xbuilder/bunadmin"
+import { Filter } from "@dashin-dev/dashin"
 
 /** A SQL statement with bound args, in libSQL stmt shape. */
 export interface Stmt {

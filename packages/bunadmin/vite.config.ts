@@ -82,83 +82,75 @@ export default defineConfig(({ mode }) => {
         // clean ESM for both bare imports and deep subpaths (e.g. the generated
         // schema's `<pkg>/sign-in`). Avoids CJS lib/ interop issues.
         {
-          find: /^@xbuilder\/bunadmin-source-strapi$/,
+          find: /^@dashin-dev\/source-strapi$/,
           replacement: r("../bunadmin-source-strapi/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-source-graphql$/,
+          find: /^@dashin-dev\/source-graphql$/,
           replacement: r("../bunadmin-source-graphql/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-source-pocketbase$/,
+          find: /^@dashin-dev\/source-pocketbase$/,
           replacement: r("../bunadmin-source-pocketbase/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-source-appwrite$/,
+          find: /^@dashin-dev\/source-appwrite$/,
           replacement: r("../bunadmin-source-appwrite/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-source-supabase$/,
+          find: /^@dashin-dev\/source-supabase$/,
           replacement: r("../bunadmin-source-supabase/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-source-directus$/,
+          find: /^@dashin-dev\/source-directus$/,
           replacement: r("../bunadmin-source-directus/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-source-payload$/,
+          find: /^@dashin-dev\/source-payload$/,
           replacement: r("../bunadmin-source-payload/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-source-turso$/,
+          find: /^@dashin-dev\/source-turso$/,
           replacement: r("../bunadmin-source-turso/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-rich-text-editor$/,
+          find: /^@dashin-dev\/rich-text-editor$/,
           replacement: r("../bunadmin-rich-text-editor/index.tsx")
         },
         // dir-mapped: bare -> index.ts (Vite resolves), subpath -> source file
         {
-          find: /^@xbuilder\/bunadmin-auth-local\/(.*)/,
+          find: /^@dashin-dev\/auth-local\/(.*)/,
           replacement: r("../../plugins/bunadmin-auth-local") + "/$1"
         },
         {
-          find: /^@xbuilder\/bunadmin-auth-local$/,
+          find: /^@dashin-dev\/auth-local$/,
           replacement: r("../../plugins/bunadmin-auth-local/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-auth-strapi\/(.*)/,
+          find: /^@dashin-dev\/auth-strapi\/(.*)/,
           replacement: r("../../plugins/bunadmin-auth-strapi") + "/$1"
         },
         {
-          find: /^@xbuilder\/bunadmin-auth-strapi$/,
+          find: /^@dashin-dev\/auth-strapi$/,
           replacement: r("../../plugins/bunadmin-auth-strapi/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-auth-buncms\/(.*)/,
-          replacement: r("../../plugins/bunadmin-auth-buncms") + "/$1"
-        },
-        {
-          find: /^@xbuilder\/bunadmin-auth-buncms$/,
-          replacement: r("../../plugins/bunadmin-auth-buncms/index.ts")
-        },
-        {
-          find: /^@xbuilder\/bunadmin-auth-pocketbase\/(.*)/,
+          find: /^@dashin-dev\/auth-pocketbase\/(.*)/,
           replacement: r("../../plugins/bunadmin-auth-pocketbase") + "/$1"
         },
         {
-          find: /^@xbuilder\/bunadmin-auth-pocketbase$/,
+          find: /^@dashin-dev\/auth-pocketbase$/,
           replacement: r("../../plugins/bunadmin-auth-pocketbase/index.ts")
         },
         {
-          find: /^@xbuilder\/bunadmin-upload-strapi\/(.*)/,
+          find: /^@dashin-dev\/upload-strapi\/(.*)/,
           replacement: r("../../plugins/bunadmin-upload-strapi") + "/$1"
         },
         {
-          find: /^@xbuilder\/bunadmin-upload-strapi$/,
+          find: /^@dashin-dev\/upload-strapi$/,
           replacement: r("../../plugins/bunadmin-upload-strapi/index.ts")
         },
-        { find: /^@xbuilder\/bunadmin$/, replacement: r("src") }
+        { find: /^@dashin-dev\/dashin$/, replacement: r("src") }
       ]
     },
     test: {

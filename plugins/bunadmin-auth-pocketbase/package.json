@@ -1,5 +1,5 @@
 {
-  "name": "@xbuilder/bunadmin-auth-pocketbase",
+  "name": "@dashin-dev/auth-pocketbase",
   "version": "1.6.0-beta.0",
   "license": "Apache-2.0",
   "main": "lib/index.js",
@@ -8,7 +8,7 @@
     "lib"
   ],
   "devDependencies": {
-    "@xbuilder/bunadmin": "^1.6.0-beta.0",
+    "@dashin-dev/dashin": "^1.6.0-beta.0",
     "prettier": "1.19.1",
     "typescript": "4.8.3",
     "vitest": "^1.6.0"

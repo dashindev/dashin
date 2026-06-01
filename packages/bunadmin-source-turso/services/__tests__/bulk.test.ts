@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const execute = vi.fn()
 vi.mock("../client", () => ({ execute: (...a: any[]) => execute(...a) }))
-vi.mock("@xbuilder/bunadmin", () => ({ notice: vi.fn() }))
+vi.mock("@dashin-dev/dashin", () => ({ notice: vi.fn() }))
 
 import { bulkDeleteSer, bulkUpdateSer } from "../bulk"
 

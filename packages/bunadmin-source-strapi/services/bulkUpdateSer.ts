@@ -4,7 +4,7 @@ import {
   storedToken,
   notice,
   BulkUpdateProps
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 export default async function bulkUpdateSer<T>({
   t,

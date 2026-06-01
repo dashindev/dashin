@@ -1,4 +1,4 @@
-import { MenuType as Type } from "@xbuilder/bunadmin"
+import { MenuType as Type } from "@dashin-dev/dashin"
 
 const menus = [
   {

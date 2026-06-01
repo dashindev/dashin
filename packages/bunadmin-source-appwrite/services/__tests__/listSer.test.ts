@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const request = vi.fn()
-vi.mock("@xbuilder/bunadmin", () => ({
+vi.mock("@dashin-dev/dashin", () => ({
   ENV: { AUTH_URL: "http://aw.test", APPWRITE_PROJECT: "proj1", APPWRITE_DATABASE: "db1" },
   request: (...a: any[]) => request(...a),
   storedToken: async () => "jwt"

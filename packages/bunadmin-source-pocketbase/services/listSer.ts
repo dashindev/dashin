@@ -3,7 +3,7 @@
  * GET /api/collections/{name}/records?page=&perPage=&filter=&sort=
  *   -> { page, perPage, totalItems, totalPages, items[] }
  */
-import { ENV, request, storedToken } from "@xbuilder/bunadmin"
+import { ENV, request, storedToken } from "@dashin-dev/dashin"
 import { ListService } from "../types"
 import { buildFilter, buildSort } from "./filter"
 

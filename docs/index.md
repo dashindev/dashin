@@ -1,7 +1,7 @@
 ---
 layout: home
 hero:
-  name: BunAdmin
+  name: Dashin
   text: AI-assisted admin, validated against your real schema
   tagline: A Vite + Tailwind React admin scaffold. Point it at your backend, let AI generate a validated admin — cheap models work because output is checked against your schema, not freeform code.
   actions:

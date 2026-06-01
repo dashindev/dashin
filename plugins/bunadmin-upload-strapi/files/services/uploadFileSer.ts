@@ -1,5 +1,5 @@
 import request from "umi-request"
-import { BunadminFileType, ENV, storedToken } from "@xbuilder/bunadmin"
+import { BunadminFileType, ENV, storedToken } from "@dashin-dev/dashin"
 import { IFile } from "../../utils/types/file"
 
 type Resp = IFile[]

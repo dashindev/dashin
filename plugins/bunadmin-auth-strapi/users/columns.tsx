@@ -1,8 +1,8 @@
-import { Column } from "@xbuilder/bunadmin"
+import { Column } from "@dashin-dev/dashin"
 import Type from "./types"
 import { TFunction } from "i18next"
 import React from "react"
-import { SingleSelector } from "@xbuilder/bunadmin"
+import { SingleSelector } from "@dashin-dev/dashin"
 
 export default ({ t, roleLookup }: { t: TFunction; roleLookup: object }) =>
   [

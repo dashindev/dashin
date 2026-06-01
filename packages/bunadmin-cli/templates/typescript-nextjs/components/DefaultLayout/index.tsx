@@ -5,7 +5,7 @@ import {
   DefaultLayoutProps,
   ENV,
   store
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 export default function DefaultLayout(props: DefaultLayoutProps) {
   const { children, leftMenu } = props

@@ -1,6 +1,6 @@
 /**
  * Worked example: a `posts` page backed by PocketBase via
- * @xbuilder/bunadmin-source-pocketbase.
+ * @dashin-dev/source-pocketbase.
  *
  * Drop this into a bunadmin project's plugin (e.g. src/plugins/bunadmin-plugin-
  * myteam-blog/posts/index.tsx) and register it like any other schema plugin.
@@ -14,8 +14,8 @@ import {
   TableDefaultProps as DefaultProps,
   useTranslation,
   Column
-} from "@xbuilder/bunadmin"
-import { dataCtrl, editableCtrl } from "@xbuilder/bunadmin-source-pocketbase"
+} from "@dashin-dev/dashin"
+import { dataCtrl, editableCtrl } from "@dashin-dev/source-pocketbase"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 

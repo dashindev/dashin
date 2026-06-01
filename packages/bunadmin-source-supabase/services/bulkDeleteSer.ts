@@ -1,4 +1,4 @@
-import { ENV, request, notice, BulkDeleteProps } from "@xbuilder/bunadmin"
+import { ENV, request, notice, BulkDeleteProps } from "@dashin-dev/dashin"
 import { sbHeaders, tablePath } from "./sbConfig"
 
 type Props<RowData extends object> = BulkDeleteProps & {

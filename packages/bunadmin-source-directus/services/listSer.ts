@@ -3,7 +3,7 @@
  * GET /items/{collection}?filter[..]&sort&limit&offset&meta=filter_count
  *   -> { data: RowData[], meta: { filter_count } }
  */
-import { ENV, request } from "@xbuilder/bunadmin"
+import { ENV, request } from "@dashin-dev/dashin"
 import { ListService } from "../types"
 import { buildParams } from "./filter"
 import { dxHeaders, itemsPath } from "./dxConfig"

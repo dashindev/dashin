@@ -1,6 +1,6 @@
 # bunadmin-source-strapi
 
-[This plugin needs to be used in BunAdmin](https://github.com/xbuilder/bunadmin)
+[This plugin needs to be used in Dashin](https://github.com/xbuilder/bunadmin)
 
 ### How to use
 

@@ -3,7 +3,7 @@ import { Form, Formik, Field, ErrorMessage } from "formik"
 import validateController from "./controllers/validateController"
 import submitController from "./controllers/submitController"
 import { Values } from "./types"
-import { ENV, useTranslation, useRouter } from "@xbuilder/bunadmin"
+import { ENV, useTranslation, useRouter } from "@dashin-dev/dashin"
 
 export default function SignInContainer() {
   const { t } = useTranslation("plugins")

@@ -1,5 +1,5 @@
 {
-  "name": "@xbuilder/bunadmin-source-graphql",
+  "name": "@dashin-dev/source-graphql",
   "version": "1.6.0-beta.0",
   "license": "Apache-2.0",
   "main": "lib/index.js",

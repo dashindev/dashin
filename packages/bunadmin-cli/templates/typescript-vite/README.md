@@ -1,4 +1,4 @@
-# Bunadmin TypeScript CRA example
+# Dashin TypeScript CRA example
 
 ## How to use it?
 

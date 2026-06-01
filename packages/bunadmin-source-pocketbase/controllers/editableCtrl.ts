@@ -1,4 +1,4 @@
-import { EditableCtrl, EditableDataType } from "@xbuilder/bunadmin"
+import { EditableCtrl, EditableDataType } from "@dashin-dev/dashin"
 import updateSer from "../services/updateSer"
 import deleteSer from "../services/deleteSer"
 import addSer from "../services/addSer"

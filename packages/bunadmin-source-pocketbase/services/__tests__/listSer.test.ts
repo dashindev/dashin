@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 // Mock the bunadmin runtime deps the service imports.
 const request = vi.fn()
-vi.mock("@xbuilder/bunadmin", () => ({
+vi.mock("@dashin-dev/dashin", () => ({
   ENV: { AUTH_URL: "http://pb.test" },
   request: (...a: any[]) => request(...a),
   storedToken: async () => "tok"

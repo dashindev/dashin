@@ -1,4 +1,4 @@
-import { EditableCtrl, ENV, request, notice } from "@xbuilder/bunadmin"
+import { EditableCtrl, ENV, request, notice } from "@dashin-dev/dashin"
 import { dxHeaders, itemsPath } from "./dxConfig"
 
 interface Add<R> extends EditableCtrl { newData: R }

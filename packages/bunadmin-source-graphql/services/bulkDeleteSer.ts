@@ -4,7 +4,7 @@ import {
   storedToken,
   notice,
   BulkDeleteProps
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 type Props<RowData extends object> = BulkDeleteProps & {
   data: RowData[]

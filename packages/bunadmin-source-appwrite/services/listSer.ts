@@ -3,7 +3,7 @@
  * GET /v1/databases/{databaseId}/collections/{collectionId}/documents?queries[]=
  *   -> { total, documents[] }
  */
-import { ENV, request, storedToken } from "@xbuilder/bunadmin"
+import { ENV, request, storedToken } from "@dashin-dev/dashin"
 import { ListService } from "../types"
 import { buildQueries } from "./filter"
 

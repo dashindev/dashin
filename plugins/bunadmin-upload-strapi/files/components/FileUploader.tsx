@@ -5,8 +5,8 @@ import {
   BunadminFileType,
   Uploader,
   OnDropProps
-} from "@xbuilder/bunadmin"
-import { EditComponentProps } from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
+import { EditComponentProps } from "@dashin-dev/dashin"
 import { DropResult } from "react-beautiful-dnd"
 import { IFile } from "../../utils/types/file"
 import uploadMediaCtrl from "../controllers/uploadMediaCtrl"

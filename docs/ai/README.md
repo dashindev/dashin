@@ -60,7 +60,7 @@ bunadmin ai theme "dark mode with a purple accent and rounded corners"
 
 Apply it in your app:
 ```ts
-import { applyPreset } from "@xbuilder/bunadmin"
+import { applyPreset } from "@dashin-dev/dashin"
 import theme from "./bunadmin.theme"
 applyPreset(theme.preset, theme.mode, theme.overrides)
 ```
@@ -76,7 +76,7 @@ always a professional, on-brand theme by construction.
 2. **Scaffold a project:** `bunadmin new my-admin` (Vite template).
 3. **Point it at PocketBase** in `.env`:
    ```
-   VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase
+   VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase
    VITE_AUTH_URL=http://127.0.0.1:8090
    ```
 4. **Generate the posts admin:**
@@ -87,7 +87,7 @@ always a professional, on-brand theme by construction.
 5. **Theme it:** `bunadmin ai theme "clean light theme, indigo accent"`.
 6. **Run it:** `yarn dev` → a validated, themed admin for your real data.
 
-The same flow works for **Appwrite** (`@xbuilder/bunadmin-source-appwrite`) and
+The same flow works for **Appwrite** (`@dashin-dev/source-appwrite`) and
 Strapi — point `ai generate` at the backend, get a validated admin.
 
 ---

@@ -30,7 +30,7 @@ bunadmin new my-admin && cd my-admin
 
 `.env`:
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-directus
+VITE_AUTH_PLUGIN=@dashin-dev/auth-directus
 VITE_MAIN_URL=http://127.0.0.1:8055
 ```
 

@@ -22,7 +22,7 @@ bunadmin new my-admin && cd my-admin
 
 `.env` (use the values printed by `start.sh`):
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-supabase
+VITE_AUTH_PLUGIN=@dashin-dev/auth-supabase
 VITE_MAIN_URL=http://127.0.0.1:54321
 VITE_SUPABASE_KEY=<anon-key>
 ```

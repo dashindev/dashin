@@ -3,7 +3,7 @@ import { useEditor, EditorContent, Editor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import Link from "@tiptap/extension-link"
 import Image from "@tiptap/extension-image"
-import { EditComponentProps } from "@xbuilder/bunadmin"
+import { EditComponentProps } from "@dashin-dev/dashin"
 
 interface Props<T extends object> extends EditComponentProps<T> {}
 

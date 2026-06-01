@@ -1,7 +1,7 @@
 /**
  * Remote data controller
  */
-import { ENV, request, storedToken } from "@xbuilder/bunadmin"
+import { ENV, request, storedToken } from "@dashin-dev/dashin"
 import { ListService } from "../types"
 
 export default async function listSer<RowData extends object>({

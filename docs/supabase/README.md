@@ -1,13 +1,13 @@
 # Supabase / Postgres Connector
 
-`@xbuilder/bunadmin-source-supabase` — use [Supabase](https://supabase.com)
+`@dashin-dev/source-supabase` — use [Supabase](https://supabase.com)
 (PostgREST) as the data source for any bunadmin schema. Same table UI, backed by
 your Postgres tables.
 
 ## Install
 
 ```bash
-yarn add @xbuilder/bunadmin-source-supabase
+yarn add @dashin-dev/source-supabase
 ```
 
 ## Configure (`.env`)
@@ -24,7 +24,7 @@ token (or the key) is sent as `Authorization: Bearer …`. Requests go to
 ## Use in a schema
 
 ```tsx
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-supabase"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-supabase"
 
 export default function Posts() {
   const { t } = useTranslation("table")

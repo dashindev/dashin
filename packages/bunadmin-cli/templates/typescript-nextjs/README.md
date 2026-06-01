@@ -1,4 +1,4 @@
-# Bunadmin TypeScript Next.js example
+# Dashin TypeScript Next.js example
 
 
 ## How to use it?

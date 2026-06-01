@@ -2,7 +2,7 @@
  * Pure helpers that map bunadmin table filters to a PocketBase `filter`
  * expression. Kept separate from listSer so they're unit-testable.
  */
-import { Filter } from "@xbuilder/bunadmin"
+import { Filter } from "@dashin-dev/dashin"
 
 export function escape(v: any): string {
   return String(v).replace(/'/g, "\\'")

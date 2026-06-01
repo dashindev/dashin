@@ -1,4 +1,4 @@
-import { ENV, request, notice, BulkDeleteProps, BulkUpdateProps } from "@xbuilder/bunadmin"
+import { ENV, request, notice, BulkDeleteProps, BulkUpdateProps } from "@dashin-dev/dashin"
 import { dxHeaders, itemsPath } from "./dxConfig"
 
 async function batchNotice(t: any, n: number, ok: number, fail: number) {

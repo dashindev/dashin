@@ -1,8 +1,8 @@
 /**
  * Remote data controller
  */
-import { QueryResult } from "@xbuilder/bunadmin"
-import { notice } from "@xbuilder/bunadmin"
+import { QueryResult } from "@dashin-dev/dashin"
+import { notice } from "@dashin-dev/dashin"
 import listSer from "../services/listSer"
 import { DataCtrl, ListService } from "../types"
 

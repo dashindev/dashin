@@ -1,6 +1,6 @@
-import { Query } from "@xbuilder/bunadmin"
+import { Query } from "@dashin-dev/dashin"
 import { TFunction } from "i18next"
-import { ListServiceRes } from "@xbuilder/bunadmin"
+import { ListServiceRes } from "@dashin-dev/dashin"
 
 export interface DataCtrl {
   t?: TFunction

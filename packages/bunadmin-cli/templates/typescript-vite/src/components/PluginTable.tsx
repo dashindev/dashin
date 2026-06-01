@@ -3,7 +3,7 @@ import {
   PluginTableProps,
   TableSkeleton,
   handlePluginPath
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import { importPlugin, hasPlugin } from "../pluginRegistry"
 
 function PluginTable({ team, group, name }: PluginTableProps) {

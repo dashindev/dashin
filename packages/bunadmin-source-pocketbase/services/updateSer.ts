@@ -4,7 +4,7 @@ import {
   request,
   storedToken,
   notice
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 interface Props<RowData> extends EditableCtrl {
   newData: RowData

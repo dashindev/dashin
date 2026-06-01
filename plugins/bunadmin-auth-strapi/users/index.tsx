@@ -5,12 +5,12 @@ import {
   tableIcons,
   TableDefaultProps as DefaultProps,
   notice
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 import { SchemaLabel, SchemaColumns, SchemaName } from "./plugin"
 import editableCtrl from "./controllers/editableCtrl"
-import { useTranslation } from "@xbuilder/bunadmin"
-import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
+import { useTranslation } from "@dashin-dev/dashin"
+import { dataCtrl } from "@dashin-dev/source-strapi"
 import listSer from "../roles/services/listSer"
 import { IRole } from "../utils/types"
 

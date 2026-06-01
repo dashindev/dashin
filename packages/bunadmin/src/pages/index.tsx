@@ -1,5 +1,5 @@
 import React from "react"
-import { ENV, ProTip } from "@xbuilder/bunadmin"
+import { ENV, ProTip } from "@dashin-dev/dashin"
 
 function Copyright() {
   return (

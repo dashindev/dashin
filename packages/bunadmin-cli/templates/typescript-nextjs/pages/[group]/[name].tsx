@@ -6,12 +6,12 @@ import {
   SchemaContainer,
   withoutLayout,
   MenuType
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import PluginTable from "../../components/PluginTable"
 import DefaultLayout from "../../components/DefaultLayout"
 import Error from "../../components/Error"
 import Home from "../../components/Home"
-import { SignIn as AuthComponent } from "@xbuilder/bunadmin-auth-local"
+import { SignIn as AuthComponent } from "@dashin-dev/auth-local"
 
 const DynamicGroupNamePage = ({
   leftMenuData,

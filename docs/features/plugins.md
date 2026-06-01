@@ -28,11 +28,11 @@ runtime via the plugin registry (`import.meta.glob`).
 Set the active auth plugin in `.env`:
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase
+VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase
 VITE_AUTH_URL=http://127.0.0.1:8090
 ```
 
-Available: `auth-local`, `auth-pocketbase`, `auth-strapi`, `auth-buncms`. The
+Available: `auth-local`, `auth-pocketbase`, `auth-strapi`. The
 sign-in component is resolved dynamically from the configured plugin (no hardcoded
 import) — switching auth backends is a `.env` change. After sign-in the token is
 stored (IndexedDB) and read by connectors via `storedToken()`.

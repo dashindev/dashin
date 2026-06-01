@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const execute = vi.fn()
 vi.mock("../client", () => ({ execute: (...a: any[]) => execute(...a) }))
-vi.mock("@xbuilder/bunadmin", () => ({ EditableCtrl: {}, notice: vi.fn() }))
+vi.mock("@dashin-dev/dashin", () => ({ EditableCtrl: {}, notice: vi.fn() }))
 
 import { addSer, updateSer, deleteSer } from "../crud"
 

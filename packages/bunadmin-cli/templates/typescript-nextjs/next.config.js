@@ -1,5 +1,5 @@
 const path = require("path")
-const bunadminPlugin = require("@xbuilder/bunadmin/plugin")
+const bunadminPlugin = require("@dashin-dev/dashin/plugin")
 
 module.exports = () => {
   /**

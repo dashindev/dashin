@@ -3,7 +3,7 @@
  * decodes the {cols, rows} response into row objects.
  * https://docs.turso.tech/sdk/http/reference
  */
-import { ENV, request, storedToken } from "@xbuilder/bunadmin"
+import { ENV, request, storedToken } from "@dashin-dev/dashin"
 import { Stmt } from "./sql"
 
 /** Encode a JS value into a libSQL arg ({ type, value }). */

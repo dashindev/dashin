@@ -29,7 +29,7 @@ module.exports = () => {
        * alias
        */
       config.resolve.alias["@"] = path.resolve(__dirname, "src")
-      config.resolve.alias["@xbuilder/bunadmin"] = path.resolve(
+      config.resolve.alias["@dashin-dev/dashin"] = path.resolve(
         __dirname,
         "src"
       )

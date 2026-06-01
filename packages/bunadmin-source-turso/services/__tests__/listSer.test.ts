@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 // Mock the libSQL client so listSer is tested without a network.
 const execute = vi.fn()
 vi.mock("../client", () => ({ execute: (...a: any[]) => execute(...a) }))
-// listSer also imports nothing else from @xbuilder/bunadmin directly, but sql.ts does not.
+// listSer also imports nothing else from @dashin-dev/dashin directly, but sql.ts does not.
 
 import listSer from "../listSer"
 

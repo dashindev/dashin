@@ -3,7 +3,7 @@ function strToArr(str?: string) {
   return str.split(/[ ,]+/)
 }
 
-export const DEFAULT_AUTH_PLUGIN = "@xbuilder/bunadmin-auth-buncms"
+export const DEFAULT_AUTH_PLUGIN = "@dashin-dev/auth-local"
 
 type EnvTypes = {
   SITE_NAME: string

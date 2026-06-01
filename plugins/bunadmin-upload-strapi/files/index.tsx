@@ -4,13 +4,13 @@ import {
   TableHead,
   tableIcons,
   TableDefaultProps as DefaultProps
-} from "@xbuilder/bunadmin"
-import { Query } from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
+import { Query } from "@dashin-dev/dashin"
 
 import { SchemaLabel, SchemaColumns } from "./plugin"
 import editableCtrl from "./controllers/editableCtrl"
 import { useTranslation } from "react-i18next"
-import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
+import { dataCtrl } from "@dashin-dev/source-strapi"
 import { SchemaName } from "./plugin"
 import Type from "./types"
 

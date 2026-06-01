@@ -1,4 +1,4 @@
-import { ENV, storedToken } from "@xbuilder/bunadmin"
+import { ENV, storedToken } from "@dashin-dev/dashin"
 
 // Supabase anon/service key (from VITE_* env, surfaced on ENV).
 export const SUPABASE_KEY =

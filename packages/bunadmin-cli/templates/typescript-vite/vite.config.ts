@@ -12,7 +12,7 @@ function bunadminGenerator(mode: string): Plugin {
     const env = loadEnv(mode, __dirname, "VITE_")
     for (const k of Object.keys(env)) process.env[k] = env[k]
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const bunadminPlugin = require("@xbuilder/bunadmin/plugin")
+    const bunadminPlugin = require("@dashin-dev/dashin/plugin")
     return bunadminPlugin({
       packagePath: path.resolve(__dirname, "package.json"),
       modulesPath: path.resolve(__dirname, "node_modules"),

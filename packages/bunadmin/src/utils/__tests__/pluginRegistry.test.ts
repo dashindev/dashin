@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest"
 
-// The eager glob in pluginRegistry pulls in bunadmin-auth-local → @xbuilder/bunadmin
+// The eager glob in pluginRegistry pulls in bunadmin-auth-local → @dashin-dev/dashin
 // → src/index.tsx which calls ReactDOM.createRoot and renders <App>.
 // Mock react-dom/client to prevent the side-effect.
 vi.mock("react-dom/client", () => ({

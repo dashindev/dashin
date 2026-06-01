@@ -1,4 +1,4 @@
-import { IPluginData } from "@xbuilder/bunadmin"
+import { IPluginData } from "@dashin-dev/dashin"
 
 const plugin = "auth-pocketbase"
 

@@ -1,6 +1,6 @@
 import React from "react"
 import Document, { Html, Head, Main, NextScript } from "next/document"
-import { ENV } from "@xbuilder/bunadmin"
+import { ENV } from "@dashin-dev/dashin"
 
 export default class MyDocument extends Document {
   render() {

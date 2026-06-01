@@ -3,7 +3,7 @@
  * Payload uses `where[field][operator]=value` (equals/contains/greater_than/...),
  * sort=`-field`, and page/limit (page is 1-based). Testable core.
  */
-import { Filter } from "@xbuilder/bunadmin"
+import { Filter } from "@dashin-dev/dashin"
 
 /** Map one bunadmin operator to a Payload `where` operator key. */
 export function payloadOp(operator: string): string {

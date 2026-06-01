@@ -7,7 +7,7 @@ import {
   storedToken,
   store,
   TableState
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import { ListService } from "../types"
 
 const eq = "_eq"

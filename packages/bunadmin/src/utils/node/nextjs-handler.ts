@@ -10,7 +10,7 @@ export function useNextJsRouter(modulePath: string) {
 exports.useRouter = useNextJsRouter.useRouter
 `
   fs.writeFile(
-    `${modulePath}/@xbuilder/bunadmin/lib/router.js`,
+    `${modulePath}/@dashin-dev/dashin/lib/router.js`,
     routerContent,
     e => {
       if (e) console.error("cannot generating pluginsData.ts: " + e)

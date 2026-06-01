@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const request = vi.fn()
-vi.mock("@xbuilder/bunadmin", () => ({
+vi.mock("@dashin-dev/dashin", () => ({
   EditableCtrl: {},
   ENV: { MAIN_URL: "http://sb.test", AUTH_URL: "http://sb.test", SUPABASE_KEY: "anon" },
   request: (...a: any[]) => request(...a),

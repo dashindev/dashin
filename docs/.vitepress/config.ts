@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress"
 
 export default defineConfig({
-  title: "BunAdmin",
+  title: "Dashin",
   description:
     "Vite + Tailwind React admin scaffold with AI-assisted, schema-validated generation.",
   lastUpdated: true,

@@ -1,4 +1,4 @@
-import { ENV, request } from "@xbuilder/bunadmin"
+import { ENV, request } from "@dashin-dev/dashin"
 
 export interface SignInParamsType {
   identifier: string

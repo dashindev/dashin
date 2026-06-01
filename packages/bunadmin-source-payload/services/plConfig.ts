@@ -1,4 +1,4 @@
-import { storedToken } from "@xbuilder/bunadmin"
+import { storedToken } from "@dashin-dev/dashin"
 
 /** Payload collection endpoint. */
 export function apiPath(collection: string, id?: string): string {

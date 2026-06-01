@@ -1,6 +1,6 @@
 import listSer from "../services/listSer"
 import { DataCtrl, ListService } from "../types"
-import { notice, QueryResult } from "@xbuilder/bunadmin"
+import { notice, QueryResult } from "@dashin-dev/dashin"
 
 export default async function dataCtrl<RowData extends object>({
   t,

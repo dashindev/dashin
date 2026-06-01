@@ -7,7 +7,7 @@ import { importPlugin, hasPlugin } from "@/utils/pluginRegistry"
 const overrides = import.meta.glob("./plugins/**/index.{ts,tsx}")
 
 /**
- * !DO NOT export PluginTable in @xbuilder/bunadmin
+ * !DO NOT export PluginTable in @dashin-dev/dashin
  * Due to the dynamic import of plugins, PluginTable needs to be defined
  * in each project.
  */

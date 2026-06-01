@@ -12,7 +12,7 @@
 - **Slotted layout registry** + opt-in regions (KPI stat band with sparklines,
   sidebar footer) — a constrained, validated, AI-composable design space.
 - **PocketBase** data-source + auth plugins; **Appwrite** data-source connector
-  (`@xbuilder/bunadmin-source-appwrite`).
+  (`@dashin-dev/source-appwrite`).
 - Pre-commit secret-scan hook (`scripts/pre-commit.sh`, install via
   `scripts/install-hooks.sh`).
 
@@ -21,7 +21,7 @@
   drop-in `EvaIcon` adapter; topbar/selectors/repeater/file-explorer SVGs too).
 - UI fully tokenized for dark mode; bunadmin-3 visual refresh (gradient brand,
   section headers, status pills).
-- `@xbuilder/bunadmin` no longer hard-depends on auth-local (loaded dynamically).
+- `@dashin-dev/dashin` no longer hard-depends on auth-local (loaded dynamically).
 
 ### Notes
 - Test suite: 88 app + plugin/connector + AI validator tests.
@@ -57,8 +57,8 @@ The entire UI layer has been migrated off Material-UI. All `@mui/*`, `@emotion/*
 - The `material-table` type surface (`Column`, `Query`, `QueryResult`,
   `EditComponentProps`, `Filter`, `Action`, etc.) is reproduced locally in
   `src/components/Table/models/material-table-shim.ts` and re-exported from
-  `@xbuilder/bunadmin`. Plugins importing these types from `material-table`
-  must import them from `@xbuilder/bunadmin` instead.
+  `@dashin-dev/dashin`. Plugins importing these types from `material-table`
+  must import them from `@dashin-dev/dashin` instead.
 - `defaultTheme` is now a plain object (no `createTheme`); global base styles
   moved into `src/tailwind.css`.
 - `config-overrides.js` transpiles the `@tanstack` ESM pulled in by
@@ -66,7 +66,7 @@ The entire UI layer has been migrated off Material-UI. All `@mui/*`, `@emotion/*
 
 **Migration notes for plugin authors**
 - Replace `import { Column } from "material-table"` with
-  `import { Column } from "@xbuilder/bunadmin"`.
+  `import { Column } from "@dashin-dev/dashin"`.
 - Column `filterComponent` / `editComponent` contracts are unchanged
   (`columnDef`, `onFilterChanged`, `editProps.{onChange,onRowDataChange}`).
 - Some material-table-only features are not reimplemented: tree data, grouping,

@@ -1,4 +1,4 @@
-import { ENV, request, notice, BulkUpdateProps } from "@xbuilder/bunadmin"
+import { ENV, request, notice, BulkUpdateProps } from "@dashin-dev/dashin"
 import { awHeaders, docPath } from "./awConfig"
 
 export default async function bulkUpdateSer<T>({

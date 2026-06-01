@@ -13,12 +13,12 @@ import {
   TableDefaultProps as DefaultProps,
   useTranslation,
   Column
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import {
   dataCtrl,
   editableCtrl,
   bulkDeleteCtrl
-} from "@xbuilder/bunadmin-source-pocketbase"
+} from "@dashin-dev/source-pocketbase"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 

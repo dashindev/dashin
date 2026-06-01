@@ -1,4 +1,4 @@
-import { storedToken } from "@xbuilder/bunadmin"
+import { storedToken } from "@dashin-dev/dashin"
 
 /** Directus items endpoint. */
 export function itemsPath(collection: string, id?: string): string {

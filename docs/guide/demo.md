@@ -30,7 +30,7 @@ seeds demo collections (`posts`, `products`) + a `demo` user.
 
 ```bash
 bunadmin new my-admin && cd my-admin
-# .env: VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase, VITE_AUTH_URL=http://127.0.0.1:8090
+# .env: VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase, VITE_AUTH_URL=http://127.0.0.1:8090
 export BUNADMIN_AI_PROVIDER=openai BUNADMIN_AI_API_KEY=sk-... BUNADMIN_AI_MODEL=gpt-4o-mini
 bunadmin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin-token>
 yarn dev
@@ -76,7 +76,7 @@ serves on `http://127.0.0.1:3001`.
 
 ```bash
 bunadmin new my-admin && cd my-admin
-# .env: VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-payload, VITE_AUTH_URL=http://127.0.0.1:3001
+# .env: VITE_AUTH_PLUGIN=@dashin-dev/auth-payload, VITE_AUTH_URL=http://127.0.0.1:3001
 export BUNADMIN_AI_PROVIDER=openai BUNADMIN_AI_API_KEY=sk-... BUNADMIN_AI_MODEL=gpt-4o-mini
 bunadmin ai generate --url http://127.0.0.1:3001 --collection posts --token <admin-token>
 yarn dev
@@ -103,7 +103,7 @@ Studio runs at `http://127.0.0.1:54323`, the API at `http://127.0.0.1:54321`. Th
 script prints the anon key to use in `.env`.
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-supabase
+VITE_AUTH_PLUGIN=@dashin-dev/auth-supabase
 VITE_MAIN_URL=http://127.0.0.1:54321
 VITE_SUPABASE_KEY=<anon-key>
 ```
@@ -125,7 +125,7 @@ Serves the console on `http://127.0.0.1:8080`. Create a project + database +
 `posts` collection in the console (one-time), then:
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-appwrite
+VITE_AUTH_PLUGIN=@dashin-dev/auth-appwrite
 VITE_AUTH_URL=http://127.0.0.1:8080
 VITE_APPWRITE_PROJECT=<your-project-id>
 VITE_APPWRITE_DATABASE=<your-database-id>
@@ -148,7 +148,7 @@ Serves on `http://127.0.0.1:8055`. Create a `posts` collection in the data studi
 (one-time), then:
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-directus
+VITE_AUTH_PLUGIN=@dashin-dev/auth-directus
 VITE_MAIN_URL=http://127.0.0.1:8055
 ```
 
@@ -169,7 +169,7 @@ cd examples/turso-demo
 Serves the libSQL HTTP protocol on `http://127.0.0.1:8080`.
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-local
+VITE_AUTH_PLUGIN=@dashin-dev/auth-local
 VITE_MAIN_URL=http://127.0.0.1:8080
 ```
 

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react"
-import { BunadminFileType, notice, OnDropProps } from "@xbuilder/bunadmin"
+import { BunadminFileType, notice, OnDropProps } from "@dashin-dev/dashin"
 import uploadFileSer from "../services/uploadFileSer"
-import { EditComponentProps } from "@xbuilder/bunadmin"
+import { EditComponentProps } from "@dashin-dev/dashin"
 
 interface Props extends OnDropProps {
   editProps?: EditComponentProps<any>

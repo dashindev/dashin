@@ -4,7 +4,7 @@
  * (e.g. status=eq.Published, name=ilike.*foo*). Kept separate from listSer so
  * they're unit-testable (the connector's core, mirroring the other sources).
  */
-import { Filter } from "@xbuilder/bunadmin"
+import { Filter } from "@dashin-dev/dashin"
 
 /** Map one bunadmin column operator to a PostgREST `operator.value` string. */
 export function buildClause(operator: string, value: any): string {

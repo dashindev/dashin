@@ -3,7 +3,7 @@
  * GET /rest/v1/{table}?select=*&{col}={op}.{val}&order=&limit=&offset=
  *   -> RowData[]  (total via Content-Range header when Prefer: count=exact)
  */
-import { ENV, request } from "@xbuilder/bunadmin"
+import { ENV, request } from "@dashin-dev/dashin"
 import { ListService } from "../types"
 import { buildParams } from "./filter"
 import { sbHeaders, tablePath } from "./sbConfig"

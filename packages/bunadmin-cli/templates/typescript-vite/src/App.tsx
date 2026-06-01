@@ -14,7 +14,7 @@ import {
   SnackMessage,
   useTranslation,
   MenuType
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import { SnackbarProvider } from "notistack"
 import {
   getDynamicIndex,

@@ -1,4 +1,4 @@
-import { EditableCtrl, notice } from "@xbuilder/bunadmin"
+import { EditableCtrl, notice } from "@dashin-dev/dashin"
 import { buildInsert, buildUpdate, buildDelete } from "./sql"
 import { execute } from "./client"
 

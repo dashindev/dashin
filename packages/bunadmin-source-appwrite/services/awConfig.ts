@@ -1,4 +1,4 @@
-import { ENV, storedToken } from "@xbuilder/bunadmin"
+import { ENV, storedToken } from "@dashin-dev/dashin"
 
 export const PROJECT = ENV.APPWRITE_PROJECT
 export const DATABASE =

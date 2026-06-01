@@ -9,7 +9,7 @@ import {
   SETTING_NAMES,
   request,
   ENV
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import { TFunction } from "i18next"
 
 interface Props {

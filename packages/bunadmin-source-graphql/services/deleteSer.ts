@@ -4,7 +4,7 @@ import {
   ENV,
   EditableCtrl,
   notice
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 interface Props<RowData> extends EditableCtrl {
   oldData: RowData

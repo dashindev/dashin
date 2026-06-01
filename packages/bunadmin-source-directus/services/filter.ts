@@ -3,7 +3,7 @@
  * Directus filters use `filter[field][_op]=value` (e.g. filter[status][_eq]=x),
  * sort=`-field` for desc, plus limit/offset/search. Testable core.
  */
-import { Filter } from "@xbuilder/bunadmin"
+import { Filter } from "@dashin-dev/dashin"
 
 /** Map one bunadmin operator to a Directus filter operator key. */
 export function directusOp(operator: string): string {

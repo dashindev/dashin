@@ -5,7 +5,7 @@ import {
   DefaultLayoutProps,
   ENV,
   store
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import { importPlugin, hasPlugin } from "../../pluginRegistry"
 
 export default function DefaultLayout(props: DefaultLayoutProps) {

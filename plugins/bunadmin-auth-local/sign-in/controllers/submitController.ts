@@ -7,7 +7,7 @@ import {
   notice,
   Router,
   SETTING_NAMES
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 import { TFunction } from "i18next"
 
 interface Props {

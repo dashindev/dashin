@@ -5,7 +5,7 @@
  *
  * Drop into src/plugins/bunadmin-plugin-xbuilder-blog/index.ts.
  */
-import { IPluginData } from "@xbuilder/bunadmin"
+import { IPluginData } from "@dashin-dev/dashin"
 
 export { default as posts } from "./example-admin"
 export { default as products } from "./example-products"

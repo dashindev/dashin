@@ -2,8 +2,8 @@ import React from "react"
 import { Column } from "@/components/Table/models/material-table-shim"
 import Type from "./types"
 import { SchemaName } from "./plugin"
-import { ListSelector, PluginColumns } from "@xbuilder/bunadmin"
-import { dataCtrl } from "@xbuilder/bunadmin-source-strapi"
+import { ListSelector, PluginColumns } from "@dashin-dev/dashin"
+import { dataCtrl } from "@dashin-dev/source-strapi"
 
 const columns = ({ t }: PluginColumns): Column<Type>[] => [
   {

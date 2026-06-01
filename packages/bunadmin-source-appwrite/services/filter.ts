@@ -5,7 +5,7 @@
  * passed as repeated `queries[]=` params. Kept separate from listSer so they're
  * unit-testable (the connector's testable core, mirroring source-pocketbase).
  */
-import { Filter } from "@xbuilder/bunadmin"
+import { Filter } from "@dashin-dev/dashin"
 
 /** Build a single Appwrite query JSON string for a method/attribute/values. */
 export function q(method: string, attribute: string, values: any[]): string {

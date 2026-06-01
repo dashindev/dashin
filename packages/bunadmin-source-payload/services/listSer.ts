@@ -2,7 +2,7 @@
  * Remote data controller (Payload CMS)
  * GET /api/{collection}?where[..]&sort&limit&page -> { docs, totalDocs }
  */
-import { ENV, request } from "@xbuilder/bunadmin"
+import { ENV, request } from "@dashin-dev/dashin"
 import { ListService } from "../types"
 import { buildParams } from "./filter"
 import { plHeaders, apiPath } from "./plConfig"

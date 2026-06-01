@@ -1,4 +1,4 @@
-import { Query } from "@xbuilder/bunadmin"
+import { Query } from "@dashin-dev/dashin"
 
 export interface DataCtrl extends EditableCtrl {
   query: Query<any>

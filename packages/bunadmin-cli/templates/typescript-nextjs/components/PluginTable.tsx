@@ -4,7 +4,7 @@ import {
   PluginTableProps,
   TableSkeleton,
   handlePluginPath
-} from "@xbuilder/bunadmin"
+} from "@dashin-dev/dashin"
 
 function PluginTable({ team, group, name, hideLoading }: PluginTableProps) {
   const pluginPath = handlePluginPath({ team, group, name })

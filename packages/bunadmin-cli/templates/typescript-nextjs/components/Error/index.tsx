@@ -2,7 +2,7 @@ import React from "react"
 import errorMessages from "./errorMessages"
 import { ErrorGetProps, ErrorMsg } from "./types"
 import DefaultLayout from "../DefaultLayout"
-import { ErrorProps, useRouter } from "@xbuilder/bunadmin"
+import { ErrorProps, useRouter } from "@dashin-dev/dashin"
 
 const Error = ({ statusCode, hasLayout, message, redirect }: ErrorProps) => {
   const router = useRouter()

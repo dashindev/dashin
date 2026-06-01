@@ -9,7 +9,7 @@ import { ENV, store } from "@/utils"
 import { importPlugin, hasPlugin } from "@/utils/pluginRegistry"
 
 /**
- * !DO NOT export DefaultLayout in @xbuilder/bunadmin
+ * !DO NOT export DefaultLayout in @dashin-dev/dashin
  * Due to the dynamic import of aliases (@plugin) and customized elements
  * DefaultLayout needs to be defined in each project.
  * @param props

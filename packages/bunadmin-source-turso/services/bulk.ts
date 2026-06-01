@@ -1,4 +1,4 @@
-import { notice, BulkDeleteProps, BulkUpdateProps } from "@xbuilder/bunadmin"
+import { notice, BulkDeleteProps, BulkUpdateProps } from "@dashin-dev/dashin"
 import { buildDelete, buildUpdate } from "./sql"
 import { execute } from "./client"
 

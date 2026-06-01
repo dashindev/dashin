@@ -1,6 +1,6 @@
 import { TFunction } from "i18next"
-import { Query } from "@xbuilder/bunadmin"
-import { ListServiceRes } from "@xbuilder/bunadmin"
+import { Query } from "@dashin-dev/dashin"
+import { ListServiceRes } from "@dashin-dev/dashin"
 
 export type DataCtrl<RowData extends object> = {
   t?: TFunction

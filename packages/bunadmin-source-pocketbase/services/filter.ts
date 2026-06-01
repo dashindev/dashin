@@ -1,5 +1,5 @@
 /**
- * Pure helpers that map bunadmin table filters to a PocketBase `filter`
+ * Pure helpers that map dashin table filters to a PocketBase `filter`
  * expression. Kept separate from listSer so they're unit-testable.
  */
 import { Filter } from "@dashin-dev/dashin"
@@ -8,7 +8,7 @@ export function escape(v: any): string {
   return String(v).replace(/'/g, "\\'")
 }
 
-/** Map a single bunadmin column operator to a PocketBase filter clause. */
+/** Map a single dashin column operator to a PocketBase filter clause. */
 export function buildClause(field: string, operator: string, value: any): string {
   const v = escape(value)
   switch (operator) {

@@ -38,7 +38,7 @@ export default function SettingMenu() {
           <Settings size={18} />
         </Menu.Button>
         <Menu.Items className="absolute right-0 z-50 mt-1 w-56 origin-top-right rounded-bn bg-content-box py-1 shadow-lg ring-1 ring-bn-border focus:outline-none">
-          {settingMenus({ theme: { bunadmin: { iconColor: "#8f9bb3" } } } as any).map(
+          {settingMenus({ theme: { dashin: { iconColor: "#8f9bb3" } } } as any).map(
             (item, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (

@@ -1,6 +1,6 @@
 import { Schema } from "./schema"
 
 export const Collection = {
-  name: "bunadmin_auth",
+  name: "dashin_auth",
   schema: Schema
 }

@@ -12,7 +12,7 @@ import { useSelector } from "react-redux"
 import { Type } from "@/core/menu/types"
 import { selectNestedMenu } from "@/slices/nestedMenuSlice"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 export default function LocalLeftMenuContainer() {
   const { t } = useTranslation("table")

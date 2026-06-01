@@ -9,7 +9,7 @@ import { Schema } from "./schema"
 import { useTranslation } from "react-i18next"
 import { BA_DB, ISetting } from "@/utils/database"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 export default function AuthInfoContainer() {
   const { t } = useTranslation("table")

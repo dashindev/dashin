@@ -1,6 +1,6 @@
 /**
  * Local shim for the (removed) `material-table` type surface.
- * Only the types actually consumed across bunadmin are reproduced here.
+ * Only the types actually consumed across dashin are reproduced here.
  * The runtime table is a lightweight Tailwind implementation (see ../index.tsx).
  */
 import { ReactNode } from "react"
@@ -100,7 +100,7 @@ export interface Options<RowData extends object = any> {
   [key: string]: any
 }
 
-/** Props accepted by the bunadmin <Table/> (material-table compatible subset). */
+/** Props accepted by the dashin <Table/> (material-table compatible subset). */
 export interface MaterialTableProps<RowData extends object> {
   title?: string | ReactNode
   columns: Column<RowData>[]

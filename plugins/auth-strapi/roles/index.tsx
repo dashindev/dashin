@@ -12,7 +12,7 @@ import { useTranslation } from "@dashin-dev/dashin"
 import { dataCtrl } from "@dashin-dev/source-strapi"
 import listSer from "./services/listSer"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 export default function() {
   const { t } = useTranslation("table")

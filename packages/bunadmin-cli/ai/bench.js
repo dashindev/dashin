@@ -19,8 +19,8 @@ async function adminToken() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      identity: process.env.PB_ADMIN || "admin@bunadmin.test",
-      password: process.env.PB_ADMIN_PW || "bunadmin123"
+      identity: process.env.PB_ADMIN || "admin@dashin.test",
+      password: process.env.PB_ADMIN_PW || "dashin123"
     })
   }).then(r => r.json())
   return r.token

@@ -14,7 +14,7 @@ import { dataCtrl } from "@dashin-dev/source-strapi"
 import { SchemaName } from "./plugin"
 import Type from "./types"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 export default function media() {
   const { t } = useTranslation("table")

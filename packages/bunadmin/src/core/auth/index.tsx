@@ -12,7 +12,7 @@ import { JSON_VIEW_BG } from "@/utils/themes/defaultTheme"
 import { BA_DB, IUser } from "@/utils/database"
 import { AuthPrimary, SETTING_NAMES } from "@/main"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 const Primary = AuthPrimary
 
 export default function AuthInfoContainer() {

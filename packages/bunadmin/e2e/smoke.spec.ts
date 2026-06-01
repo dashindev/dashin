@@ -35,7 +35,7 @@ test("sign-in route renders without fatal errors (best-effort login)", async ({
   const user = page.locator('input[name="username"]')
   if (await user.count()) {
     await user.fill("admin")
-    await page.locator('input[name="password"]').fill("bunadmin")
+    await page.locator('input[name="password"]').fill("dashin")
     await page.locator('button[type="submit"]').click()
     await page.waitForLoadState("networkidle")
   }

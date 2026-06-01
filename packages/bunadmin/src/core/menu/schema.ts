@@ -32,7 +32,7 @@ export const Schema = {
       index: true
     },
     parent: {
-      ref: "bunadmin_menu", // refers to self collection
+      ref: "dashin_menu", // refers to self collection
       type: "string" // ref-values must always be string (primary of foreign RxDocument)
     }
   },

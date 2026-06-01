@@ -7,7 +7,7 @@ import { Icons } from "./material-table-shim"
  * MUI <Icon> wrapper removed; EvaIcon rendered directly.
  */
 export default function tableIcons({ theme }: { theme: any }): Icons {
-  const color: string = theme.bunadmin.iconColor
+  const color: string = theme.dashin.iconColor
 
   const icon = (name: string, size: any = "large") =>
     React.forwardRef<HTMLSpanElement>((props, ref) => (

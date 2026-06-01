@@ -12,7 +12,7 @@ import { useSelector } from "react-redux"
 import { selectSchema } from "@/slices/schemaSlice"
 import { JSON_VIEW_BG } from "@/utils/themes/defaultTheme"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 export default function SchemaManagerContainer() {
   const { t } = useTranslation("table")

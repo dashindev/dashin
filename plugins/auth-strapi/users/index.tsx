@@ -14,7 +14,7 @@ import { dataCtrl } from "@dashin-dev/source-strapi"
 import listSer from "../roles/services/listSer"
 import { IRole } from "../utils/types"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 export default function<RowData extends object>() {
   const { t } = useTranslation("table")

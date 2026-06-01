@@ -20,7 +20,7 @@ export function ident(name: string): string {
   return `"${name}"`
 }
 
-/** Map a bunadmin operator to a SQL operator + value transform (for LIKE). */
+/** Map a dashin operator to a SQL operator + value transform (for LIKE). */
 function sqlOp(operator: string, value: any): { op: string; val: any } {
   switch (operator) {
     case "!=":

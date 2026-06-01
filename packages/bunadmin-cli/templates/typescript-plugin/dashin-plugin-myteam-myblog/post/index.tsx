@@ -12,7 +12,7 @@ import Type from "./types"
 
 export default function Post() {
   const { t } = useTranslation("table")
-  const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+  const theme = { dashin: { iconColor: "#8f9bb3" } }
   const tableRef = createRef()
 
   return (

@@ -12,7 +12,7 @@ import MigrationDialogs from "./components/Dialog"
 import { useTranslation } from "react-i18next"
 import { BA_DB, DashinDatabase } from "@/utils/database"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 const primaryColor = "#3366ff"
 
 export default function MigrationContainer({ db }: { db?: DashinDatabase }) {

@@ -22,5 +22,5 @@ export default async function newProject(
 
   // replace {project name} in file: `package.json`
   const packageFile = path.resolve(targetFolder, "package.json")
-  return await replaceInFile(packageFile, "bunadmin-typescript", name)
+  return await replaceInFile(packageFile, "dashin-typescript", name)
 }

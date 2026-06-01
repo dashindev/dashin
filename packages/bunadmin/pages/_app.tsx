@@ -28,7 +28,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   function requirePlugin(path: string) {
     try {
-      return require(`../.bunadmin/dynamic/${path}`)
+      return require(`../.dashin/dynamic/${path}`)
     } catch (err) {
       return null
     }
@@ -53,9 +53,9 @@ const App = ({ Component, pageProps }: AppProps) => {
       const authPluginName =
         process.env.NEXT_PUBLIC_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
       const authPlugin: IAuthPlugin = await import(
-        `../.bunadmin/dynamic/${authPluginName}`
+        `../.dashin/dynamic/${authPluginName}`
       )
-      let pluginsData: PluginData[] = require("../.bunadmin/dynamic/pluginsData")
+      let pluginsData: PluginData[] = require("../.dashin/dynamic/pluginsData")
       const plugins = require("../src/private/plugins/pluginsData")
       if (plugins && plugins.data)
         pluginsData = [...pluginsData, ...plugins.data]

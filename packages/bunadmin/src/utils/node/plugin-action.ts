@@ -14,7 +14,7 @@ export function findPlugins(paths: string): string[] {
       .depth(1)
       .directory()
       // @ts-ignore
-      .match(["bunadmin-auth-*", "bunadmin-upload-*", "bunadmin-plugin-*"])
+      .match(["auth-*", "upload-*", "dashin-plugin-*"])
       .findSync() || []
 
   /**
@@ -22,7 +22,7 @@ export function findPlugins(paths: string): string[] {
    * @type {number}
    */
   const countAuth = (
-    activePlugins.find(item => /bunadmin-auth-/g.test(item)) || []
+    activePlugins.find(item => /\/auth-/g.test(item)) || []
   ).length
   const AUTH_PLUGIN =
     process.env.VITE_AUTH_PLUGIN ||
@@ -33,7 +33,7 @@ export function findPlugins(paths: string): string[] {
     activePlugins.map(item => {
       if (
         (AUTH_PLUGIN && item.indexOf(AUTH_PLUGIN) > -1) ||
-        item.indexOf("bunadmin-auth-") < 0
+        item.indexOf("/auth-") < 0
       ) {
         newArr.push(item)
       }
@@ -82,9 +82,9 @@ export function getPluginNames(packageJson: string): string[] {
     const allDeps = { ...obj.dependencies, ...obj.devDependencies }
     pluginNames = Object.keys(allDeps).filter(k => {
       const matchPlugins = [
-        "bunadmin-auth",
-        "bunadmin-upload",
-        "bunadmin-plugin"
+        "@dashin-dev/auth",
+        "@dashin-dev/upload",
+        "dashin-plugin"
       ]
 
       for (let index = 0; index < matchPlugins.length; index++) {
@@ -95,7 +95,7 @@ export function getPluginNames(packageJson: string): string[] {
 
     if (pluginNames.length == 0)
       console.warn(
-        "you should add at least one bunadmin plugin in your dependencies"
+        "you should add at least one dashin plugin in your dependencies"
       )
 
     return pluginNames

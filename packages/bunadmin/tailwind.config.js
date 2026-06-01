@@ -5,7 +5,7 @@ module.exports = {
     "./src/**/*.{ts,tsx}",
     "./pages/**/*.{ts,tsx}",
     "../../plugins/**/*.{ts,tsx}",
-    "../bunadmin-rich-text-editor/**/*.{ts,tsx}"
+    "../dashin-rich-text-editor/**/*.{ts,tsx}"
   ],
   theme: {
     extend: {

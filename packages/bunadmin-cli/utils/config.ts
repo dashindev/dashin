@@ -10,5 +10,5 @@ const homePath = process.env.APPDATA || process.env.HOME + "/.local/share"
 
 export const DASHIN_CLI_PATH =
   process.platform == "darwin"
-    ? "/usr/local/lib/node_modules/bunadmin-cli"
-    : resolve(homePath, "npm/node_modules/bunadmin-cli")
+    ? "/usr/local/lib/node_modules/dashin-cli"
+    : resolve(homePath, "npm/node_modules/dashin-cli")

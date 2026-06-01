@@ -10,7 +10,7 @@ function validateColumns(generated, schema) {
   const errors = []
   const fieldByName = {}
   schema.fields.forEach(f => (fieldByName[f.name] = f))
-  // bunadmin always exposes id
+  // dashin always exposes id
   fieldByName.id = fieldByName.id || { name: "id", type: "text" }
 
   const cols = Array.isArray(generated && generated.columns)

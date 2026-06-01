@@ -1,5 +1,5 @@
-// `bunadmin ai generate --url <pb-url> --collection <name> [--token <admin>] [--out <dir>]`
-// `bunadmin ai theme "<description>" [--out <dir>]`
+// `dashin ai generate --url <pb-url> --collection <name> [--token <admin>] [--out <dir>]`
+// `dashin ai theme "<description>" [--out <dir>]`
 // Resolves the (uncompiled, CommonJS) ai/ modules relative to the built command.
 const path = require("path")
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -66,6 +66,6 @@ export default async function newAi(
   }
 
   return {
-    errors: `Unknown ai subcommand "${sub || ""}". Try: bunadmin ai generate | theme | refine`
+    errors: `Unknown ai subcommand "${sub || ""}". Try: dashin ai generate | theme | refine`
   }
 }

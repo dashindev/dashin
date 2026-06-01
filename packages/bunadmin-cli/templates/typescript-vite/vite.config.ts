@@ -3,17 +3,17 @@ import react from "@vitejs/plugin-react"
 import path from "path"
 
 /**
- * Runs the bunadmin plugin generator before Vite scans the module graph, so
+ * Runs the dashin plugin generator before Vite scans the module graph, so
  * `src/.dashin/dynamic/**` exists when import.meta.glob (pluginRegistry) resolves.
  */
-function bunadminGenerator(mode: string): Plugin {
+function dashinGenerator(mode: string): Plugin {
   let ran = false
   const generate = () => {
     const env = loadEnv(mode, __dirname, "VITE_")
     for (const k of Object.keys(env)) process.env[k] = env[k]
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const bunadminPlugin = require("@dashin-dev/dashin/plugin")
-    return bunadminPlugin({
+    const dashinPlugin = require("@dashin-dev/dashin/plugin")
+    return dashinPlugin({
       packagePath: path.resolve(__dirname, "package.json"),
       modulesPath: path.resolve(__dirname, "node_modules"),
       dynamicPath: path.resolve(__dirname, "src/.dashin/dynamic"),
@@ -21,7 +21,7 @@ function bunadminGenerator(mode: string): Plugin {
     })
   }
   return {
-    name: "bunadmin-generator",
+    name: "dashin-generator",
     enforce: "pre",
     async buildStart() {
       await generate()
@@ -43,7 +43,7 @@ export default defineConfig(({ mode }) => {
     define[`process.env.${k}`] = JSON.stringify(env[k])
   }
   return {
-    plugins: [bunadminGenerator(mode), react()],
+    plugins: [dashinGenerator(mode), react()],
     define,
     server: { port: 3000 },
     resolve: { alias: { "@": path.resolve(__dirname, "src") } }

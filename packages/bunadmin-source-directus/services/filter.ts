@@ -1,11 +1,11 @@
 /**
- * Pure helpers mapping bunadmin table filters to Directus query params.
+ * Pure helpers mapping dashin table filters to Directus query params.
  * Directus filters use `filter[field][_op]=value` (e.g. filter[status][_eq]=x),
  * sort=`-field` for desc, plus limit/offset/search. Testable core.
  */
 import { Filter } from "@dashin-dev/dashin"
 
-/** Map one bunadmin operator to a Directus filter operator key. */
+/** Map one dashin operator to a Directus filter operator key. */
 export function directusOp(operator: string): string {
   switch (operator) {
     case "!=":

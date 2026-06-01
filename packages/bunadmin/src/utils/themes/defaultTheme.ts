@@ -1,6 +1,6 @@
 /**
  * Plain theme object (MUI createTheme removed).
- * Keeps the `bunadmin` namespace and a minimal `palette` shape that the
+ * Keeps the `dashin` namespace and a minimal `palette` shape that the
  * remaining consumers read (e.g. _document theme-color, tableIcons iconColor).
  * Visual styling now lives in Tailwind (see src/tailwind.css + tailwind.config.js).
  */
@@ -10,7 +10,7 @@ const contentBoxBg = "#FFF"
 export const JSON_VIEW_BG = "rgba(143, 155, 179, 0.3)"
 
 const defaultTheme = {
-  bunadmin: {
+  dashin: {
     iconColor,
     contentBg,
     contentBoxBg,

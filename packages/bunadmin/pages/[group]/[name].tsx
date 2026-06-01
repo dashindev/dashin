@@ -17,7 +17,7 @@ const DynamicGroupNamePage = () => {
       if (!ENV.NOTIFICATION_PLUGIN) return
       const customNotificationPath = ENV.NOTIFICATION_PLUGIN
       const { NotificationTable, notificationCount } = await import(
-        `../../.bunadmin/dynamic/${customNotificationPath}`
+        `../../.dashin/dynamic/${customNotificationPath}`
       )
       if (!NotificationTable || !notificationCount) return
       setNtTable(NotificationTable)

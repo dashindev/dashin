@@ -15,7 +15,7 @@ import Error from "@/private/Error"
 
 const prismCss = "/assets/css/prism.css"
 
-const REMOTE_BRANCH = "https://github.com/xbuilder/bunadmin/blob/master"
+const REMOTE_BRANCH = "https://github.com/xbuilder/dashin/blob/master"
 
 export default function DocsCategorySlug() {
   const router = useRouter()
@@ -23,13 +23,13 @@ export default function DocsCategorySlug() {
   const [pagination, setPagination] = useState<PaginationType>({})
   const [menuData, setMenuData] = useState<Type[]>([])
 
-  const bunadminDocPath = "@dashin-dev/docs"
+  const dashinDocPath = "@dashin-dev/docs"
 
   useEffect(() => {
     ;(async () => {
       try {
         const content = await import(
-          `../../../.bunadmin/dynamic/${bunadminDocPath}/menus`
+          `../../../.dashin/dynamic/${dashinDocPath}/menus`
         )
         const menuData: Type[] = content ? content.menu : []
         setMenuData(menuData)
@@ -66,7 +66,7 @@ export default function DocsCategorySlug() {
   const DocsComponent = dynamic({
     loader: () =>
       import(
-        `../../../../../plugins/${bunadminDocPath}/${category}/${slug}.mdx`
+        `../../../../../plugins/${dashinDocPath}/${category}/${slug}.mdx`
       ),
     loading: () => <TableSkeleton title={`${slug} loading...`} />
   })
@@ -101,7 +101,7 @@ export default function DocsCategorySlug() {
         <a
           href={
             REMOTE_BRANCH +
-            `/plugins/${bunadminDocPath}/${category}/${slug}.mdx`
+            `/plugins/${dashinDocPath}/${category}/${slug}.mdx`
           }
           target="_blank"
           rel="noopener nofollow"

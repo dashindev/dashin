@@ -95,7 +95,7 @@ export default function FileUploader({
   }
 
   function onDragSort(result: DropResult) {
-    // TODO add position for Strapi Media or use alternativeText: replace 'bunadmin_65536' N soring
+    // TODO add position for Strapi Media or use alternativeText: replace 'dashin_65536' N soring
     console.log(result)
   }
 

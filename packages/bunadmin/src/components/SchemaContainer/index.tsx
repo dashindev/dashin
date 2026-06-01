@@ -14,7 +14,7 @@ import { useSelector } from "react-redux"
 import { selectSchema } from "@/slices/schemaSlice"
 import { PluginTableProps, specialPluginGroup } from "@/utils"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 interface Interface {
   group: string

@@ -1,5 +1,5 @@
 /**
- * `bunadmin ai refine` — conversational/iterative refinement of an already
+ * `dashin ai refine` — conversational/iterative refinement of an already
  * generated admin. Takes the CURRENT columns + a natural-language instruction
  * ("add a status filter", "make views numeric", "remove albums"), asks the LLM
  * for the updated columns, and VALIDATES against the same live schema before
@@ -13,7 +13,7 @@ const { extractJson, emitSchemaFile } = require("./generate")
 
 function buildRefinePrompt(schema, currentColumns, instruction) {
   return [
-    "You are refining an existing bunadmin admin table definition (STRICT JSON).",
+    "You are refining an existing dashin admin table definition (STRICT JSON).",
     `Collection: "${schema.collection}".`,
     "Real fields (use ONLY these, never invent fields):",
     JSON.stringify(schema.fields, null, 2),

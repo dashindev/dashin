@@ -4,11 +4,11 @@ const plugin = "auth-pocketbase"
 
 const data: IPluginData[] = [
   {
-    id: "bunadmin_auth_pocketbase_sign_in",
+    id: "dashin_auth_pocketbase_sign_in",
     group: "auth-pocketbase",
     name: "sign-in",
     label: "Sign-in",
-    team: "bunadmin",
+    team: "dashin",
     customized: true,
     ignore_menu: true
   }

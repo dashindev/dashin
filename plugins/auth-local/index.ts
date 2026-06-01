@@ -18,4 +18,4 @@ export const authRequestMethod = authPlugin.authRequestMethod
 export const authorizationOverwrite = authPlugin.authorizationOverwrite
 
 export const LOCAL_USERNAME = "admin"
-export const LOCAL_PASSWORD = "bunadmin"
+export const LOCAL_PASSWORD = "dashin"

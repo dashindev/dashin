@@ -42,7 +42,7 @@ export default async function listSer<RowData extends object>({
   })
 
   // PostgREST returns an array; total comes from the Content-Range header, which
-  // bunadmin's request() may expose as data._contentRange or similar. Fall back
+  // dashin's request() may expose as data._contentRange or similar. Fall back
   // to array length when the header isn't surfaced.
   const rows = Array.isArray(data) ? data : data.data || []
   const total =

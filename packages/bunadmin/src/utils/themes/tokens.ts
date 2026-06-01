@@ -1,5 +1,5 @@
 /**
- * Design tokens — the single source of truth for bunadmin theming AND the
+ * Design tokens — the single source of truth for dashin theming AND the
  * constrained, validated surface an AI "theme" command edits (set values, never
  * write CSS). Presets are named (light+dark) token sets — the AI/user SELECTS a
  * preset and/or overrides individual tokens, all pre-designed. CSS variables in
@@ -22,7 +22,7 @@ export interface ThemeTokens {
   radius: string // base corner radius
 }
 
-/** "classic" — the original flat bunadmin look (mockup 1). */
+/** "classic" — the original flat dashin look (mockup 1). */
 export const classicLight: ThemeTokens = {
   bg: "#edf1f7",
   surface: "#ffffff",

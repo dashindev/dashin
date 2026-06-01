@@ -5,10 +5,9 @@ import {
   tableIcons,
   TableDefaultProps as DefaultProps
 } from "@dashin-dev/dashin"
-import { Query } from "@/components/Table/models/material-table-shim"
 
-import { SchemaName, SchemaLabel, SchemaColumns } from "./plugin"
-import { useTranslation } from "react-i18next"
+import { SchemaLabel, SchemaColumns, SchemaName } from "./plugin"
+import { useTranslation } from "@dashin-dev/dashin"
 import {
   bulkDeleteCtrl,
   dataCtrl,
@@ -16,9 +15,9 @@ import {
 } from "@dashin-dev/source-strapi"
 import Type from "./types"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
-export default function() {
+export default function Post() {
   const { t } = useTranslation("table")
   const tableRef = createRef()
 
@@ -35,8 +34,13 @@ export default function() {
           ...DefaultProps.options,
           filtering: true
         }}
-        data={async (tableQuery: Query<Type>) =>
-          await dataCtrl({ t, tableQuery, path: SchemaName })
+        data={async (tableQuery: any) =>
+          await dataCtrl({
+            t,
+            tableQuery,
+            path: SchemaName,
+            searchField: "name"
+          })
         }
         editable={editableCtrl({ t, SchemaName })}
         actions={[bulkDeleteCtrl({ SchemaName, t, tableRef })]}

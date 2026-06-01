@@ -3,7 +3,7 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{ts,tsx}",
-    // include the installed bunadmin packages so their Tailwind classes compile
+    // include the installed dashin packages so their Tailwind classes compile
     "./node_modules/@xbuilder/**/lib/**/*.js"
   ],
   theme: {

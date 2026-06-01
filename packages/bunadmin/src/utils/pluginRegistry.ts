@@ -4,7 +4,7 @@
 /**
  * Vite plugin registry — replaces webpack-era dynamic require()/import(`${var}`)
  * with statically-analyzable import.meta.glob maps. The generated
- * `.dashin/dynamic/` tree is produced by the bunadmin generator (run in
+ * `.dashin/dynamic/` tree is produced by the dashin generator (run in
  * vite.config buildStart) before these globs resolve.
  */
 
@@ -67,8 +67,8 @@ export function hasPlugin(path: string): boolean {
 
 /**
  * Sync resolver for plugin i18n bundles (replaces the old require() in
- * addResource). `path` looks like `bunadmin-auth-local/utils/i18n/en` or
- * `bunadmin-plugin-team-group/utils/i18n/en`.
+ * addResource). `path` looks like `dashin-auth-local/utils/i18n/en` or
+ * `dashin-plugin-team-group/utils/i18n/en`.
  */
 export function requirePlugin(path: string): any {
   // Match the trailing `<plugin>/utils/i18n/<lan>` against the glob keys,

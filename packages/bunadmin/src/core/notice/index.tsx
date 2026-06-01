@@ -19,7 +19,7 @@ import { BA_DB, INotification } from "@/utils/database"
 import { EnhancedStore, AnyAction } from "@reduxjs/toolkit"
 import { ThunkMiddlewareFor } from "@reduxjs/toolkit/dist/getDefaultMiddleware"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 type Props = {
   store: EnhancedStore<any, AnyAction, [ThunkMiddlewareFor<any>]>

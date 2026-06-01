@@ -51,7 +51,7 @@ const UI = (props: UIProps) => {
         case "new":
           {
             updateState({ command })
-            const projectName = inputs[1] || "my-bunadmin"
+            const projectName = inputs[1] || "my-dashin"
             const errors = await newProject(projectName, options)
             updateState({ errors })
           }
@@ -81,7 +81,7 @@ const UI = (props: UIProps) => {
           break
         default:
           updateState({
-            errors: "Command does not exist, please check help: bunadmin --help"
+            errors: "Command does not exist, please check help: dashin --help"
           })
       }
     })()

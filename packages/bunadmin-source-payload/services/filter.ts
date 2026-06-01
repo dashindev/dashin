@@ -1,11 +1,11 @@
 /**
- * Pure helpers mapping bunadmin table filters to Payload CMS query params.
+ * Pure helpers mapping dashin table filters to Payload CMS query params.
  * Payload uses `where[field][operator]=value` (equals/contains/greater_than/...),
  * sort=`-field`, and page/limit (page is 1-based). Testable core.
  */
 import { Filter } from "@dashin-dev/dashin"
 
-/** Map one bunadmin operator to a Payload `where` operator key. */
+/** Map one dashin operator to a Payload `where` operator key. */
 export function payloadOp(operator: string): string {
   switch (operator) {
     case "!=":

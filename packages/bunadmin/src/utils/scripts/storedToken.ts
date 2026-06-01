@@ -10,7 +10,7 @@ export default async function storedToken(
 ): Promise<string | IUser | undefined> {
   const db = BA_DB
 
-  // query username from bunadmin_setting
+  // query username from dashin_setting
   const settingRes = await db.settings
     .where("name")
     .equals(Primary)

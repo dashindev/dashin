@@ -4,11 +4,11 @@ export default {
   plugin: "strapi-upload",
   data: [
     {
-      id: "bunadmin_upload_strapi_files",
+      id: "dashin_upload_strapi_files",
       group: "upload-strapi",
       name: "files",
       label: "Files",
-      team: "bunadmin",
+      team: "dashin",
       customized: true,
       icon_type: "eva",
       icon: "cloud-upload-outline",

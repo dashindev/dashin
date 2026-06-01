@@ -4,29 +4,29 @@ const plugin = "auth-strapi"
 
 const data: IPluginData[] = [
   {
-    id: "bunadmin_auth_strapi_sign_in",
+    id: "dashin_auth_strapi_sign_in",
     group: "auth-strapi",
     name: "sign-in",
     label: "Sign-in",
-    team: "bunadmin",
+    team: "dashin",
     customized: true,
     ignore_menu: true
   },
   {
-    id: "bunadmin_auth_strapi_sign_up",
+    id: "dashin_auth_strapi_sign_up",
     group: "auth-strapi",
     name: "sign-up",
     label: "Sign-up",
-    team: "bunadmin",
+    team: "dashin",
     customized: true,
     ignore_menu: true
   },
   {
-    id: "bunadmin_auth_strapi_users",
+    id: "dashin_auth_strapi_users",
     group: "auth-strapi",
     name: "users",
     label: "User",
-    team: "bunadmin",
+    team: "dashin",
     customized: true,
     icon_type: "eva",
     icon: "person-outline",
@@ -36,11 +36,11 @@ const data: IPluginData[] = [
       "Admin,Reviewer"
   },
   {
-    id: "bunadmin_auth_strapi_roles",
+    id: "dashin_auth_strapi_roles",
     group: "auth-strapi",
     name: "roles",
     label: "Role",
-    team: "bunadmin",
+    team: "dashin",
     customized: true,
     icon_type: "eva",
     icon: "people-outline",

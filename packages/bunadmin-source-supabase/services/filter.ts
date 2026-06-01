@@ -1,12 +1,12 @@
 /**
- * Pure helpers mapping bunadmin table filters to PostgREST (Supabase) query
+ * Pure helpers mapping dashin table filters to PostgREST (Supabase) query
  * params. PostgREST filters take the form `column=operator.value`
  * (e.g. status=eq.Published, name=ilike.*foo*). Kept separate from listSer so
  * they're unit-testable (the connector's core, mirroring the other sources).
  */
 import { Filter } from "@dashin-dev/dashin"
 
-/** Map one bunadmin column operator to a PostgREST `operator.value` string. */
+/** Map one dashin column operator to a PostgREST `operator.value` string. */
 export function buildClause(operator: string, value: any): string {
   switch (operator) {
     case "!=":

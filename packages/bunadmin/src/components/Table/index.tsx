@@ -355,7 +355,7 @@ export default function Table<RowData extends object>(
     [...collapsedGroups].some(ck => key.startsWith(ck))
 
   return (
-    <div id="bunadmin-table" className="rounded bg-content-box">
+    <div id="dashin-table" className="rounded bg-content-box">
       {/* toolbar */}
       {showSelection && selectedCount > 0 ? (
         <div className="flex items-center justify-between gap-3 bg-primary/10 px-4 py-3">

@@ -1,7 +1,7 @@
 import * as fs from "fs"
 
 /**
- * Overwrite the bunadmin router file (in node_modules path)
+ * Overwrite the dashin router file (in node_modules path)
  * Only used for next.js project
  * @param modulePath
  */

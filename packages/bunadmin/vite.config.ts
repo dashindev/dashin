@@ -4,10 +4,10 @@ import react from "@vitejs/plugin-react"
 import path from "path"
 
 /**
- * Runs the bunadmin plugin generator BEFORE Vite scans the module graph,
+ * Runs the dashin plugin generator BEFORE Vite scans the module graph,
  * so `.dashin/dynamic/**` exists when import.meta.glob resolves.
  */
-function bunadminGenerator(mode: string): Plugin {
+function dashinGenerator(mode: string): Plugin {
   let ran = false
   const generate = () => {
     // Make VITE_ env available to the Node-side generator (loadEnv does not
@@ -15,8 +15,8 @@ function bunadminGenerator(mode: string): Plugin {
     const env = loadEnv(mode, __dirname, "VITE_")
     for (const k of Object.keys(env)) process.env[k] = env[k]
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const bunadminPlugin = require("./plugin")
-    return bunadminPlugin({
+    const dashinPlugin = require("./plugin")
+    return dashinPlugin({
       packagePath: path.resolve(__dirname, "package.json"),
       modulesPath: path.resolve(__dirname, "../../node_modules"),
       dynamicPath: path.resolve(__dirname, "src/.dashin/dynamic"),
@@ -24,7 +24,7 @@ function bunadminGenerator(mode: string): Plugin {
     })
   }
   return {
-    name: "bunadmin-generator",
+    name: "dashin-generator",
     enforce: "pre",
     async buildStart() {
       await generate()
@@ -51,7 +51,7 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    plugins: [bunadminGenerator(mode), react()],
+    plugins: [dashinGenerator(mode), react()],
     define,
     server: { port: 3000 },
     build: {
@@ -83,39 +83,39 @@ export default defineConfig(({ mode }) => {
         // schema's `<pkg>/sign-in`). Avoids CJS lib/ interop issues.
         {
           find: /^@dashin-dev\/source-strapi$/,
-          replacement: r("../bunadmin-source-strapi/index.ts")
+          replacement: r("../dashin-source-strapi/index.ts")
         },
         {
           find: /^@dashin-dev\/source-graphql$/,
-          replacement: r("../bunadmin-source-graphql/index.ts")
+          replacement: r("../dashin-source-graphql/index.ts")
         },
         {
           find: /^@dashin-dev\/source-pocketbase$/,
-          replacement: r("../bunadmin-source-pocketbase/index.ts")
+          replacement: r("../dashin-source-pocketbase/index.ts")
         },
         {
           find: /^@dashin-dev\/source-appwrite$/,
-          replacement: r("../bunadmin-source-appwrite/index.ts")
+          replacement: r("../dashin-source-appwrite/index.ts")
         },
         {
           find: /^@dashin-dev\/source-supabase$/,
-          replacement: r("../bunadmin-source-supabase/index.ts")
+          replacement: r("../dashin-source-supabase/index.ts")
         },
         {
           find: /^@dashin-dev\/source-directus$/,
-          replacement: r("../bunadmin-source-directus/index.ts")
+          replacement: r("../dashin-source-directus/index.ts")
         },
         {
           find: /^@dashin-dev\/source-payload$/,
-          replacement: r("../bunadmin-source-payload/index.ts")
+          replacement: r("../dashin-source-payload/index.ts")
         },
         {
           find: /^@dashin-dev\/source-turso$/,
-          replacement: r("../bunadmin-source-turso/index.ts")
+          replacement: r("../dashin-source-turso/index.ts")
         },
         {
           find: /^@dashin-dev\/rich-text-editor$/,
-          replacement: r("../bunadmin-rich-text-editor/index.tsx")
+          replacement: r("../dashin-rich-text-editor/index.tsx")
         },
         // dir-mapped: bare -> index.ts (Vite resolves), subpath -> source file
         {

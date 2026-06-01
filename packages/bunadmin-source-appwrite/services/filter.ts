@@ -1,5 +1,5 @@
 /**
- * Pure helpers mapping bunadmin table filters to Appwrite query strings.
+ * Pure helpers mapping dashin table filters to Appwrite query strings.
  * Appwrite queries are JSON of the form
  *   {"method":"equal","attribute":"status","values":["Published"]}
  * passed as repeated `queries[]=` params. Kept separate from listSer so they're
@@ -12,7 +12,7 @@ export function q(method: string, attribute: string, values: any[]): string {
   return JSON.stringify({ method, attribute, values })
 }
 
-/** Map one bunadmin column operator to an Appwrite query string. */
+/** Map one dashin column operator to an Appwrite query string. */
 export function buildClause(
   field: string,
   operator: string,

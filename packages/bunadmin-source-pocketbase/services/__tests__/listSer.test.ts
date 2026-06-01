@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-// Mock the bunadmin runtime deps the service imports.
+// Mock the dashin runtime deps the service imports.
 const request = vi.fn()
 vi.mock("@dashin-dev/dashin", () => ({
   ENV: { AUTH_URL: "http://pb.test" },

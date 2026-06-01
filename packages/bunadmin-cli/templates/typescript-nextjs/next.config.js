@@ -1,5 +1,5 @@
 const path = require("path")
-const bunadminPlugin = require("@dashin-dev/dashin/plugin")
+const dashinPlugin = require("@dashin-dev/dashin/plugin")
 
 module.exports = () => {
   /**
@@ -9,7 +9,7 @@ module.exports = () => {
   return {
     poweredByHeader: false,
     generateBuildId: async () => {
-      return "bunadmin-" + require("./package.json").version
+      return "dashin-" + require("./package.json").version
     },
     webpack: (config, { isServer }) => {
       /**
@@ -21,7 +21,7 @@ module.exports = () => {
         const modulesPath = path.resolve(__dirname, "./node_modules")
         const dynamicPath = path.resolve(__dirname, "./.dashin/dynamic")
         const pluginsPath = path.resolve(__dirname, "./plugins")
-        bunadminPlugin({ modulesPath, dynamicPath, pluginsPath })
+        dashinPlugin({ modulesPath, dynamicPath, pluginsPath })
       }
       /**
        * ignore

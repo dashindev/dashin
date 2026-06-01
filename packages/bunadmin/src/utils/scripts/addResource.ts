@@ -12,9 +12,9 @@ export default function addResource({
   requirePlugin: (path: string) => any
 }) {
   Object.keys(i18nCodes).forEach(lan => {
-    let plugin = `bunadmin-plugin-${team}-${group}`
+    let plugin = `dashin-plugin-${team}-${group}`
     if (group.indexOf("auth") > -1 || group.indexOf("upload") > -1)
-      plugin = `bunadmin-${group}`
+      plugin = group
 
     const lang: any = requirePlugin(`${plugin}/utils/i18n/${lan}`)
     if (!lang) return

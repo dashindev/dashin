@@ -6,32 +6,32 @@ import {
 } from "../handlePlugin"
 
 describe("handlePluginPath", () => {
-  it("maps a regular plugin to bunadmin-plugin-[group]/[name]", () => {
+  it("maps a regular plugin to dashin-plugin-[team]-[group]/[name]", () => {
     expect(
-      handlePluginPath({ team: "bunadmin", group: "blog", name: "category" })
-    ).toBe("bunadmin-plugin-blog/category")
+      handlePluginPath({ team: "myteam", group: "blog", name: "category" })
+    ).toBe("dashin-plugin-myteam-blog/category")
   })
 
-  it("maps an auth plugin to bunadmin-auth-[group]/[name]", () => {
+  it("maps an auth plugin to its package basename auth-[x]/[name]", () => {
     expect(
-      handlePluginPath({ team: "buncms", group: "auth-buncms", name: "users" })
-    ).toBe("bunadmin-auth-buncms/users")
+      handlePluginPath({ team: "x", group: "auth-local", name: "users" })
+    ).toBe("auth-local/users")
   })
 
-  it("maps an upload plugin to bunadmin-upload-[group]/[name]", () => {
+  it("maps an upload plugin to its package basename upload-[x]/[name]", () => {
     expect(
       handlePluginPath({
-        team: "buncms",
-        group: "upload-buncms",
+        team: "x",
+        group: "upload-strapi",
         name: "files"
       })
-    ).toBe("bunadmin-upload-buncms/files")
+    ).toBe("upload-strapi/files")
   })
 })
 
 describe("specialPluginGroup", () => {
   it("collapses auth-* to auth", () => {
-    expect(specialPluginGroup("auth-buncms")).toBe("auth")
+    expect(specialPluginGroup("auth-local")).toBe("auth")
   })
   it("collapses upload-* to upload", () => {
     expect(specialPluginGroup("upload-strapi")).toBe("upload")
@@ -43,7 +43,7 @@ describe("specialPluginGroup", () => {
 
 describe("specialPluginSlug", () => {
   it("normalizes an auth slug", () => {
-    expect(specialPluginSlug("/auth-buncms/users")).toBe("/auth/users")
+    expect(specialPluginSlug("/auth-local/users")).toBe("/auth/users")
   })
   it("normalizes an upload slug", () => {
     expect(specialPluginSlug("/upload-strapi/files")).toBe("/upload/files")

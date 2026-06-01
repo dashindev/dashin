@@ -5,7 +5,7 @@ import path from "path"
 
 /**
  * Runs the bunadmin plugin generator BEFORE Vite scans the module graph,
- * so `.bunadmin/dynamic/**` exists when import.meta.glob resolves.
+ * so `.dashin/dynamic/**` exists when import.meta.glob resolves.
  */
 function bunadminGenerator(mode: string): Plugin {
   let ran = false
@@ -19,7 +19,7 @@ function bunadminGenerator(mode: string): Plugin {
     return bunadminPlugin({
       packagePath: path.resolve(__dirname, "package.json"),
       modulesPath: path.resolve(__dirname, "../../node_modules"),
-      dynamicPath: path.resolve(__dirname, "src/.bunadmin/dynamic"),
+      dynamicPath: path.resolve(__dirname, "src/.dashin/dynamic"),
       pluginsPath: path.resolve(__dirname, "src/private/plugins")
     })
   }
@@ -120,35 +120,35 @@ export default defineConfig(({ mode }) => {
         // dir-mapped: bare -> index.ts (Vite resolves), subpath -> source file
         {
           find: /^@dashin-dev\/auth-local\/(.*)/,
-          replacement: r("../../plugins/bunadmin-auth-local") + "/$1"
+          replacement: r("../../plugins/auth-local") + "/$1"
         },
         {
           find: /^@dashin-dev\/auth-local$/,
-          replacement: r("../../plugins/bunadmin-auth-local/index.ts")
+          replacement: r("../../plugins/auth-local/index.ts")
         },
         {
           find: /^@dashin-dev\/auth-strapi\/(.*)/,
-          replacement: r("../../plugins/bunadmin-auth-strapi") + "/$1"
+          replacement: r("../../plugins/auth-strapi") + "/$1"
         },
         {
           find: /^@dashin-dev\/auth-strapi$/,
-          replacement: r("../../plugins/bunadmin-auth-strapi/index.ts")
+          replacement: r("../../plugins/auth-strapi/index.ts")
         },
         {
           find: /^@dashin-dev\/auth-pocketbase\/(.*)/,
-          replacement: r("../../plugins/bunadmin-auth-pocketbase") + "/$1"
+          replacement: r("../../plugins/auth-pocketbase") + "/$1"
         },
         {
           find: /^@dashin-dev\/auth-pocketbase$/,
-          replacement: r("../../plugins/bunadmin-auth-pocketbase/index.ts")
+          replacement: r("../../plugins/auth-pocketbase/index.ts")
         },
         {
           find: /^@dashin-dev\/upload-strapi\/(.*)/,
-          replacement: r("../../plugins/bunadmin-upload-strapi") + "/$1"
+          replacement: r("../../plugins/upload-strapi") + "/$1"
         },
         {
           find: /^@dashin-dev\/upload-strapi$/,
-          replacement: r("../../plugins/bunadmin-upload-strapi/index.ts")
+          replacement: r("../../plugins/upload-strapi/index.ts")
         },
         { find: /^@dashin-dev\/dashin$/, replacement: r("src") }
       ]
@@ -168,7 +168,7 @@ export default defineConfig(({ mode }) => {
           "**/e2e/**",
           "**/__tests__/**",
           "**/*.d.ts",
-          "**/.bunadmin/**",
+          "**/.dashin/**",
           "src/setupTests.ts",
           "src/index.tsx",
           "src/main.ts"

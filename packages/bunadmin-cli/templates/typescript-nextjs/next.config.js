@@ -19,7 +19,7 @@ module.exports = () => {
         config.resolve.fallback.fs = false
       } else {
         const modulesPath = path.resolve(__dirname, "./node_modules")
-        const dynamicPath = path.resolve(__dirname, "./.bunadmin/dynamic")
+        const dynamicPath = path.resolve(__dirname, "./.dashin/dynamic")
         const pluginsPath = path.resolve(__dirname, "./plugins")
         bunadminPlugin({ modulesPath, dynamicPath, pluginsPath })
       }

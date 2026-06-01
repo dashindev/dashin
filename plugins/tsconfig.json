@@ -1,9 +1,9 @@
 {
   "files": [],
   "references": [
-    { "path": "bunadmin-auth-local" },
-    { "path": "bunadmin-auth-strapi" },
-    { "path": "bunadmin-docs" },
-    { "path": "bunadmin-upload-strapi" }
+    { "path": "auth-local" },
+    { "path": "auth-strapi" },
+    { "path": "docs" },
+    { "path": "upload-strapi" }
   ]
 }

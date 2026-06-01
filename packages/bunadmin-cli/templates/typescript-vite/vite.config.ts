@@ -4,7 +4,7 @@ import path from "path"
 
 /**
  * Runs the bunadmin plugin generator before Vite scans the module graph, so
- * `src/.bunadmin/dynamic/**` exists when import.meta.glob (pluginRegistry) resolves.
+ * `src/.dashin/dynamic/**` exists when import.meta.glob (pluginRegistry) resolves.
  */
 function bunadminGenerator(mode: string): Plugin {
   let ran = false
@@ -16,7 +16,7 @@ function bunadminGenerator(mode: string): Plugin {
     return bunadminPlugin({
       packagePath: path.resolve(__dirname, "package.json"),
       modulesPath: path.resolve(__dirname, "node_modules"),
-      dynamicPath: path.resolve(__dirname, "src/.bunadmin/dynamic"),
+      dynamicPath: path.resolve(__dirname, "src/.dashin/dynamic"),
       pluginsPath: path.resolve(__dirname, "src/plugins")
     })
   }

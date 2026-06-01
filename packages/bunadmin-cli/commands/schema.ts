@@ -6,7 +6,7 @@ const fs = require("fs")
 
 const sourceFolder = path.resolve(
   DASHIN_CLI_PATH,
-  "templates/typescript-plugin/bunadmin-plugin-myteam-myblog/post"
+  "templates/typescript-plugin/dashin-plugin-myteam-myblog/post"
 )
 
 export default async function newSchema(

@@ -1,11 +1,7 @@
 /**
- * Handle plugin path
- * bunadmin-[team]-[group]/[name] -> bunadmin-[plugin or special]-[group]/[name]
- * return dynamic import path: bunadmin-[plugin]-[group]/[name]
- * example:
- * bunadmin-plugin-blog/category
- * bunadmin-auth-buncms/users
- * bunadmin-upload-buncms/files
+ * Handle plugin path → dynamic import path (matches the plugin package basename).
+ * special (auth/upload): @dashin-dev/auth-local → "auth-local/[name]"
+ * regular custom plugin:  dashin-plugin-[team]-[group] → "dashin-plugin-[team]-[group]/[name]"
  */
 export function handlePluginPath({
   team,
@@ -16,24 +12,15 @@ export function handlePluginPath({
   group: string
   name: string
 }): string {
-  let pluginPath = `${team}-${group}/${name}`
-  const isSpecialPlugin = RegExp(".*-auth|.*-upload").test(pluginPath)
+  const isSpecialPlugin = RegExp(".*-auth|.*-upload").test(`${team}-${group}`)
 
-  if (!isSpecialPlugin) {
-    /**
-     * bunadmin-blog/category -> bunadmin-plugin-blog/category
-     */
-    pluginPath = pluginPath.replace("bunadmin-", "")
-    pluginPath = `bunadmin-plugin-${pluginPath}`
-  } else {
-    /**
-     * buncms-auth-buncms/users -> bunadmin-auth-buncms/users
-     * buncms-upload-buncms/files -> bunadmin-upload-buncms/files
-     */
-    pluginPath = `bunadmin-${group}/${name}`
+  if (isSpecialPlugin) {
+    // dynamic folder = package basename, e.g. "auth-local", "upload-strapi"
+    return `${group}/${name}`
   }
 
-  return pluginPath
+  // custom plugin package basename: dashin-plugin-[team]-[group]
+  return `dashin-plugin-${team}-${group}/${name}`
 }
 
 /**

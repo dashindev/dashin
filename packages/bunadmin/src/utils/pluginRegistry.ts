@@ -4,24 +4,24 @@
 /**
  * Vite plugin registry — replaces webpack-era dynamic require()/import(`${var}`)
  * with statically-analyzable import.meta.glob maps. The generated
- * `.bunadmin/dynamic/` tree is produced by the bunadmin generator (run in
+ * `.dashin/dynamic/` tree is produced by the bunadmin generator (run in
  * vite.config buildStart) before these globs resolve.
  */
 
 // Generated auth-plugin index (eager: needed synchronously at init).
-const indexEager = import.meta.glob("../.bunadmin/dynamic/index.js", {
+const indexEager = import.meta.glob("../.dashin/dynamic/index.js", {
   eager: true
 })
 // Generated custom-plugins data (eager).
-const pluginsDataTs = import.meta.glob("../.bunadmin/dynamic/pluginsData.ts", {
+const pluginsDataTs = import.meta.glob("../.dashin/dynamic/pluginsData.ts", {
   eager: true
 })
 const pluginsDataJson = import.meta.glob(
-  "../.bunadmin/dynamic/pluginsData.json",
+  "../.dashin/dynamic/pluginsData.json",
   { eager: true }
 )
 // Per-plugin schema modules (lazy: code-split).
-const dynamicLazy = import.meta.glob("../.bunadmin/dynamic/**/*/index.js")
+const dynamicLazy = import.meta.glob("../.dashin/dynamic/**/*/index.js")
 
 // Plugin i18n bundles, consumed synchronously by addResource via requirePlugin.
 // They live in the plugin packages' source (utils/i18n/{lan}.ts).
@@ -31,7 +31,7 @@ const pluginI18n = import.meta.glob(
 )
 
 const first = (m: Record<string, any>) => Object.values(m)[0] as any
-const lazyKey = (p: string) => `../.bunadmin/dynamic/${p}/index.js`
+const lazyKey = (p: string) => `../.dashin/dynamic/${p}/index.js`
 
 /** The generated auth-plugin map: { [pluginName]: module }. */
 export function getDynamicIndex(): Record<string, any> {
@@ -51,7 +51,7 @@ export function getPluginsDataTs(): any[] {
 
 /**
  * Async, code-split lookup of a dynamic plugin module.
- * Replaces `import(`../.bunadmin/dynamic/${path}`)` and `require(`./plugins/...`)`.
+ * Replaces `import(`../.dashin/dynamic/${path}`)` and `require(`./plugins/...`)`.
  */
 export function importPlugin(path: string): Promise<any> {
   const loader = dynamicLazy[lazyKey(path)]

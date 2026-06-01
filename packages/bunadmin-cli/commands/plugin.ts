@@ -5,7 +5,7 @@ const path = require("path")
 
 const sourceFolder = path.resolve(
   DASHIN_CLI_PATH,
-  "templates/typescript-plugin/bunadmin-plugin-myteam-myblog"
+  "templates/typescript-plugin/dashin-plugin-myteam-myblog"
 )
 
 export default async function newPlugin(
@@ -26,7 +26,7 @@ export default async function newPlugin(
   const group = input[1]
   if (!group || group === "") return `group '${group}' format is incorrect`
   // copy template files to target folder
-  const targetFolder = path.resolve(`bunadmin-plugin-${name}`)
+  const targetFolder = path.resolve(`dashin-plugin-${name}`)
   errors = await copyFolder(sourceFolder, targetFolder)
   if (errors) return errors
 

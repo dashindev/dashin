@@ -38,5 +38,5 @@ yarn-error.log*
 .idea/vcs.xml
 
 # bunadmin
-.bunadmin
+.dashin
 /plugins/pluginsData.ts

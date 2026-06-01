@@ -11,17 +11,17 @@ describe("addResource", () => {
     i18n = { addResourceBundle: vi.fn() }
   })
 
-  it("resolves a normal plugin name as bunadmin-plugin-{team}-{group}", () => {
+  it("resolves a normal plugin name as dashin-plugin-{team}-{group}", () => {
     const requirePlugin = vi.fn(() => ({ plugins: { Hello: "Hi" } }))
     addResource({ i18n, team: "myteam", group: "blog", requirePlugin })
-    expect(requirePlugin).toHaveBeenCalledWith("bunadmin-plugin-myteam-blog/utils/i18n/en")
+    expect(requirePlugin).toHaveBeenCalledWith("dashin-plugin-myteam-blog/utils/i18n/en")
     expect(i18n.addResourceBundle).toHaveBeenCalledWith("en", "plugins", { Hello: "Hi" }, true, true)
   })
 
-  it("special-cases auth/upload groups as bunadmin-{group}", () => {
+  it("special-cases auth/upload groups as the bare {group}", () => {
     const requirePlugin = vi.fn(() => null)
     addResource({ i18n, team: "x", group: "auth-local", requirePlugin })
-    expect(requirePlugin).toHaveBeenCalledWith("bunadmin-auth-local/utils/i18n/en")
+    expect(requirePlugin).toHaveBeenCalledWith("auth-local/utils/i18n/en")
   })
 
   it("skips bundling when the plugin lang is missing", () => {

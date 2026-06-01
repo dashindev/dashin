@@ -21,7 +21,7 @@ function PluginTable({ team, group, name, hideLoading }: PluginTableProps) {
   const Plugin =
     CustomPlugin ||
     dynamic({
-      loader: () => import(`../.bunadmin/dynamic/${pluginPath}`),
+      loader: () => import(`../.dashin/dynamic/${pluginPath}`),
       loading: () =>
         hideLoading ? null : <TableSkeleton title={`${name} loading...`} />
     })

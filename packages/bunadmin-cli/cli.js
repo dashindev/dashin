@@ -22,7 +22,7 @@ const cli = meow(`
 
 	Create a schema
 	  $ dashin schema [name]
-	  (Run in the plugin directory: plugins/bunadmin-plugin-[team]-[group]/)
+	  (Run in the plugin directory: plugins/dashin-plugin-[team]-[group]/)
 
 	Generate an admin table from a backend schema (AI, bring-your-own-key)
 	  $ dashin ai generate --url <pocketbase-url> --collection <name> [--token <admin>] [--out <dir>]

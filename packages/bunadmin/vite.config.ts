@@ -49,6 +49,9 @@ export default defineConfig(({ mode }) => {
   for (const k of Object.keys(env)) {
     define[`process.env.${k}`] = JSON.stringify(env[k])
   }
+  // Base process.env so dynamic lookups (process.env[`VITE_${key}`]) resolve in
+  // the browser. VITE_ keys only (public); include NODE_ENV for libs that read it.
+  define["process.env"] = JSON.stringify({ NODE_ENV: mode, ...env })
 
   return {
     plugins: [dashinGenerator(mode), react()],
@@ -83,39 +86,39 @@ export default defineConfig(({ mode }) => {
         // schema's `<pkg>/sign-in`). Avoids CJS lib/ interop issues.
         {
           find: /^@dashin-dev\/source-strapi$/,
-          replacement: r("../dashin-source-strapi/index.ts")
+          replacement: r("../bunadmin-source-strapi/index.ts")
         },
         {
           find: /^@dashin-dev\/source-graphql$/,
-          replacement: r("../dashin-source-graphql/index.ts")
+          replacement: r("../bunadmin-source-graphql/index.ts")
         },
         {
           find: /^@dashin-dev\/source-pocketbase$/,
-          replacement: r("../dashin-source-pocketbase/index.ts")
+          replacement: r("../bunadmin-source-pocketbase/index.ts")
         },
         {
           find: /^@dashin-dev\/source-appwrite$/,
-          replacement: r("../dashin-source-appwrite/index.ts")
+          replacement: r("../bunadmin-source-appwrite/index.ts")
         },
         {
           find: /^@dashin-dev\/source-supabase$/,
-          replacement: r("../dashin-source-supabase/index.ts")
+          replacement: r("../bunadmin-source-supabase/index.ts")
         },
         {
           find: /^@dashin-dev\/source-directus$/,
-          replacement: r("../dashin-source-directus/index.ts")
+          replacement: r("../bunadmin-source-directus/index.ts")
         },
         {
           find: /^@dashin-dev\/source-payload$/,
-          replacement: r("../dashin-source-payload/index.ts")
+          replacement: r("../bunadmin-source-payload/index.ts")
         },
         {
           find: /^@dashin-dev\/source-turso$/,
-          replacement: r("../dashin-source-turso/index.ts")
+          replacement: r("../bunadmin-source-turso/index.ts")
         },
         {
           find: /^@dashin-dev\/rich-text-editor$/,
-          replacement: r("../dashin-rich-text-editor/index.tsx")
+          replacement: r("../bunadmin-rich-text-editor/index.tsx")
         },
         // dir-mapped: bare -> index.ts (Vite resolves), subpath -> source file
         {

@@ -3,7 +3,7 @@ import errorMessages from "./errorMessages"
 import { ErrorMsg } from "./types"
 import { useRouter } from "@/router"
 import DefaultLayout from "../DefaultLayout"
-import { ErrorProps } from "@/components"
+import { ErrorProps, Button } from "@/components"
 
 function Error({ statusCode, hasLayout, message, redirect }: ErrorProps) {
   const router = useRouter()
@@ -20,12 +20,9 @@ function Error({ statusCode, hasLayout, message, redirect }: ErrorProps) {
       <div className="py-2" />
       {message || msg.message}
       <div className="py-2" />
-      <button
-        onClick={() => router.push(redirect || "/")}
-        className="rounded bg-primary px-3 py-1.5 text-sm font-medium text-white hover:bg-primary-hover"
-      >
+      <Button onClick={() => router.push(redirect || "/")}>
         {redirect ? "Redirect" : "Take Me Home"}
-      </button>
+      </Button>
     </div>
   )
 

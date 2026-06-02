@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect } from "react"
 import { Dialog } from "@headlessui/react"
 import { Translation } from "react-i18next"
+import Button from "../ui/Button"
 
 interface Interface {
   openModal: number
@@ -47,19 +48,12 @@ export default function ConfirmDialog({
             {content || <p>{msg}</p>}
           </div>
           <div className="flex justify-end gap-2 px-4 pb-3">
-            <button
-              autoFocus
-              onClick={handleClose}
-              className="rounded px-3 py-1.5 text-sm font-medium uppercase text-primary hover:bg-primary/10"
-            >
+            <Button variant="link" autoFocus onClick={handleClose} className="uppercase">
               {disagree || <Translation>{t => t("Cancel")}</Translation>}
-            </button>
-            <button
-              onClick={handleAgree}
-              className="rounded px-3 py-1.5 text-sm font-medium uppercase text-primary hover:bg-primary/10"
-            >
+            </Button>
+            <Button variant="link" onClick={handleAgree} className="uppercase">
               {agree || <Translation>{t => t("Confirm")}</Translation>}
-            </button>
+            </Button>
           </div>
         </Dialog.Panel>
       </div>

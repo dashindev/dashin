@@ -449,9 +449,9 @@ export default function Table<RowData extends object>(
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-bn-border text-left">
-              {hasDetail && <th className="w-8 px-4 py-2" />}
+              {hasDetail && <th className="sticky top-0 z-10 bg-content-box w-8 px-4 py-2" />}
               {showSelection && (
-                <th className="w-8 px-4 py-2">
+                <th className="sticky top-0 z-10 bg-content-box w-8 px-4 py-2">
                   <input
                     type="checkbox"
                     aria-label="select all"
@@ -467,18 +467,35 @@ export default function Table<RowData extends object>(
                   />
                 </th>
               )}
-              {cols.map(c => (
-                <th
-                  key={c.tableData!.id}
-                  style={{ width: c.width }}
-                  className="cursor-pointer select-none px-4 py-2 font-semibold text-icon-muted"
-                  onClick={() => toggleSort(c)}
-                >
-                  {c.title}
-                  {orderBy?.field === c.field && (orderDir === "asc" ? " ▲" : " ▼")}
-                </th>
-              ))}
-              {hasRowActions && <th className="px-4 py-2 font-semibold text-icon-muted">{t("actions")}</th>}
+              {cols.map(c => {
+                const sorted = orderBy?.field === c.field
+                return (
+                  <th
+                    key={c.tableData!.id}
+                    style={{ width: c.width }}
+                    aria-sort={
+                      sorted
+                        ? orderDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="sticky top-0 z-10 bg-content-box px-4 py-2 font-semibold text-icon-muted"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => toggleSort(c)}
+                      className="inline-flex select-none items-center gap-1 rounded-bn focus:outline-none focus-visible:ring-2 focus-visible:ring-bn"
+                    >
+                      {c.title}
+                      <span aria-hidden="true">
+                        {sorted ? (orderDir === "asc" ? "▲" : "▼") : ""}
+                      </span>
+                    </button>
+                  </th>
+                )
+              })}
+              {hasRowActions && <th className="sticky top-0 z-10 bg-content-box px-4 py-2 font-semibold text-icon-muted">{t("actions")}</th>}
             </tr>
             {showFiltering && (
               <tr className="border-b border-bn-border">

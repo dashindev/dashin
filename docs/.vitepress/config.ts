@@ -43,6 +43,7 @@ export default defineConfig({
           { text: "Tables & CRUD", link: "/features/tables" },
           { text: "Theming", link: "/features/theming" },
           { text: "Layout & regions", link: "/features/layout" },
+          { text: "UI Primitives", link: "/features/ui-primitives" },
           { text: "Plugins & auth", link: "/features/plugins" }
         ]
       },

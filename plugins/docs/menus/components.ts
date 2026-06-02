@@ -2,6 +2,13 @@ import { MenuType as Type } from "@dashin-dev/dashin"
 
 const menus = [
   {
+    id: "comp_ui-primitives",
+    name: "ui-primitives",
+    label: "UI Primitives",
+    slug: "/docs/components/ui-primitives",
+    parent: "components"
+  },
+  {
     id: "comp_dialog",
     name: "dialog",
     label: "Dialog",

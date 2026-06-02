@@ -6,13 +6,15 @@ import { Values } from "./types"
 import {
   ENV,
   AnimatedRandomBG,
+  Button,
+  Input,
   useTranslation,
   useRouter
 } from "@dashin-dev/dashin"
 
 function Copyright() {
   return (
-    <p className="text-center text-[0.8125rem] text-gray-500">
+    <p className="text-center text-[0.8125rem] text-icon-muted">
       {"Copyright © "}
       <a href="#" className="text-inherit hover:underline">
         {ENV.SITE_NAME}
@@ -33,15 +35,12 @@ export default function SignInContainer() {
     await submitController({ t, values, setSubmitting, router })
   }
 
-  const fieldClass =
-    "mt-4 w-full rounded border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-
   return (
     <div className="relative h-screen overflow-hidden">
       <AnimatedRandomBG />
       <div className="flex w-full items-center justify-center">
-        <div className="relative m-8 flex max-w-[400px] flex-col items-center bg-white/60 p-8">
-          <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/30 text-primary">
+        <div className="relative m-8 flex max-w-[400px] flex-col items-center rounded-bn border border-bn-border bg-content-box/80 p-8 shadow-bn backdrop-blur">
+          <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
             🔒
           </div>
           <h1 className="text-xl font-medium">{t("Sign in")}</h1>
@@ -57,7 +56,8 @@ export default function SignInContainer() {
                     name="username"
                     type="text"
                     placeholder={t("Username")}
-                    className={fieldClass}
+                    as={Input}
+                    className="mt-4 w-full"
                   />
                   <ErrorMessage
                     name="username"
@@ -68,27 +68,28 @@ export default function SignInContainer() {
                     name="password"
                     type="password"
                     placeholder={t("Password")}
-                    className={fieldClass}
+                    as={Input}
+                    className="mt-4 w-full"
                   />
                   <ErrorMessage
                     name="password"
                     component="div"
                     className="mt-1 text-xs text-danger"
                   />
-                  <label className="mt-2 flex items-center gap-2 text-sm">
+                  <label className="mt-2 flex items-center gap-2 text-sm text-icon-muted">
                     <input type="checkbox" value="remember" />
                     {t("Remember me")}
                   </label>
                   {isSubmitting && (
-                    <div className="mt-2 h-1 w-full animate-pulse rounded bg-primary/40" />
+                    <div className="mt-2 h-1 w-full animate-pulse rounded-bn bg-primary/40" />
                   )}
-                  <button
+                  <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="mb-2 mt-6 w-full rounded bg-primary py-2.5 text-sm font-medium text-white hover:bg-primary/90 disabled:opacity-50"
+                    className="mb-2 mt-6 w-full py-2.5"
                   >
                     {t("Sign in")}
-                  </button>
+                  </Button>
                 </Form>
               )}
             </Formik>

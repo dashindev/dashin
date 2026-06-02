@@ -1,6 +1,7 @@
 import React, { ChangeEventHandler, useEffect } from "react"
 import { Dialog } from "@headlessui/react"
 import { useTranslation } from "react-i18next"
+import Button from "../ui/Button"
 
 interface Interface {
   openModal: number
@@ -46,13 +47,9 @@ export default function UploadConfirmDialog({
             <p>{msg}</p>
           </div>
           <div className="flex justify-end gap-2 px-4 pb-3">
-            <button
-              autoFocus
-              onClick={handleClose}
-              className="rounded px-3 py-1.5 text-sm font-medium uppercase text-primary hover:bg-primary/10"
-            >
+            <Button variant="link" autoFocus onClick={handleClose} className="uppercase">
               {t("Cancel")}
-            </button>
+            </Button>
 
             <input
               hidden

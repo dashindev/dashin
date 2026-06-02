@@ -2,9 +2,46 @@
 
 ## Unreleased
 
+### BREAKING — Rebranded BunAdmin → Dashin (`@dashin-dev`)
+
+The project is now **Dashin** (https://dashin.dev). All packages move to the
+`@dashin-dev` npm scope, the CLI command becomes `dashin`, and `bunadmin`-named
+conventions are renamed. This is a major, breaking change.
+
+**Package renames**
+
+| Old | New |
+| --- | --- |
+| `@xbuilder/bunadmin` | `@dashin-dev/dashin` |
+| `@xbuilder/bunadmin-cli` | `@dashin-dev/cli` (bin: `dashin`) |
+| `@xbuilder/bunadmin-source-*` | `@dashin-dev/source-*` |
+| `@xbuilder/bunadmin-auth-*` | `@dashin-dev/auth-*` |
+| `@xbuilder/bunadmin-upload-*` | `@dashin-dev/upload-*` |
+| `@xbuilder/bunadmin-rich-text-editor` | `@dashin-dev/rich-text-editor` |
+| `@xbuilder/bunadmin-auth-buncms` | **removed** |
+
+**Conventions & runtime**
+- CLI command `bunadmin` → `dashin` (`dashin new`, `dashin plugin`, `dashin schema`, `dashin ai …`).
+- Plugin prefix `bunadmin-plugin-[team]-[group]` → `dashin-plugin-[team]-[group]`.
+- Generated registry folder `src/.bunadmin/dynamic/` → `src/.dashin/dynamic/`.
+- AI env vars `BUNADMIN_AI_*` → `DASHIN_AI_*`.
+- Theme namespace `{ bunadmin: { … } }` / `theme.bunadmin` → `{ dashin: { … } }` / `theme.dashin`.
+- Exported identifiers `BunadminFile*` → `DashinFile*`, `BunadminDatabase` → `DashinDatabase`.
+- Default auth plugin → `@dashin-dev/auth-local`.
+- Local IndexedDB name → `DashinDatabase` (**local browser data resets**; export via Data Migration first if you need it).
+- `.env` files are now `.env.example` (gitignored real `.env`); `dashin new` materializes `.env` from the example.
+
+**Migration**
+1. Update dependencies to `@dashin-dev/*` and update all imports.
+2. Replace CLI usage `bunadmin …` → `dashin …`; reinstall the CLI: `npm i -g @dashin-dev/cli`.
+3. Rename custom plugin folders `bunadmin-plugin-*` → `dashin-plugin-*`.
+4. In `.env`: point `VITE_AUTH_PLUGIN` to `@dashin-dev/auth-*`; rename `BUNADMIN_AI_*` → `DASHIN_AI_*`.
+5. Update theme objects `{ bunadmin: … }` → `{ dashin: … }`.
+6. Re-seed local data if needed (the IndexedDB name changed).
+
 ### Added
-- **AI-assisted admin generation** (BYOK, validated): `bunadmin ai generate`
-  (backend schema → validated table definition) and `bunadmin ai theme`
+- **AI-assisted admin generation** (BYOK, validated): `dashin ai generate`
+  (backend schema → validated table definition) and `dashin ai theme`
   (description → validated `{preset,mode,overrides}` theme). Providers:
   OpenAI-compatible / Anthropic / Ollama. See `docs/ai/README.md`.
 - **Design-token system + theme presets** (`classic`, `modern` default) with
@@ -19,7 +56,7 @@
 ### Changed
 - Icons migrated from unmaintained `react-eva-icons` to **lucide-react** (via a
   drop-in `EvaIcon` adapter; topbar/selectors/repeater/file-explorer SVGs too).
-- UI fully tokenized for dark mode; bunadmin-3 visual refresh (gradient brand,
+- UI fully tokenized for dark mode; dashin-3 visual refresh (gradient brand,
   section headers, status pills).
 - `@dashin-dev/dashin` no longer hard-depends on auth-local (loaded dynamically).
 

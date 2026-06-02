@@ -1,6 +1,6 @@
 {
   "name": "@dashin-dev/dashin",
-  "version": "1.6.0-beta.0",
+  "version": "2.0.0-alpha.0",
   "description": "A simple graphql admin dashboard. Easy to expand with the flexible plugin. Graphql first, also supports api. Based on React, Redux, Tailwind CSS, Headless UI, Formik, I18N.",
   "license": "Apache-2.0",
   "repository": {
@@ -69,9 +69,9 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-test-renderer": "^18.3.0",
     "@vitest/coverage-v8": "^1.6.0",
-    "@dashin-dev/auth-local": "^1.6.0-beta.0",
-    "@dashin-dev/auth-pocketbase": "^1.6.0-beta.0",
-    "@dashin-dev/source-pocketbase": "^1.6.0-beta.0",
+    "@dashin-dev/auth-local": "^2.0.0-alpha.0",
+    "@dashin-dev/auth-pocketbase": "^2.0.0-alpha.0",
+    "@dashin-dev/source-pocketbase": "^2.0.0-alpha.0",
     "husky": "^4.2.5",
     "prettier": "1.19.1",
     "pretty-quick": "^2.0.1",

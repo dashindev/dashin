@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.0.0-alpha.0
 
 ### BREAKING — Rebranded BunAdmin → Dashin (`@dashin-dev`)
 

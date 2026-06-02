@@ -1,6 +1,6 @@
 {
   "name": "@dashin-dev/source-pocketbase",
-  "version": "1.6.0-beta.0",
+  "version": "2.0.0-alpha.0",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -8,7 +8,7 @@
     "lib"
   ],
   "devDependencies": {
-    "@dashin-dev/dashin": "^1.6.0-beta.0",
+    "@dashin-dev/dashin": "^2.0.0-alpha.0",
     "prettier": "1.19.1",
     "typescript": "4.8.3",
     "vitest": "^1.6.0"

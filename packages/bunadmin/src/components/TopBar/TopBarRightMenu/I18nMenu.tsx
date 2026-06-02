@@ -39,7 +39,7 @@ export default function I18nMenu() {
         <Menu.Button className="inline-flex items-center justify-center rounded-full h-9 w-9 text-icon-muted hover:bg-primary/10 hover:text-primary">
           <Globe size={18} />
         </Menu.Button>
-        <Menu.Items className="absolute right-0 z-50 mt-1 w-40 origin-top-right rounded-bn bg-content-box py-1 shadow-lg ring-1 ring-bn-border focus:outline-none">
+        <Menu.Items className="absolute right-0 z-50 mt-1 w-40 origin-top-right rounded-bn bg-content-box py-1 shadow-bn ring-1 ring-bn-border focus:outline-none">
           {i18nMenus.map((item, index) => (
             <Menu.Item key={index}>
               {({ active }) => (

@@ -11,7 +11,7 @@ export default function NoticeTabs({
   setTab: Dispatch<number>
 }) {
   return (
-    <div className="bg-content-box shadow-sm">
+    <div className="bg-content-box shadow-bn">
       <div className="flex" role="tablist" aria-label="core notice tabs">
         <button
           className={`px-4 py-2 text-sm font-medium border-b-2 ${

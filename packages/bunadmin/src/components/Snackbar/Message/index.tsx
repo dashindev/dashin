@@ -44,7 +44,7 @@ const SnackMessage = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   return (
     <div
       ref={ref}
-      className={`min-w-[344px] max-w-[400px] rounded bg-gradient-to-br text-white shadow-md ${
+      className={`min-w-[344px] max-w-[400px] rounded bg-gradient-to-br text-white shadow-bn ${
         gradients[state.severity || "success"]
       }`}
     >

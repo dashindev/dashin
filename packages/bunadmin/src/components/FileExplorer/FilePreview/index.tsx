@@ -49,7 +49,7 @@ export default function FilePreview({
     <Dialog open={preview} onClose={handleClose} className="relative z-[1300]">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className={`fixed inset-0 flex items-center justify-center ${state.fullScreen ? "" : "p-4"}`}>
-        <Dialog.Panel className={`bg-content-box shadow-xl flex flex-col ${state.fullScreen ? "w-full h-full" : "max-w-3xl max-h-[90vh] rounded"}`}>
+        <Dialog.Panel className={`bg-content-box shadow-bn flex flex-col ${state.fullScreen ? "w-full h-full" : "max-w-3xl max-h-[90vh] rounded"}`}>
           {/* Image area */}
           <div
             className="flex-1 flex items-center justify-center overflow-auto cursor-pointer"

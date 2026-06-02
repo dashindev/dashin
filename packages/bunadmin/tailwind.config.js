@@ -13,6 +13,7 @@ module.exports = {
         // Token-driven (var() mirrors src/utils/themes/tokens.ts + tailwind.css).
         primary: "var(--bn-primary)",
         "primary-foreground": "var(--bn-primary-foreground)",
+        "primary-hover": "var(--bn-primary-hover)",
         secondary: "var(--bn-success)",
         success: "var(--bn-success)",
         warning: "var(--bn-warning)",
@@ -26,6 +27,12 @@ module.exports = {
       },
       borderRadius: {
         bn: "var(--bn-radius)"
+      },
+      boxShadow: {
+        bn: "var(--bn-shadow)"
+      },
+      ringColor: {
+        bn: "var(--bn-ring)"
       },
       backgroundImage: {
         "primary-gradient": "var(--bn-primary-gradient)"

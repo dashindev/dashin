@@ -56,7 +56,7 @@ export default function MultipleSelector(props: Props) {
                 <ChevronsUpDown className="h-5 w-5 text-icon-muted" />
               </span>
             </Listbox.Button>
-            <Listbox.Options className="absolute z-10 mt-1 max-h-[230px] w-[250px] overflow-auto rounded bg-content-box py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
+            <Listbox.Options className="absolute z-10 mt-1 max-h-[230px] w-[250px] overflow-auto rounded bg-content-box py-1 text-sm shadow-bn ring-1 ring-bn-border focus:outline-none">
               {names.map(name => (
                 <Listbox.Option
                   key={name}

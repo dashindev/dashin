@@ -112,7 +112,7 @@ export default function FilterListSelector({
             <Combobox.Input
               className={`w-full py-2 pr-8 text-sm outline-none ${
                 variant === "outlined"
-                  ? "rounded border border-bn-border px-3 focus:border-primary focus:ring-1 focus:ring-primary"
+                  ? "rounded border border-bn-border px-3 focus:border-primary focus:ring-1 focus:ring-bn"
                   : "border-b border-bn-border bg-transparent focus:border-primary"
               }`}
               displayValue={displayValue}
@@ -129,7 +129,7 @@ export default function FilterListSelector({
             </span>
           </div>
           {open && options.length > 0 && (
-            <Combobox.Options static className="absolute z-10 mt-1 max-h-[230px] w-full overflow-auto rounded bg-content-box py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
+            <Combobox.Options static className="absolute z-10 mt-1 max-h-[230px] w-full overflow-auto rounded bg-content-box py-1 text-sm shadow-bn ring-1 ring-bn-border focus:outline-none">
               {options.map(option => (
                 <Combobox.Option
                   key={option.id}

@@ -62,7 +62,7 @@ export default function StatBand({ stats }: StatBandProps) {
       {stats.map((s, i) => (
         <div
           key={i}
-          className="bg-content-box border border-bn-border rounded-bn p-4 shadow-sm"
+          className="bg-content-box border border-bn-border rounded-bn p-4 shadow-bn"
         >
           <div className="flex items-start justify-between">
             <span className="text-sm text-icon-muted">{s.label}</span>

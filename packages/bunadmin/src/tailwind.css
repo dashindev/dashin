@@ -19,6 +19,9 @@
     --bn-warning: #f59e0b;
     --bn-danger: #ef4444;
     --bn-radius: 12px;
+    --bn-shadow: 0 4px 12px rgba(2, 6, 23, 0.08);
+    --bn-ring: #6366f1;
+    --bn-primary-hover: #4f46e5;
   }
   .dark {
     --bn-bg: #0a0e1a;
@@ -34,6 +37,9 @@
     --bn-warning: #fbbf24;
     --bn-danger: #f87171;
     --bn-radius: 12px;
+    --bn-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    --bn-ring: #818cf8;
+    --bn-primary-hover: #6366f1;
   }
 }
 

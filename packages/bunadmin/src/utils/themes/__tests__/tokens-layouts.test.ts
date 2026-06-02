@@ -53,7 +53,7 @@ describe("tokensToCssVars", () => {
   it("maps a full dark token set", () => {
     const vars = tokensToCssVars(darkTokens)
     expect(vars["--bn-bg"]).toBe(darkTokens.bg)
-    expect(Object.keys(vars)).toHaveLength(13)
+    expect(Object.keys(vars)).toHaveLength(16)
   })
 })
 

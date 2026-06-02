@@ -20,6 +20,9 @@ export interface ThemeTokens {
   warning: string
   danger: string
   radius: string // base corner radius
+  shadow: string // elevation (cards/dropdowns/dialogs) — dark-mode aware
+  ring: string // focus ring color (brand)
+  primaryHover: string // primary accent, hover state
 }
 
 /** "classic" — the original flat dashin look (mockup 1). */
@@ -36,7 +39,10 @@ export const classicLight: ThemeTokens = {
   success: "#00d68f",
   warning: "#ffaa00",
   danger: "#ff1744",
-  radius: "10px"
+  radius: "10px",
+  shadow: "0 1px 3px rgba(0,0,0,0.12)",
+  ring: "#3366ff",
+  primaryHover: "#2952cc"
 }
 
 export const classicDark: ThemeTokens = {
@@ -52,7 +58,10 @@ export const classicDark: ThemeTokens = {
   success: "#22c55e",
   warning: "#f59e0b",
   danger: "#f43f5e",
-  radius: "10px"
+  radius: "10px",
+  shadow: "0 2px 8px rgba(0,0,0,0.6)",
+  ring: "#6366f1",
+  primaryHover: "#4f46e5"
 }
 
 /** "modern" — the refined default (mockup 3): softer surfaces, indigo→violet
@@ -70,7 +79,10 @@ export const modernLight: ThemeTokens = {
   success: "#10b981",
   warning: "#f59e0b",
   danger: "#ef4444",
-  radius: "12px"
+  radius: "12px",
+  shadow: "0 4px 12px rgba(2,6,23,0.08)",
+  ring: "#6366f1",
+  primaryHover: "#4f46e5"
 }
 
 export const modernDark: ThemeTokens = {
@@ -86,7 +98,10 @@ export const modernDark: ThemeTokens = {
   success: "#34d399",
   warning: "#fbbf24",
   danger: "#f87171",
-  radius: "12px"
+  radius: "12px",
+  shadow: "0 6px 20px rgba(0,0,0,0.5)",
+  ring: "#818cf8",
+  primaryHover: "#6366f1"
 }
 
 export interface ThemePreset {
@@ -126,7 +141,10 @@ export const tokenCssVar: Record<keyof ThemeTokens, string> = {
   success: "--bn-success",
   warning: "--bn-warning",
   danger: "--bn-danger",
-  radius: "--bn-radius"
+  radius: "--bn-radius",
+  shadow: "--bn-shadow",
+  ring: "--bn-ring",
+  primaryHover: "--bn-primary-hover"
 }
 
 /** Apply a (partial) token set as inline CSS variables at runtime. */

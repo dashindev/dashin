@@ -559,9 +559,30 @@ export default function Table<RowData extends object>(
               </tr>
             )}
             {isLoading ? (
-              <tr><td colSpan={colSpan} className="px-4 py-8 text-center text-icon-muted">…</td></tr>
+              <>
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <tr key={`sk-${i}`} className="border-b border-bn-border">
+                    <td colSpan={colSpan} className="px-4 py-3">
+                      <div className="h-4 w-full animate-pulse rounded-bn bg-icon-muted/20" />
+                    </td>
+                  </tr>
+                ))}
+              </>
             ) : rows.length === 0 ? (
-              <tr><td colSpan={colSpan} className="px-4 py-8 text-center text-icon-muted">{t("emptyDataSourceMessage")}</td></tr>
+              <tr>
+                <td colSpan={colSpan} className="px-4 py-12 text-center">
+                  <div className="flex flex-col items-center gap-2 text-icon-muted">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-10 w-10 fill-current opacity-40"
+                      aria-hidden="true"
+                    >
+                      <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14zM12 7a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1zm0 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                    </svg>
+                    <span className="text-sm">{t("emptyDataSourceMessage")}</span>
+                  </div>
+                </td>
+              </tr>
             ) : grouping ? (
               groupItems.map(item =>
                 item.kind === "group" ? (

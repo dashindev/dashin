@@ -52,10 +52,17 @@ can't run on Cloudflare; D1 can.
 
 ## Public-demo safety
 
-The gateway Worker only allows `SELECT/INSERT/UPDATE/DELETE` on the demo tables
-(rejects DDL, multi-statements, comments) and **re-seeds every 30 minutes** via a
-free Worker cron, so visitor edits revert. Auth is client-side `auth-local`, so
-there are no server credentials to change.
+The gateway Worker is hardened for public exposure:
+
+- **Per-IP rate limit** (30 POSTs / 10s) + Cloudflare's automatic DDoS protection.
+- **SQL guard** — only `SELECT/INSERT/UPDATE/DELETE` on the demo tables; no DDL /
+  multi-statements / comments; bounded length; `SELECT` must carry a small `LIMIT`.
+- **Write cap** — `INSERT` is refused past 500 rows, so storage can't be inflated.
+- **`/reset` is token-gated**; the cron **re-seeds every 30 min**, reverting edits.
+- Auth is client-side `auth-local`, so there are **no server credentials** to change.
+
+On the **Workers Free plan** there is no overage billing — abuse is throttled, not
+charged.
 
 ## How it differs from the Turso connector
 

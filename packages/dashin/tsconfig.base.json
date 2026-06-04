@@ -4,7 +4,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@dashin-dev/dashin": ["./src"],
-      "@.bunadmin/dynamic": ["./bunadmin/dynamic"]
+      "@.dashin/dynamic": ["./src/.dashin/dynamic"]
     }
   }
 }

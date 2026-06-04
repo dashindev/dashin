@@ -4,6 +4,6 @@
 /docs/CONTRIBUTORS.md  @Chris533
 
 # Connectors (the new data sources) — keep their docs + code owners aligned.
-/packages/bunadmin-source-pocketbase/  @Chris533
-/packages/bunadmin-source-appwrite/    @Chris533
-/packages/bunadmin-source-supabase/    @Chris533
+/packages/dashin-source-pocketbase/  @Chris533
+/packages/dashin-source-appwrite/    @Chris533
+/packages/dashin-source-supabase/    @Chris533

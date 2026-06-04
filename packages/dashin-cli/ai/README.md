@@ -48,7 +48,7 @@ priced on convenience) is the later revenue layer.
 
 ## Try it
 ```bash
-node packages/bunadmin-cli/ai/run.js \
+node packages/dashin-cli/ai/run.js \
   --url http://127.0.0.1:8090 --collection posts --token <admin-token> \
   --mock '{"columns":[{"field":"id"},{"field":"name"},{"field":"status"},{"field":"views"}]}'
 # or with a real model: set DASHIN_AI_PROVIDER + key, drop --mock

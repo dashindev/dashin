@@ -16,6 +16,6 @@ EXPOSE 3000
 COPY --from=BUILD_IMAGE /usr/src/app/ ./
 
 # Environment variables are available
-CMD cd packages/bunadmin && yarn build && yarn start
+CMD cd packages/dashin && yarn build && yarn start
 
-# If you need a smaller image, you can use the Dockerfile in `packages/bunadmin`.
+# If you need a smaller image, you can use the Dockerfile in `packages/dashin`.

@@ -86,39 +86,39 @@ export default defineConfig(({ mode }) => {
         // schema's `<pkg>/sign-in`). Avoids CJS lib/ interop issues.
         {
           find: /^@dashin-dev\/source-strapi$/,
-          replacement: r("../bunadmin-source-strapi/index.ts")
+          replacement: r("../dashin-source-strapi/index.ts")
         },
         {
           find: /^@dashin-dev\/source-graphql$/,
-          replacement: r("../bunadmin-source-graphql/index.ts")
+          replacement: r("../dashin-source-graphql/index.ts")
         },
         {
           find: /^@dashin-dev\/source-pocketbase$/,
-          replacement: r("../bunadmin-source-pocketbase/index.ts")
+          replacement: r("../dashin-source-pocketbase/index.ts")
         },
         {
           find: /^@dashin-dev\/source-appwrite$/,
-          replacement: r("../bunadmin-source-appwrite/index.ts")
+          replacement: r("../dashin-source-appwrite/index.ts")
         },
         {
           find: /^@dashin-dev\/source-supabase$/,
-          replacement: r("../bunadmin-source-supabase/index.ts")
+          replacement: r("../dashin-source-supabase/index.ts")
         },
         {
           find: /^@dashin-dev\/source-directus$/,
-          replacement: r("../bunadmin-source-directus/index.ts")
+          replacement: r("../dashin-source-directus/index.ts")
         },
         {
           find: /^@dashin-dev\/source-payload$/,
-          replacement: r("../bunadmin-source-payload/index.ts")
+          replacement: r("../dashin-source-payload/index.ts")
         },
         {
           find: /^@dashin-dev\/source-turso$/,
-          replacement: r("../bunadmin-source-turso/index.ts")
+          replacement: r("../dashin-source-turso/index.ts")
         },
         {
           find: /^@dashin-dev\/rich-text-editor$/,
-          replacement: r("../bunadmin-rich-text-editor/index.tsx")
+          replacement: r("../dashin-rich-text-editor/index.tsx")
         },
         // dir-mapped: bare -> index.ts (Vite resolves), subpath -> source file
         {

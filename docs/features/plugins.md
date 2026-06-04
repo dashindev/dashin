@@ -19,8 +19,8 @@ bunadmin plugin myteam-blog     # in plugins/
 bunadmin schema post            # in the plugin dir
 ```
 
-The generator scans your `dependencies` + `devDependencies` for bunadmin plugins
-and emits `.bunadmin/dynamic/` (menus, schema data, an import map) consumed at
+The generator scans your `dependencies` + `devDependencies` for dashin plugins
+and emits `.dashin/dynamic/` (menus, schema data, an import map) consumed at
 runtime via the plugin registry (`import.meta.glob`).
 
 ## Auth

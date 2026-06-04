@@ -86,7 +86,7 @@ The dev server (Vite) runs at [http://localhost:3000](http://localhost:3000).
 
 ### Scripts
 
-Inside `packages/bunadmin`:
+Inside `packages/dashin`:
 
 | Command          | Description           |
 | ---------------- | --------------------- |

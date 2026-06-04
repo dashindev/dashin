@@ -6,10 +6,10 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xbuilder/bunadmin"
+    "url": "https://github.com/dashindev/dashin"
   },
   "bugs": {
-    "url": "https://github.com/xbuilder/bunadmin/issues"
+    "url": "https://github.com/dashindev/dashin/issues"
   },
   "author": "XBuilder Team",
   "main": "lib/main.js",

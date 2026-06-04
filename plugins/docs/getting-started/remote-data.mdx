@@ -41,13 +41,13 @@ cd [Test folder]
 git clone https://github.com/xbuilder/bunadmin.git bunadmin-example-strapi
 $_ && yarn install
 
-cd packages/bunadmin
+cd packages/dashin
 cp example/.env .env.development
 ```
 
 3.Use environment variables
 
-Replace the content of `.env.development` **_(bunadmin-example-strapi/packages/bunadmin/.env.development)_** with the following:
+Replace the content of `.env.development` **_(bunadmin-example-strapi/packages/dashin/.env.development)_** with the following:
 
 ```shell
 # Dashin Core
@@ -82,7 +82,7 @@ REACT_APP_AUTH_STRAPI_ROLE=Admin
 
 4.Start Dashin
 
-Run in `bunadmin` path **_(bunadmin-example-strapi/packages/bunadmin/)_**
+Run in `bunadmin` path **_(bunadmin-example-strapi/packages/dashin/)_**
 
 ```shell script
 yarn dev

@@ -20,7 +20,7 @@
     "node_modules",
     "lib",
     "pages",
-    "src/.bunadmin",
+    "src/.dashin",
     "src/App.spec.tsx",
     "src/App.tsx",
     "src/index.tsx",

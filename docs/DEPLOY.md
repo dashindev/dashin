@@ -45,3 +45,44 @@ npm run dev      # http://localhost:5174
 npm run build    # outputs .vitepress/dist
 npm run preview
 ```
+
+---
+
+# Deploying the demo app (Cloudflare Workers — static assets)
+
+The **demo** is the Dashin admin SPA (`packages/dashin`) built with the default
+`auth-local` plugin — **fully self-contained**: no backend, login `admin` /
+`dashin`, sample data seeded into the browser (IndexedDB). It's a separate
+Cloudflare project from the docs (suggested domain: `demo.dashin.dev`).
+
+Because it's a yarn-workspace build (not a single VitePress folder), the
+account's "Build output directory" field doesn't fit — use the committed
+[`wrangler.demo.jsonc`](../wrangler.demo.jsonc), which declares the output via
+`assets.directory`.
+
+## One-time setup (Cloudflare dashboard)
+
+Create a **second** Workers project from the same repo:
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `master` |
+| Root directory | *(repo root)* |
+| Build command | `yarn tsc:build && yarn workspace @dashin-dev/dashin build` |
+| Deploy command | `npx wrangler deploy -c wrangler.demo.jsonc` |
+
+`yarn tsc:build` builds all plugin `lib/` (the Vite plugin generator needs them)
+**before** `vite build`. Node is pinned to 20 by the repo-root `.node-version`.
+Then add the custom domain **`demo.dashin.dev`**.
+
+## Local
+
+```
+yarn install
+yarn tsc:build && yarn workspace @dashin-dev/dashin build   # -> packages/dashin/dist
+npx wrangler deploy -c wrangler.demo.jsonc                  # or: serve packages/dashin/dist
+```
+
+> The sidebar's **Local** section works fully offline. The **Blog** / **Remote**
+> sections expect a live connector backend — to show only the offline-working
+> parts in the public demo, set `VITE_IGNORED_PLUGINS` at build time (follow-up).

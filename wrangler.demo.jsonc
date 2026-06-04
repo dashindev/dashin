@@ -1,0 +1,23 @@
+// Cloudflare Workers (static assets) config for the Dashin DEMO app.
+// The demo is the admin SPA built from packages/dashin with the default
+// auth-local plugin — fully self-contained (no backend; login admin / dashin,
+// data seeded into the browser's IndexedDB).
+//
+// Deploy (from the repo root):
+//   yarn install
+//   yarn tsc:build && yarn workspace @dashin-dev/dashin build
+//   npx wrangler deploy -c wrangler.demo.jsonc
+//
+// In the Cloudflare "Workers Builds" UI use:
+//   Build command:  yarn tsc:build && yarn workspace @dashin-dev/dashin build
+//   Deploy command: npx wrangler deploy -c wrangler.demo.jsonc
+{
+  "name": "dashin-demo",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    // The Vite build output. This IS the "output directory".
+    "directory": "./packages/dashin/dist",
+    // SPA: serve index.html for client-side routes instead of 404.
+    "not_found_handling": "single-page-application"
+  }
+}

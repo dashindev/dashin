@@ -10,8 +10,8 @@ PB_VERSION="${PB_VERSION:-0.22.21}"
 PB_PORT="${PB_PORT:-8090}"
 DIR="$(cd "$(dirname "$0")" && pwd)"
 PB_DIR="$DIR/.pb"
-ADMIN_EMAIL="${PB_ADMIN:-admin@bunadmin.test}"
-ADMIN_PW="${PB_ADMIN_PW:-bunadmin123}"
+ADMIN_EMAIL="${PB_ADMIN:-admin@dashin.test}"
+ADMIN_PW="${PB_ADMIN_PW:-dashin123}"
 
 mkdir -p "$PB_DIR"
 cd "$PB_DIR"
@@ -46,7 +46,7 @@ PB_URL="http://127.0.0.1:${PB_PORT}" PB_ADMIN="$ADMIN_EMAIL" PB_ADMIN_PW="$ADMIN
 cat <<EOF
 
 ✓ Demo backend ready: http://127.0.0.1:${PB_PORT}  (admin UI: /_/)
-  admin: ${ADMIN_EMAIL} / ${ADMIN_PW}   demo user: demo / bunadmin123
+  admin: ${ADMIN_EMAIL} / ${ADMIN_PW}   demo user: demo / dashin123
 
 Next — in another terminal:
   dashin new my-admin && cd my-admin

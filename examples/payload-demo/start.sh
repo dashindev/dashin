@@ -77,8 +77,8 @@ CFG
 import { getPayload } from "payload"
 import config from "./payload.config.ts"
 
-const ADMIN_EMAIL = process.env.PAYLOAD_ADMIN || "admin@bunadmin.test"
-const ADMIN_PW = process.env.PAYLOAD_ADMIN_PW || "bunadmin123"
+const ADMIN_EMAIL = process.env.PAYLOAD_ADMIN || "admin@dashin.test"
+const ADMIN_PW = process.env.PAYLOAD_ADMIN_PW || "dashin123"
 
 async function seed() {
   const payload = await getPayload({ config })

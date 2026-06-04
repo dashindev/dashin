@@ -52,7 +52,7 @@ See [`docs/pocketbase/`](docs/pocketbase/).
 [dashin.dev](https://dashin.dev/)
 
 - Username: `admin`
-- Password: `bunadmin`
+- Password: `dashin`
 
 [More details](https://dashin.dev/guide/demo)
 
@@ -82,7 +82,7 @@ $ yarn dev
 The dev server (Vite) runs at [http://localhost:3000](http://localhost:3000).
 
 - Username: `admin`
-- Password: `bunadmin`
+- Password: `dashin`
 
 ### Scripts
 

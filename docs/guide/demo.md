@@ -36,7 +36,7 @@ dashin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin
 yarn dev
 ```
 
-Sign in as `demo` / `bunadmin123`. See the [AI guide](/ai/) for the full flow,
+Sign in as `demo` / `dashin123`. See the [AI guide](/ai/) for the full flow,
 including `ai theme` and `ai refine`.
 
 ### Flagship example (no AI key)
@@ -52,8 +52,8 @@ i18n, dynamic routing — is added automatically by `dashin new` on every list
 view, so it needs no code in these files.
 
 ## Credentials (PocketBase)
-- PocketBase admin: `admin@bunadmin.test` / `bunadmin123`
-- Demo user (app login): `demo` / `bunadmin123`
+- PocketBase admin: `admin@dashin.test` / `dashin123`
+- Demo user (app login): `demo` / `dashin123`
 
 ---
 
@@ -85,7 +85,7 @@ yarn dev
 Or drop in the pre-built [`example-admin.tsx`](https://github.com/dashindev/dashin/tree/master/examples/payload-demo/example-admin.tsx) — no AI key needed.
 
 ### Credentials (Payload)
-- Payload admin: `admin@bunadmin.test` / `bunadmin123`
+- Payload admin: `admin@dashin.test` / `dashin123`
 
 ---
 
@@ -153,7 +153,7 @@ VITE_MAIN_URL=http://127.0.0.1:8055
 ```
 
 ### Credentials (Directus)
-- Directus admin: `admin@bunadmin.test` / `bunadmin123`
+- Directus admin: `admin@dashin.test` / `dashin123`
 
 ---
 

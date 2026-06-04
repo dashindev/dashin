@@ -17,7 +17,7 @@ Wait ~15s for first-boot migrations, then sign in to the app at `/admin`.
 
 Create the demo collection once in the Directus data studio:
 
-1. Sign in at `http://127.0.0.1:8055` (`admin@bunadmin.test` / `bunadmin123`).
+1. Sign in at `http://127.0.0.1:8055` (`admin@dashin.test` / `dashin123`).
 2. Create a `posts` collection with fields: `title` (string), `status`
    (string), `views` (integer).
 3. Under **Settings → Roles & Permissions**, grant read/write on `posts`.
@@ -42,7 +42,7 @@ Or drop in [`example-admin.tsx`](./example-admin.tsx) directly.
 
 ## Credentials
 
-- Directus admin: `admin@bunadmin.test` / `bunadmin123`
+- Directus admin: `admin@dashin.test` / `dashin123`
 
 ## Notes
 

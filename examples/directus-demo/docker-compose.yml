@@ -12,8 +12,8 @@ services:
       - SECRET=dashin-demo-secret-change-me
       - DB_CLIENT=sqlite3
       - DB_FILENAME=/directus/database/data.db
-      - ADMIN_EMAIL=admin@bunadmin.test
-      - ADMIN_PASSWORD=bunadmin123
+      - ADMIN_EMAIL=admin@dashin.test
+      - ADMIN_PASSWORD=dashin123
     volumes:
       - directus_db:/directus/database
     healthcheck:

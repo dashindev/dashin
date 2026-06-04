@@ -42,11 +42,11 @@ yarn dev
 
 Or drop in [`example-admin.tsx`](./example-admin.tsx) directly — no AI key needed.
 
-Sign in as `admin@bunadmin.test` / `bunadmin123`.
+Sign in as `admin@dashin.test` / `dashin123`.
 
 ## Credentials
 
-- Payload admin: `admin@bunadmin.test` / `bunadmin123`
+- Payload admin: `admin@dashin.test` / `dashin123`
 
 ## API endpoints
 

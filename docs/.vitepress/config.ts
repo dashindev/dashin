@@ -9,6 +9,24 @@ export default defineConfig({
 
   ignoreDeadLinks: [/^http:\/\/localhost/, /\.tsx?$/, /\.js$/],
 
+  head: [
+    ["link", { rel: "icon", type: "image/svg+xml", href: "/logo.svg" }],
+    ["meta", { name: "theme-color", content: "#3366ff" }],
+    ["meta", { property: "og:type", content: "website" }],
+    ["meta", { property: "og:title", content: "Dashin" }],
+    [
+      "meta",
+      {
+        property: "og:description",
+        content:
+          "Vite + Tailwind React admin scaffold with AI-assisted, schema-validated generation."
+      }
+    ],
+    ["meta", { property: "og:image", content: "https://dashin.dev/og.png" }],
+    ["meta", { name: "twitter:card", content: "summary_large_image" }],
+    ["meta", { name: "twitter:image", content: "https://dashin.dev/og.png" }]
+  ],
+
   // README.md files (kept for GitHub browsing) serve as section indexes.
   rewrites: {
     "ai/README.md": "ai/index.md",
@@ -21,6 +39,7 @@ export default defineConfig({
   },
 
   themeConfig: {
+    logo: "/logo.svg",
     outline: "deep",
     nav: [
       { text: "Guide", link: "/guide/getting-started" },

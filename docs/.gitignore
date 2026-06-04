@@ -2,4 +2,4 @@ node_modules
 .vitepress/dist
 .vitepress/cache
 yarn.lock
-package-lock.json
+# package-lock.json is committed for reproducible Cloudflare Pages builds (npm ci)

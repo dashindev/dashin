@@ -2,6 +2,10 @@
 
 ![Dashin — the plugin-based React admin scaffold](assets/banner.png)
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-dashin.dev-00d68f.svg)](https://dashin.dev)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/dashindev/dashin/pulls)
+
 **Dashin** is a scaffold to quickly build a `React` background management system. It is easy to use and can help you build a powerful background management panel. The app is powered by **Vite**, styled with **Tailwind CSS** + **Headless UI**, and uses **TipTap** for rich-text editing. If you have not used these before, don't worry — you can learn them quickly during actual use.
 
 Dashin hopes to achieve as many function reuse as possible through simple development methods, so in each Dashin project, **common functions have been built**, such as dynamic routing, multi-level menus, **permission control, data management**, search filtering and sorting, CRUD, **file management, message notification**, documenting your code, etc. You only need to build your own plugin to call it, and the Dashin plugin is also easy to learn and use.
@@ -101,10 +105,15 @@ From the repo root:
 ## Lerna (publish packages)
 
 ```
-yarn turbo:tsc:build
+yarn tsc:build        # build all package lib/ first (publish ships lib/, not src)
 
-npx lerna version --force-publish --no-git-tag-version
-npx lerna publish from-package
+# First 2.0 release is an alpha — publish under the `alpha` dist-tag so it
+# doesn't take the default `latest` tag:
+npx lerna publish from-package --dist-tag alpha
+
+# Later, to cut a stable release:
+#   npx lerna version 2.0.0 --no-private
+#   npx lerna publish from-git
 ```
 
 #### Thanks
@@ -117,6 +126,5 @@ npx lerna publish from-package
 [ngx-admin](https://github.com/akveo/ngx-admin)
 [ant-design-pro](https://github.com/ant-design/ant-design-pro)
 [react-admin](https://github.com/marmelab/react-admin)
-...
 
 ❤️🎉

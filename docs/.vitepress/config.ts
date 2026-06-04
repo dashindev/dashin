@@ -35,7 +35,8 @@ export default defineConfig({
     "supabase/README.md": "supabase/index.md",
     "directus/README.md": "directus/index.md",
     "payload/README.md": "payload/index.md",
-    "turso/README.md": "turso/index.md"
+    "turso/README.md": "turso/index.md",
+    "d1/README.md": "d1/index.md"
   },
 
   themeConfig: {
@@ -79,7 +80,8 @@ export default defineConfig({
           { text: "Supabase / Postgres", link: "/supabase/" },
           { text: "Directus", link: "/directus/" },
           { text: "Payload", link: "/payload/" },
-          { text: "Turso / libSQL", link: "/turso/" }
+          { text: "Turso / libSQL", link: "/turso/" },
+          { text: "Cloudflare D1 (free)", link: "/d1/" }
         ]
       },
       {

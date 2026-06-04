@@ -1,0 +1,103 @@
+import { Uploader } from "@dashin-dev/dashin"
+
+# Uploader
+
+### Used to display/upload single/multiple pictures/files
+
+<br />
+
+## Display
+
+#### Click to preview
+
+<Uploader
+  viewMode={true}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
+  noDrawer={true}
+  width={80}
+/>
+
+```tsx
+import { Uploader } from "@dashin-dev/dashin"
+//...
+;<Uploader
+  viewMode={true}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
+  noDrawer={true}
+  width={80}
+/>
+```
+
+<br />
+
+## Upload
+
+#### Click/drop to upload/replace, drag the outer box to sort
+
+<Uploader
+  viewMode={false}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
+  onDrop={() => console.log("onDrop")}
+  onDel={() => console.log("onDel")}
+  onDragSort={() => console.log("onDragSort")}
+  noDrawer={true}
+  width={80}
+/>
+
+```tsx
+import { Uploader } from "@dashin-dev/dashin"
+//...
+;<Uploader
+  viewMode={false}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
+  onDrop={() => console.log("onDrop")}
+  onDel={() => console.log("onDel")}
+  onDragSort={() => console.log("onDragSort")}
+  noDrawer={true}
+  width={80}
+/>
+```
+
+<br />
+
+## Use Drawer
+
+<Uploader
+  viewMode={false}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
+  onDrop={() => console.log("onDrop")}
+  onDel={() => console.log("onDel")}
+  onDragSort={() => console.log("onDragSort")}
+  width={135}
+/>
+
+```tsx
+import { Uploader } from "@dashin-dev/dashin"
+//...
+;<Uploader
+  viewMode={false}
+  files={[
+    { id: 1, url: "/p/default.jpg" },
+    { id: 2, url: "/p/default.jpg" }
+  ]}
+  onDrop={() => console.log("onDrop")}
+  onDel={() => console.log("onDel")}
+  onDragSort={() => console.log("onDragSort")}
+  width={135}
+/>
+```

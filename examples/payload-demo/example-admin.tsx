@@ -1,6 +1,6 @@
 /**
  * Worked example: a `posts` page backed by Payload CMS via
- * @xbuilder/bunadmin-source-payload.
+ * @dashin-dev/source-payload.
  *
  * Drop this into a bunadmin project's plugin (e.g. src/plugins/bunadmin-plugin-
  * myteam-blog/posts/index.tsx) and register it like any other schema plugin.
@@ -14,8 +14,8 @@ import {
   TableDefaultProps as DefaultProps,
   useTranslation,
   Column
-} from "@xbuilder/bunadmin"
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-payload"
+} from "@dashin-dev/dashin"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-payload"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 

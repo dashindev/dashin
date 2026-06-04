@@ -1,6 +1,6 @@
 /**
  * Worked example: a `posts` page backed by Directus (Items REST API) via
- * @xbuilder/bunadmin-source-directus.
+ * @dashin-dev/source-directus.
  *
  * Drop this into a bunadmin project's plugin and register it like any other
  * schema plugin. Requires a Directus `posts` collection (see README.md).
@@ -13,8 +13,8 @@ import {
   TableDefaultProps as DefaultProps,
   useTranslation,
   Column
-} from "@xbuilder/bunadmin"
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-directus"
+} from "@dashin-dev/dashin"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-directus"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 

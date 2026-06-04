@@ -1,0 +1,182 @@
+import { Checkbox } from "@mui/material"
+
+# Create a simple plugin
+
+In this tutorial, we will:
+
+1. Create a basic plugin by creating 100 lines of code _(3 directories and 5 files)_.
+2. Learn how to automatically generate multi-level menus and table columns.
+3. Manage data from the table you created.
+
+---
+
+## Create a plugin directory
+
+Create a new command line window, enter the bunadmin **root directory** **_(bunadmin-tutorial)_**. **!NOT** ~~**_packages/dashin_**~~
+
+```shell
+# cd ../..
+mkdir plugins/bunadmin-plugin-myteam-blog
+```
+
+_Folders starting with `bunadmin-plugin-` in the `plugins` directory will be automatically recognized as plugins._
+
+## Create an initialization data file
+
+```shell
+$_ && mkdir utils
+touch utils/initData.ts
+```
+
+_File `utils/initData.ts` will automatically activate the plugin, and it will automatically generate multi-level menus and table columns._
+
+Replace the content of `utils/initData.ts` **_(bunadmin-tutorial/plugins/bunadmin-plugin-myteam-blog/utils/initData.ts)_** with the following:
+
+```ts
+import { IPluginData } from "@dashin-dev/dashin"
+
+const plugin = "mypost"
+
+const commonProps = {
+  team: "myteam",
+  group: "blog",
+  customized: true,
+  icon_type: "eva"
+}
+
+const data: IPluginData[] = [
+  {
+    ...commonProps,
+    id: "blog_post",
+    name: "post",
+    label: "Post",
+    icon: "file-text-outline"
+  }
+]
+
+export default { plugin, data }
+```
+
+## Create a schema
+
+```shell
+SCHEMA="post" && mkdir $SCHEMA && \
+touch $SCHEMA/columns.tsx && \
+touch $SCHEMA/index.tsx && \
+touch $SCHEMA/plugin.ts && \
+touch $SCHEMA/types.ts
+```
+
+_The updated `post` schema will automatically generate a table for data management._
+
+### The Steps
+
+1. Create interface
+2. Prepare table columns
+3. Construct table
+
+`post/types.ts` <Checkbox />
+
+```ts
+export default interface Type {
+  id: number
+  title: string
+  body: string
+}
+```
+
+`post/columns.tsx` <Checkbox />
+
+```tsx
+import { Column } from "material-table"
+import Type from "./types"
+
+export default (): Column<Type>[] => [
+  {
+    title: "ID",
+    field: "id",
+    type: "numeric",
+    width: 100,
+    defaultSort: "desc"
+  },
+  {
+    title: "Title",
+    field: "title"
+  },
+  {
+    title: "Body",
+    field: "body"
+  }
+]
+```
+
+`post/plugin.ts` <Checkbox />
+
+```ts
+import Columns from "./columns"
+
+export const SchemaName = "posts"
+
+export const SchemaLabel = "Posts"
+
+export const SchemaColumns = Columns
+```
+
+`post/index.tsx` <Checkbox />
+
+```tsx
+import React, { createRef } from "react"
+import {
+  Table,
+  TableHead,
+  TableDefaultProps,
+  tableIcons
+} from "@dashin-dev/dashin"
+import { useTheme } from "@mui/material/styles"
+import { SchemaLabel, SchemaColumns } from "./plugin"
+
+export default function() {
+  const theme = useTheme()
+  const tableRef = createRef()
+  return (
+    <>
+      <TableHead title={SchemaLabel} />
+      <Table
+        tableRef={tableRef}
+        title={SchemaLabel}
+        columns={SchemaColumns()}
+        style={TableDefaultProps.style}
+        icons={tableIcons({ theme })}
+        options={{
+          ...TableDefaultProps.options,
+          filtering: true
+        }}
+        data={[
+          {
+            id: 1,
+            title: "post 1",
+            body: "body 1"
+          },
+          {
+            id: 2,
+            title: "post 2",
+            body: "body 2"
+          }
+        ]}
+      />
+    </>
+  )
+}
+```
+
+## Query data through activated plugin
+
+Open [http://localhost:1911/blog/post](http://localhost:1911/blog/post)
+
+You can now query local data, test filtering and sorting, but you can’t modify the data yet, we will complete this in the next tutorial.
+
+![Blog Post](https://gblobscdn.gitbook.com/assets%2F-M1ZbjnBaWO_NJOdj8_A%2F-MHfe3l6qmtBikzv9V28%2F-MHfedSDcseBrb_aue5G%2Fblog-post.png)
+
+_If you see the screenshot page, it means that the plugin has been created and successfully activated, otherwise please check the steps above or try to restart bunadmin._
+
+## [Sample code](https://github.com/xbuilder/bunadmin-example-plugin-tutorial)

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@dashin-dev/dashin": ["./src"],
+      "@.dashin/dynamic": ["./src/.dashin/dynamic"]
+    }
+  }
+}

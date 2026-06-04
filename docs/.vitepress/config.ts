@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress"
 
 export default defineConfig({
-  title: "BunAdmin",
+  title: "Dashin",
   description:
     "Vite + Tailwind React admin scaffold with AI-assisted, schema-validated generation.",
   lastUpdated: true,
@@ -27,7 +27,7 @@ export default defineConfig({
       { text: "Features", link: "/features/tables" },
       { text: "AI Generation", link: "/ai/" },
       { text: "Connectors", link: "/connectors/" },
-      { text: "GitHub", link: "https://github.com/Chris533/bunadmin" }
+      { text: "GitHub", link: "https://github.com/dashindev/dashin" }
     ],
     sidebar: [
       {
@@ -43,6 +43,7 @@ export default defineConfig({
           { text: "Tables & CRUD", link: "/features/tables" },
           { text: "Theming", link: "/features/theming" },
           { text: "Layout & regions", link: "/features/layout" },
+          { text: "UI Primitives", link: "/features/ui-primitives" },
           { text: "Plugins & auth", link: "/features/plugins" }
         ]
       },
@@ -68,7 +69,7 @@ export default defineConfig({
       }
     ],
     socialLinks: [
-      { icon: "github", link: "https://github.com/Chris533/bunadmin" }
+      { icon: "github", link: "https://github.com/dashindev/dashin" }
     ],
     search: { provider: "local" }
   }

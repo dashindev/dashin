@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="prettier" type="js.build_tools.npm">
-    <package-json value="$PROJECT_DIR$/packages/bunadmin/package.json" />
+    <package-json value="$PROJECT_DIR$/packages/dashin/package.json" />
     <command value="run" />
     <scripts>
       <script value="prettier" />

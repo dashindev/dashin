@@ -19,10 +19,10 @@ into the existing generator.
 
 ```bash
 # bring your own key (any OpenAI-compatible endpoint, Anthropic, or Ollama)
-export BUNADMIN_AI_PROVIDER=openai          # openai | anthropic | ollama
-export BUNADMIN_AI_API_KEY=sk-...           # your key
-export BUNADMIN_AI_MODEL=gpt-4o-mini        # or llama-3.1-8b-instant, etc.
-export BUNADMIN_AI_BASE_URL=https://api.openai.com/v1   # optional (Groq/Ollama/etc.)
+export DASHIN_AI_PROVIDER=openai          # openai | anthropic | ollama
+export DASHIN_AI_API_KEY=sk-...           # your key
+export DASHIN_AI_MODEL=gpt-4o-mini        # or llama-3.1-8b-instant, etc.
+export DASHIN_AI_BASE_URL=https://api.openai.com/v1   # optional (Groq/Ollama/etc.)
 
 bunadmin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin>
 # → writes posts.generated.tsx
@@ -60,7 +60,7 @@ bunadmin ai theme "dark mode with a purple accent and rounded corners"
 
 Apply it in your app:
 ```ts
-import { applyPreset } from "@xbuilder/bunadmin"
+import { applyPreset } from "@dashin-dev/dashin"
 import theme from "./bunadmin.theme"
 applyPreset(theme.preset, theme.mode, theme.overrides)
 ```
@@ -76,18 +76,18 @@ always a professional, on-brand theme by construction.
 2. **Scaffold a project:** `bunadmin new my-admin` (Vite template).
 3. **Point it at PocketBase** in `.env`:
    ```
-   VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase
+   VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase
    VITE_AUTH_URL=http://127.0.0.1:8090
    ```
 4. **Generate the posts admin:**
    ```bash
-   export BUNADMIN_AI_PROVIDER=openai BUNADMIN_AI_API_KEY=sk-... BUNADMIN_AI_MODEL=gpt-4o-mini
+   export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
    bunadmin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin> --out src/plugins/blog/post
    ```
 5. **Theme it:** `bunadmin ai theme "clean light theme, indigo accent"`.
 6. **Run it:** `yarn dev` → a validated, themed admin for your real data.
 
-The same flow works for **Appwrite** (`@xbuilder/bunadmin-source-appwrite`) and
+The same flow works for **Appwrite** (`@dashin-dev/source-appwrite`) and
 Strapi — point `ai generate` at the backend, get a validated admin.
 
 ---

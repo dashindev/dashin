@@ -23,13 +23,13 @@ jobs:
       # Build all package lib/ (the plugin generator requires it)
       - run: yarn tsc:build
       - name: App type-check
-        working-directory: packages/bunadmin
+        working-directory: packages/dashin
         run: yarn typecheck
       - name: Unit tests (Vitest)
-        working-directory: packages/bunadmin
+        working-directory: packages/dashin
         run: yarn test
       - name: Production build (Vite)
-        working-directory: packages/bunadmin
+        working-directory: packages/dashin
         run: yarn build
 
   # Heavy job (installs Playwright browsers). Manual-only like the rest; runs
@@ -46,8 +46,8 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn tsc:build
       - name: Install Playwright browsers
-        working-directory: packages/bunadmin
+        working-directory: packages/dashin
         run: npx playwright install --with-deps chromium
       - name: E2E smoke (Playwright)
-        working-directory: packages/bunadmin
+        working-directory: packages/dashin
         run: yarn e2e

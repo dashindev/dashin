@@ -8,21 +8,21 @@ Swap the connector import to change backends — the table UI is unchanged.
 
 | Backend | Package | API |
 | --- | --- | --- |
-| [PocketBase](/pocketbase/) | `@xbuilder/bunadmin-source-pocketbase` | REST `/api/collections` |
-| [Appwrite](/appwrite/) | `@xbuilder/bunadmin-source-appwrite` | Databases REST |
-| [Supabase / Postgres](/supabase/) | `@xbuilder/bunadmin-source-supabase` | PostgREST |
-| [Directus](/directus/) | `@xbuilder/bunadmin-source-directus` | REST `/items` |
-| [Payload](/payload/) | `@xbuilder/bunadmin-source-payload` | REST `/api` |
-| [Turso / libSQL](/turso/) | `@xbuilder/bunadmin-source-turso` | SQLite over HTTP (SQL) |
-| Strapi | `@xbuilder/bunadmin-source-strapi` | REST |
-| GraphQL | `@xbuilder/bunadmin-source-graphql` | any GraphQL API |
+| [PocketBase](/pocketbase/) | `@dashin-dev/source-pocketbase` | REST `/api/collections` |
+| [Appwrite](/appwrite/) | `@dashin-dev/source-appwrite` | Databases REST |
+| [Supabase / Postgres](/supabase/) | `@dashin-dev/source-supabase` | PostgREST |
+| [Directus](/directus/) | `@dashin-dev/source-directus` | REST `/items` |
+| [Payload](/payload/) | `@dashin-dev/source-payload` | REST `/api` |
+| [Turso / libSQL](/turso/) | `@dashin-dev/source-turso` | SQLite over HTTP (SQL) |
+| Strapi | `@dashin-dev/source-strapi` | REST |
+| GraphQL | `@dashin-dev/source-graphql` | any GraphQL API |
 
 ## Common shape
 
 Every connector exports `dataCtrl`, `editableCtrl`, and `bulkDeleteCtrl`:
 
 ```tsx
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-<backend>"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-<backend>"
 
 <Table
   data={query => dataCtrl({ t, tableQuery: query, path: "<collection-or-table>" })}
@@ -35,7 +35,7 @@ import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-sourc
 
 CMSes and backends that expose a **GraphQL API** — including **KeystoneJS**,
 **Hasura**, and GraphQL-mode Strapi — are supported through the
-**`@xbuilder/bunadmin-source-graphql`** connector rather than a dedicated package.
+**`@dashin-dev/source-graphql`** connector rather than a dedicated package.
 Point it at the GraphQL endpoint and map your query/mutations; no separate
 connector is needed.
 

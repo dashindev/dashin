@@ -1,60 +1,60 @@
-# BunAdmin
+# Dashin
 
-**Bunadmin** is a scaffold to quickly build a `React` background management system. It is easy to use and can help you build a powerful background management panel. The app is powered by **Vite**, styled with **Tailwind CSS** + **Headless UI**, and uses **TipTap** for rich-text editing. If you have not used these before, don't worry — you can learn them quickly during actual use.
+**Dashin** is a scaffold to quickly build a `React` background management system. It is easy to use and can help you build a powerful background management panel. The app is powered by **Vite**, styled with **Tailwind CSS** + **Headless UI**, and uses **TipTap** for rich-text editing. If you have not used these before, don't worry — you can learn them quickly during actual use.
 
-Bunadmin hopes to achieve as many function reuse as possible through simple development methods, so in each bunadmin project, **common functions have been built**, such as dynamic routing, multi-level menus, **permission control, data management**, search filtering and sorting, CRUD, **file management, message notification**, documenting your code, etc. You only need to build your own plugin to call it, and the bunadmin plugin is also easy to learn and use.
+Dashin hopes to achieve as many function reuse as possible through simple development methods, so in each Dashin project, **common functions have been built**, such as dynamic routing, multi-level menus, **permission control, data management**, search filtering and sorting, CRUD, **file management, message notification**, documenting your code, etc. You only need to build your own plugin to call it, and the Dashin plugin is also easy to learn and use.
 
 ## Quick start
 
 ```
-npm install --global bunadmin-cli
-bunadmin new my-bunadmin
+npm install --global @dashin-dev/cli
+dashin new my-dashin
 ```
 
 Create a plugin
-`$ bunadmin plugin [team]-[group]`
+`$ dashin plugin [team]-[group]`
 (Run in the plugins directory: plugins/)
 
 Create a schema
-`$ bunadmin schema [name]`
+`$ dashin schema [name]`
 (Run in the plugin directory: plugins/bunadmin-plugin-[team]-[group]/)
 
 Display help for command
-`$ bunadmin --help`
+`$ dashin --help`
 
-[Read the Getting Started tutorial](http://blog.eg.bunadmin.com/docs/getting-started/introduction)
+[Read the Getting Started tutorial](https://dashin.dev/guide/getting-started)
 
 ## AI-assisted generation (BYOK)
 
-Point bunadmin at your backend and let AI generate a **validated** admin — cheap
+Point Dashin at your backend and let AI generate a **validated** admin — cheap
 models work because output is checked against your real schema, not freeform code.
 
 ```
 # schema -> validated admin table
-bunadmin ai generate --url <backend-url> --collection <name> --token <admin>
+dashin ai generate --url <backend-url> --collection <name> --token <admin>
 
 # description -> validated theme
-bunadmin ai theme "dark mode with a purple accent"
+dashin ai theme "dark mode with a purple accent"
 ```
 
-Bring your own key: set `BUNADMIN_AI_PROVIDER` (openai | anthropic | ollama) +
-`BUNADMIN_AI_API_KEY`. Full guide: [`docs/ai/README.md`](docs/ai/README.md).
+Bring your own key: set `DASHIN_AI_PROVIDER` (openai | anthropic | ollama) +
+`DASHIN_AI_API_KEY`. Full guide: [`docs/ai/README.md`](docs/ai/README.md).
 
 ## Backend connectors
 
 Swap data sources via plugins — same table/CRUD UI on any backend:
-**PocketBase** (`@xbuilder/bunadmin-source-pocketbase`), **Appwrite**
-(`@xbuilder/bunadmin-source-appwrite`), **Strapi**, **GraphQL**.
+**PocketBase** (`@dashin-dev/source-pocketbase`), **Appwrite**
+(`@dashin-dev/source-appwrite`), **Strapi**, **GraphQL**.
 See [`docs/pocketbase/`](docs/pocketbase/).
 
 ## Online demo
 
-[blog.eg.bunadmin.com](http://blog.eg.bunadmin.com/)
+[dashin.dev](https://dashin.dev/)
 
 - Username: `admin`
 - Password: `bunadmin`
 
-[More details](http://blog.eg.bunadmin.com/docs/getting-started/remote-data)
+[More details](https://dashin.dev/guide/demo)
 
 ## Screenshot
 
@@ -65,7 +65,7 @@ See [`docs/pocketbase/`](docs/pocketbase/).
 ## Development
 
 ```shell script
-git clone git@github.com:xbuilder/bunadmin.git
+git clone git@github.com:dashindev/dashin.git
 
 yarn
 yarn tsc:build        # required once — builds all package lib/ for the plugin generator
@@ -73,8 +73,8 @@ yarn tsc:watch
 yarn dev
 
 # minimum command
-$ yarn workspace @xbuilder/bunadmin tsc:watch
-$ yarn workspace @xbuilder/bunadmin-auth-local tsc:watch
+$ yarn workspace @dashin-dev/dashin tsc:watch
+$ yarn workspace @dashin-dev/auth-local tsc:watch
 
 $ yarn dev
 ```
@@ -86,7 +86,7 @@ The dev server (Vite) runs at [http://localhost:3000](http://localhost:3000).
 
 ### Scripts
 
-Inside `packages/bunadmin`:
+Inside `packages/dashin`:
 
 | Command          | Description           |
 | ---------------- | --------------------- |

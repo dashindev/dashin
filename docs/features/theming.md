@@ -27,7 +27,7 @@ Two built-in presets: `classic` (flat) and `modern` (default — softer surfaces
 indigo→violet gradient, glow-friendly dark). Switch at runtime:
 
 ```ts
-import { applyPreset } from "@xbuilder/bunadmin"
+import { applyPreset } from "@dashin-dev/dashin"
 applyPreset("modern", "dark")              // preset + mode
 applyPreset("modern", "light", { primary: "#7c3aed", radius: "16px" }) // + overrides
 ```

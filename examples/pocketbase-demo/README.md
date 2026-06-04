@@ -30,13 +30,13 @@ bunadmin new my-admin && cd my-admin
 
 `.env`:
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase
+VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase
 VITE_AUTH_URL=http://127.0.0.1:8090
 ```
 
 Generate a validated admin table from the live `posts` collection (BYOK):
 ```bash
-export BUNADMIN_AI_PROVIDER=openai BUNADMIN_AI_API_KEY=sk-... BUNADMIN_AI_MODEL=gpt-4o-mini
+export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
 bunadmin ai generate --url http://127.0.0.1:8090 --collection posts \
   --token <admin-token> --out src/plugins/blog/post
 yarn dev

@@ -1,6 +1,6 @@
 /**
  * Worked example: a `posts` page backed by Appwrite Databases via
- * @xbuilder/bunadmin-source-appwrite.
+ * @dashin-dev/source-appwrite.
  *
  * Drop this into a bunadmin project's plugin and register it like any other
  * schema plugin. Requires an Appwrite `posts` collection (see README.md).
@@ -14,8 +14,8 @@ import {
   TableDefaultProps as DefaultProps,
   useTranslation,
   Column
-} from "@xbuilder/bunadmin"
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-appwrite"
+} from "@dashin-dev/dashin"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-appwrite"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 

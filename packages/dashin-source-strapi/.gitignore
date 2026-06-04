@@ -1,0 +1,10 @@
+# dependencies
+/node_modules
+
+# Idea
+/.idea/workspace.xml
+
+# Dashin
+dist
+*.tgz
+yarn.lock

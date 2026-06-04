@@ -1,0 +1,20 @@
+{
+  "name": "@dashin-dev/source-graphql",
+  "version": "2.0.0-alpha.0",
+  "publishConfig": { "access": "public" },
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "tsc:watch": "tsc -w",
+    "tsc:clean": "tsc --build --clean",
+    "tsc:build": "tsc",
+    "test": "prettier --check --no-semi src/** pages/** test/** && jest"
+  },
+  "devDependencies": {
+    "typescript": "4.8.3"
+  }
+}

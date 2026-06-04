@@ -1,0 +1,11 @@
+# dependencies
+/node_modules
+
+# Idea
+/.idea/workspace.xml
+
+yarn-error.log
+
+# Dashin
+dist
+*.tgz

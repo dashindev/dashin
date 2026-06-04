@@ -51,7 +51,7 @@ cat <<EOF
 Next — in another terminal:
   bunadmin new my-admin && cd my-admin
   # .env:
-  #   VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase
+  #   VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase
   #   VITE_AUTH_URL=http://127.0.0.1:${PB_PORT}
   bunadmin ai generate --url http://127.0.0.1:${PB_PORT} --collection posts \\
     --token \$(curl -s -X POST http://127.0.0.1:${PB_PORT}/api/admins/auth-with-password \\

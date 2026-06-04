@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS products (
 );
 INSERT INTO posts (title, status, views) VALUES
   ('Hello World', 'published', 42),
-  ('Getting Started with Bunadmin', 'published', 128),
+  ('Getting Started with Dashin', 'published', 128),
   ('Draft Post', 'draft', 0);
 INSERT INTO products (name, price, in_stock) VALUES
   ('Widget', 9.99, true),
@@ -56,7 +56,7 @@ cat <<EOF
 Next — in another terminal:
   bunadmin new my-admin && cd my-admin
   # .env:
-  #   VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-supabase
+  #   VITE_AUTH_PLUGIN=@dashin-dev/auth-supabase
   #   VITE_MAIN_URL=${API_URL}
   #   VITE_SUPABASE_KEY=${ANON_KEY}
   yarn dev

@@ -92,7 +92,7 @@ async function seed() {
   // Seed posts
   const posts = [
     { title: "Hello World", status: "published", views: 42 },
-    { title: "Getting Started with Bunadmin", status: "published", views: 128 },
+    { title: "Getting Started with Dashin", status: "published", views: 128 },
     { title: "Draft Post", status: "draft", views: 0 },
   ]
   for (const p of posts) {

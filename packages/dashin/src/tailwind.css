@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens — mirror src/utils/themes/tokens.ts (default preset: "modern").
+   :root = modern light, .dark = modern dark. */
+@layer base {
+  :root {
+    --bn-bg: #f8fafc;
+    --bn-surface: #ffffff;
+    --bn-sidebar: #ffffff;
+    --bn-foreground: #1e293b;
+    --bn-muted: #94a3b8;
+    --bn-border: #eef2f7;
+    --bn-primary: #6366f1;
+    --bn-primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    --bn-primary-foreground: #ffffff;
+    --bn-success: #10b981;
+    --bn-warning: #f59e0b;
+    --bn-danger: #ef4444;
+    --bn-radius: 12px;
+    --bn-shadow: 0 4px 12px rgba(2, 6, 23, 0.08);
+    --bn-ring: #6366f1;
+    --bn-primary-hover: #4f46e5;
+  }
+  .dark {
+    --bn-bg: #0a0e1a;
+    --bn-surface: #111729;
+    --bn-sidebar: #0a0e1a;
+    --bn-foreground: #e5e7eb;
+    --bn-muted: #64748b;
+    --bn-border: #1e293b;
+    --bn-primary: #818cf8;
+    --bn-primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    --bn-primary-foreground: #ffffff;
+    --bn-success: #34d399;
+    --bn-warning: #fbbf24;
+    --bn-danger: #f87171;
+    --bn-radius: 12px;
+    --bn-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    --bn-ring: #818cf8;
+    --bn-primary-hover: #6366f1;
+  }
+}
+
+/* Global base styles migrated from the former MUI CssBaseline overrides. */
+@layer base {
+  body {
+    background: var(--bn-bg);
+    color: var(--bn-foreground);
+  }
+  img {
+    width: 100%;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+  }
+  *::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border: 2px solid white;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  .eva-hover {
+    display: inherit;
+    font-size: 0;
+  }
+}

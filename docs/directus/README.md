@@ -1,12 +1,12 @@
 # Directus Connector
 
-`@xbuilder/bunadmin-source-directus` — use [Directus](https://directus.io) as the
+`@dashin-dev/source-directus` — use [Directus](https://directus.io) as the
 data source (list / filter / sort / CRUD / bulk via the Items REST API).
 
 ## Install
 
 ```bash
-yarn add @xbuilder/bunadmin-source-directus
+yarn add @dashin-dev/source-directus
 ```
 
 ## Configure (`.env`)
@@ -20,7 +20,7 @@ Auth uses the bunadmin stored token as `Authorization: Bearer …`.
 ## Use in a schema
 
 ```tsx
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-directus"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-directus"
 
 <Table
   columns={columns}

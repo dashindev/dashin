@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.next" />
+      <excludeFolder url="file://$MODULE_DIR$/out" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin-cli/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin-cli/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin-rich-text-editor/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin-source-graphql/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin-source-strapi/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin/.dashin" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin/.next" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin/out" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/dashin/src/.dashin" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-auth-buncms/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-auth-mesh/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-auth-strapi/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-plugin-example-blog/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-upload-strapi/lib" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

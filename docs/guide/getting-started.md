@@ -1,6 +1,6 @@
 # Getting Started
 
-BunAdmin is a scaffold for building React admin/back-office apps quickly. It's
+Dashin is a scaffold for building React admin/back-office apps quickly. It's
 powered by **Vite**, styled with **Tailwind CSS + Headless UI**, uses **TipTap**
 for rich text, and ships an **AI-assisted, schema-validated** generation flow.
 
@@ -28,7 +28,7 @@ The dev server runs at http://localhost:3000.
 
 ## Pick a backend
 
-BunAdmin is backend-agnostic — choose a data-source connector:
+Dashin is backend-agnostic — choose a data-source connector:
 
 - [PocketBase](/pocketbase/)
 - [Appwrite](/appwrite/)

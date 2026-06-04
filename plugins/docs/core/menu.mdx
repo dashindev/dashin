@@ -1,0 +1,88 @@
+import { NestedList } from "@dashin-dev/dashin"
+const menus = [
+  {
+    id: "#1",
+    name: "menu1",
+    label: "Menu 1",
+    parent: "",
+    icon_type: "eva",
+    icon: "grid-outline"
+  },
+  {
+    id: "#1-1",
+    name: "menu1-1",
+    label: "Menu 1-1",
+    parent: "menu1"
+  },
+  {
+    id: "#1-2",
+    name: "menu1-2",
+    label: "Menu 1-2",
+    parent: "menu1"
+  },
+  {
+    id: "#2",
+    name: "menu2",
+    label: "Menu 2",
+    parent: "",
+    icon_type: "eva",
+    icon: "link-outline"
+  },
+  {
+    id: "#3",
+    name: "menu3",
+    label: "Menu 3",
+    parent: "",
+    icon_type: "eva",
+    icon: "arrowhead-right-outline"
+  }
+]
+
+# Menu
+
+## NestedList Menu
+
+<NestedList data={menus} />
+
+```tsx
+import { NestedList } from "@dashin-dev/dashin"
+//...
+const menus = [
+  {
+    id: "#1",
+    name: "menu1",
+    label: "Menu 1",
+    parent: "",
+    icon_type: "eva",
+    icon: "grid-outline"
+  },
+  {
+    id: "#1-1",
+    name: "menu1-1",
+    label: "Menu 1-1",
+    parent: "menu1"
+  }
+]
+
+;<NestedList data={menus} />
+```
+
+### Icon Types
+
+[Eva Icons](https://akveo.github.io/eva-icons/)
+[Material Icons](https://material.io/resources/icons/)
+
+## Props
+
+```ts
+interface Props {
+  id: string
+  name: string
+  label?: string
+  slug?: string
+  icon?: string | undefined
+  icon_type?: "eva" | "material" | "url" | undefined
+  parent: string
+  rank: string
+}
+```

@@ -8,12 +8,12 @@
         <option name="containerName" value="bunadmin-static-demo-blog" />
         <option name="entrypoint" value="" />
         <option name="commandLineOptions" value="" />
-        <option name="sourceFilePath" value="packages/bunadmin/Dockerfile" />
+        <option name="sourceFilePath" value="packages/dashin/Dockerfile" />
       </settings>
     </deployment>
     <method v="2">
       <option name="NpmBeforeRunTask" enabled="true">
-        <package-json value="$PROJECT_DIR$/packages/bunadmin/package.json" />
+        <package-json value="$PROJECT_DIR$/packages/dashin/package.json" />
         <command value="run" />
         <scripts>
           <script value="build" />
@@ -22,7 +22,7 @@
         <envs />
       </option>
       <option name="NpmBeforeRunTask" enabled="true">
-        <package-json value="$PROJECT_DIR$/packages/bunadmin/package.json" />
+        <package-json value="$PROJECT_DIR$/packages/dashin/package.json" />
         <command value="run" />
         <scripts>
           <script value="export" />

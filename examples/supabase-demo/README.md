@@ -22,14 +22,14 @@ bunadmin new my-admin && cd my-admin
 
 `.env` (use the values printed by `start.sh`):
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-supabase
+VITE_AUTH_PLUGIN=@dashin-dev/auth-supabase
 VITE_MAIN_URL=http://127.0.0.1:54321
 VITE_SUPABASE_KEY=<anon-key>
 ```
 
 Generate a validated admin table from the live `posts` table (BYOK):
 ```bash
-export BUNADMIN_AI_PROVIDER=openai BUNADMIN_AI_API_KEY=sk-... BUNADMIN_AI_MODEL=gpt-4o-mini
+export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
 bunadmin ai generate --url http://127.0.0.1:54321 --collection posts \
   --token <anon-key> --out src/plugins/blog/post
 yarn dev

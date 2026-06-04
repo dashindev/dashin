@@ -1,18 +1,18 @@
 # Flagship Demo
 
 Boot a real backend, seed data, and generate a working admin — in minutes. The
-runnable demo lives in [`examples/pocketbase-demo`](https://github.com/Chris533/bunadmin/tree/master/examples/pocketbase-demo).
+runnable demo lives in [`examples/pocketbase-demo`](https://github.com/dashindev/dashin/tree/master/examples/pocketbase-demo).
 
 Runnable demos exist for every connector — pick your backend:
 
 | Backend | Example | Start |
 | --- | --- | --- |
-| PocketBase | [`examples/pocketbase-demo`](https://github.com/Chris533/bunadmin/tree/master/examples/pocketbase-demo) | `./start.sh` |
-| Payload + SQLite | [`examples/payload-demo`](https://github.com/Chris533/bunadmin/tree/master/examples/payload-demo) | `./start.sh` |
-| Supabase / Postgres | [`examples/supabase-demo`](https://github.com/Chris533/bunadmin/tree/master/examples/supabase-demo) | `./start.sh` |
-| Appwrite | [`examples/appwrite-demo`](https://github.com/Chris533/bunadmin/tree/master/examples/appwrite-demo) | `./start.sh` |
-| Directus | [`examples/directus-demo`](https://github.com/Chris533/bunadmin/tree/master/examples/directus-demo) | `docker compose up -d` |
-| Turso / libSQL | [`examples/turso-demo`](https://github.com/Chris533/bunadmin/tree/master/examples/turso-demo) | `./start.sh` |
+| PocketBase | [`examples/pocketbase-demo`](https://github.com/dashindev/dashin/tree/master/examples/pocketbase-demo) | `./start.sh` |
+| Payload + SQLite | [`examples/payload-demo`](https://github.com/dashindev/dashin/tree/master/examples/payload-demo) | `./start.sh` |
+| Supabase / Postgres | [`examples/supabase-demo`](https://github.com/dashindev/dashin/tree/master/examples/supabase-demo) | `./start.sh` |
+| Appwrite | [`examples/appwrite-demo`](https://github.com/dashindev/dashin/tree/master/examples/appwrite-demo) | `./start.sh` |
+| Directus | [`examples/directus-demo`](https://github.com/dashindev/dashin/tree/master/examples/directus-demo) | `docker compose up -d` |
+| Turso / libSQL | [`examples/turso-demo`](https://github.com/dashindev/dashin/tree/master/examples/turso-demo) | `./start.sh` |
 
 ## One command
 
@@ -30,8 +30,8 @@ seeds demo collections (`posts`, `products`) + a `demo` user.
 
 ```bash
 bunadmin new my-admin && cd my-admin
-# .env: VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase, VITE_AUTH_URL=http://127.0.0.1:8090
-export BUNADMIN_AI_PROVIDER=openai BUNADMIN_AI_API_KEY=sk-... BUNADMIN_AI_MODEL=gpt-4o-mini
+# .env: VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase, VITE_AUTH_URL=http://127.0.0.1:8090
+export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
 bunadmin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin-token>
 yarn dev
 ```
@@ -76,13 +76,13 @@ serves on `http://127.0.0.1:3001`.
 
 ```bash
 bunadmin new my-admin && cd my-admin
-# .env: VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-payload, VITE_AUTH_URL=http://127.0.0.1:3001
-export BUNADMIN_AI_PROVIDER=openai BUNADMIN_AI_API_KEY=sk-... BUNADMIN_AI_MODEL=gpt-4o-mini
+# .env: VITE_AUTH_PLUGIN=@dashin-dev/auth-payload, VITE_AUTH_URL=http://127.0.0.1:3001
+export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
 bunadmin ai generate --url http://127.0.0.1:3001 --collection posts --token <admin-token>
 yarn dev
 ```
 
-Or drop in the pre-built [`example-admin.tsx`](https://github.com/Chris533/bunadmin/tree/master/examples/payload-demo/example-admin.tsx) — no AI key needed.
+Or drop in the pre-built [`example-admin.tsx`](https://github.com/dashindev/dashin/tree/master/examples/payload-demo/example-admin.tsx) — no AI key needed.
 
 ### Credentials (Payload)
 - Payload admin: `admin@bunadmin.test` / `bunadmin123`
@@ -103,7 +103,7 @@ Studio runs at `http://127.0.0.1:54323`, the API at `http://127.0.0.1:54321`. Th
 script prints the anon key to use in `.env`.
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-supabase
+VITE_AUTH_PLUGIN=@dashin-dev/auth-supabase
 VITE_MAIN_URL=http://127.0.0.1:54321
 VITE_SUPABASE_KEY=<anon-key>
 ```
@@ -125,7 +125,7 @@ Serves the console on `http://127.0.0.1:8080`. Create a project + database +
 `posts` collection in the console (one-time), then:
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-appwrite
+VITE_AUTH_PLUGIN=@dashin-dev/auth-appwrite
 VITE_AUTH_URL=http://127.0.0.1:8080
 VITE_APPWRITE_PROJECT=<your-project-id>
 VITE_APPWRITE_DATABASE=<your-database-id>
@@ -148,7 +148,7 @@ Serves on `http://127.0.0.1:8055`. Create a `posts` collection in the data studi
 (one-time), then:
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-directus
+VITE_AUTH_PLUGIN=@dashin-dev/auth-directus
 VITE_MAIN_URL=http://127.0.0.1:8055
 ```
 
@@ -169,7 +169,7 @@ cd examples/turso-demo
 Serves the libSQL HTTP protocol on `http://127.0.0.1:8080`.
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-local
+VITE_AUTH_PLUGIN=@dashin-dev/auth-local
 VITE_MAIN_URL=http://127.0.0.1:8080
 ```
 

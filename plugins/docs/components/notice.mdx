@@ -1,0 +1,52 @@
+import { notice } from "@dashin-dev/dashin"
+import { Button } from "@mui/material"
+
+# Notice
+### A notification prompt will pop up, and the message will be stored locally
+
+<Button color="secondary" onClick={async ()=> {
+    await notice({
+      title: "Notice done",
+      content: "This is a Notice test"
+    })
+}}>Initiate a success Notice</Button>
+
+``` ts
+import { notice } from "@dashin-dev/dashin"
+import { Button } from "@mui/material"
+//...
+    await notice({
+      title: "Error done",
+      severity: "error",
+      content: "This is a Error Notice test"
+    })
+```
+
+<Button style={{ color: "red" }} onClick={async ()=> {
+    await notice({
+      title: "Error done",
+      severity: "error",
+      content: "This is a Error Notice test"
+    })
+}}>Initiate a error Notice</Button>
+
+``` tsx
+import { notice } from "@dashin-dev/dashin"
+import { Button } from "@mui/material"
+//...
+<Button color="secondary" onClick={async ()=> {
+    await notice({
+      title: "Notice done",
+      content: "This is a Notice test"
+    })
+}}>Success Notice</Button>
+```
+
+## Props
+``` ts
+interface Props {
+  title: string
+  severity?: "success" | "info" | "warning" | "error" | null
+  content?: string | object
+}
+```

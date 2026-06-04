@@ -1,0 +1,15 @@
+import { Column } from "@dashin-dev/dashin"
+import Type from "./types"
+import { TFunction } from "i18next"
+
+export default ({ t }: { t: TFunction }) =>
+  [
+    {
+      title: t("Id"),
+      field: "id",
+      editable: "never"
+    },
+    { title: t("Name"), field: "name" },
+    { title: t("Description"), field: "description" },
+    { title: t("Type"), field: "type", hidden: true }
+  ] as Column<Type>[]

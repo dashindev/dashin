@@ -1,6 +1,6 @@
 # Turso / libSQL Connector
 
-`@xbuilder/bunadmin-source-turso` — use [Turso](https://turso.tech) / libSQL
+`@dashin-dev/source-turso` — use [Turso](https://turso.tech) / libSQL
 (SQLite over HTTP) as the data source, with **full CRUD via SQL**.
 
 > SQLite has no native HTTP API; this connector targets the **libSQL HTTP
@@ -9,7 +9,7 @@
 ## Install
 
 ```bash
-yarn add @xbuilder/bunadmin-source-turso
+yarn add @dashin-dev/source-turso
 ```
 
 ## Configure (`.env`)
@@ -24,7 +24,7 @@ Auth uses the bunadmin stored token (a Turso DB auth token) as
 ## Use in a schema
 
 ```tsx
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-turso"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-turso"
 
 <Table
   columns={columns}

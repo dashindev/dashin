@@ -19,8 +19,8 @@ bunadmin plugin myteam-blog     # in plugins/
 bunadmin schema post            # in the plugin dir
 ```
 
-The generator scans your `dependencies` + `devDependencies` for bunadmin plugins
-and emits `.bunadmin/dynamic/` (menus, schema data, an import map) consumed at
+The generator scans your `dependencies` + `devDependencies` for dashin plugins
+and emits `.dashin/dynamic/` (menus, schema data, an import map) consumed at
 runtime via the plugin registry (`import.meta.glob`).
 
 ## Auth
@@ -28,11 +28,11 @@ runtime via the plugin registry (`import.meta.glob`).
 Set the active auth plugin in `.env`:
 
 ```
-VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase
+VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase
 VITE_AUTH_URL=http://127.0.0.1:8090
 ```
 
-Available: `auth-local`, `auth-pocketbase`, `auth-strapi`, `auth-buncms`. The
+Available: `auth-local`, `auth-pocketbase`, `auth-strapi`. The
 sign-in component is resolved dynamically from the configured plugin (no hardcoded
 import) — switching auth backends is a `.env` change. After sign-in the token is
 stored (IndexedDB) and read by connectors via `storedToken()`.

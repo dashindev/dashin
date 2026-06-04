@@ -144,7 +144,7 @@ async function main() {
     console.log(`product ${p.name}:`, r.ok ? "created" : `skip (${r.status})`)
   }
   console.log("\nDone. Set your bunadmin .env:")
-  console.log("  VITE_AUTH_PLUGIN=@xbuilder/bunadmin-auth-pocketbase")
+  console.log("  VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase")
   console.log(`  VITE_AUTH_URL=${PB}`)
 }
 

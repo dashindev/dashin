@@ -1,6 +1,6 @@
 /**
  * Worked example: a `posts` page backed by Turso / libSQL (SQL over HTTP) via
- * @xbuilder/bunadmin-source-turso.
+ * @dashin-dev/source-turso.
  *
  * Drop this into a bunadmin project's plugin and register it like any other
  * schema plugin. Requires a `posts` table (see start.sh seed step).
@@ -13,8 +13,8 @@ import {
   TableDefaultProps as DefaultProps,
   useTranslation,
   Column
-} from "@xbuilder/bunadmin"
-import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@xbuilder/bunadmin-source-turso"
+} from "@dashin-dev/dashin"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-turso"
 
 const theme = { bunadmin: { iconColor: "#8f9bb3" } }
 

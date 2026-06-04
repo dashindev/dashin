@@ -89,15 +89,12 @@ export function guard(sql: string): string | null {
   const table = targetTable(s)
   if (!table) return "could not identify target table"
   if (!ALLOWED_TABLES.includes(table)) return `table not allowed: ${table}`
+  // Result size is already bounded by the per-table row cap (MAX_ROWS_PER_TABLE),
+  // so a LIMIT isn't required. The connector parameterises LIMIT as `LIMIT ?`;
+  // only reject an explicit, oversized literal LIMIT.
   if (verb === "SELECT") {
-    // Aggregates (the connector's COUNT(*) for totalCount) return one row, so
-    // they don't need a LIMIT. Row-returning SELECTs must be bounded.
-    const isAggregate = /^SELECT\s+COUNT\s*\(/i.test(s)
-    if (!isAggregate) {
-      const lim = s.match(/\bLIMIT\s+(\d+)/i)
-      if (!lim) return "SELECT must include a LIMIT"
-      if (Number(lim[1]) > SELECT_MAX_LIMIT) return `LIMIT too large (max ${SELECT_MAX_LIMIT})`
-    }
+    const lim = s.match(/\bLIMIT\s+(\d+)/i)
+    if (lim && Number(lim[1]) > SELECT_MAX_LIMIT) return `LIMIT too large (max ${SELECT_MAX_LIMIT})`
   }
   return null
 }

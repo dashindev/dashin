@@ -32,12 +32,10 @@ const MAX_SQL_LEN = 2000
 const SELECT_MAX_LIMIT = 200
 const MAX_ROWS_PER_TABLE = 500
 
-const ALLOWED_ORIGINS = [
-  "https://dashin-demo.ganchengs.workers.dev",
-  "https://demo.dashin.dev",
-  "http://localhost:3000",
-  "http://127.0.0.1:3000"
-]
+// The demo frontend (Worker "dashin-demo") on any account subdomain, the custom
+// domain, or local dev. Pattern-based so switching CF accounts needs no edits.
+const ORIGIN_RE =
+  /^https:\/\/dashin-demo\.[a-z0-9-]+\.workers\.dev$|^https:\/\/demo\.dashin\.dev$|^http:\/\/(localhost|127\.0\.0\.1):3000$/
 
 /** The seed = single source of truth for demo data. Run on reset + cron. */
 const SEED: string[] = [
@@ -55,7 +53,7 @@ const SEED: string[] = [
 
 function corsHeaders(req: Request): Record<string, string> {
   const origin = req.headers.get("Origin") || ""
-  const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
+  const allow = ORIGIN_RE.test(origin) ? origin : "https://demo.dashin.dev"
   return {
     "Access-Control-Allow-Origin": allow,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -92,9 +90,14 @@ export function guard(sql: string): string | null {
   if (!table) return "could not identify target table"
   if (!ALLOWED_TABLES.includes(table)) return `table not allowed: ${table}`
   if (verb === "SELECT") {
-    const lim = s.match(/\bLIMIT\s+(\d+)/i)
-    if (!lim) return "SELECT must include a LIMIT"
-    if (Number(lim[1]) > SELECT_MAX_LIMIT) return `LIMIT too large (max ${SELECT_MAX_LIMIT})`
+    // Aggregates (the connector's COUNT(*) for totalCount) return one row, so
+    // they don't need a LIMIT. Row-returning SELECTs must be bounded.
+    const isAggregate = /^SELECT\s+COUNT\s*\(/i.test(s)
+    if (!isAggregate) {
+      const lim = s.match(/\bLIMIT\s+(\d+)/i)
+      if (!lim) return "SELECT must include a LIMIT"
+      if (Number(lim[1]) > SELECT_MAX_LIMIT) return `LIMIT too large (max ${SELECT_MAX_LIMIT})`
+    }
   }
   return null
 }
@@ -112,7 +115,8 @@ export default {
       return json({ ok: true, service: "dashin-d1-demo-api" }, req)
 
     // Per-IP rate limit on the mutating/expensive routes.
-    if (req.method === "POST") {
+    // (Optional-chained so local `wrangler dev` without the binding still runs.)
+    if (req.method === "POST" && env.RATE_LIMITER?.limit) {
       const ip = req.headers.get("CF-Connecting-IP") || "anon"
       const { success } = await env.RATE_LIMITER.limit({ key: ip })
       if (!success) return json({ error: "rate limited — slow down" }, req, 429)

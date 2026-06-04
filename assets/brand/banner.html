@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1280px; height: 340px; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    background:
+      radial-gradient(700px 360px at 8% -30%, rgba(51,102,255,0.32), transparent 60%),
+      radial-gradient(620px 380px at 106% 130%, rgba(0,214,143,0.22), transparent 55%),
+      linear-gradient(135deg, #0a0e1a 0%, #0e1430 55%, #0b1124 100%);
+    color: #eef2fb;
+    display: flex; align-items: center;
+    padding: 0 72px; overflow: hidden;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(800px 360px at 30% 50%, #000 35%, transparent 82%);
+  }
+  .wrap { position: relative; display: flex; align-items: center; gap: 30px; width: 100%; }
+  .tile {
+    width: 104px; height: 104px; border-radius: 26px; flex: none;
+    background: linear-gradient(145deg, #3a6bff, #5e86ff);
+    box-shadow: 0 16px 44px rgba(51,102,255,0.45), inset 0 2px 0 rgba(255,255,255,0.35);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tile span { color: #fff; font-size: 70px; font-weight: 800; line-height: 1; }
+  .text { display: flex; flex-direction: column; }
+  .name { font-size: 96px; font-weight: 800; letter-spacing: -3px; line-height: 0.95; }
+  .name b { color: #fff; } .name i { font-style: normal; color: #00d68f; }
+  .tag { margin-top: 12px; font-size: 30px; font-weight: 600; color: #c2cce4; letter-spacing: -0.3px; }
+  .sub { margin-top: 6px; font-size: 22px; font-weight: 500; color: #8b97ba; }
+  .right { margin-left: auto; text-align: right; }
+  .right .url { font-size: 26px; font-weight: 700; color: #93a0c4; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="wrap">
+    <div class="tile"><span>&raquo;</span></div>
+    <div class="text">
+      <div class="name"><b>Dash</b><i>in</i></div>
+      <div class="tag">The plugin-based React admin scaffold</div>
+      <div class="sub">Vite&nbsp;&middot;&nbsp;Tailwind CSS&nbsp;&middot;&nbsp;Headless UI&nbsp;&middot;&nbsp;GraphQL / REST&nbsp;&middot;&nbsp;AI-assisted</div>
+    </div>
+    <div class="right"><div class="url">dashin.dev</div></div>
+  </div>
+</body>
+</html>

@@ -16,6 +16,18 @@
   // "reset every 30 minutes" — the scheduled() handler re-seeds the demo data.
   "triggers": { "crons": ["*/30 * * * *"] },
 
+  // Per-IP rate limit (anti-abuse): max 30 POSTs / 10s per client IP.
+  "unsafe": {
+    "bindings": [
+      {
+        "name": "RATE_LIMITER",
+        "type": "ratelimit",
+        "namespace_id": "1001",
+        "simple": { "limit": 30, "period": 10 }
+      }
+    ]
+  },
+
   "d1_databases": [
     {
       "binding": "DB",

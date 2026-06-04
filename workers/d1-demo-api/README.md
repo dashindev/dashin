@@ -15,11 +15,17 @@ This is what makes a **100%-free, all-Cloudflare** Dashin demo possible: D1
 | `POST /reset` | — (Bearer `RESET_TOKEN`) | `{ ok: true }` — re-seed now |
 | `GET /health` | — | `{ ok: true }` |
 
-**Safety (public demo):** `/query` only allows `SELECT/INSERT/UPDATE/DELETE` on the
-demo tables (`posts`, `products`); DDL, multi-statements and comments are rejected.
-The `scheduled` cron (`*/30 * * * *`, in `wrangler.jsonc`) re-seeds every 30 min, so
-any visitor edits revert. There are **no server credentials** — the demo logs in
-via the client-side `auth-local` plugin.
+**Safety / anti-abuse (this is a public, write-enabled API):**
+- **Per-IP rate limit** — `RATE_LIMITER` binding, 30 POSTs / 10s per client IP (429 over that). Caps request floods; Cloudflare's automatic DDoS protection covers volumetric attacks.
+- **SQL guard** — only `SELECT/INSERT/UPDATE/DELETE` on `posts`/`products`; no DDL, multi-statements or comments; statement length ≤ 2000; **`SELECT` must carry a `LIMIT` ≤ 200** (no full-table scans); ≤ 64 bound args.
+- **Write cap** — `INSERT` is refused once a table hits 500 rows, so storage / the D1 write budget can't be inflated.
+- **`/reset` requires `RESET_TOKEN`** (Bearer); the cron resets without it.
+- **30-min re-seed cron** reverts any change.
+- **No server credentials** — login is the client-side `auth-local` plugin.
+
+> Cost: keep the account on the **Workers Free plan** and there is no overage
+> billing — abuse just hits daily limits and is throttled, never charged. The
+> caps above keep usage well inside the free tier in normal operation.
 
 ## Deploy (your Cloudflare account)
 
@@ -29,7 +35,7 @@ npm install
 
 npx wrangler d1 create dashin-demo          # paste database_id into wrangler.jsonc
 npx wrangler d1 execute dashin-demo --remote --file=schema.sql
-npx wrangler secret put RESET_TOKEN          # optional, gates /reset
+npx wrangler secret put RESET_TOKEN          # required — gates POST /reset
 npx wrangler deploy
 curl -X POST https://<worker-url>/reset -H "Authorization: Bearer <token>"   # initial seed
 ```

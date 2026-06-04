@@ -7,21 +7,37 @@
  *   POST /query  { sql, args }  -> { rows, rowsAffected } | { error }
  *   POST /reset                 -> re-seed (also runs on a cron) [token-gated]
  *
- * Public-demo safety:
- *  - A SQL guard allows only SELECT/INSERT/UPDATE/DELETE on the demo tables,
- *    rejects DDL, multi-statements and comments.
- *  - A `scheduled` cron re-seeds the data every 30 min (see wrangler.jsonc), so
- *    anything a visitor changes reverts. There are no server-side credentials
- *    (the demo logs in via the client-side auth-local plugin).
+ * This is a PUBLIC demo, so it's defended against abuse / runaway cost:
+ *  - Per-IP rate limit (RATE_LIMITER binding) — caps request floods.
+ *  - SQL guard: only SELECT/INSERT/UPDATE/DELETE on the demo tables; no DDL,
+ *    multi-statements or comments; bounded statement length; SELECT must carry
+ *    a small LIMIT (no full-table scans).
+ *  - Write cap: INSERT is refused once a table reaches MAX_ROWS, so storage /
+ *    the D1 write budget can't be inflated.
+ *  - `scheduled` cron re-seeds every 30 min, so any change reverts.
+ *  - `/reset` over HTTP requires RESET_TOKEN; CORS is limited to the demo origin.
+ *  - No server credentials (demo auth is client-side auth-local).
  */
 
 export interface Env {
   DB: D1Database
-  /** Optional bearer token gating POST /reset (set via `wrangler secret put`). */
+  /** Bearer token gating POST /reset (set via `wrangler secret put RESET_TOKEN`). */
   RESET_TOKEN?: string
+  /** Per-IP rate limiter binding (see wrangler.jsonc). */
+  RATE_LIMITER: { limit(opts: { key: string }): Promise<{ success: boolean }> }
 }
 
 const ALLOWED_TABLES = ["posts", "products"]
+const MAX_SQL_LEN = 2000
+const SELECT_MAX_LIMIT = 200
+const MAX_ROWS_PER_TABLE = 500
+
+const ALLOWED_ORIGINS = [
+  "https://dashin-demo.ganchengs.workers.dev",
+  "https://demo.dashin.dev",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000"
+]
 
 /** The seed = single source of truth for demo data. Run on reset + cron. */
 const SEED: string[] = [
@@ -37,34 +53,49 @@ const SEED: string[] = [
      ('Enterprise', 99, 0)`
 ]
 
-const CORS: Record<string, string> = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization"
+function corsHeaders(req: Request): Record<string, string> {
+  const origin = req.headers.get("Origin") || ""
+  const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
+  return {
+    "Access-Control-Allow-Origin": allow,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    Vary: "Origin"
+  }
 }
 
-const json = (body: unknown, status = 200): Response =>
+const json = (body: unknown, req: Request, status = 200): Response =>
   new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", ...CORS }
+    headers: { "Content-Type": "application/json", ...corsHeaders(req) }
   })
+
+/** Identify the target table of a connector-generated statement (quoted ident). */
+function targetTable(sql: string): string | null {
+  const m = sql.match(
+    /^(?:SELECT[\s\S]*?\bFROM|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\s+"([A-Za-z_][A-Za-z0-9_]*)"/i
+  )
+  return m ? m[1] : null
+}
 
 /** Returns an error string if the statement is not allowed, else null. */
 export function guard(sql: string): string | null {
   const s = sql.trim()
   if (!s) return "empty statement"
+  if (s.length > MAX_SQL_LEN) return "statement too long"
   if (s.includes("--") || s.includes("/*")) return "comments not allowed"
-  // No inner semicolons (one statement only); a single trailing `;` is fine.
   if (s.replace(/;\s*$/, "").includes(";")) return "multiple statements not allowed"
   const verb = (s.match(/^([A-Za-z]+)/)?.[1] || "").toUpperCase()
   if (!["SELECT", "INSERT", "UPDATE", "DELETE"].includes(verb))
     return `statement not allowed: ${verb || "?"}`
-  // The connector always quotes the table identifier right after the verb/FROM.
-  const m = s.match(
-    /^(?:SELECT[\s\S]*?\bFROM|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\s+"([A-Za-z_][A-Za-z0-9_]*)"/i
-  )
-  if (!m) return "could not identify target table"
-  if (!ALLOWED_TABLES.includes(m[1])) return `table not allowed: ${m[1]}`
+  const table = targetTable(s)
+  if (!table) return "could not identify target table"
+  if (!ALLOWED_TABLES.includes(table)) return `table not allowed: ${table}`
+  if (verb === "SELECT") {
+    const lim = s.match(/\bLIMIT\s+(\d+)/i)
+    if (!lim) return "SELECT must include a LIMIT"
+    if (Number(lim[1]) > SELECT_MAX_LIMIT) return `LIMIT too large (max ${SELECT_MAX_LIMIT})`
+  }
   return null
 }
 
@@ -74,42 +105,60 @@ async function reseed(env: Env): Promise<void> {
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
-    if (req.method === "OPTIONS") return new Response(null, { headers: CORS })
+    if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(req) })
     const url = new URL(req.url)
+
+    if (url.pathname === "/" || url.pathname === "/health")
+      return json({ ok: true, service: "dashin-d1-demo-api" }, req)
+
+    // Per-IP rate limit on the mutating/expensive routes.
+    if (req.method === "POST") {
+      const ip = req.headers.get("CF-Connecting-IP") || "anon"
+      const { success } = await env.RATE_LIMITER.limit({ key: ip })
+      if (!success) return json({ error: "rate limited — slow down" }, req, 429)
+    }
 
     if (url.pathname === "/query" && req.method === "POST") {
       let body: { sql?: string; args?: unknown[] }
       try {
         body = await req.json()
       } catch {
-        return json({ error: "invalid JSON body" })
+        return json({ error: "invalid JSON body" }, req)
       }
       const sql = String(body.sql || "")
-      const args = Array.isArray(body.args) ? body.args : []
+      const args = Array.isArray(body.args) ? body.args.slice(0, 64) : []
       const bad = guard(sql)
-      if (bad) return json({ error: bad })
+      if (bad) return json({ error: bad }, req)
+
+      // Write cap: don't let anyone inflate storage / the D1 write budget.
+      if (/^INSERT/i.test(sql.trim())) {
+        const table = targetTable(sql)!
+        const { results } = await env.DB.prepare(
+          `SELECT COUNT(*) AS c FROM "${table}"`
+        ).all<{ c: number }>()
+        if ((results?.[0]?.c ?? 0) >= MAX_ROWS_PER_TABLE)
+          return json({ error: "demo table is full — it resets every 30 minutes" }, req)
+      }
+
       try {
         const { results, meta } = await env.DB.prepare(sql)
           .bind(...args)
           .all()
-        return json({ rows: results ?? [], rowsAffected: meta?.changes ?? 0 })
+        return json({ rows: results ?? [], rowsAffected: meta?.changes ?? 0 }, req)
       } catch (e: any) {
-        return json({ error: String(e?.message || e) })
+        return json({ error: String(e?.message || e) }, req)
       }
     }
 
     if (url.pathname === "/reset" && req.method === "POST") {
       const auth = req.headers.get("Authorization") || ""
-      if (env.RESET_TOKEN && auth !== `Bearer ${env.RESET_TOKEN}`)
-        return json({ error: "unauthorized" }, 401)
+      if (!env.RESET_TOKEN || auth !== `Bearer ${env.RESET_TOKEN}`)
+        return json({ error: "unauthorized" }, req, 401)
       await reseed(env)
-      return json({ ok: true, reset: true })
+      return json({ ok: true, reset: true }, req)
     }
 
-    if (url.pathname === "/" || url.pathname === "/health")
-      return json({ ok: true, service: "dashin-d1-demo-api" })
-
-    return json({ error: "not found" }, 404)
+    return json({ error: "not found" }, req, 404)
   },
 
   // The "reset every 30 minutes" — schedule is in wrangler.jsonc (triggers.crons).

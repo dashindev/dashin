@@ -2,7 +2,7 @@
   "name": "@dashin-dev/rich-text-editor",
   "version": "2.0.0-alpha.0",
   "publishConfig": { "access": "public" },
-  "description": "Rich Text Editor for bunadmin",
+  "description": "Rich Text Editor for dashin",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -15,9 +15,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "bunadmin"
+    "dashin"
   ],
-  "author": "xbuilder",
+  "author": "Dashin Team",
   "license": "Apache-2.0",
   "dependencies": {
     "@tiptap/core": "^2.4.0",

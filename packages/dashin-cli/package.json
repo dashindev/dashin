@@ -14,7 +14,7 @@
     "tsc:clean": "tsc --build --clean",
     "tsc:build": "tsc",
     "test": "xo && ava",
-    "local-install-global": "npm run tsc && npm uninstall bunadmin-cli --global && npm install --global ./"
+    "local-install-global": "npm run tsc && npm uninstall @dashin-dev/cli --global && npm install --global ./"
   },
   "files": [
     "cli.js",

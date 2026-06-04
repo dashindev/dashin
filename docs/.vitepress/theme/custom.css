@@ -1,0 +1,57 @@
+/**
+ * Dashin brand theme for VitePress.
+ * Primary = blue (#3366ff), accent = green (#00d68f) — matches the README banner.
+ */
+
+:root {
+  /* Brand (links, buttons, accents) */
+  --vp-c-brand-1: #2f5fe6; /* text/links — AA contrast on light */
+  --vp-c-brand-2: #4f7bff; /* hover */
+  --vp-c-brand-3: #3366ff; /* solid button bg */
+  --vp-c-brand-soft: rgba(51, 102, 255, 0.14);
+
+  /* Home hero wordmark: blue -> green gradient */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #3366ff 28%, #00d68f);
+
+  /* Glow behind the hero logo */
+  --vp-home-hero-image-background-image: linear-gradient(
+    120deg,
+    rgba(51, 102, 255, 0.55),
+    rgba(0, 214, 143, 0.55)
+  );
+  --vp-home-hero-image-filter: blur(60px);
+
+  /* Brand-tinted code-block "info" accents */
+  --vp-c-brand-1-rgb: 51, 102, 255;
+}
+
+.dark {
+  --vp-c-brand-1: #7aa0ff; /* lighter for contrast on dark */
+  --vp-c-brand-2: #5e86ff;
+  --vp-c-brand-3: #3366ff;
+  --vp-c-brand-soft: rgba(51, 102, 255, 0.22);
+}
+
+/* Green accent dot before each feature title for a touch of brand */
+.VPFeatures .VPFeature .title {
+  position: relative;
+}
+.VPFeatures .VPFeature .title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: #00d68f;
+  vertical-align: middle;
+}
+
+/* Hero image sizing for the logo mark */
+.VPHero .image-bg {
+  opacity: 0.7;
+}
+.VPHero .VPImage {
+  max-width: 220px;
+}

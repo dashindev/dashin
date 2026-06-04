@@ -6,12 +6,12 @@
  *   PB_URL=... PB_ADMIN=... PB_ADMIN_PW=... node docs/pocketbase/seed.js
  *
  * Creates: a `posts` collection (name/status/views), a demo user
- * (demo / bunadmin123), and a few sample records. Idempotent-ish: ignores
+ * (demo / dashin123), and a few sample records. Idempotent-ish: ignores
  * "already exists" errors.
  */
 const PB = process.env.PB_URL || "http://127.0.0.1:8090"
-const ADMIN = process.env.PB_ADMIN || "admin@bunadmin.test"
-const ADMIN_PW = process.env.PB_ADMIN_PW || "bunadmin123"
+const ADMIN = process.env.PB_ADMIN || "admin@dashin.test"
+const ADMIN_PW = process.env.PB_ADMIN_PW || "dashin123"
 
 async function api(path, opts = {}, token) {
   const res = await fetch(`${PB}${path}`, {
@@ -103,14 +103,14 @@ async function main() {
       method: "POST",
       body: {
         username: "demo",
-        email: "demo@bunadmin.test",
-        password: "bunadmin123",
-        passwordConfirm: "bunadmin123"
+        email: "demo@dashin.test",
+        password: "dashin123",
+        passwordConfirm: "dashin123"
       }
     },
     token
   )
-  console.log("demo user:", user.ok ? "created (demo / bunadmin123)" : `skip (${user.status})`)
+  console.log("demo user:", user.ok ? "created (demo / dashin123)" : `skip (${user.status})`)
 
   // sample records
   for (let i = 1; i <= 3; i++) {

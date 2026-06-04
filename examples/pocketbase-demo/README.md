@@ -42,7 +42,7 @@ dashin ai generate --url http://127.0.0.1:8090 --collection posts \
 yarn dev
 ```
 
-Sign in as `demo` / `bunadmin123`. You now have a themed, validated admin for real
+Sign in as `demo` / `dashin123`. You now have a themed, validated admin for real
 PocketBase data — see [`../../docs/ai/README.md`](../../docs/ai/README.md) for the
 full AI walkthrough.
 
@@ -69,5 +69,5 @@ above:
 - **i18n** (`t()` / `useTranslation`), dynamic routing, permission-aware menus
 
 ## Credentials
-- PocketBase admin: `admin@bunadmin.test` / `bunadmin123`
-- Demo user (app login): `demo` / `bunadmin123`
+- PocketBase admin: `admin@dashin.test` / `dashin123`
+- Demo user (app login): `demo` / `dashin123`

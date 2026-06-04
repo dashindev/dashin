@@ -15,8 +15,8 @@ Dashin ships two plugins for it:
 
 ```bash
 # download the binary for your OS from https://pocketbase.io/docs/
-./pocketbase admin create admin@bunadmin.test bunadmin123   # PocketBase 0.22
-# (0.23+: ./pocketbase superuser create admin@bunadmin.test bunadmin123)
+./pocketbase admin create admin@dashin.test dashin123   # PocketBase 0.22
+# (0.23+: ./pocketbase superuser create admin@dashin.test dashin123)
 ./pocketbase serve --http=127.0.0.1:8090
 ```
 
@@ -30,7 +30,7 @@ With PocketBase running:
 node docs/pocketbase/seed.js
 ```
 
-Creates a `posts` collection, a demo user (`demo` / `bunadmin123`), and a few
+Creates a `posts` collection, a demo user (`demo` / `dashin123`), and a few
 records. Override with `PB_URL`, `PB_ADMIN`, `PB_ADMIN_PW` env vars.
 
 ## 3. Point your Dashin project at it

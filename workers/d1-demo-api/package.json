@@ -1,0 +1,16 @@
+{
+  "name": "dashin-d1-demo-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HTTP gateway over Cloudflare D1 for the Dashin source-d1 demo (query API + 30-min reset cron).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "init:local": "wrangler d1 execute dashin-demo --local --file=schema.sql",
+    "init:remote": "wrangler d1 execute dashin-demo --remote --file=schema.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "wrangler": "^3.99.0"
+  }
+}

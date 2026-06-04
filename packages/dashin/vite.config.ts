@@ -117,6 +117,10 @@ export default defineConfig(({ mode }) => {
           replacement: r("../dashin-source-turso/index.ts")
         },
         {
+          find: /^@dashin-dev\/source-d1$/,
+          replacement: r("../dashin-source-d1/index.ts")
+        },
+        {
           find: /^@dashin-dev\/rich-text-editor$/,
           replacement: r("../dashin-rich-text-editor/index.tsx")
         },

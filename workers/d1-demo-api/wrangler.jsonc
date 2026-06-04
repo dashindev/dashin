@@ -1,0 +1,26 @@
+// Dashin D1 demo gateway Worker.
+//
+// Setup:
+//   cd workers/d1-demo-api && npm install
+//   npx wrangler d1 create dashin-demo      # paste the database_id below
+//   npx wrangler d1 execute dashin-demo --remote --file=schema.sql
+//   npx wrangler secret put RESET_TOKEN     # optional: gate POST /reset
+//   npx wrangler deploy
+//   curl -X POST https://<worker-url>/reset -H "Authorization: Bearer <token>"
+{
+  "name": "dashin-d1-demo-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-01-01",
+  "observability": { "enabled": true },
+
+  // "reset every 30 minutes" — the scheduled() handler re-seeds the demo data.
+  "triggers": { "crons": ["*/30 * * * *"] },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dashin-demo",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+    }
+  ]
+}

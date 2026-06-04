@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/dashindev/dashin/issues"
   },
-  "author": "XBuilder Team",
+  "author": "Dashin Team",
   "main": "lib/main.js",
   "types": "lib/main.d.ts",
   "files": [
@@ -97,7 +97,7 @@
     "dashboard",
     "admin panel"
   ],
-  "homepage": "https://www.xbuilder.net/",
+  "homepage": "https://dashin.dev/",
   "browserslist": {
     "production": [
       ">0.2%",

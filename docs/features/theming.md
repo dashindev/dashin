@@ -1,6 +1,6 @@
 # Theming
 
-bunadmin's look is driven by **design tokens** — CSS variables for color, surface,
+dashin's look is driven by **design tokens** — CSS variables for color, surface,
 border, radius, and a gradient brand accent. Themes are **named presets** (each
 with light + dark), and the AI can compose them ([`ai theme`](/ai/)).
 
@@ -38,7 +38,7 @@ TopBar theme toggle and `ai theme` both call it.
 ## AI theming
 
 ```bash
-bunadmin ai theme "dark mode with a purple accent and rounded corners"
+dashin ai theme "dark mode with a purple accent and rounded corners"
 ```
 
 Emits a validated `{ preset, mode, overrides }` config for `applyPreset` — the AI

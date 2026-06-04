@@ -1,19 +1,19 @@
 # AI-Assisted Admin Generation
 
-> Point bunadmin at your backend → AI introspects the schema → generates a
+> Point dashin at your backend → AI introspects the schema → generates a
 > working, **validated** admin. Bring your own key (BYOK); cheap models work
 > because output is validated against your real schema, not freeform code.
 
-bunadmin ships two AI commands. Both follow the same principle: **the AI never
+dashin ships two AI commands. Both follow the same principle: **the AI never
 writes UI code — it fills a constrained, validated contract.** That's why a small
 model (e.g. Llama-3.1-8B) hits ~100% valid output: the generation target is
 narrow and every result is checked against ground truth.
 
 ---
 
-## `bunadmin ai generate` — schema → admin table
+## `dashin ai generate` — schema → admin table
 
-Introspects a backend collection and emits a bunadmin table definition (columns,
+Introspects a backend collection and emits a dashin table definition (columns,
 lookups, types) — the same file shape you'd write by hand, so it drops straight
 into the existing generator.
 
@@ -24,13 +24,13 @@ export DASHIN_AI_API_KEY=sk-...           # your key
 export DASHIN_AI_MODEL=gpt-4o-mini        # or llama-3.1-8b-instant, etc.
 export DASHIN_AI_BASE_URL=https://api.openai.com/v1   # optional (Groq/Ollama/etc.)
 
-bunadmin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin>
+dashin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin>
 # → writes posts.generated.tsx
 ```
 
 Dry run with no key (uses a mock model, still validates):
 ```bash
-bunadmin ai generate --url http://127.0.0.1:8090 --collection posts \
+dashin ai generate --url http://127.0.0.1:8090 --collection posts \
   --token <admin> --mock '{"columns":[{"field":"id"},{"field":"name"},{"field":"status"}]}'
 ```
 
@@ -45,15 +45,15 @@ admin. (A freeform "AI writes React" tool has no such guarantee.)
 
 ---
 
-## `bunadmin ai theme` — description → validated theme
+## `dashin ai theme` — description → validated theme
 
 Turns a plain-English description into a validated `{ preset, mode, overrides }`
 theme config consumed by `applyPreset()` at runtime. The AI may only pick a known
 preset/mode and override known design tokens with valid CSS values.
 
 ```bash
-bunadmin ai theme "dark mode with a purple accent and rounded corners"
-# → writes bunadmin.theme.ts:
+dashin ai theme "dark mode with a purple accent and rounded corners"
+# → writes dashin.theme.ts:
 #   export const theme = { preset: "modern", mode: "dark",
 #     overrides: { primary: "#7c3aed", radius: "16px" } }
 ```
@@ -61,7 +61,7 @@ bunadmin ai theme "dark mode with a purple accent and rounded corners"
 Apply it in your app:
 ```ts
 import { applyPreset } from "@dashin-dev/dashin"
-import theme from "./bunadmin.theme"
+import theme from "./dashin.theme"
 applyPreset(theme.preset, theme.mode, theme.overrides)
 ```
 
@@ -73,7 +73,7 @@ always a professional, on-brand theme by construction.
 ## Flagship walkthrough: describe → working PocketBase admin (5 min)
 
 1. **Run a backend.** Any PocketBase instance (see [`../pocketbase/README.md`](../pocketbase/README.md)); seed demo data with `node docs/pocketbase/seed.js`.
-2. **Scaffold a project:** `bunadmin new my-admin` (Vite template).
+2. **Scaffold a project:** `dashin new my-admin` (Vite template).
 3. **Point it at PocketBase** in `.env`:
    ```
    VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase
@@ -82,9 +82,9 @@ always a professional, on-brand theme by construction.
 4. **Generate the posts admin:**
    ```bash
    export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
-   bunadmin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin> --out src/plugins/blog/post
+   dashin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin> --out src/plugins/blog/post
    ```
-5. **Theme it:** `bunadmin ai theme "clean light theme, indigo accent"`.
+5. **Theme it:** `dashin ai theme "clean light theme, indigo accent"`.
 6. **Run it:** `yarn dev` → a validated, themed admin for your real data.
 
 The same flow works for **Appwrite** (`@dashin-dev/source-appwrite`) and

@@ -1,7 +1,7 @@
 # Supabase / Postgres Connector
 
 `@dashin-dev/source-supabase` — use [Supabase](https://supabase.com)
-(PostgREST) as the data source for any bunadmin schema. Same table UI, backed by
+(PostgREST) as the data source for any dashin schema. Same table UI, backed by
 your Postgres tables.
 
 ## Install
@@ -43,7 +43,7 @@ export default function Posts() {
 
 ## How filters map
 
-bunadmin table operators → PostgREST `column=operator.value`:
+dashin table operators → PostgREST `column=operator.value`:
 
 | Table operator | PostgREST |
 | --- | --- |

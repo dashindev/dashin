@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Seed a local PocketBase for the bunadmin demo.
+ * Seed a local PocketBase for the dashin demo.
  * Usage:
  *   node docs/pocketbase/seed.js            (PB at http://127.0.0.1:8090)
  *   PB_URL=... PB_ADMIN=... PB_ADMIN_PW=... node docs/pocketbase/seed.js
@@ -143,7 +143,7 @@ async function main() {
     )
     console.log(`product ${p.name}:`, r.ok ? "created" : `skip (${r.status})`)
   }
-  console.log("\nDone. Set your bunadmin .env:")
+  console.log("\nDone. Set your dashin .env:")
   console.log("  VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase")
   console.log(`  VITE_AUTH_URL=${PB}`)
 }

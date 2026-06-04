@@ -1,4 +1,4 @@
-# bunadmin Demo (Turso / libSQL)
+# dashin Demo (Turso / libSQL)
 
 Boot a local libSQL server (`sqld`) with SQLite + seed data + a working admin.
 
@@ -16,16 +16,16 @@ libSQL HTTP protocol (`sqld` via Docker) on `http://127.0.0.1:8080`. Ctrl-C stop
 ## Hosted Turso alternative
 
 ```bash
-turso db create bunadmin-demo
-turso db shell bunadmin-demo < seed.sql   # same DDL as start.sh
-turso db show bunadmin-demo --url         # → VITE_MAIN_URL
-turso db tokens create bunadmin-demo      # → auth token
+turso db create dashin-demo
+turso db shell dashin-demo < seed.sql   # same DDL as start.sh
+turso db show dashin-demo --url         # → VITE_MAIN_URL
+turso db tokens create dashin-demo      # → auth token
 ```
 
 ## Then: generate the admin
 
 ```bash
-bunadmin new my-admin && cd my-admin
+dashin new my-admin && cd my-admin
 ```
 
 `.env`:

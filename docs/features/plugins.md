@@ -1,22 +1,22 @@
 # Plugins & Auth
 
-bunadmin is plugin-driven: schemas, data sources, auth, and uploads are all
+dashin is plugin-driven: schemas, data sources, auth, and uploads are all
 plugins, discovered by the generator and loaded dynamically.
 
 ## Plugin types
 
 | Kind | Example | Role |
 | --- | --- | --- |
-| **Schema/feature** | `bunadmin-plugin-[team]-[group]` | menus + schemas (tables) |
-| **Data source** | `bunadmin-source-*` | list/CRUD against a backend ([Connectors](/connectors/)) |
-| **Auth** | `bunadmin-auth-*` | sign-in + token handling |
-| **Upload** | `bunadmin-upload-*` | file storage |
+| **Schema/feature** | `dashin-plugin-[team]-[group]` | menus + schemas (tables) |
+| **Data source** | `dashin-source-*` | list/CRUD against a backend ([Connectors](/connectors/)) |
+| **Auth** | `dashin-auth-*` | sign-in + token handling |
+| **Upload** | `dashin-upload-*` | file storage |
 
 Create one with the CLI:
 
 ```bash
-bunadmin plugin myteam-blog     # in plugins/
-bunadmin schema post            # in the plugin dir
+dashin plugin myteam-blog     # in plugins/
+dashin schema post            # in the plugin dir
 ```
 
 The generator scans your `dependencies` + `devDependencies` for dashin plugins

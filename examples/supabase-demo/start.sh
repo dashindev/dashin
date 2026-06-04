@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command bunadmin demo: Supabase (local via the Supabase CLI).
+# One-command dashin demo: Supabase (local via the Supabase CLI).
 #
 #   ./start.sh            # starts local Supabase (Docker) + seeds data on :54321
 #
@@ -54,7 +54,7 @@ cat <<EOF
   Anon key: ${ANON_KEY}
 
 Next — in another terminal:
-  bunadmin new my-admin && cd my-admin
+  dashin new my-admin && cd my-admin
   # .env:
   #   VITE_AUTH_PLUGIN=@dashin-dev/auth-supabase
   #   VITE_MAIN_URL=${API_URL}

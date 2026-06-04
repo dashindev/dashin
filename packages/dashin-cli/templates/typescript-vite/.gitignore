@@ -38,7 +38,7 @@ yarn-error.log*
 .idea/workspace.xml
 .idea/vcs.xml
 
-# bunadmin
+# dashin
 .dashin
 /plugins/pluginsData.ts
 .env

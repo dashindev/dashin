@@ -1,11 +1,11 @@
-# bunadmin flagship demo — PocketBase backend (docker alternative to start.sh).
+# dashin flagship demo — PocketBase backend (docker alternative to start.sh).
 #   docker compose up        # serves PocketBase on :8090
 #   then: node ../../docs/pocketbase/seed.js   (PB_URL=http://127.0.0.1:8090)
 # Uses a community PocketBase image; pin a digest for production use.
 services:
   pocketbase:
     image: ghcr.io/muchobien/pocketbase:0.22.21
-    container_name: bunadmin-demo-pb
+    container_name: dashin-demo-pb
     ports:
       - "8090:8090"
     volumes:

@@ -1,6 +1,6 @@
-# bunadmin Demo (Appwrite)
+# dashin Demo (Appwrite)
 
-Boot a self-hosted Appwrite + wire it to a bunadmin admin.
+Boot a self-hosted Appwrite + wire it to a dashin admin.
 
 ## One command
 
@@ -27,7 +27,7 @@ them once in the console:
 ## Then: generate the admin
 
 ```bash
-bunadmin new my-admin && cd my-admin
+dashin new my-admin && cd my-admin
 ```
 
 `.env`:

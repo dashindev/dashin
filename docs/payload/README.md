@@ -15,7 +15,7 @@ yarn add @dashin-dev/source-payload
 VITE_MAIN_URL=https://your-payload-app.example.com
 ```
 
-Auth uses the bunadmin stored token as `Authorization: Bearer …`.
+Auth uses the dashin stored token as `Authorization: Bearer …`.
 
 ## Use in a schema
 
@@ -32,7 +32,7 @@ import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-paylo
 
 ## Filter mapping
 
-bunadmin operators → Payload `where[field][operator]`:
+dashin operators → Payload `where[field][operator]`:
 
 | Table operator | Payload |
 | --- | --- |

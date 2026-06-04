@@ -17,9 +17,9 @@ const pluginsDataTs = import.meta.glob("./.dashin/dynamic/pluginsData.ts", {
 const dynamicLazy = import.meta.glob("./.dashin/dynamic/**/*/index.js")
 // Local override/customized plugins (src/plugins/**).
 const localPlugins = import.meta.glob("./plugins/**/index.{ts,tsx}")
-// Plugin i18n bundles (installed @xbuilder packages), consumed synchronously.
+// Plugin i18n bundles (installed @dashin-dev packages), consumed synchronously.
 const pluginI18n = import.meta.glob(
-  "/node_modules/@xbuilder/*/lib/utils/i18n/*.js",
+  "/node_modules/@dashin-dev/*/lib/utils/i18n/*.js",
   { eager: true }
 )
 

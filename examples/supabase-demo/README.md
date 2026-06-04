@@ -1,4 +1,4 @@
-# bunadmin Demo (Supabase / Postgres)
+# dashin Demo (Supabase / Postgres)
 
 Boot a local Supabase stack + seed data + generate a working admin.
 
@@ -17,7 +17,7 @@ Starts a local Supabase (via the Supabase CLI + Docker), seeds `posts` and
 ## Then: generate the admin
 
 ```bash
-bunadmin new my-admin && cd my-admin
+dashin new my-admin && cd my-admin
 ```
 
 `.env` (use the values printed by `start.sh`):
@@ -30,7 +30,7 @@ VITE_SUPABASE_KEY=<anon-key>
 Generate a validated admin table from the live `posts` table (BYOK):
 ```bash
 export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
-bunadmin ai generate --url http://127.0.0.1:54321 --collection posts \
+dashin ai generate --url http://127.0.0.1:54321 --collection posts \
   --token <anon-key> --out src/plugins/blog/post
 yarn dev
 ```

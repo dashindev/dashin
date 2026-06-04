@@ -1,7 +1,7 @@
 # Appwrite Connector
 
 `@dashin-dev/source-appwrite` — use [Appwrite](https://appwrite.io)
-Databases as the data source for any bunadmin schema (list / filter / sort /
+Databases as the data source for any dashin schema (list / filter / sort /
 CRUD / bulk), reusing the same table UI.
 
 ## Install
@@ -18,7 +18,7 @@ VITE_APPWRITE_PROJECT=<your-project-id>
 VITE_APPWRITE_DATABASE=<your-database-id>   # defaults to "default"
 ```
 
-These are surfaced on bunadmin's `ENV` (`ENV.APPWRITE_PROJECT`,
+These are surfaced on dashin's `ENV` (`ENV.APPWRITE_PROJECT`,
 `ENV.APPWRITE_DATABASE`) and sent as the `X-Appwrite-Project` header; the stored
 auth token is sent as `X-Appwrite-JWT`.
 
@@ -45,7 +45,7 @@ export default function Posts() {
 
 ## How filters map
 
-bunadmin table operators → Appwrite query JSON
+dashin table operators → Appwrite query JSON
 (`/v1/databases/{db}/collections/{col}/documents?queries[]=`):
 
 | Table operator | Appwrite query |

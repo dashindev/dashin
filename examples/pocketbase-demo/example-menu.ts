@@ -3,20 +3,20 @@
  * `products`) into a **multi-level menu**: a "Blog" parent with Posts and
  * Products children. `ignore_schema: true` makes the parent a menu group only.
  *
- * Drop into src/plugins/bunadmin-plugin-xbuilder-blog/index.ts.
+ * Drop into src/plugins/dashin-plugin-dashin-blog/index.ts.
  */
 import { IPluginData } from "@dashin-dev/dashin"
 
 export { default as posts } from "./example-admin"
 export { default as products } from "./example-products"
 
-const shared = { team: "xbuilder", group: "blog", customized: true }
+const shared = { team: "dashin", group: "blog", customized: true }
 
 export const initData: IPluginData[] = [
   {
     ...shared,
-    id: "xbuilder_blog",
-    name: "xbuilder_blog",
+    id: "dashin_blog",
+    name: "dashin_blog",
     label: "Blog",
     icon_type: "eva",
     icon: "file-text-outline",
@@ -24,20 +24,20 @@ export const initData: IPluginData[] = [
   },
   {
     ...shared,
-    id: "xbuilder_blog_posts",
+    id: "dashin_blog_posts",
     name: "posts",
     label: "Posts",
     icon_type: "eva",
     icon: "file-text-outline",
-    parent: "xbuilder_blog"
+    parent: "dashin_blog"
   },
   {
     ...shared,
-    id: "xbuilder_blog_products",
+    id: "dashin_blog_products",
     name: "products",
     label: "Products",
     icon_type: "eva",
     icon: "shopping-bag-outline",
-    parent: "xbuilder_blog"
+    parent: "dashin_blog"
   }
 ]

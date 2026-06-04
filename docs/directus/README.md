@@ -15,7 +15,7 @@ yarn add @dashin-dev/source-directus
 VITE_MAIN_URL=https://your-directus-instance.example.com
 ```
 
-Auth uses the bunadmin stored token as `Authorization: Bearer …`.
+Auth uses the dashin stored token as `Authorization: Bearer …`.
 
 ## Use in a schema
 
@@ -32,7 +32,7 @@ import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-direc
 
 ## Filter mapping
 
-bunadmin operators → Directus `filter[field][_op]`:
+dashin operators → Directus `filter[field][_op]`:
 
 | Table operator | Directus |
 | --- | --- |

@@ -1,16 +1,16 @@
-# bunadmin Appwrite demo — minimal self-hosted Appwrite.
+# dashin Appwrite demo — minimal self-hosted Appwrite.
 #   docker compose up -d        # serves Appwrite console on :8080
 # This is a trimmed single-service setup for local demos. For production use the
 # official compose file: https://appwrite.io/docs/advanced/self-hosting
 services:
   appwrite:
     image: appwrite/appwrite:1.5.7
-    container_name: bunadmin-demo-appwrite
+    container_name: dashin-demo-appwrite
     ports:
       - "8080:80"
     environment:
       - _APP_ENV=production
-      - _APP_OPENSSL_KEY_V1=bunadmin-demo-secret-change-me
+      - _APP_OPENSSL_KEY_V1=dashin-demo-secret-change-me
       - _APP_DOMAIN=localhost
       - _APP_DOMAIN_TARGET=localhost
     volumes:

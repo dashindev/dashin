@@ -2,7 +2,7 @@
  * Worked example: a `posts` page backed by Directus (Items REST API) via
  * @dashin-dev/source-directus.
  *
- * Drop this into a bunadmin project's plugin and register it like any other
+ * Drop this into a dashin project's plugin and register it like any other
  * schema plugin. Requires a Directus `posts` collection (see README.md).
  */
 import React, { createRef } from "react"
@@ -16,7 +16,7 @@ import {
 } from "@dashin-dev/dashin"
 import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-directus"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 interface Post {
   id: number

@@ -1,7 +1,7 @@
 {
   "license": "Apache-2.0",
   "private": true,
-  "author": "Xbuilder Team",
+  "author": "Dashin Team",
   "packageManager": "yarn@1.22.22",
   "workspaces": [
     "packages/*",

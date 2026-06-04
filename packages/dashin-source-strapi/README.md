@@ -1,11 +1,11 @@
-# bunadmin-source-strapi
+# dashin-source-strapi
 
-[This plugin needs to be used in Dashin](https://github.com/xbuilder/bunadmin)
+[This plugin needs to be used in Dashin](https://github.com/dashindev/dashin)
 
 ### How to use
 
 ```
-yarn add bunadmin-source-strapi
+yarn add dashin-source-strapi
 ```
 
-See more on [bunadmin-example-strapi](https://github.com/xbuilder/bunadmin-example-strapi)
+See more on [dashin-example-strapi](https://github.com/dashindev/dashin-example-strapi)

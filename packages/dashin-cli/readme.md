@@ -1,27 +1,27 @@
-# bunadmin-cli
+# dashin-cli
 
 ## Install
 
 ```bash
-$ npm install --global bunadmin-cli
+$ npm install --global dashin-cli
 ```
 
 
 ## CLI
 
 ```
-$ bunadmin --help
+$ dashin --help
 
 Usage
 	Create a new project (Vite or Next.js)
-	  $ bunadmin new {name}
-	  $ bunadmin new {name} --nextjs
+	  $ dashin new {name}
+	  $ dashin new {name} --nextjs
 
 Options
     --plugin  with demo plugin
     --doc     with demo document
 
 Examples
-  $ bunadmin new my-dashboard
+  $ dashin new my-dashboard
   Your project "my-dashboard" has been created.
 ```

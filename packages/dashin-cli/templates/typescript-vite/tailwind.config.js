@@ -4,7 +4,7 @@ module.exports = {
     "./index.html",
     "./src/**/*.{ts,tsx}",
     // include the installed dashin packages so their Tailwind classes compile
-    "./node_modules/@xbuilder/**/lib/**/*.js"
+    "./node_modules/@dashin-dev/**/lib/**/*.js"
   ],
   theme: {
     extend: {

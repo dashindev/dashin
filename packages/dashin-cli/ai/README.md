@@ -4,7 +4,7 @@
 
 ## Thesis
 Generic AI codegen (v0/Bolt/Lovable) emits *freeform* React that is often
-subtly broken, so it needs expensive frontier models to be reliable. bunadmin
+subtly broken, so it needs expensive frontier models to be reliable. dashin
 has a **constrained, validated output contract** (the plugin/schema generator).
 Generating into that contract is a *narrow* task, so:
 
@@ -28,7 +28,7 @@ introspect (ground truth)  ->  LLM (BYOK/cheap)  ->  VALIDATE  ->  emit schema f
 ## What this spike proves (run against live PocketBase)
 - **Introspection** pulls the real `posts` schema (`name`/`status`/`views`) — the
   model fills a template, it doesn't invent.
-- **Valid output → emitted a working bunadmin schema file in 1 attempt**, identical
+- **Valid output → emitted a working dashin schema file in 1 attempt**, identical
   in shape to `docs/pocketbase/example-posts.tsx` (so the existing generator
   consumes it unchanged).
 - **Hallucinated output → REJECTED.** The validator caught, against ground truth:

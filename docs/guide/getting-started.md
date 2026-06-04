@@ -7,8 +7,8 @@ for rich text, and ships an **AI-assisted, schema-validated** generation flow.
 ## Install & scaffold
 
 ```bash
-npm install --global bunadmin-cli
-bunadmin new my-admin
+npm install --global dashin-cli
+dashin new my-admin
 cd my-admin
 yarn && yarn dev
 ```
@@ -19,12 +19,12 @@ The dev server runs at http://localhost:3000.
 
 | Command | Description |
 | --- | --- |
-| `bunadmin new <name>` | Create a project (Vite template) |
-| `bunadmin plugin [team]-[group]` | Create a plugin (run in `plugins/`) |
-| `bunadmin schema [name]` | Create a schema (run in a plugin dir) |
-| `bunadmin ai generate` | Generate a validated admin table from a backend ([AI guide](/ai/)) |
-| `bunadmin ai theme` | Generate a validated theme from a description |
-| `bunadmin ai refine` | Refine an existing generated admin via natural language |
+| `dashin new <name>` | Create a project (Vite template) |
+| `dashin plugin [team]-[group]` | Create a plugin (run in `plugins/`) |
+| `dashin schema [name]` | Create a schema (run in a plugin dir) |
+| `dashin ai generate` | Generate a validated admin table from a backend ([AI guide](/ai/)) |
+| `dashin ai theme` | Generate a validated theme from a description |
+| `dashin ai refine` | Refine an existing generated admin via natural language |
 
 ## Pick a backend
 

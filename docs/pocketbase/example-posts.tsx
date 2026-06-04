@@ -2,7 +2,7 @@
  * Worked example: a `posts` page backed by PocketBase via
  * @dashin-dev/source-pocketbase.
  *
- * Drop this into a bunadmin project's plugin (e.g. src/plugins/bunadmin-plugin-
+ * Drop this into a dashin project's plugin (e.g. src/plugins/dashin-plugin-
  * myteam-blog/posts/index.tsx) and register it like any other schema plugin.
  * Requires a PocketBase `posts` collection (see docs/pocketbase/seed.js).
  */
@@ -17,7 +17,7 @@ import {
 } from "@dashin-dev/dashin"
 import { dataCtrl, editableCtrl } from "@dashin-dev/source-pocketbase"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 interface Post {
   id: string

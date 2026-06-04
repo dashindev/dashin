@@ -1,13 +1,13 @@
-# bunadmin Payload demo — Docker alternative to start.sh.
+# dashin Payload demo — Docker alternative to start.sh.
 #   docker compose up        # serves Payload on :3001
 services:
   payload:
     build: .
-    container_name: bunadmin-demo-payload
+    container_name: dashin-demo-payload
     ports:
       - "3001:3000"
     environment:
-      - PAYLOAD_SECRET=bunadmin-demo-secret-change-me
+      - PAYLOAD_SECRET=dashin-demo-secret-change-me
       - DATABASE_URL=file:/app/data.db
     volumes:
       - payload_data:/app

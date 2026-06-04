@@ -1,4 +1,4 @@
-# bunadmin Flagship Demo (PocketBase)
+# dashin Flagship Demo (PocketBase)
 
 Boot a real backend + seed data + generate a working admin — in minutes.
 
@@ -25,7 +25,7 @@ node ../../docs/pocketbase/seed.js   # PB_URL defaults to http://127.0.0.1:8090
 ## Then: generate the admin
 
 ```bash
-bunadmin new my-admin && cd my-admin
+dashin new my-admin && cd my-admin
 ```
 
 `.env`:
@@ -37,7 +37,7 @@ VITE_AUTH_URL=http://127.0.0.1:8090
 Generate a validated admin table from the live `posts` collection (BYOK):
 ```bash
 export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
-bunadmin ai generate --url http://127.0.0.1:8090 --collection posts \
+dashin ai generate --url http://127.0.0.1:8090 --collection posts \
   --token <admin-token> --out src/plugins/blog/post
 yarn dev
 ```
@@ -56,10 +56,10 @@ Drop-in files showing the **plugin-level** features end to end:
 | [`example-products.tsx`](./example-products.tsx) | `products` table — numeric + boolean columns, bulk delete |
 | [`example-menu.ts`](./example-menu.ts) | registers both as a **multi-level menu** (Blog → Posts + Products) |
 
-Place them under `src/plugins/bunadmin-plugin-xbuilder-blog/` (posts/products in
+Place them under `src/plugins/dashin-plugin-dashin-blog/` (posts/products in
 their own folders, `example-menu.ts` as the plugin `index.ts`).
 
-### Provided for free by `bunadmin new`
+### Provided for free by `dashin new`
 
 The app shell adds these automatically on every list view — no code in the files
 above:

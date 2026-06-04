@@ -6,9 +6,9 @@
  * delete**, a status-pill `lookup`, a numeric column, and a custom `render`.
  *
  * The surrounding shell (KPI stat band, modern layout, dark-mode toggle, i18n)
- * is provided automatically by `bunadmin new` on every list view — no code here.
+ * is provided automatically by `dashin new` on every list view — no code here.
  *
- * Drop into src/plugins/bunadmin-plugin-xbuilder-blog/posts/index.tsx.
+ * Drop into src/plugins/dashin-plugin-dashin-blog/posts/index.tsx.
  */
 import React, { createRef } from "react"
 import {
@@ -25,7 +25,7 @@ import {
   bulkDeleteCtrl
 } from "@dashin-dev/source-pocketbase"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 interface Post {
   id: string

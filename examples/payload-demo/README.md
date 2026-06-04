@@ -1,4 +1,4 @@
-# bunadmin Demo (Payload CMS + SQLite)
+# dashin Demo (Payload CMS + SQLite)
 
 Boot Payload CMS with SQLite + seed data + generate a working admin — in minutes.
 
@@ -23,7 +23,7 @@ docker compose up -d
 ## Then: generate the admin
 
 ```bash
-bunadmin new my-admin && cd my-admin
+dashin new my-admin && cd my-admin
 ```
 
 `.env`:
@@ -35,7 +35,7 @@ VITE_AUTH_URL=http://127.0.0.1:3001
 Generate a validated admin table from the live `posts` collection (BYOK):
 ```bash
 export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
-bunadmin ai generate --url http://127.0.0.1:3001 --collection posts \
+dashin ai generate --url http://127.0.0.1:3001 --collection posts \
   --token <admin-token> --out src/plugins/blog/post
 yarn dev
 ```

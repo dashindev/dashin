@@ -3,7 +3,7 @@ import { IPluginData } from "@dashin-dev/dashin"
 export { default as post } from "./post"
 
 const shared = {
-  team: "xbuilder",
+  team: "dashin",
   group: "blog",
   customized: true
 }
@@ -11,8 +11,8 @@ const shared = {
 export const initData: IPluginData[] = [
   {
     ...shared,
-    id: "xbuilder_blog",
-    name: "xbuilder_blog",
+    id: "dashin_blog",
+    name: "dashin_blog",
     label: "Blog",
     icon_type: "eva",
     icon: "file-text-outline",
@@ -20,20 +20,20 @@ export const initData: IPluginData[] = [
   },
   {
     ...shared,
-    id: "xbuilder_blog_category",
+    id: "dashin_blog_category",
     name: "category",
     label: "Category",
     icon_type: "eva",
     icon: "file-text-outline",
-    parent: "xbuilder_blog"
+    parent: "dashin_blog"
   },
   {
     ...shared,
-    id: "xbuilder_blog_post",
+    id: "dashin_blog_post",
     name: "post",
     label: "Post",
     icon_type: "eva",
     icon: "file-text-outline",
-    parent: "xbuilder_blog"
+    parent: "dashin_blog"
   }
 ]

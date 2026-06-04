@@ -29,10 +29,10 @@ seeds demo collections (`posts`, `products`) + a `demo` user.
 ## Generate the admin
 
 ```bash
-bunadmin new my-admin && cd my-admin
+dashin new my-admin && cd my-admin
 # .env: VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase, VITE_AUTH_URL=http://127.0.0.1:8090
 export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
-bunadmin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin-token>
+dashin ai generate --url http://127.0.0.1:8090 --collection posts --token <admin-token>
 yarn dev
 ```
 
@@ -48,7 +48,7 @@ and `example-menu.ts` (registers both as a **multi-level menu**: Blog → Posts 
 Products).
 
 The surrounding shell — **KPI stat band**, modern layout, **dark-mode toggle**,
-i18n, dynamic routing — is added automatically by `bunadmin new` on every list
+i18n, dynamic routing — is added automatically by `dashin new` on every list
 view, so it needs no code in these files.
 
 ## Credentials (PocketBase)
@@ -75,10 +75,10 @@ serves on `http://127.0.0.1:3001`.
 ### Generate the admin
 
 ```bash
-bunadmin new my-admin && cd my-admin
+dashin new my-admin && cd my-admin
 # .env: VITE_AUTH_PLUGIN=@dashin-dev/auth-payload, VITE_AUTH_URL=http://127.0.0.1:3001
 export DASHIN_AI_PROVIDER=openai DASHIN_AI_API_KEY=sk-... DASHIN_AI_MODEL=gpt-4o-mini
-bunadmin ai generate --url http://127.0.0.1:3001 --collection posts --token <admin-token>
+dashin ai generate --url http://127.0.0.1:3001 --collection posts --token <admin-token>
 yarn dev
 ```
 

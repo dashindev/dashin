@@ -2,7 +2,7 @@
  * Worked example: a `posts` page backed by Payload CMS via
  * @dashin-dev/source-payload.
  *
- * Drop this into a bunadmin project's plugin (e.g. src/plugins/bunadmin-plugin-
+ * Drop this into a dashin project's plugin (e.g. src/plugins/dashin-plugin-
  * myteam-blog/posts/index.tsx) and register it like any other schema plugin.
  * Requires a Payload `posts` collection (see start.sh seed step).
  */
@@ -17,7 +17,7 @@ import {
 } from "@dashin-dev/dashin"
 import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-payload"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 interface Post {
   id: string

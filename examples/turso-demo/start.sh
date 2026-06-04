@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command bunadmin demo: Turso / libSQL (local sqld via Docker).
+# One-command dashin demo: Turso / libSQL (local sqld via Docker).
 #
 #   ./start.sh            # starts sqld (libSQL HTTP) on :8080 + seeds data
 #
@@ -55,7 +55,7 @@ cat <<EOF
 ✓ libSQL server ready: http://127.0.0.1:${PORT}
 
 Next — in another terminal:
-  bunadmin new my-admin && cd my-admin
+  dashin new my-admin && cd my-admin
   # .env:
   #   VITE_AUTH_PLUGIN=@dashin-dev/auth-local
   #   VITE_MAIN_URL=http://127.0.0.1:${PORT}

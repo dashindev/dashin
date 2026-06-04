@@ -2,7 +2,7 @@
  * Worked example: a `posts` page backed by Appwrite Databases via
  * @dashin-dev/source-appwrite.
  *
- * Drop this into a bunadmin project's plugin and register it like any other
+ * Drop this into a dashin project's plugin and register it like any other
  * schema plugin. Requires an Appwrite `posts` collection (see README.md).
  * Note: Appwrite rows use `$id` rather than `id`.
  */
@@ -17,7 +17,7 @@ import {
 } from "@dashin-dev/dashin"
 import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-appwrite"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 interface Post {
   $id: string

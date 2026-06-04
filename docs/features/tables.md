@@ -1,6 +1,6 @@
 # Tables & CRUD
 
-The `Table` component is the core of a bunadmin admin: a data grid with filtering,
+The `Table` component is the core of a dashin admin: a data grid with filtering,
 sorting, search, pagination, inline editing, bulk actions, grouping, and row
 detail — backed by any [connector](/connectors/).
 

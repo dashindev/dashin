@@ -12,14 +12,14 @@ In this tutorial, we will:
 
 ## Create a plugin directory
 
-Create a new command line window, enter the bunadmin **root directory** **_(bunadmin-tutorial)_**. **!NOT** ~~**_packages/dashin_**~~
+Create a new command line window, enter the dashin **root directory** **_(dashin-tutorial)_**. **!NOT** ~~**_packages/dashin_**~~
 
 ```shell
 # cd ../..
-mkdir plugins/bunadmin-plugin-myteam-blog
+mkdir plugins/dashin-plugin-myteam-blog
 ```
 
-_Folders starting with `bunadmin-plugin-` in the `plugins` directory will be automatically recognized as plugins._
+_Folders starting with `dashin-plugin-` in the `plugins` directory will be automatically recognized as plugins._
 
 ## Create an initialization data file
 
@@ -30,7 +30,7 @@ touch utils/initData.ts
 
 _File `utils/initData.ts` will automatically activate the plugin, and it will automatically generate multi-level menus and table columns._
 
-Replace the content of `utils/initData.ts` **_(bunadmin-tutorial/plugins/bunadmin-plugin-myteam-blog/utils/initData.ts)_** with the following:
+Replace the content of `utils/initData.ts` **_(dashin-tutorial/plugins/dashin-plugin-myteam-blog/utils/initData.ts)_** with the following:
 
 ```ts
 import { IPluginData } from "@dashin-dev/dashin"
@@ -177,6 +177,6 @@ You can now query local data, test filtering and sorting, but you can’t modify
 
 ![Blog Post](https://gblobscdn.gitbook.com/assets%2F-M1ZbjnBaWO_NJOdj8_A%2F-MHfe3l6qmtBikzv9V28%2F-MHfedSDcseBrb_aue5G%2Fblog-post.png)
 
-_If you see the screenshot page, it means that the plugin has been created and successfully activated, otherwise please check the steps above or try to restart bunadmin._
+_If you see the screenshot page, it means that the plugin has been created and successfully activated, otherwise please check the steps above or try to restart dashin._
 
-## [Sample code](https://github.com/xbuilder/bunadmin-example-plugin-tutorial)
+## [Sample code](https://github.com/dashindev/dashin-example-plugin-tutorial)

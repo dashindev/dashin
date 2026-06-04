@@ -17,7 +17,7 @@ Create a plugin
 
 Create a schema
 `$ dashin schema [name]`
-(Run in the plugin directory: plugins/bunadmin-plugin-[team]-[group]/)
+(Run in the plugin directory: plugins/dashin-plugin-[team]-[group]/)
 
 Display help for command
 `$ dashin --help`

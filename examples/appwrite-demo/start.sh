@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command bunadmin demo: Appwrite (self-hosted via Docker).
+# One-command dashin demo: Appwrite (self-hosted via Docker).
 #
 #   ./start.sh            # starts Appwrite on :8080
 #
@@ -29,7 +29,7 @@ Next steps (one-time, in the Appwrite console):
   3. Set collection permissions to allow your user to read/write.
 
 Then — in another terminal:
-  bunadmin new my-admin && cd my-admin
+  dashin new my-admin && cd my-admin
   # .env:
   #   VITE_AUTH_PLUGIN=@dashin-dev/auth-appwrite
   #   VITE_AUTH_URL=http://127.0.0.1:8080

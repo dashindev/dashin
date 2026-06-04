@@ -1,6 +1,6 @@
 # Connectors
 
-A connector is a **data-source plugin** that maps bunadmin's table query
+A connector is a **data-source plugin** that maps dashin's table query
 (filter / sort / search / pagination / CRUD / bulk) to a specific backend's API.
 Swap the connector import to change backends — the table UI is unchanged.
 

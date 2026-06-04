@@ -1,6 +1,6 @@
-# bunadmin Demo (Directus)
+# dashin Demo (Directus)
 
-Boot a self-hosted Directus (SQLite-backed) + wire it to a bunadmin admin.
+Boot a self-hosted Directus (SQLite-backed) + wire it to a dashin admin.
 
 ## One command
 
@@ -25,7 +25,7 @@ Create the demo collection once in the Directus data studio:
 ## Then: generate the admin
 
 ```bash
-bunadmin new my-admin && cd my-admin
+dashin new my-admin && cd my-admin
 ```
 
 `.env`:

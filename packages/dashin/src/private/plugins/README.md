@@ -2,4 +2,4 @@ Directory `private/plugins` has the same function as `[real-project]/plugins/`, 
 
 All plugins under this directory need to be imported "initData" in `plugin/index.ts`.
 
-`plugin/pluginsData.ts` will be automatically generated every time `bunadmin` start.
+`plugin/pluginsData.ts` will be automatically generated every time `dashin` start.

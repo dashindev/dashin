@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command bunadmin flagship demo: PocketBase + seed + a generated admin.
+# One-command dashin flagship demo: PocketBase + seed + a generated admin.
 #
 #   ./start.sh            # downloads PocketBase, seeds it, serves on :8090
 #
@@ -49,11 +49,11 @@ cat <<EOF
   admin: ${ADMIN_EMAIL} / ${ADMIN_PW}   demo user: demo / bunadmin123
 
 Next — in another terminal:
-  bunadmin new my-admin && cd my-admin
+  dashin new my-admin && cd my-admin
   # .env:
   #   VITE_AUTH_PLUGIN=@dashin-dev/auth-pocketbase
   #   VITE_AUTH_URL=http://127.0.0.1:${PB_PORT}
-  bunadmin ai generate --url http://127.0.0.1:${PB_PORT} --collection posts \\
+  dashin ai generate --url http://127.0.0.1:${PB_PORT} --collection posts \\
     --token \$(curl -s -X POST http://127.0.0.1:${PB_PORT}/api/admins/auth-with-password \\
       -H 'Content-Type: application/json' \\
       -d '{"identity":"${ADMIN_EMAIL}","password":"${ADMIN_PW}"}' | sed -n 's/.*"token":"\\([^"]*\\)".*/\\1/p')

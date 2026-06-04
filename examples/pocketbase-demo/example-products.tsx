@@ -3,7 +3,7 @@
  * plugin). Two schemas under one plugin → a multi-level menu (see
  * `example-menu.ts`). Shows a numeric and a boolean column + bulk delete.
  *
- * Drop into src/plugins/bunadmin-plugin-xbuilder-blog/products/index.tsx.
+ * Drop into src/plugins/dashin-plugin-dashin-blog/products/index.tsx.
  */
 import React, { createRef } from "react"
 import {
@@ -20,7 +20,7 @@ import {
   bulkDeleteCtrl
 } from "@dashin-dev/source-pocketbase"
 
-const theme = { bunadmin: { iconColor: "#8f9bb3" } }
+const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 interface Product {
   id: string

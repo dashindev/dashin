@@ -1,15 +1,15 @@
-# bunadmin Directus demo.
+# dashin Directus demo.
 #   docker compose up -d        # serves Directus on :8055
 # Uses SQLite (file-backed) — no external DB needed.
 services:
   directus:
     image: directus/directus:11
-    container_name: bunadmin-demo-directus
+    container_name: dashin-demo-directus
     ports:
       - "8055:8055"
     environment:
-      - KEY=bunadmin-demo-key-change-me
-      - SECRET=bunadmin-demo-secret-change-me
+      - KEY=dashin-demo-key-change-me
+      - SECRET=dashin-demo-secret-change-me
       - DB_CLIENT=sqlite3
       - DB_FILENAME=/directus/database/data.db
       - ADMIN_EMAIL=admin@bunadmin.test

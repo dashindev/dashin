@@ -2,10 +2,10 @@
   <configuration default="false" name="Dockerfile (static demo - blog)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
     <deployment type="dockerfile">
       <settings>
-        <option name="imageTag" value="xbuilder/bunadmin:static-demo-blog" />
+        <option name="imageTag" value="dashin/dashin:static-demo-blog" />
         <option name="buildCliOptions" value="" />
         <option name="command" value="" />
-        <option name="containerName" value="bunadmin-static-demo-blog" />
+        <option name="containerName" value="dashin-static-demo-blog" />
         <option name="entrypoint" value="" />
         <option name="commandLineOptions" value="" />
         <option name="sourceFilePath" value="packages/dashin/Dockerfile" />

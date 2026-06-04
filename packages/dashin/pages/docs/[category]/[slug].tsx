@@ -15,7 +15,7 @@ import Error from "@/private/Error"
 
 const prismCss = "/assets/css/prism.css"
 
-const REMOTE_BRANCH = "https://github.com/xbuilder/dashin/blob/master"
+const REMOTE_BRANCH = "https://github.com/dashindev/dashin/blob/master"
 
 export default function DocsCategorySlug() {
   const router = useRouter()

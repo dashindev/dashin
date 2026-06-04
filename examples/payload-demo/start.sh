@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command bunadmin demo: Payload CMS + SQLite.
+# One-command dashin demo: Payload CMS + SQLite.
 #
 #   ./start.sh            # installs Payload, seeds it, serves on :3001
 #
@@ -18,7 +18,7 @@ if [ ! -f "package.json" ]; then
   echo "→ scaffolding Payload CMS project ..."
   cat > package.json <<'PKG'
 {
-  "name": "bunadmin-payload-demo",
+  "name": "dashin-payload-demo",
   "private": true,
   "type": "module",
   "scripts": {
@@ -49,7 +49,7 @@ import { sqliteAdapter } from "@payloadcms/db-sqlite"
 import path from "path"
 
 export default buildConfig({
-  secret: process.env.PAYLOAD_SECRET || "bunadmin-demo-secret-change-me",
+  secret: process.env.PAYLOAD_SECRET || "dashin-demo-secret-change-me",
   db: sqliteAdapter({ url: `file:${path.resolve(__dirname, "data.db")}` }),
   collections: [
     {

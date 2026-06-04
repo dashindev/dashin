@@ -16,11 +16,11 @@
       <excludeFolder url="file://$MODULE_DIR$/packages/dashin/lib" />
       <excludeFolder url="file://$MODULE_DIR$/packages/dashin/out" />
       <excludeFolder url="file://$MODULE_DIR$/packages/dashin/src/.dashin" />
-      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-auth-buncms/lib" />
-      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-auth-mesh/lib" />
-      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-auth-strapi/lib" />
-      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-plugin-example-blog/lib" />
-      <excludeFolder url="file://$MODULE_DIR$/plugins/bunadmin-upload-strapi/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/dashin-auth-buncms/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/dashin-auth-mesh/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/dashin-auth-strapi/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/dashin-plugin-example-blog/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins/dashin-upload-strapi/lib" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

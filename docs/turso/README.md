@@ -18,7 +18,7 @@ yarn add @dashin-dev/source-turso
 VITE_MAIN_URL=https://<your-db>.turso.io
 ```
 
-Auth uses the bunadmin stored token (a Turso DB auth token) as
+Auth uses the dashin stored token (a Turso DB auth token) as
 `Authorization: Bearer …`.
 
 ## Use in a schema

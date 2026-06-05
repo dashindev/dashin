@@ -29,18 +29,23 @@ This is what makes a **100%-free, all-Cloudflare** Dashin demo possible: D1
 
 ## Deploy (your Cloudflare account)
 
+Keep your account-specific `database_id` **out of git** — put it in a gitignored
+`wrangler.local.jsonc` and pass `-c` on every remote command:
+
 ```bash
 cd workers/d1-demo-api
 npm install
 
-npx wrangler d1 create dashin-demo          # paste database_id into wrangler.jsonc
-npx wrangler d1 execute dashin-demo --remote --file=schema.sql
-npx wrangler secret put RESET_TOKEN          # required — gates POST /reset
-npx wrangler deploy
+npx wrangler d1 create dashin-demo                 # note the database_id
+cp wrangler.jsonc wrangler.local.jsonc             # gitignored; put your real id here
+npx wrangler d1 execute dashin-demo --remote --file=schema.sql -c wrangler.local.jsonc
+npx wrangler secret put RESET_TOKEN -c wrangler.local.jsonc   # required — gates POST /reset
+npx wrangler deploy -c wrangler.local.jsonc
 curl -X POST https://<worker-url>/reset -H "Authorization: Bearer <token>"   # initial seed
 ```
 
-Then point the Dashin demo frontend at the Worker URL via `VITE_MAIN_URL`.
+Then point the Dashin demo frontend at the Worker URL via `VITE_MAIN_URL`
+(set it in the frontend's gitignored `.env.local`, not in any committed file).
 
 ## Local development
 

@@ -1,13 +1,17 @@
 // Dashin D1 demo gateway Worker.
 //
-// Setup:
+// Setup (keep your account-specific database_id OUT of this committed file):
 //   cd workers/d1-demo-api && npm install
-//   npx wrangler d1 create dashin-demo      # put YOUR database_id below
-//                                           # (it's account-specific — don't commit a real one)
-//   npx wrangler d1 execute dashin-demo --remote --file=schema.sql
-//   npx wrangler secret put RESET_TOKEN     # optional: gate POST /reset
-//   npx wrangler deploy
+//   npx wrangler d1 create dashin-demo            # note the database_id
+//   cp wrangler.jsonc wrangler.local.jsonc        # gitignored override
+//   # ...put your real database_id in wrangler.local.jsonc, then use -c on every
+//   #    remote command:
+//   npx wrangler d1 execute dashin-demo --remote --file=schema.sql -c wrangler.local.jsonc
+//   npx wrangler secret put RESET_TOKEN -c wrangler.local.jsonc   # gate POST /reset
+//   npx wrangler deploy -c wrangler.local.jsonc
 //   curl -X POST https://<worker-url>/reset -H "Authorization: Bearer <token>"
+//
+// (Local dev — `wrangler dev --local` — works with the placeholder id as-is.)
 {
   "name": "dashin-d1-demo-api",
   "main": "src/index.ts",

@@ -46,4 +46,5 @@ jobs:
       # seeds within 30 min). Skipped unless GATEWAY_URL + RESET_TOKEN are set.
       - name: Reseed now (optional)
         if: ${{ env.GATEWAY_URL != '' && env.RESET_TOKEN != '' }}
-        run: curl -fsS -X POST "$GATEWAY_URL/reset" -H "Authorization: Bearer $RESET_TOKEN"
+        run: |
+          curl -fsS -X POST "$GATEWAY_URL/reset" -H "Authorization: Bearer $RESET_TOKEN"

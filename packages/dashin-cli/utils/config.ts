@@ -1,14 +1,11 @@
 import { resolve } from "path"
 
-/** Home path
-  OS X - '/Users/user/Library/Preferences'
-  Windows 8 - 'C:\Users\user\AppData\Roaming'
-  Windows XP - 'C:\Documents and Settings\user\Application Data'
-  Linux - '/home/user/.local/share'
+/**
+ * Absolute path to this CLI package's root — the directory that contains
+ * `templates/`. Resolved from the compiled file's own location (this file ships
+ * as `lib/utils/config.js`, so `../..` is the package root), which works for
+ * every install method: `npx`, global, and local. The previous hardcoded global
+ * path (`<home>/npm/node_modules/dashin-cli`) only resolved in one specific
+ * layout and broke `dashin new` / `plugin` / `schema` from npm.
  */
-const homePath = process.env.APPDATA || process.env.HOME + "/.local/share"
-
-export const DASHIN_CLI_PATH =
-  process.platform == "darwin"
-    ? "/usr/local/lib/node_modules/dashin-cli"
-    : resolve(homePath, "npm/node_modules/dashin-cli")
+export const DASHIN_CLI_PATH = resolve(__dirname, "..", "..")

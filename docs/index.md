@@ -12,6 +12,9 @@ hero:
       text: Get Started
       link: /guide/getting-started
     - theme: alt
+      text: Live Demo ↗
+      link: https://demo.dashin.dev
+    - theme: alt
       text: AI Generation
       link: /ai/
     - theme: alt

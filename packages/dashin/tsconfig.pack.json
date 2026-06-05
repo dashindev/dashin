@@ -27,6 +27,13 @@
     "src/serviceWorker.ts",
     "src/pages/**",
     "src/private/**",
-    "src/utils/pluginRegistry.ts"
+    "src/utils/pluginRegistry.ts",
+    "src/setupTests.ts",
+    "**/__tests__/**",
+    "**/__mocks__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
   ]
 }

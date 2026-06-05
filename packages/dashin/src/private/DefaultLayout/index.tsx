@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react"
 import LeftMenu from "../../components/LeftMenu"
 import TopBar from "../../components/TopBar"
-import StatBand from "../../components/regions/StatBand"
+import StatBand, { Stat } from "../../components/regions/StatBand"
+import { StatsContext } from "../../components/Table/statsContext"
 import SidebarFooter from "../../components/regions/SidebarFooter"
 import { DefaultLayoutProps } from "@/components"
 import { getLayout } from "@/utils/themes/layouts"
@@ -15,12 +16,33 @@ import { importPlugin, hasPlugin } from "@/utils/pluginRegistry"
  * @param props
  * @constructor
  */
+/** Placeholder cards shown while the table computes its stats. */
+function StatBandSkeleton() {
+  return (
+    <div className="grid gap-4 mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-content-box border border-bn-border rounded-bn p-4 shadow-bn animate-pulse"
+        >
+          <div className="h-3 w-20 rounded bg-bn-border" />
+          <div className="mt-3 h-6 w-12 rounded bg-bn-border" />
+          <div className="mt-4 h-2 w-full rounded-full bg-bn-border" />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function DefaultLayout(props: DefaultLayoutProps) {
   const { children, leftMenu, stats, sidebarStats, sidebarUpgrade } = props
   const cfg = getLayout(props.layout?.id)
   const layout = { ...cfg, ...props.layout }
   const [open, setOpen] = React.useState(true)
   const [phoneVertical, setPhoneVertical] = useState(false)
+  // Live stats pushed up from the <Table> (fallback to the `stats` prop).
+  const [liveStats, setLiveStats] = useState<Stat[] | null>(null)
+  const bandStats = liveStats ?? stats
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width:640px)")
@@ -90,10 +112,17 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
               : "calc(100vw - 73px)"
           }}
         >
-          {layout.statBand && stats && <StatBand stats={stats} />}
-          <div className="bg-content-box overflow-hidden rounded-bn h-full shadow">
-            {children}
-          </div>
+          <StatsContext.Provider value={{ setStats: setLiveStats }}>
+            {layout.statBand &&
+              (bandStats && bandStats.length ? (
+                <StatBand stats={bandStats} />
+              ) : (
+                liveStats === null && <StatBandSkeleton />
+              ))}
+            <div className="bg-content-box overflow-hidden rounded-bn h-full shadow">
+              {children}
+            </div>
+          </StatsContext.Provider>
         </div>
       </div>
     </div>

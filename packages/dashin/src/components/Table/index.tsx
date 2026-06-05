@@ -1,5 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from "react"
 import { TableProps } from "@/components"
+import { StatsContext } from "./statsContext"
+import { computeStats } from "./computeStats"
 import {
   Column,
   Query,
@@ -37,6 +45,7 @@ export default function Table<RowData extends object>(
   const { group: qGroup, name: qName } = router.query
   const { columns, data, title, editable, options, actions, detailPanel, onRowClick } = props
   const isRemote = typeof data === "function"
+  const { setStats } = useContext(StatsContext)
   const pageSize: number =
     options?.pageSize || DefaultProps.options?.pageSize || 10
   const showFiltering = !!options?.filtering
@@ -109,6 +118,24 @@ export default function Table<RowData extends object>(
     },
     [data, buildQuery]
   )
+
+  // Push real list-page stats (total + per-enum distribution) up to the
+  // StatBand. Recomputed when the table identity (title) changes, not on
+  // every filter/page change.
+  useEffect(() => {
+    if (!isRemote || !setStats) return
+    let cancelled = false
+    computeStats(cols, data as any, typeof title === "string" ? title : undefined).then(
+      s => {
+        if (!cancelled) setStats(s)
+      }
+    )
+    return () => {
+      cancelled = true
+      setStats(null)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title, isRemote])
 
   // initial / data change
   useEffect(() => {

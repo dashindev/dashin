@@ -63,20 +63,13 @@ const DynamicGroupNamePage = ({
     sidebarFooter: "upgrade" as const,
     buttons: "labeled" as const
   }
-  const stats = isListView
-    ? [
-        { label: "Total Posts", value: "128", delta: "All time posts", trend: "neutral" as const, spark: [4, 6, 5, 8, 7, 9, 11] },
-        { label: "Published", value: "45", delta: "35.2% of total", trend: "up" as const, spark: [2, 3, 5, 4, 6, 7, 8] },
-        { label: "Pending", value: "28", delta: "21.9% of total", trend: "neutral" as const, spark: [3, 2, 4, 3, 5, 4, 6] },
-        { label: "Rejected", value: "21", delta: "16.4% of total", trend: "down" as const, spark: [5, 4, 3, 4, 2, 3, 2] }
-      ]
-    : undefined
-
+  // The stat band is now data-driven: the <Table> computes real totals +
+  // per-status distribution and pushes them up via StatsContext (see
+  // components/Table). No hardcoded placeholders here.
   return (
     <DefaultLayout
       leftMenu={{ data: leftMenuData }}
       layout={layout}
-      stats={stats}
       sidebarUpgrade={{
         title: "Dashin Pro",
         description: "Unlock advanced features and premium components.",

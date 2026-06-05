@@ -86,7 +86,7 @@ export default function TopBar(props: TopBarProps) {
           <div className="flex-1 flex justify-center">
             <div className="w-full max-w-xl flex items-center gap-2 rounded-full border border-bn-border bg-content-bg px-4 py-2 text-sm text-icon-muted">
               <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current shrink-0"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 5 1.49-1.5-5-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg>
-              <span className="flex-1">Search posts, categories, users...</span>
+              <span className="flex-1">Search products, orders, customers...</span>
               <kbd className="text-xs text-icon-muted border border-bn-border rounded px-1.5 py-0.5">⌘K</kbd>
             </div>
           </div>

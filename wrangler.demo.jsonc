@@ -1,11 +1,13 @@
 // Cloudflare Workers (static assets) config for the Dashin DEMO app.
-// The demo is the admin SPA built from packages/dashin with the default
-// auth-local plugin — fully self-contained (no backend; login admin / dashin,
-// data seeded into the browser's IndexedDB).
+// The demo is the admin SPA built from packages/dashin (login admin / dashin via
+// the client-side auth-local plugin). It runs as a live e-commerce store backed
+// by Cloudflare D1 through the d1-demo-api gateway Worker — point the build at it
+// with VITE_MAIN_URL in a gitignored packages/dashin/.env.local (account-specific
+// URL stays out of git). Without that var the SPA simply has no remote data.
 //
 // Deploy (from the repo root):
 //   yarn install
-//   yarn tsc:build && yarn workspace @dashin-dev/dashin build
+//   yarn tsc:build && yarn workspace @dashin-dev/dashin build   # reads .env.local
 //   npx wrangler deploy -c wrangler.demo.jsonc
 //
 // In the Cloudflare "Workers Builds" UI use:

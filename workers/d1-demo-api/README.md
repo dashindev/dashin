@@ -17,7 +17,7 @@ This is what makes a **100%-free, all-Cloudflare** Dashin demo possible: D1
 
 **Safety / anti-abuse (this is a public, write-enabled API):**
 - **Per-IP rate limit** — `RATE_LIMITER` binding, 30 POSTs / 10s per client IP (429 over that). Caps request floods; Cloudflare's automatic DDoS protection covers volumetric attacks.
-- **SQL guard** — only `SELECT/INSERT/UPDATE/DELETE` on `posts`/`products`; no DDL, multi-statements or comments; statement length ≤ 2000; **`SELECT` must carry a `LIMIT` ≤ 200** (no full-table scans); ≤ 64 bound args.
+- **SQL guard** — only `SELECT/INSERT/UPDATE/DELETE` on the allow-listed store tables (`categories`, `products`, `customers`, `orders`); no DDL, multi-statements or comments; statement length ≤ 2000; an oversized literal `LIMIT` (> 200) is rejected; ≤ 64 bound args.
 - **Write cap** — `INSERT` is refused once a table hits 500 rows, so storage / the D1 write budget can't be inflated.
 - **`/reset` requires `RESET_TOKEN`** (Bearer); the cron resets without it.
 - **30-min re-seed cron** reverts any change.
@@ -54,5 +54,5 @@ npm install
 npx wrangler d1 execute dashin-demo --local --file=schema.sql   # create local tables
 npx wrangler dev                                                # http://localhost:8787
 curl -X POST localhost:8787/reset                               # seed (no token locally)
-curl -X POST localhost:8787/query -d '{"sql":"SELECT * FROM \"posts\"","args":[]}'
+curl -X POST localhost:8787/query -d '{"sql":"SELECT * FROM \"orders\" LIMIT 5","args":[]}'
 ```

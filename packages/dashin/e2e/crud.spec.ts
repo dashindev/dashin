@@ -43,9 +43,11 @@ test("sign-in form is reachable (best-effort) without fatal errors", async ({
   expect(errors.filter(e => fatalRe.test(e))).toHaveLength(0)
 })
 
-test("local table route renders without fatal errors", async ({ page }) => {
+test("entity table route renders without fatal errors", async ({ page }) => {
   const errors = collectErrors(page)
-  await page.goto("/myblog/local")
+  // A D1 demo resource route (data load needs a backend; here we only assert the
+  // route mounts without the fatal plugin-resolution error class).
+  await page.goto("/d1/orders")
   await page.waitForLoadState("networkidle")
   await page.waitForTimeout(1500)
   expect(errors.filter(e => fatalRe.test(e))).toHaveLength(0)

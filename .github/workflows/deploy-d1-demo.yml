@@ -1,0 +1,49 @@
+name: Deploy D1 demo backend
+
+# Deploys the Cloudflare D1 gateway Worker (workers/d1-demo-api) from GitHub's
+# cloud — no local machine, and (unlike Workers Builds) no Cloudflare<->GitHub
+# account link required. Auth is a Cloudflare API token in repo secrets.
+#
+# Manual-only (Actions tab -> Run workflow, or `gh workflow run deploy-d1-demo.yml`)
+# to match ci.yml and avoid per-push spend.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN   token with Workers Scripts:Edit + D1:Edit + Account:Read
+#   CLOUDFLARE_ACCOUNT_ID  the demo account's id
+#   D1_DATABASE_ID         the dashin-demo D1 database id
+# Optional (for an immediate reseed instead of waiting for the 30-min cron):
+#   GATEWAY_URL            https://<gateway>.workers.dev   (the worker's URL)
+#   RESET_TOKEN            same value set as the worker's RESET_TOKEN secret
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-d1-demo-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: workers/d1-demo-api
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      D1_DATABASE_ID: ${{ secrets.D1_DATABASE_ID }}
+      GATEWAY_URL: ${{ secrets.GATEWAY_URL }}
+      RESET_TOKEN: ${{ secrets.RESET_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      # Injects D1_DATABASE_ID into a generated config and runs `wrangler deploy`.
+      - name: Deploy gateway Worker
+        run: bash scripts/ci-deploy.sh
+      # Optional immediate reseed (schema self-bootstraps; otherwise the cron
+      # seeds within 30 min). Skipped unless GATEWAY_URL + RESET_TOKEN are set.
+      - name: Reseed now (optional)
+        if: ${{ env.GATEWAY_URL != '' && env.RESET_TOKEN != '' }}
+        run: curl -fsS -X POST "$GATEWAY_URL/reset" -H "Authorization: Bearer $RESET_TOKEN"

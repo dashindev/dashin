@@ -60,11 +60,13 @@ See [`docs/pocketbase/`](docs/pocketbase/).
 
 ## Online demo
 
-[dashin.dev](https://dashin.dev/)
+**[demo.dashin.dev](https://demo.dashin.dev)** — a full e-commerce admin (dashboard
++ charts, products, orders, customers) running 100% free on Cloudflare D1.
 
 - Username: `admin`
 - Password: `dashin`
 
+Fully editable; the demo data resets every 30 minutes.
 [More details](https://dashin.dev/guide/demo)
 
 ## Development

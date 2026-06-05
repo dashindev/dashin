@@ -3,8 +3,13 @@
 ![Dashin — the plugin-based React admin scaffold](assets/banner.png)
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Live demo](https://img.shields.io/badge/live%20demo-demo.dashin.dev-6366f1.svg)](https://demo.dashin.dev)
 [![Docs](https://img.shields.io/badge/docs-dashin.dev-00d68f.svg)](https://dashin.dev)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/dashindev/dashin/pulls)
+
+> **▶ Try the live demo — [demo.dashin.dev](https://demo.dashin.dev)** — a full e-commerce
+> admin (dashboard + charts, products, orders, customers) running 100% free on Cloudflare D1.
+> Log in with `admin` / `dashin`; it's fully editable and resets every 30 minutes.
 
 **Dashin** is a scaffold to quickly build a `React` background management system. It is easy to use and can help you build a powerful background management panel. The app is powered by **Vite**, styled with **Tailwind CSS** + **Headless UI**, and uses **TipTap** for rich-text editing. If you have not used these before, don't worry — you can learn them quickly during actual use.
 
@@ -55,11 +60,13 @@ See [`docs/pocketbase/`](docs/pocketbase/).
 
 ## Online demo
 
-[dashin.dev](https://dashin.dev/)
+**[demo.dashin.dev](https://demo.dashin.dev)** — a full e-commerce admin (dashboard
++ charts, products, orders, customers) running 100% free on Cloudflare D1.
 
 - Username: `admin`
 - Password: `dashin`
 
+Fully editable; the demo data resets every 30 minutes.
 [More details](https://dashin.dev/guide/demo)
 
 ## Development

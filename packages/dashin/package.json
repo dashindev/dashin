@@ -1,8 +1,10 @@
 {
   "name": "@dashin-dev/dashin",
   "version": "2.0.0-alpha.0",
-  "publishConfig": { "access": "public" },
-  "description": "A simple graphql admin dashboard. Easy to expand with the flexible plugin. Graphql first, also supports api. Based on React, Redux, Tailwind CSS, Headless UI, Formik, I18N.",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "AI-assisted, plugin-based React admin dashboard scaffold — Vite + Tailwind + Headless UI, with schema-validated CRUD and backend connectors for PocketBase, Supabase, Appwrite, Directus, Strapi & GraphQL.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -87,15 +89,25 @@
     }
   },
   "keywords": [
-    "admin",
-    "graphql",
-    "react",
-    "react admin",
-    "tailwind",
-    "tailwind admin",
-    "plugin",
+    "react-admin",
+    "admin-dashboard",
+    "admin-panel",
+    "react-admin-dashboard",
+    "admin-ui",
     "dashboard",
-    "admin panel"
+    "crud",
+    "crud-generator",
+    "react",
+    "typescript",
+    "vite",
+    "tailwindcss",
+    "headless-ui",
+    "internal-tools",
+    "low-code",
+    "graphql",
+    "ai",
+    "plugin",
+    "scaffold"
   ],
   "homepage": "https://dashin.dev/",
   "browserslist": {

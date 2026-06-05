@@ -2,7 +2,8 @@
 //
 // Setup:
 //   cd workers/d1-demo-api && npm install
-//   npx wrangler d1 create dashin-demo      # paste the database_id below
+//   npx wrangler d1 create dashin-demo      # put YOUR database_id below
+//                                           # (it's account-specific — don't commit a real one)
 //   npx wrangler d1 execute dashin-demo --remote --file=schema.sql
 //   npx wrangler secret put RESET_TOKEN     # optional: gate POST /reset
 //   npx wrangler deploy
@@ -32,7 +33,7 @@
     {
       "binding": "DB",
       "database_name": "dashin-demo",
-      "database_id": "95cee212-fdbb-4b98-9c72-f1925d9ed522"
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
     }
   ]
 }

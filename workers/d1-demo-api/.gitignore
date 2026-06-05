@@ -2,3 +2,6 @@ node_modules
 .wrangler
 .dev.vars
 package-lock.json
+# Local deploy config holding your real, account-specific database_id.
+# Keep account values OUT of the committed wrangler.jsonc.
+wrangler.local.jsonc

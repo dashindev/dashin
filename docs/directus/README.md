@@ -1,4 +1,9 @@
-# Directus Connector
+---
+title: "Directus custom admin panel"
+description: "Build a custom React admin panel on Directus with Dashin. CRUD tables, filtering and sorting over the Directus Items API, themeable and plugin-based."
+---
+
+# Custom Directus admin panel with Dashin
 
 `@dashin-dev/source-directus` — use [Directus](https://directus.io) as the
 data source (list / filter / sort / CRUD / bulk via the Items REST API).

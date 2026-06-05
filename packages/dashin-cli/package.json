@@ -63,5 +63,20 @@
     "rules": {
       "react/prop-types": "off"
     }
-  }
+  },
+  "description": "Dashin CLI — scaffold an AI-assisted React admin dashboard (Vite + Tailwind) and generate plugins & schemas from your backend.",
+  "keywords": [
+    "dashin",
+    "react-admin",
+    "admin-dashboard",
+    "admin-panel",
+    "cli",
+    "scaffold",
+    "crud-generator",
+    "generator",
+    "react",
+    "vite",
+    "internal-tools",
+    "create-admin"
+  ]
 }

@@ -2,8 +2,9 @@ import { defineConfig } from "vitepress"
 
 export default defineConfig({
   title: "Dashin",
+  titleTemplate: ":title | Dashin — React admin dashboard",
   description:
-    "Vite + Tailwind React admin scaffold with AI-assisted, schema-validated generation.",
+    "Open-source React admin dashboard scaffold — Vite + Tailwind, plugin-based, with schema-validated CRUD and AI generation. Connectors for PocketBase, Supabase, Appwrite, Directus, Strapi & GraphQL.",
   lastUpdated: true,
   cleanUrls: true,
 
@@ -13,13 +14,13 @@ export default defineConfig({
     ["link", { rel: "icon", type: "image/svg+xml", href: "/logo.svg" }],
     ["meta", { name: "theme-color", content: "#3366ff" }],
     ["meta", { property: "og:type", content: "website" }],
-    ["meta", { property: "og:title", content: "Dashin" }],
+    ["meta", { property: "og:title", content: "Dashin — AI-assisted React admin dashboard scaffold" }],
     [
       "meta",
       {
         property: "og:description",
         content:
-          "Vite + Tailwind React admin scaffold with AI-assisted, schema-validated generation."
+          "Open-source React admin dashboard scaffold — Vite + Tailwind, plugin-based, with schema-validated CRUD and AI generation. Connectors for PocketBase, Supabase, Appwrite, Directus, Strapi & GraphQL."
       }
     ],
     ["meta", { property: "og:image", content: "https://dashin.dev/og.png" }],

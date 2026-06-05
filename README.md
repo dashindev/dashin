@@ -1,6 +1,6 @@
-# Dashin
+# Dashin — AI-assisted React admin dashboard scaffold
 
-![Dashin — the plugin-based React admin scaffold](assets/banner.png)
+![Dashin — AI-assisted, plugin-based React admin dashboard scaffold (Vite + Tailwind)](assets/banner.png)
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Live demo](https://img.shields.io/badge/live%20demo-demo.dashin.dev-6366f1.svg)](https://demo.dashin.dev)
@@ -11,7 +11,7 @@
 > admin (dashboard + charts, products, orders, customers) running 100% free on Cloudflare D1.
 > Log in with `admin` / `dashin`; it's fully editable and resets every 30 minutes.
 
-**Dashin** is a scaffold to quickly build a `React` background management system. It is easy to use and can help you build a powerful background management panel. The app is powered by **Vite**, styled with **Tailwind CSS** + **Headless UI**, and uses **TipTap** for rich-text editing. If you have not used these before, don't worry — you can learn them quickly during actual use.
+**Dashin** is an open-source, plugin-based **React admin dashboard** scaffold built on **Vite + Tailwind CSS + Headless UI**. Point it at your backend — **PocketBase, Supabase, Appwrite, Directus, Strapi, or GraphQL/REST** — and Dashin gives you a **schema-validated CRUD admin panel**: tables, forms, filtering/sorting, auth, and i18n, ready to ship. It also supports **AI generation** whose output is validated against your real schema, so even cheap models produce a working admin — never freeform code. Routes, menus, CRUD pages, and auth are all plugins, and TipTap powers rich-text editing.
 
 Dashin hopes to achieve as many function reuse as possible through simple development methods, so in each Dashin project, **common functions have been built**, such as dynamic routing, multi-level menus, **permission control, data management**, search filtering and sorting, CRUD, **file management, message notification**, documenting your code, etc. You only need to build your own plugin to call it, and the Dashin plugin is also easy to learn and use.
 

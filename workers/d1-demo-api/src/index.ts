@@ -179,7 +179,35 @@ export function guard(sql: string): string | null {
   return null
 }
 
+// Idempotent schema (mirrors schema.sql) so the Worker can bootstrap its own
+// tables — lets a fresh deploy (e.g. Cloudflare Workers Builds) come up with no
+// manual DDL: the reseed below creates anything missing, then fills it.
+const SCHEMA: string[] = [
+  `CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY, name TEXT NOT NULL, slug TEXT NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY, name TEXT NOT NULL, price REAL NOT NULL DEFAULT 0, stock INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL DEFAULT 'active', category_id INTEGER NOT NULL DEFAULT 1)`,
+  `CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL, country TEXT NOT NULL DEFAULT 'US', created_at TEXT NOT NULL DEFAULT (date('now')))`,
+  `CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY, customer_id INTEGER NOT NULL DEFAULT 1, total REAL NOT NULL DEFAULT 0, status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL DEFAULT (date('now')))`
+]
+
+async function ensureSchema(env: Env): Promise<void> {
+  // One-time cleanup of the pre-e-commerce demo tables.
+  await env.DB.exec("DROP TABLE IF EXISTS posts")
+  // The old `products` table had a different shape; if it predates the
+  // e-commerce schema (no `category_id`), drop it so the new CREATE applies.
+  try {
+    const info = await env.DB.prepare("PRAGMA table_info(products)").all()
+    const cols = (info.results || []) as Array<{ name: string }>
+    if (cols.length && !cols.some(c => c.name === "category_id")) {
+      await env.DB.exec("DROP TABLE IF EXISTS products")
+    }
+  } catch {
+    /* table doesn't exist yet — the CREATE below handles it */
+  }
+  for (const ddl of SCHEMA) await env.DB.exec(ddl)
+}
+
 async function reseed(env: Env): Promise<void> {
+  await ensureSchema(env)
   await env.DB.batch(SEED.map(sql => env.DB.prepare(sql)))
 }
 

@@ -47,6 +47,30 @@ curl -X POST https://<worker-url>/reset -H "Authorization: Bearer <token>"   # i
 Then point the Dashin demo frontend at the Worker URL via `VITE_MAIN_URL`
 (set it in the frontend's gitignored `.env.local`, not in any committed file).
 
+> **Schema is self-bootstrapping.** The Worker creates its tables (and migrates
+> the pre-e-commerce `posts`/`products`) on every reseed, so the
+> `d1 execute --file=schema.sql` step above is optional — a fresh deploy fills
+> itself on the next reseed/cron. `schema.sql` remains the human-readable source
+> of truth.
+
+## Continuous deploy — Cloudflare Workers Builds (no local machine)
+
+Deploy the gateway straight from GitHub, like the frontend. The committed
+`wrangler.jsonc` keeps a **placeholder** `database_id`; `scripts/ci-deploy.sh`
+injects the real id from a build variable at deploy time, so no account value is
+ever committed. In the Workers Builds project for this Worker set:
+
+| Setting | Value |
+|---------|-------|
+| Root directory | `workers/d1-demo-api` |
+| Build command | `npm install` |
+| Deploy command | `bash scripts/ci-deploy.sh` |
+| Variable | `D1_DATABASE_ID` = your `dashin-demo` D1 id |
+
+On the first deploy the Worker has no data until a reseed; the 30-min cron fills
+it automatically (or set `RESET_TOKEN` in the project's secrets and `POST /reset`
+once for an immediate seed). No `wrangler` runs on your machine.
+
 ## Local development
 
 ```bash

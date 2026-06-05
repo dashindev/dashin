@@ -13,7 +13,7 @@ import Type from "./types"
 
 const theme = { dashin: { iconColor: "#8f9bb3" } }
 
-export default function Posts() {
+export default function Orders() {
   const { t } = useTranslation("table")
   const tableRef = createRef()
 
@@ -28,7 +28,7 @@ export default function Posts() {
         icons={tableIcons({ theme })}
         options={{ ...DefaultProps.options, filtering: true }}
         data={async (tableQuery: any) =>
-          await dataCtrl({ t, tableQuery, path: SchemaName, searchField: "title" })
+          await dataCtrl({ t, tableQuery, path: SchemaName, searchField: "status" })
         }
         editable={editableCtrl({ t, SchemaName })}
         actions={[bulkDeleteCtrl({ SchemaName, t, tableRef })]}

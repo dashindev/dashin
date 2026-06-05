@@ -2,5 +2,7 @@ export default interface Type {
   id: number
   name: string
   price: number
-  in_stock: number
+  stock: number
+  status: string
+  category_id: number
 }

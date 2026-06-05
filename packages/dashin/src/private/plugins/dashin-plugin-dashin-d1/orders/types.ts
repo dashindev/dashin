@@ -1,6 +1,7 @@
 export default interface Type {
   id: number
-  title: string
+  customer_id: number
+  total: number
   status: string
-  views: number
+  created_at: string
 }

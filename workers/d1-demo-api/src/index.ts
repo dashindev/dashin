@@ -27,7 +27,7 @@ export interface Env {
   RATE_LIMITER: { limit(opts: { key: string }): Promise<{ success: boolean }> }
 }
 
-const ALLOWED_TABLES = ["posts", "products"]
+const ALLOWED_TABLES = ["categories", "products", "customers", "orders"]
 const MAX_SQL_LEN = 2000
 const SELECT_MAX_LIMIT = 200
 const MAX_ROWS_PER_TABLE = 500
@@ -37,18 +37,98 @@ const MAX_ROWS_PER_TABLE = 500
 const ORIGIN_RE =
   /^https:\/\/dashin-demo\.[a-z0-9-]+\.workers\.dev$|^https:\/\/demo\.dashin\.dev$|^http:\/\/(localhost|127\.0\.0\.1):3000$/
 
-/** The seed = single source of truth for demo data. Run on reset + cron. */
+/**
+ * The seed = single source of truth for demo data (an e-commerce store).
+ * Run on reset + the 30-min cron. `created_at` uses relative dates so the data
+ * is always "recent" → real, always-fresh trend charts on the dashboard.
+ */
 const SEED: string[] = [
-  `DELETE FROM posts`,
+  `DELETE FROM orders`,
   `DELETE FROM products`,
-  `INSERT INTO posts (title, status, views) VALUES
-     ('Welcome to the Dashin × Cloudflare D1 demo', 'published', 1280),
-     ('Edit me — everything resets every 30 minutes', 'published', 342),
-     ('Draft: this admin runs 100% free on Cloudflare', 'draft', 12)`,
-  `INSERT INTO products (name, price, in_stock) VALUES
-     ('Starter', 0, 1),
-     ('Pro', 19, 1),
-     ('Enterprise', 99, 0)`
+  `DELETE FROM customers`,
+  `DELETE FROM categories`,
+
+  `INSERT INTO categories (id, name, slug) VALUES
+     (1,'Electronics','electronics'),
+     (2,'Apparel','apparel'),
+     (3,'Home & Kitchen','home-kitchen'),
+     (4,'Books','books'),
+     (5,'Toys & Games','toys-games'),
+     (6,'Sports & Outdoors','sports'),
+     (7,'Beauty','beauty'),
+     (8,'Grocery','grocery')`,
+
+  `INSERT INTO products (name, price, stock, status, category_id) VALUES
+     ('Wireless Earbuds Pro', 129.00, 84, 'active', 1),
+     ('4K Ultra Monitor 27"', 349.00, 23, 'active', 1),
+     ('Mechanical Keyboard', 89.00, 0, 'active', 1),
+     ('USB-C 7-in-1 Hub', 39.00, 140, 'active', 1),
+     ('Smart Watch Series 6', 199.00, 31, 'active', 1),
+     ('Bluetooth Speaker Mini', 45.00, 60, 'draft', 1),
+     ('Noise-Cancelling Headphones', 159.00, 18, 'active', 1),
+     ('Cotton Crew T-Shirt', 19.00, 220, 'active', 2),
+     ('Denim Jacket', 79.00, 44, 'active', 2),
+     ('Running Shoes', 110.00, 0, 'active', 2),
+     ('Merino Wool Beanie', 24.00, 95, 'active', 2),
+     ('Rain Shell', 129.00, 12, 'archived', 2),
+     ('Ceramic Mug Set (4)', 32.00, 73, 'active', 3),
+     ('Chef Knife 8"', 64.00, 27, 'active', 3),
+     ('Air Fryer 5L', 119.00, 15, 'active', 3),
+     ('Throw Blanket', 38.00, 51, 'active', 3),
+     ('The Pragmatic Programmer', 42.00, 130, 'active', 4),
+     ('Clean Code', 38.00, 88, 'active', 4),
+     ('Designing Data-Intensive Apps', 55.00, 40, 'active', 4),
+     ('Building Blocks Set (500)', 49.00, 64, 'active', 5),
+     ('Strategy Board Game', 35.00, 22, 'active', 5),
+     ('RC Drift Car', 89.00, 9, 'draft', 5),
+     ('Yoga Mat Pro', 45.00, 110, 'active', 6),
+     ('Adjustable Dumbbell Pair', 199.00, 6, 'active', 6),
+     ('Insulated Water Bottle', 28.00, 175, 'active', 6),
+     ('Vitamin C Serum', 26.00, 90, 'active', 7),
+     ('Lip Balm Trio', 14.00, 0, 'active', 7),
+     ('Single-Origin Coffee 1kg', 22.00, 200, 'active', 8),
+     ('Dark Chocolate 70% (6)', 18.00, 130, 'active', 8),
+     ('Organic Wildflower Honey', 16.00, 58, 'active', 8)`,
+
+  `INSERT INTO customers (name, email, country, created_at) VALUES
+     ('Ava Thompson','ava.thompson@example.com','US', date('now','-58 days')),
+     ('Liam Chen','liam.chen@example.com','CA', date('now','-55 days')),
+     ('Sofia Rossi','sofia.rossi@example.com','IT', date('now','-51 days')),
+     ('Noah Müller','noah.muller@example.com','DE', date('now','-49 days')),
+     ('Emma Dubois','emma.dubois@example.com','FR', date('now','-44 days')),
+     ('Oliver Smith','oliver.smith@example.com','UK', date('now','-41 days')),
+     ('Mia Garcia','mia.garcia@example.com','ES', date('now','-39 days')),
+     ('Lucas Silva','lucas.silva@example.com','BR', date('now','-35 days')),
+     ('Hana Sato','hana.sato@example.com','JP', date('now','-33 days')),
+     ('Arjun Patel','arjun.patel@example.com','IN', date('now','-30 days')),
+     ('Charlotte Brown','charlotte.brown@example.com','AU', date('now','-28 days')),
+     ('Ethan Wilson','ethan.wilson@example.com','US', date('now','-25 days')),
+     ('Isabella Moore','isabella.moore@example.com','US', date('now','-23 days')),
+     ('Mateo Lopez','mateo.lopez@example.com','MX', date('now','-21 days')),
+     ('Amelia Taylor','amelia.taylor@example.com','UK', date('now','-19 days')),
+     ('James Anderson','james.anderson@example.com','CA', date('now','-16 days')),
+     ('Yuki Tanaka','yuki.tanaka@example.com','JP', date('now','-14 days')),
+     ('Lena Schmidt','lena.schmidt@example.com','DE', date('now','-12 days')),
+     ('Hugo Martin','hugo.martin@example.com','FR', date('now','-9 days')),
+     ('Grace Kim','grace.kim@example.com','KR', date('now','-7 days')),
+     ('Daniel Nguyen','daniel.nguyen@example.com','US', date('now','-5 days')),
+     ('Freya Olsen','freya.olsen@example.com','NO', date('now','-3 days')),
+     ('Marco Bianchi','marco.bianchi@example.com','IT', date('now','-2 days')),
+     ('Zoe Clark','zoe.clark@example.com','AU', date('now','-1 days'))`,
+
+  // 56 orders, generated over the last 30 days; status weighted toward paid/shipped.
+  `INSERT INTO orders (customer_id, total, status, created_at)
+   WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM seq WHERE n < 56)
+   SELECT
+     (abs(random()) % 24) + 1,
+     round((abs(random()) % 48000) / 100.0 + 12.99, 2),
+     (CASE abs(random()) % 10
+        WHEN 0 THEN 'pending' WHEN 1 THEN 'pending'
+        WHEN 2 THEN 'paid' WHEN 3 THEN 'paid' WHEN 4 THEN 'paid' WHEN 5 THEN 'paid'
+        WHEN 6 THEN 'shipped' WHEN 7 THEN 'shipped' WHEN 8 THEN 'shipped'
+        ELSE 'cancelled' END),
+     date('now', '-' || (abs(random()) % 30) || ' days')
+   FROM seq`
 ]
 
 function corsHeaders(req: Request): Record<string, string> {

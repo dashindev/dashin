@@ -12,6 +12,10 @@
 //   curl -X POST https://<worker-url>/reset -H "Authorization: Bearer <token>"
 //
 // (Local dev — `wrangler dev --local` — works with the placeholder id as-is.)
+//
+// CI deploy (Cloudflare Workers Builds, no local machine): keep this placeholder
+// and let scripts/ci-deploy.sh inject the real id from the `D1_DATABASE_ID`
+// build variable. See README.md → "Continuous deploy".
 {
   "name": "dashin-d1-demo-api",
   "main": "src/index.ts",

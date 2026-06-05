@@ -1,4 +1,9 @@
-# Turso / libSQL Connector
+---
+title: "Turso / libSQL admin panel"
+description: "Build a Turso / libSQL admin panel with Dashin, a React admin dashboard with CRUD over your edge SQLite database. Filter, sort and edit your tables, no boilerplate."
+---
+
+# Turso / libSQL admin panel with Dashin
 
 `@dashin-dev/source-turso` — use [Turso](https://turso.tech) / libSQL
 (SQLite over HTTP) as the data source, with **full CRUD via SQL**.

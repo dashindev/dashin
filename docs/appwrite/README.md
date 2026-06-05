@@ -1,4 +1,9 @@
-# Appwrite Connector
+---
+title: "Appwrite admin panel"
+description: "Build an Appwrite admin panel with Dashin, a React admin dashboard over Appwrite Databases. CRUD, filter, sort and bulk actions on your collections, no custom UI."
+---
+
+# Appwrite admin panel with Dashin
 
 `@dashin-dev/source-appwrite` — use [Appwrite](https://appwrite.io)
 Databases as the data source for any dashin schema (list / filter / sort /

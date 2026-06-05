@@ -1,4 +1,9 @@
-# Supabase / Postgres Connector
+---
+title: "Supabase admin panel (Postgres)"
+description: "Build a Supabase / Postgres admin panel with Dashin, a React admin dashboard with CRUD tables, filtering and sorting over PostgREST. Connect your tables and ship."
+---
+
+# Supabase admin panel with Dashin
 
 `@dashin-dev/source-supabase` — use [Supabase](https://supabase.com)
 (PostgREST) as the data source for any dashin schema. Same table UI, backed by

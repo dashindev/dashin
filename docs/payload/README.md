@@ -1,4 +1,9 @@
-# Payload Connector
+---
+title: "Payload CMS admin panel"
+description: "Build a Payload CMS admin panel with Dashin, a React admin dashboard with CRUD, filter and sort over Payload’s REST API. A custom front-end for your collections."
+---
+
+# Payload admin panel with Dashin
 
 `@dashin-dev/source-payload` — use [Payload CMS](https://payloadcms.com) as
 the data source (list / filter / sort / CRUD / bulk via the REST API).

@@ -1,4 +1,9 @@
-# AI-Assisted Admin Generation
+---
+title: "AI admin panel generator"
+description: "Generate a React admin panel with AI using Dashin. Point it at your backend, the AI reads your schema and produces a validated CRUD admin. BYOK; cheap models work."
+---
+
+# AI admin panel generator (schema-validated)
 
 > Point dashin at your backend → AI introspects the schema → generates a
 > working, **validated** admin. Bring your own key (BYOK); cheap models work

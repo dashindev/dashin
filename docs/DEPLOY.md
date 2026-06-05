@@ -57,7 +57,7 @@ Cloudflare project from the docs (suggested domain: `demo.dashin.dev`).
 
 Because it's a yarn-workspace build (not a single VitePress folder), the
 account's "Build output directory" field doesn't fit — use the committed
-[`wrangler.demo.jsonc`](../wrangler.demo.jsonc), which declares the output via
+[`wrangler.demo.jsonc`](https://github.com/dashindev/dashin/blob/master/wrangler.demo.jsonc), which declares the output via
 `assets.directory`.
 
 ## One-time setup (Cloudflare dashboard)

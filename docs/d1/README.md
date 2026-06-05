@@ -1,4 +1,9 @@
-# Cloudflare D1
+---
+title: "Cloudflare D1 admin panel"
+description: "Build a Cloudflare D1 admin panel with Dashin, a React admin dashboard with CRUD over your D1 serverless SQLite database. See the live demo at demo.dashin.dev."
+---
+
+# Cloudflare D1 admin panel with Dashin
 
 Run Dashin **100% free on Cloudflare** with a real SQL database.
 [`@dashin-dev/source-d1`](https://github.com/dashindev/dashin/tree/master/packages/dashin-source-d1)

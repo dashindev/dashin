@@ -1,4 +1,9 @@
-# Using PocketBase with Dashin
+---
+title: "PocketBase admin panel"
+description: "Build a PocketBase admin panel with Dashin, an open-source React admin dashboard. Schema-validated CRUD, auth, filter and sort over PocketBase’s REST API."
+---
+
+# PocketBase admin panel with Dashin
 
 [PocketBase](https://pocketbase.io) is a single-binary backend (auth + collections
 + REST API, embedded SQLite) — a zero-build way to run a real auth + CMS backend

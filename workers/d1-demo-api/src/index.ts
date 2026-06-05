@@ -211,6 +211,20 @@ async function reseed(env: Env): Promise<void> {
   await env.DB.batch(SEED.map(sql => env.DB.prepare(sql)))
 }
 
+// De-duped one-time bootstrap so concurrent first requests (the dashboard fires
+// several queries at once) don't all reseed. Lets a freshly deployed Worker
+// self-seed on first use instead of waiting for the 30-min cron.
+let bootstrapPromise: Promise<void> | null = null
+function ensureSeeded(env: Env): Promise<void> {
+  if (!bootstrapPromise) {
+    bootstrapPromise = reseed(env).catch(e => {
+      bootstrapPromise = null // failed — let a later request retry
+      throw e
+    })
+  }
+  return bootstrapPromise
+}
+
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(req) })
@@ -255,6 +269,20 @@ export default {
           .all()
         return json({ rows: results ?? [], rowsAffected: meta?.changes ?? 0 }, req)
       } catch (e: any) {
+        // Self-heal: on a fresh/just-deployed DB the tables may not exist yet.
+        // Bootstrap (create + seed) once, then retry, so the first visitor sees
+        // data without waiting for the cron.
+        if (/no such table/i.test(String(e?.message || e))) {
+          try {
+            await ensureSeeded(env)
+            const { results, meta } = await env.DB.prepare(sql)
+              .bind(...args)
+              .all()
+            return json({ rows: results ?? [], rowsAffected: meta?.changes ?? 0 }, req)
+          } catch (e2: any) {
+            return json({ error: String(e2?.message || e2) }, req)
+          }
+        }
         return json({ error: String(e?.message || e) }, req)
       }
     }

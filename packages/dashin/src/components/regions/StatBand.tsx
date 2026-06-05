@@ -17,6 +17,14 @@ export interface Stat {
   icon?: React.ReactNode
   /** optional sparkline data points (mockup-3 mini chart) */
   spark?: number[]
+  /** optional distribution segments → a stacked mini bar chart */
+  dist?: DistSegment[]
+}
+
+export interface DistSegment {
+  label: string
+  value: number
+  color: string
 }
 
 export interface StatBandProps {
@@ -55,6 +63,36 @@ function Sparkline({ points, color }: { points: number[]; color: string }) {
   )
 }
 
+/** Stacked horizontal bar of distribution segments + a small legend. */
+function DistBar({ segments }: { segments: DistSegment[] }) {
+  const total = segments.reduce((s, x) => s + (x.value || 0), 0)
+  if (total <= 0) return null
+  const visible = segments.filter(s => s.value > 0)
+  return (
+    <div className="mt-3">
+      <div className="flex h-2 w-full overflow-hidden rounded-full bg-bn-border">
+        {visible.map((s, i) => (
+          <div
+            key={i}
+            style={{ width: `${(s.value / total) * 100}%`, background: s.color }}
+            title={`${s.label}: ${s.value}`}
+          />
+        ))}
+      </div>
+      {visible.length > 1 && (
+        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
+          {visible.map((s, i) => (
+            <span key={i} className="inline-flex items-center gap-1 text-[11px] text-icon-muted">
+              <span className="inline-block h-2 w-2 rounded-full" style={{ background: s.color }} />
+              {s.label}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function StatBand({ stats }: StatBandProps) {
   if (!stats || stats.length === 0) return null
   return (
@@ -80,8 +118,12 @@ export default function StatBand({ stats }: StatBandProps) {
               {s.delta}
             </div>
           )}
-          {s.spark && (
-            <Sparkline points={s.spark} color={sparkStroke[s.trend || "neutral"]} />
+          {s.dist && s.dist.length > 0 ? (
+            <DistBar segments={s.dist} />
+          ) : (
+            s.spark && (
+              <Sparkline points={s.spark} color={sparkStroke[s.trend || "neutral"]} />
+            )
           )}
         </div>
       ))}

@@ -77,10 +77,15 @@ export default function Dashboard() {
             run(newCustomersQuery(DAYS))
           ])
 
-        const firstErr = [daily, status, cats, recent, custTotal, prodTotal, prodActive, newCust]
-          .map(r => r.error)
-          .find(Boolean)
-        if (firstErr) throw new Error(typeof firstErr === "string" ? firstErr : JSON.stringify(firstErr))
+        // Degrade gracefully: a single transient failure (e.g. the gateway's
+        // per-IP rate limit on the query burst) shouldn't blank the whole
+        // dashboard — each section falls back to its empty data below. Only
+        // surface the error card if EVERY query failed (gateway unreachable).
+        const all = [daily, status, cats, recent, custTotal, prodTotal, prodActive, newCust]
+        if (all.every(r => r.error)) {
+          const e = all[0].error
+          throw new Error(typeof e === "string" ? e : JSON.stringify(e))
+        }
 
         const axis = buildDayAxis(new Date(), DAYS)
         const revSeries = mergeDailySeries(daily.rows, axis, "revenue")

@@ -119,9 +119,13 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
               ) : (
                 liveStats === null && <StatBandSkeleton />
               ))}
-            <div className="bg-content-box overflow-hidden rounded-bn h-full shadow">
-              {children}
-            </div>
+            {layout.contentCard === false ? (
+              children
+            ) : (
+              <div className="bg-content-box overflow-hidden rounded-bn h-full shadow">
+                {children}
+              </div>
+            )}
           </StatsContext.Provider>
         </div>
       </div>

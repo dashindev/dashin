@@ -60,6 +60,9 @@ const DynamicGroupNamePage = ({
   const layout = {
     ...LAYOUT_A,
     statBand: isListView,
+    // The dashboard (group undefined) carries its own cards — don't double-wrap
+    // it in the white content-box; let them sit on the page background.
+    contentCard: group !== undefined,
     sidebarFooter: "upgrade" as const,
     buttons: "labeled" as const
   }

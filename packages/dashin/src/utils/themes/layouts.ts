@@ -20,6 +20,12 @@ export interface LayoutConfig {
   buttons: "icon" | "labeled"
   /** Table row density. */
   density: "comfortable" | "compact"
+  /**
+   * Wrap page content in the white content-box card. Default (undefined/true)
+   * suits tables; set false for self-carded pages like the dashboard so their
+   * own cards sit on the page background instead of white-on-white.
+   */
+  contentCard?: boolean
 }
 
 export const LAYOUT_A: LayoutConfig = {

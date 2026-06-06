@@ -44,10 +44,12 @@ export default function SidebarFooter({
   // "upgrade"
   if (!upgrade) return null
   return (
-    <div className="m-3 p-4 rounded-bn border border-bn-border bg-primary/5">
+    <div className="m-3 p-4 rounded-bn border border-bn-border bg-primary/5 whitespace-normal">
       <div className="text-sm font-semibold text-foreground">{upgrade.title}</div>
       {upgrade.description && (
-        <p className="mt-1 text-xs text-icon-muted">{upgrade.description}</p>
+        <p className="mt-1 text-xs leading-snug text-icon-muted break-words">
+          {upgrade.description}
+        </p>
       )}
       {upgrade.cta && (
         <button

@@ -72,8 +72,10 @@ const DynamicGroupNamePage = ({
       layout={layout}
       sidebarUpgrade={{
         title: "Dashin Pro",
-        description: "Unlock advanced features and premium components.",
-        cta: "Upgrade Now"
+        description: "Advanced features for teams — coming soon.",
+        cta: "Join the waitlist",
+        onClick: () =>
+          window.open("https://dashin.dev/pro", "_blank", "noopener")
       }}
     >
       {render}

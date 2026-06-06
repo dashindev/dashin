@@ -48,6 +48,7 @@ export default defineConfig({
       { text: "Features", link: "/features/tables" },
       { text: "AI Generation", link: "/ai/" },
       { text: "Connectors", link: "/connectors/" },
+      { text: "Pro", link: "/pro" },
       { text: "GitHub", link: "https://github.com/dashindev/dashin" }
     ],
     sidebar: [

@@ -46,6 +46,18 @@ export default defineConfig(({ mode }) => {
     plugins: [dashinGenerator(mode), react()],
     define,
     server: { port: 3000 },
-    resolve: { alias: { "@": path.resolve(__dirname, "src") } }
+    resolve: { alias: { "@": path.resolve(__dirname, "src") } },
+    build: {
+      // @dashin-dev/* packages ship CommonJS. Rollup's default
+      // strictRequires:'auto' can evaluate some transitive CJS modules before
+      // their exports object exists, throwing "Object.defineProperty called on
+      // non-object" at runtime in the production build (the dev/esbuild path
+      // tolerates it). Forcing strictRequires wraps every CJS module so it
+      // initializes lazily in the correct order.
+      commonjsOptions: {
+        strictRequires: true,
+        transformMixedEsModules: true
+      }
+    }
   }
 })

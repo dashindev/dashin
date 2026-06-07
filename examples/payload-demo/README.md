@@ -26,11 +26,23 @@ docker compose up -d
 dashin new my-admin && cd my-admin
 ```
 
-`.env`:
+Install the Payload auth + data plugins:
+```bash
+yarn add @dashin-dev/auth-payload @dashin-dev/source-payload
+```
+
+`.env` (note: the URLs are the API **origin** — no `/api`. `source-payload` and
+`auth-payload` append the Payload `/api` segment themselves; setting
+`…/api` here causes a double `/api/api/...` and empty tables):
 ```
 VITE_AUTH_PLUGIN=@dashin-dev/auth-payload
+VITE_MAIN_URL=http://127.0.0.1:3001
 VITE_AUTH_URL=http://127.0.0.1:3001
 ```
+
+`@dashin-dev/auth-payload` signs in against a Payload auth collection
+(`POST /api/users/login` with email/password → JWT) and stores the token so
+`source-payload` sends it as a Bearer token on every request.
 
 Generate a validated admin table from the live `posts` collection (BYOK):
 ```bash

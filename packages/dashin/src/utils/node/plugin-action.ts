@@ -153,7 +153,11 @@ export async function importPluginModule(spec: string): Promise<any> {
 
 /** initData lives at the module root (CJS / re-export) or under default (ESM). */
 export function readInitData(mod: any): { data?: PluginData[] } | undefined {
-  return (mod && mod.initData) || (mod && mod.default && mod.default.initData)
+  return (
+    (mod && mod.initData) ||
+    (mod && mod.default && mod.default.initData) ||
+    undefined
+  )
 }
 
 /**

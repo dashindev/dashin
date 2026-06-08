@@ -3,17 +3,16 @@ import { Form, Formik, Field, ErrorMessage } from "formik"
 import validateController from "./controllers/validateController"
 import submitController from "./controllers/submitController"
 import { Values } from "./types"
-import { ENV, useTranslation, useRouter } from "@dashin-dev/dashin"
+import { ENV, useTranslation } from "@dashin-dev/dashin"
 
 export default function SignInContainer() {
   const { t } = useTranslation("plugins")
-  const router = useRouter()
 
   const handleOnSubmit = async (
     values: Values,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
-    await submitController({ t, values, setSubmitting, router })
+    await submitController({ t, values, setSubmitting })
   }
 
   const fieldClass =

@@ -1,5 +1,39 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **`@dashin-dev/auth-payload`** — auth plugin for a Payload CMS backend
+  (email/password → JWT, stored for `@dashin-dev/source-payload`). The Payload
+  demo referenced this package but it didn't exist.
+
+### Fixed
+
+- **Production build crash** — the Vite template now sets
+  `build.commonjsOptions.strictRequires`, so production builds no longer throw
+  `Object.defineProperty called on non-object` (Rollup evaluating a CommonJS
+  module before its exports object exists; the dev/esbuild path tolerated it).
+- **Dev startup crash** — the template `pluginRegistry` excludes the CommonJS
+  core package from the plugin-i18n `import.meta.glob`, fixing
+  `exports is not defined` (core i18n init already runs via the optimized core
+  bundle).
+- **Template theme** — the template adopts the core token system
+  (`tailwind.config` + `--bn-*` CSS variables, light/dark), so a freshly
+  scaffolded app's shell renders fully styled (sidebar, borders, radius,
+  gradient logo) and the theme toggle works.
+- **`source-payload` double `/api`** — `apiBase()` strips a trailing `/api`
+  from the configured base, so `VITE_MAIN_URL` set to either the origin or
+  origin + `/api` works (no more `/api/api/…` and empty tables).
+- **ESM plugin packages** — the plugin generator loads plugins via `require()`
+  with a dynamic-import fallback, so ESM (not just CommonJS) plugin packages are
+  supported.
+
+### Docs
+
+- Document `@dashin-dev/auth-payload`, the `VITE_MAIN_URL` = origin convention,
+  and CORS in the Payload guide + demo; add Payload to the README backend list.
+
 ## 2.0.0-alpha.0
 
 ### BREAKING — Rebranded BunAdmin → Dashin (`@dashin-dev`)

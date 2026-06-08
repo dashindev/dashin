@@ -1,9 +1,6 @@
+// German locale stub. Not yet listed in i18nMenus (see ./index.ts), so the app
+// falls back to English. Add `core` keys here (mirroring en.ts) to translate.
 const de = {
-  translations: {
-    "To get started, edit <1>src/App.js</1> and save to reload.":
-      "Starte in dem du, <1>src/App.js</1> editierst und speicherst.",
-    "Welcome to React": "Willkommen bei React und react-i18next",
-    welcome: "Hello <br/> <strong>World</strong>"
-  }
+  core: {}
 }
 export default de

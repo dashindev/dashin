@@ -132,3 +132,51 @@ export function getPlugins(pluginNames: string[]): PluginData[] {
 
   return pluginsData
 }
+
+/**
+ * NODE MODULE
+ * Load a plugin module supporting BOTH CommonJS and ESM packages. require() is
+ * tried first (fast, unchanged for CJS); if it throws (e.g. ERR_REQUIRE_ESM for
+ * an ESM plugin) we fall back to a dynamic import. The import is wrapped in
+ * Function() so tsc's CommonJS output doesn't down-level it back to require().
+ */
+const dynamicImport = (spec: string): Promise<any> =>
+  (Function("s", "return import(s)") as (s: string) => Promise<any>)(spec)
+
+export async function importPluginModule(spec: string): Promise<any> {
+  try {
+    return require("" + spec)
+  } catch (e) {
+    return await dynamicImport(spec)
+  }
+}
+
+/** initData lives at the module root (CJS / re-export) or under default (ESM). */
+export function readInitData(mod: any): { data?: PluginData[] } | undefined {
+  return (mod && mod.initData) || (mod && mod.default && mod.default.initData)
+}
+
+/**
+ * NODE MODULE
+ * Async variant of getPlugins that also supports ESM plugin packages.
+ */
+export async function getPluginsAsync(
+  pluginNames: string[]
+): Promise<PluginData[]> {
+  let pluginsData: PluginData[] = []
+  for (const pluginName of pluginNames) {
+    try {
+      const plugin = await importPluginModule(pluginName)
+      const initData = readInitData(plugin)
+      if (!initData || !initData.data) continue
+      pluginsData = [...pluginsData, ...initData.data]
+    } catch (e) {
+      console.error(
+        "cannot find 'initData' in the plugin, please export or check: " +
+          pluginName
+      )
+      console.error(e)
+    }
+  }
+  return pluginsData
+}

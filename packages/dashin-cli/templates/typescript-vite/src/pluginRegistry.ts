@@ -17,9 +17,17 @@ const pluginsDataTs = import.meta.glob("./.dashin/dynamic/pluginsData.ts", {
 const dynamicLazy = import.meta.glob("./.dashin/dynamic/**/*/index.js")
 // Local override/customized plugins (src/plugins/**).
 const localPlugins = import.meta.glob("./plugins/**/index.{ts,tsx}")
-// Plugin i18n bundles (installed @dashin-dev packages), consumed synchronously.
+// Plugin i18n bundles (installed @dashin-dev *plugin* packages), consumed
+// synchronously. The dashin CORE package is excluded: it ships CommonJS and is
+// served raw via this absolute-path glob (Vite can't CJS->ESM-interop it, so
+// the browser throws "exports is not defined"), and its i18n init already runs
+// through the optimized core bundle (TopBar/I18nMenu -> utils/i18n), so loading
+// it here is both broken and redundant.
 const pluginI18n = import.meta.glob(
-  "/node_modules/@dashin-dev/*/lib/utils/i18n/*.js",
+  [
+    "/node_modules/@dashin-dev/*/lib/utils/i18n/*.js",
+    "!/node_modules/@dashin-dev/dashin/**"
+  ],
   { eager: true }
 )
 

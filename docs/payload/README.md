@@ -20,7 +20,34 @@ yarn add @dashin-dev/source-payload
 VITE_MAIN_URL=https://your-payload-app.example.com
 ```
 
-Auth uses the dashin stored token as `Authorization: Bearer …`.
+`VITE_MAIN_URL` is the API **origin** (no `/api`) — the connector appends the
+Payload `/api` segment itself. A trailing `/api` is tolerated (so
+`https://app.example.com/api` also works) and won't produce a `/api/api/…`
+double-prefix.
+
+## Auth (sign-in)
+
+Use **`@dashin-dev/auth-payload`** to sign in against a Payload auth collection
+and store the JWT — which `source-payload` then sends as `Authorization: Bearer …`
+on every request.
+
+```bash
+yarn add @dashin-dev/auth-payload
+```
+
+`.env`:
+
+```
+VITE_AUTH_PLUGIN=@dashin-dev/auth-payload
+VITE_AUTH_URL=https://your-payload-app.example.com
+```
+
+It posts `email` / `password` to `POST /api/{collection}/login` (default
+collection `users`) and persists the returned token. The sign-in screen is shown
+automatically for unauthenticated users.
+
+> CORS: a browser SPA on a different origin needs the Payload server to allow it.
+> Set `cors` in your Payload config (e.g. the dashboard origin, or `'*'`).
 
 ## Use in a schema
 

@@ -1,5 +1,5 @@
-import { EditableCtrl, ENV, request, notice } from "@dashin-dev/dashin"
-import { plHeaders, apiPath } from "./plConfig"
+import { EditableCtrl, request, notice } from "@dashin-dev/dashin"
+import { plHeaders, apiPath, apiBase } from "./plConfig"
 
 interface Add<R> extends EditableCtrl { newData: R }
 interface Upd<R> extends EditableCtrl { newData: R; oldData: R; primaryKey?: string }
@@ -7,7 +7,7 @@ interface Del<R> extends EditableCtrl { oldData: R; primaryKey?: string }
 
 export async function addSer({ t, SchemaName, newData }: Add<any>) {
   const res = await request(apiPath(SchemaName), {
-    prefix: ENV.MAIN_URL || ENV.AUTH_URL, method: "POST", headers: await plHeaders(), data: newData
+    prefix: apiBase(), method: "POST", headers: await plHeaders(), data: newData
   })
   await notice(
     res && res.errors
@@ -19,7 +19,7 @@ export async function addSer({ t, SchemaName, newData }: Add<any>) {
 
 export async function updateSer({ t, SchemaName, newData, oldData, primaryKey = "id" }: Upd<any>) {
   const res = await request(apiPath(SchemaName, oldData[primaryKey]), {
-    prefix: ENV.MAIN_URL || ENV.AUTH_URL, method: "PATCH", headers: await plHeaders(), data: newData
+    prefix: apiBase(), method: "PATCH", headers: await plHeaders(), data: newData
   })
   await notice(
     res && res.errors
@@ -31,7 +31,7 @@ export async function updateSer({ t, SchemaName, newData, oldData, primaryKey = 
 
 export async function deleteSer({ t, SchemaName, oldData, primaryKey = "id" }: Del<any>) {
   const res = await request(apiPath(SchemaName, oldData[primaryKey]), {
-    prefix: ENV.MAIN_URL || ENV.AUTH_URL, method: "DELETE", headers: await plHeaders()
+    prefix: apiBase(), method: "DELETE", headers: await plHeaders()
   })
   await notice(
     res && res.errors

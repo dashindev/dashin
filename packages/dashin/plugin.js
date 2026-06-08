@@ -3,8 +3,10 @@ const fs = require("fs")
 const del = require("del")
 const {
   findPlugins,
-  getPlugins,
-  getPluginNames
+  getPluginsAsync,
+  getPluginNames,
+  importPluginModule,
+  readInitData
 } = require("./lib/utils/node/plugin-action")
 
 /**
@@ -50,9 +52,9 @@ module.exports = async ({
     fs.mkdirSync(dynamicPath)
   }
 
-  // Find plugins in package.json
+  // Find plugins in package.json (supports CommonJS and ESM plugin packages)
   const pluginNames = getPluginNames(packagePath)
-  const pluginsData = getPlugins(pluginNames)
+  const pluginsData = await getPluginsAsync(pluginNames)
 
   /**
    * Generate `index.js` in `.dashin/dynamic/`
@@ -124,10 +126,12 @@ export const data: IPluginData[] = [${arrayLine}]
       throw "modulesPath needs to contain `node_modules`!"
     }
 
-    let plugin
+    let initData
     try {
-      plugin = require(pathItem)
-      if (!plugin || !plugin.initData || !plugin.initData.data) return
+      // Load by package specifier (supports CommonJS and ESM plugins).
+      const plugin = await importPluginModule(pluginName)
+      initData = plugin && readInitData(plugin)
+      if (!initData || !initData.data) return
     } catch (e) {
       console.error("\n*************")
       console.error(
@@ -147,7 +151,7 @@ export const data: IPluginData[] = [${arrayLine}]
      * create files [plugin]/[group]/[name].js
      */
     try {
-      if (!plugin) return
+      if (!initData) return
       let fileName = pathItem.replaceAll(/\\/g, "/") // Fixing the PATH on Windows
       fileName = fileName.replace(/.*\//g, "")
       /**
@@ -157,7 +161,7 @@ export const data: IPluginData[] = [${arrayLine}]
       if (!fs.existsSync(savePluginPath)) {
         fs.mkdirSync(savePluginPath)
       }
-      plugin.initData.data.map(async dataItem => {
+      initData.data.map(async dataItem => {
         if (dataItem["ignore_schema"] || !dataItem["name"]) return
         /**
          * Recreate directory dynamic/[plugin]/[name]

@@ -1,5 +1,5 @@
-import { ENV, request, notice, BulkDeleteProps, BulkUpdateProps } from "@dashin-dev/dashin"
-import { plHeaders, apiPath } from "./plConfig"
+import { request, notice, BulkDeleteProps, BulkUpdateProps } from "@dashin-dev/dashin"
+import { plHeaders, apiPath, apiBase } from "./plConfig"
 
 async function batchNotice(t: any, n: number, ok: number, fail: number) {
   await notice({
@@ -18,7 +18,7 @@ export async function bulkDeleteSer<T extends object>({
   for (const item of data) {
     // @ts-ignore
     const res = await request(apiPath(SchemaName, item[primaryKey]), {
-      prefix: ENV.MAIN_URL || ENV.AUTH_URL, method: "DELETE", headers
+      prefix: apiBase(), method: "DELETE", headers
     })
     resList.push(res)
     res && res.errors ? fail++ : ok++
@@ -35,7 +35,7 @@ export async function bulkUpdateSer<T>({ t, SchemaName, changes }: BulkUpdatePro
   for (const c of list) {
     const { oldData, newData } = c as any
     const res = await request(apiPath(SchemaName, oldData.id), {
-      prefix: ENV.MAIN_URL || ENV.AUTH_URL, method: "PATCH", headers, data: newData
+      prefix: apiBase(), method: "PATCH", headers, data: newData
     })
     resList.push(res)
     res && res.errors ? fail++ : ok++

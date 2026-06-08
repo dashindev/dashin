@@ -2,10 +2,10 @@
  * Remote data controller (Payload CMS)
  * GET /api/{collection}?where[..]&sort&limit&page -> { docs, totalDocs }
  */
-import { ENV, request } from "@dashin-dev/dashin"
+import { request } from "@dashin-dev/dashin"
 import { ListService } from "../types"
 import { buildParams } from "./filter"
-import { plHeaders, apiPath } from "./plConfig"
+import { plHeaders, apiPath, apiBase } from "./plConfig"
 
 export default async function listSer<RowData extends object>({
   tableQuery,
@@ -26,7 +26,7 @@ export default async function listSer<RowData extends object>({
 
   const res = await request(apiPath(path), {
     params,
-    prefix: prefix || ENV.MAIN_URL || ENV.AUTH_URL,
+    prefix: apiBase(prefix),
     method: "GET",
     headers: await plHeaders()
   })

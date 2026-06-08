@@ -51,3 +51,23 @@ jobs:
       - name: E2E smoke (Playwright)
         working-directory: packages/dashin
         run: yarn e2e
+
+  # Consumer prod-build smoke: scaffold the Vite template against locally-packed
+  # @dashin-dev/* tarballs, run a production `vite build`, and headless-load the
+  # preview. Catches prod-only regressions unit tests can't (CJS init crashes,
+  # i18n glob, unstyled shell). Manual-only like the rest.
+  template-smoke:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn tsc:build
+      - name: Install Playwright browser (chromium)
+        run: npx playwright install --with-deps chromium
+      - name: Template prod-build smoke
+        run: node scripts/smoke/template-prod-smoke.mjs

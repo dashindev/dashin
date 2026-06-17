@@ -23,13 +23,14 @@ export default function DetailDrawer<RowData extends object>({
   onSaved
 }: DetailDrawerProps<RowData>) {
   const isCreate = mode === "create"
-  const [editing, setEditing] = useState(false)
-  const [draft, setDraft] = useState<RowData | null>(null)
+  const [editing, setEditing] = useState(isCreate)
+  const [draft, setDraft] = useState<RowData | null>(isCreate ? {} as RowData : row ? { ...row } : null)
   const [saving, setSaving] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
 
   useEffect(() => {
     setConfirmDelete(false)
+    setSaving(false)
     if (isCreate) {
       setEditing(true)
       setDraft({} as RowData)
@@ -147,9 +148,9 @@ export default function DetailDrawer<RowData extends object>({
               setField={setField}
               isCreate={isCreate}
             />
-          ) : (
-            <PreviewFields columns={visibleCols} row={row!} />
-          )}
+          ) : row ? (
+            <PreviewFields columns={visibleCols} row={row} />
+          ) : null}
         </div>
 
         {/* Footer */}

@@ -23,9 +23,11 @@ export default function DetailDrawer<RowData extends object>({
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState<RowData | null>(null)
   const [saving, setSaving] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   useEffect(() => {
     setEditing(false)
+    setConfirmDelete(false)
     setDraft(row ? { ...row } : null)
   }, [row])
 
@@ -133,15 +135,36 @@ export default function DetailDrawer<RowData extends object>({
         {/* Footer */}
         {editing && (
           <div className="flex items-center justify-between border-t border-bn-border px-6 py-4">
-            <div>
-              {canDelete && (
+            <div className="flex items-center gap-2">
+              {canDelete && !confirmDelete && (
                 <button
-                  onClick={handleDelete}
+                  onClick={() => setConfirmDelete(true)}
                   disabled={saving}
                   className="rounded-bn px-3 py-1.5 text-sm font-medium text-danger hover:bg-danger/10 transition-colors disabled:opacity-50"
                 >
                   Delete
                 </button>
+              )}
+              {canDelete && confirmDelete && (
+                <>
+                  <span className="text-xs text-danger">Delete?</span>
+                  <button
+                    onClick={handleDelete}
+                    disabled={saving}
+                    className="rounded-bn px-2 py-1 text-sm font-medium text-danger hover:bg-danger/10 transition-colors disabled:opacity-50"
+                    title="Confirm delete"
+                  >
+                    ✓
+                  </button>
+                  <button
+                    onClick={() => setConfirmDelete(false)}
+                    disabled={saving}
+                    className="rounded-bn px-2 py-1 text-sm font-medium text-icon-muted hover:bg-content-bg transition-colors disabled:opacity-50"
+                    title="Cancel"
+                  >
+                    ✕
+                  </button>
+                </>
               )}
             </div>
             <div className="flex items-center gap-2">

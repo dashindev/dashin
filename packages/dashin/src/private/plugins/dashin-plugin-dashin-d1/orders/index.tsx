@@ -1,4 +1,4 @@
-import React, { createRef, useMemo, useState } from "react"
+import React, { createRef, useCallback, useMemo, useState } from "react"
 import {
   Table,
   TableHead,
@@ -22,6 +22,12 @@ export default function Orders() {
   const cols = useMemo(() => SchemaColumns({ t }), [t])
   const editable = useMemo(() => editableCtrl({ t, SchemaName }), [t])
 
+  const data = useCallback(
+    async (tableQuery: any) =>
+      await dataCtrl({ t, tableQuery, path: SchemaName, searchField: "status" }) as any,
+    [t]
+  )
+
   const reload = () => setRefreshKey(k => k + 1)
 
   return (
@@ -35,9 +41,7 @@ export default function Orders() {
         style={DefaultProps.style}
         icons={tableIcons({ theme })}
         options={{ ...DefaultProps.options, filtering: true }}
-        data={async (tableQuery: any) =>
-          await dataCtrl({ t, tableQuery, path: SchemaName, searchField: "status" })
-        }
+        data={data}
         editable={editable}
         actions={[bulkDeleteCtrl({ SchemaName, t, tableRef })]}
         onRowClick={(_e, row) => row && setDrawerRow(row)}

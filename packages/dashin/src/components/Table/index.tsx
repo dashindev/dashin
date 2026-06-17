@@ -257,6 +257,7 @@ export default function Table<RowData extends object>(
     (hasRowActions ? 1 : 0) +
     (hasDetail ? 1 : 0)
   const [expanded, setExpanded] = useState<number | null>(null)
+  const [confirmingDelete, setConfirmingDelete] = useState<number | null>(null)
   const renderDetail = (row: RowData) => {
     if (!detailPanel) return null
     if (typeof detailPanel === "function") return detailPanel(row)
@@ -346,13 +347,18 @@ export default function Table<RowData extends object>(
                   <button onClick={save} className="mr-2 text-primary" title={t("saveTooltip")}>✓</button>
                   <button onClick={cancel} className="text-icon-muted" title={t("cancelTooltip")}>✕</button>
                 </>
+              ) : confirmingDelete === ri ? (
+                <>
+                  <button onClick={() => { setConfirmingDelete(null); remove(row) }} className="mr-2 text-danger" title={t("deleteTooltip")}>✓</button>
+                  <button onClick={() => setConfirmingDelete(null)} className="text-icon-muted" title={t("cancelTooltip")}>✕</button>
+                </>
               ) : (
                 <>
                   {editable?.onRowUpdate && (
                     <button onClick={() => startEdit(row)} className="mr-2 text-icon-muted hover:text-primary" title={t("editTooltip")}>✎</button>
                   )}
                   {editable?.onRowDelete && (
-                    <button onClick={() => remove(row)} className="text-icon-muted hover:text-danger" title={t("deleteTooltip")}>🗑</button>
+                    <button onClick={() => setConfirmingDelete(ri)} className="text-icon-muted hover:text-danger" title={t("deleteTooltip")}>🗑</button>
                   )}
                 </>
               )}

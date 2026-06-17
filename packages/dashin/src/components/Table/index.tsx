@@ -46,8 +46,10 @@ export default function Table<RowData extends object>(
   const { columns, data, title, editable, options, actions, detailPanel, onRowClick, onAdd } = props
   const isRemote = typeof data === "function"
   const { setStats } = useContext(StatsContext)
-  const pageSize: number =
+  const initialPageSize: number =
     options?.pageSize || DefaultProps.options?.pageSize || 10
+  const pageSizeOptions: number[] | undefined = options?.pageSizeOptions || DefaultProps.options?.pageSizeOptions
+  const [pageSize, setPageSize] = useState(initialPageSize)
   const showFiltering = !!options?.filtering
   const showSearch = options?.search !== false
   const showSelection = !!options?.selection
@@ -676,10 +678,13 @@ export default function Table<RowData extends object>(
       <Pagination
         page={page}
         pageCount={pageCount}
+        pageSize={pageSize}
+        pageSizeOptions={pageSizeOptions}
         from={from}
         to={to}
         total={totalCount}
         goto={goto}
+        onPageSizeChange={size => { setPageSize(size); setPage(0) }}
       />
     </div>
   )

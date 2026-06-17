@@ -46,7 +46,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     if (asPath === DynamicRoute || asPath === DynamicDocRoute) return
     ;(async () => {
       const authPluginName =
-        process.env.NEXT_PUBLIC_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
+        process.env.VITE_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
       const authPlugin: IAuthPlugin = await import(
         `../.dashin/dynamic/${authPluginName}`
       )

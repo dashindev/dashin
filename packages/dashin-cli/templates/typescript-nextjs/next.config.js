@@ -6,8 +6,15 @@ module.exports = () => {
    * @type {import('next').NextConfig}
    */
 
+  // Expose VITE_* env vars to the browser bundle (Next.js only auto-exposes
+  // NEXT_PUBLIC_*; dashin core reads VITE_* via process.env).
+  const viteEnv = Object.fromEntries(
+    Object.entries(process.env).filter(([k]) => k.startsWith("VITE_"))
+  )
+
   return {
     poweredByHeader: false,
+    env: viteEnv,
     generateBuildId: async () => {
       return "dashin-" + require("./package.json").version
     },

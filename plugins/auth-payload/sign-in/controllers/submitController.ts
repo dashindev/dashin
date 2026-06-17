@@ -4,7 +4,6 @@ import {
   BA_DB,
   AuthPrimary as Primary,
   notice,
-  Router,
   SETTING_NAMES
 } from "@dashin-dev/dashin"
 import { TFunction } from "i18next"
@@ -13,10 +12,9 @@ interface Props {
   t: TFunction
   values: Values
   setSubmitting: (isSubmitting: boolean) => void
-  router: Router
 }
 
-const submitController = async ({ t, values, setSubmitting, router }: Props) => {
+const submitController = async ({ t, values, setSubmitting }: Props) => {
   const res = await userSignInService(values)
   setSubmitting(false)
 
@@ -44,7 +42,11 @@ const submitController = async ({ t, values, setSubmitting, router }: Props) => 
       updated_at: Date.now()
     })
     await notice({ title: t("Sign in successful") })
-    router.push("/")
+    // Full navigation (not router.push): dashin's App reads
+    // window.location.pathname and only re-checks auth when it changes, so a
+    // client-side push to "/" from "/" leaves the sign-in form mounted until a
+    // manual refresh. A real navigation re-inits and clears isProtected.
+    window.location.assign("/")
   } else {
     await notice({
       title: t("Sign in failed"),

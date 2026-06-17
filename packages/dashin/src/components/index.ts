@@ -30,6 +30,8 @@ export { default as BunField } from "./Formik/BunField"
 export { default as Repeater } from "./Repeater"
 export { default as CoreContainer } from "./CoreContainer"
 export { default as ProTip } from "./ProTip"
+export { default as DetailDrawer } from "./DetailDrawer"
+export type { DetailDrawerProps } from "./DetailDrawer"
 
 export { default as LeftMenu } from "./LeftMenu"
 export { default as NestedList } from "./NestedMenu"

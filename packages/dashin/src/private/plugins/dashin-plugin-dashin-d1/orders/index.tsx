@@ -1,9 +1,10 @@
-import React, { createRef } from "react"
+import React, { createRef, useMemo, useState } from "react"
 import {
   Table,
   TableHead,
   tableIcons,
   TableDefaultProps as DefaultProps,
+  DetailDrawer,
   useTranslation
 } from "@dashin-dev/dashin"
 import { bulkDeleteCtrl, dataCtrl, editableCtrl } from "@dashin-dev/source-d1"
@@ -16,22 +17,37 @@ const theme = { dashin: { iconColor: "#8f9bb3" } }
 export default function Orders() {
   const { t } = useTranslation("table")
   const tableRef = createRef()
+  const [drawerRow, setDrawerRow] = useState<Type | null>(null)
+  const [refreshKey, setRefreshKey] = useState(0)
+  const cols = useMemo(() => SchemaColumns({ t }), [t])
+  const editable = useMemo(() => editableCtrl({ t, SchemaName }), [t])
+
+  const reload = () => setRefreshKey(k => k + 1)
 
   return (
     <>
       <TableHead title={t(SchemaLabel)} />
       <Table<Type>
+        key={refreshKey}
         tableRef={tableRef}
         title={t(SchemaLabel)}
-        columns={SchemaColumns({ t })}
+        columns={cols}
         style={DefaultProps.style}
         icons={tableIcons({ theme })}
         options={{ ...DefaultProps.options, filtering: true }}
         data={async (tableQuery: any) =>
           await dataCtrl({ t, tableQuery, path: SchemaName, searchField: "status" })
         }
-        editable={editableCtrl({ t, SchemaName })}
+        editable={editable}
         actions={[bulkDeleteCtrl({ SchemaName, t, tableRef })]}
+        onRowClick={(_e, row) => row && setDrawerRow(row)}
+      />
+      <DetailDrawer
+        row={drawerRow}
+        columns={cols}
+        editable={editable}
+        onClose={() => setDrawerRow(null)}
+        onSaved={reload}
       />
     </>
   )

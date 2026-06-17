@@ -49,10 +49,25 @@ export default function Table<RowData extends object>(
   const initialPageSize: number =
     options?.pageSize || DefaultProps.options?.pageSize || 10
   const pageSizeOptions: number[] | undefined = options?.pageSizeOptions || DefaultProps.options?.pageSizeOptions
-  const [pageSize, setPageSize] = useState(initialPageSize)
   const showFiltering = !!options?.filtering
   const showSearch = options?.search !== false
   const showSelection = !!options?.selection
+
+  const storeKey = qGroup && qName ? `dashin-table:${qGroup}/${qName}` : ""
+  const saved = useMemo(() => {
+    if (!storeKey) return null
+    try {
+      const raw = sessionStorage.getItem(storeKey)
+      return raw ? JSON.parse(raw) : null
+    } catch { return null }
+  }, [storeKey])
+
+  const [pageSize, setPageSize] = useState(saved?.pageSize || initialPageSize)
+  const [search, setSearch] = useState<string>(saved?.search || "")
+  const [filters, setFilters] = useState<Record<number, any>>(saved?.filters || {})
+  const [operators, setOperators] = useState<Record<number, string>>(saved?.operators || {})
+  const [orderField, setOrderField] = useState<string | undefined>(saved?.orderField)
+  const [orderDir, setOrderDir] = useState<Dir>(saved?.orderDir || "asc")
 
   // column metadata required by filter/edit selectors (material-table parity)
   const cols = useMemo(() => {
@@ -61,16 +76,25 @@ export default function Table<RowData extends object>(
     return list.filter(c => !c.hidden)
   }, [columns])
 
+  const orderBy = useMemo(
+    () => (orderField ? cols.find(c => c.field === orderField) : undefined),
+    [orderField, cols]
+  )
+
+  useEffect(() => {
+    if (!storeKey) return
+    try {
+      sessionStorage.setItem(storeKey, JSON.stringify({
+        pageSize, search, filters, operators, orderField, orderDir
+      }))
+    } catch { /* quota exceeded */ }
+  }, [storeKey, pageSize, search, filters, operators, orderField, orderDir])
+
   const [allRows, setAllRows] = useState<RowData[]>([])
   const [rows, setRows] = useState<RowData[]>([])
   const [page, setPage] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
-  const [search, setSearch] = useState("")
-  const [orderBy, setOrderBy] = useState<Column<RowData> | undefined>()
-  const [orderDir, setOrderDir] = useState<Dir>("asc")
-  const [filters, setFilters] = useState<Record<number, any>>({})
-  const [operators, setOperators] = useState<Record<number, string>>({})
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
   const [editing, setEditing] = useState<Editing<RowData>>(null)
   const [selected, setSelected] = useState<Set<number>>(new Set())
@@ -153,7 +177,7 @@ export default function Table<RowData extends object>(
   useEffect(() => {
     if (isRemote) loadRemote(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, orderBy, orderDir, filters, operators])
+  }, [search, orderBy, orderDir, filters, operators, pageSize])
 
   // local: derive filtered/sorted/paged rows
   useEffect(() => {
@@ -200,7 +224,7 @@ export default function Table<RowData extends object>(
   const toggleSort = (c: Column<RowData>) => {
     if (orderBy?.field === c.field) setOrderDir(d => (d === "asc" ? "desc" : "asc"))
     else {
-      setOrderBy(c)
+      setOrderField(c.field as string)
       setOrderDir("asc")
     }
   }
@@ -589,6 +613,7 @@ export default function Table<RowData extends object>(
                         )}
                         <input
                           type={c.type === "numeric" ? "number" : c.type === "date" || c.type === "datetime" ? "date" : "text"}
+                          value={filters[c.tableData!.id] ?? ""}
                           className="w-full rounded border border-bn-border bg-content-box text-foreground px-2 py-1 text-xs focus:border-primary focus:outline-none"
                           onChange={e => {
                             setPage(0)

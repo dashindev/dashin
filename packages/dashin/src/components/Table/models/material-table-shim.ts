@@ -118,6 +118,7 @@ export interface MaterialTableProps<RowData extends object> {
     | ((rowData: RowData) => ReactNode)
     | { icon?: any; tooltip?: string; render: (rowData: RowData) => ReactNode }[]
   onRowClick?: (event?: any, rowData?: RowData) => void
+  onAdd?: () => void
   // allow other material-table props without type errors
   [key: string]: any
 }

@@ -18,6 +18,7 @@ export default function Categories() {
   const { t } = useTranslation("table")
   const tableRef = createRef()
   const [drawerRow, setDrawerRow] = useState<Type | null>(null)
+  const [drawerMode, setDrawerMode] = useState<"view" | "create">("view")
   const [refreshKey, setRefreshKey] = useState(0)
   const cols = useMemo(() => SchemaColumns({ t }), [t])
   const editable = useMemo(() => editableCtrl({ t, SchemaName }), [t])
@@ -29,6 +30,8 @@ export default function Categories() {
   )
 
   const reload = () => setRefreshKey(k => k + 1)
+  const openCreate = () => { setDrawerRow(null); setDrawerMode("create") }
+  const closeDrawer = () => { setDrawerRow(null); setDrawerMode("view") }
 
   return (
     <>
@@ -44,13 +47,15 @@ export default function Categories() {
         data={data}
         editable={editable}
         actions={[bulkDeleteCtrl({ SchemaName, t, tableRef })]}
-        onRowClick={(_e, row) => row && setDrawerRow(row)}
+        onRowClick={(_e, row) => { if (row) { setDrawerMode("view"); setDrawerRow(row) } }}
+        onAdd={openCreate}
       />
       <DetailDrawer
         row={drawerRow}
         columns={cols}
         editable={editable}
-        onClose={() => setDrawerRow(null)}
+        mode={drawerMode}
+        onClose={closeDrawer}
         onSaved={reload}
       />
     </>

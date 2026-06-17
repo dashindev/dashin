@@ -43,7 +43,7 @@ export default function Table<RowData extends object>(
   const { t } = useTranslation("table")
   const router = useRouter()
   const { group: qGroup, name: qName } = router.query
-  const { columns, data, title, editable, options, actions, detailPanel, onRowClick } = props
+  const { columns, data, title, editable, options, actions, detailPanel, onRowClick, onAdd } = props
   const isRemote = typeof data === "function"
   const { setStats } = useContext(StatsContext)
   const pageSize: number =
@@ -248,7 +248,7 @@ export default function Table<RowData extends object>(
     reload()
   }
 
-  const canAdd = !!editable?.onRowAdd
+  const canAdd = !!editable?.onRowAdd || !!onAdd
   const hasRowActions = !!(editable?.onRowUpdate || editable?.onRowDelete)
   const hasDetail = !!detailPanel
   const colSpan =
@@ -450,7 +450,7 @@ export default function Table<RowData extends object>(
             )}
             {canAdd && (
               <button
-                onClick={startAdd}
+                onClick={onAdd || startAdd}
                 title={t("addTooltip")}
                 className="inline-flex items-center gap-1 rounded-bn bg-primary-gradient px-3 py-1.5 text-sm text-primary-foreground shadow-bn hover:opacity-90 transition-opacity"
               >

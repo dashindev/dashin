@@ -9,6 +9,7 @@ export interface DetailDrawerProps<RowData extends object> {
   row: RowData | null
   columns: Column<RowData>[]
   editable?: EditableData<RowData>
+  mode?: "view" | "create"
   onClose: () => void
   onSaved?: () => void
 }
@@ -17,22 +18,31 @@ export default function DetailDrawer<RowData extends object>({
   row,
   columns,
   editable,
+  mode = "view",
   onClose,
   onSaved
 }: DetailDrawerProps<RowData>) {
+  const isCreate = mode === "create"
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState<RowData | null>(null)
   const [saving, setSaving] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
 
   useEffect(() => {
-    setEditing(false)
     setConfirmDelete(false)
-    setDraft(row ? { ...row } : null)
-  }, [row])
+    if (isCreate) {
+      setEditing(true)
+      setDraft({} as RowData)
+    } else {
+      setEditing(false)
+      setDraft(row ? { ...row } : null)
+    }
+  }, [row, isCreate])
+
+  const open = isCreate || !!row
 
   useEffect(() => {
-    if (!row) return
+    if (!open) return
     document.body.style.overflow = "hidden"
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose() }
     document.addEventListener("keydown", onKey)
@@ -40,7 +50,7 @@ export default function DetailDrawer<RowData extends object>({
       document.body.style.overflow = ""
       document.removeEventListener("keydown", onKey)
     }
-  }, [row, onClose])
+  }, [open, onClose])
 
   const visibleCols = useMemo(
     () => columns.filter(c => !c.hidden && c.field),
@@ -54,11 +64,18 @@ export default function DetailDrawer<RowData extends object>({
   )
 
   const handleSave = async () => {
-    if (!draft || !editable?.onRowUpdate) return
+    if (!draft) return
     setSaving(true)
     try {
-      await editable.onRowUpdate(draft, row!)
+      if (isCreate) {
+        if (!editable?.onRowAdd) return
+        await editable.onRowAdd(draft)
+      } else {
+        if (!editable?.onRowUpdate) return
+        await editable.onRowUpdate(draft, row!)
+      }
       setEditing(false)
+      onClose()
       onSaved?.()
     } finally {
       setSaving(false)
@@ -78,9 +95,11 @@ export default function DetailDrawer<RowData extends object>({
   }
 
   const canEdit = !!editable?.onRowUpdate
-  const canDelete = !!editable?.onRowDelete
+  const canDelete = !isCreate && !!editable?.onRowDelete
 
-  if (!row) return null
+  if (!open) return null
+
+  const title = isCreate ? "New" : editing ? "Edit" : "Details"
 
   return (
     <>
@@ -96,7 +115,7 @@ export default function DetailDrawer<RowData extends object>({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-bn-border px-6 py-4">
           <h2 className="text-lg font-semibold text-foreground truncate">
-            {editing ? "Edit" : "Details"}
+            {title}
           </h2>
           <div className="flex items-center gap-2">
             {canEdit && !editing && (
@@ -126,9 +145,10 @@ export default function DetailDrawer<RowData extends object>({
               columns={visibleCols}
               data={draft}
               setField={setField}
+              isCreate={isCreate}
             />
           ) : (
-            <PreviewFields columns={visibleCols} row={row} />
+            <PreviewFields columns={visibleCols} row={row!} />
           )}
         </div>
 
@@ -170,6 +190,7 @@ export default function DetailDrawer<RowData extends object>({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => {
+                  if (isCreate) { onClose(); return }
                   setEditing(false)
                   setDraft(row ? { ...row } : null)
                 }}
@@ -183,7 +204,7 @@ export default function DetailDrawer<RowData extends object>({
                 disabled={saving}
                 className="rounded-bn bg-primary-gradient px-4 py-1.5 text-sm font-medium text-primary-foreground shadow-bn hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                {saving ? "Saving…" : "Save"}
+                {saving ? "Saving…" : isCreate ? "Create" : "Save"}
               </button>
             </div>
           </div>
@@ -217,18 +238,23 @@ function PreviewFields<RowData extends object>({
 function EditForm<RowData extends object>({
   columns,
   data,
-  setField
+  setField,
+  isCreate
 }: {
   columns: Column<RowData>[]
   data: RowData
   setField: (field: string, value: any) => void
+  isCreate?: boolean
 }) {
   return (
     <div className="space-y-4">
       {columns.map(col => {
         const field = col.field as string
         const value = (data as any)[field]
-        const readOnly = col.editable === "never"
+        const readOnly = !isCreate && col.editable === "never"
+        const hidden = isCreate && col.editable === "never"
+
+        if (hidden) return null
 
         return (
           <div key={field}>

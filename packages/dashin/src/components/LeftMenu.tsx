@@ -13,6 +13,7 @@ export interface LeftMenuProps {
   append?: ReactNode
   appendNested?: ReactNode
   prependSetting?: ReactNode
+  collapsed?: boolean
 }
 
 const LeftMenu = ({
@@ -22,20 +23,24 @@ const LeftMenu = ({
   prepend,
   append,
   appendNested,
-  prependSetting
+  prependSetting,
+  collapsed
 }: LeftMenuProps) => {
   return (
     <>
       {prepend}
-      {leftMenuData && <NestedList data={leftMenuData} />}
+      {leftMenuData && <NestedList data={leftMenuData} collapsed={collapsed} />}
       {appendNested}
       {prependSetting}
       {!offLeftSetting && ENV.ON_SETTING && (
         <>
-          <div className="px-4 pt-4 pb-1 text-[11px] font-semibold tracking-wider text-icon-muted uppercase">
-            System
-          </div>
-          <SettingMenu />
+          {!collapsed && (
+            <div className="px-4 pt-4 pb-1 text-[11px] font-semibold tracking-wider text-icon-muted uppercase">
+              System
+            </div>
+          )}
+          {collapsed && <div className="my-2 mx-3 border-t border-bn-border" />}
+          <SettingMenu collapsed={collapsed} />
         </>
       )}
       {append}

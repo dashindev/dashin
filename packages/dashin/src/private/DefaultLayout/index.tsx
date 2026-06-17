@@ -85,6 +85,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
           >
             <LeftMenu
               {...leftMenu}
+              collapsed={!open}
               append={
                 open && layout.sidebarFooter !== "none" ? (
                   <div className="mt-auto">

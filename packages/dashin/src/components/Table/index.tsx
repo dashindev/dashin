@@ -538,6 +538,33 @@ export default function Table<RowData extends object>(
                   <td key={c.tableData!.id} className="px-4 py-1">
                     {c.filtering === false ? null : c.filterComponent ? (
                       c.filterComponent({ columnDef: c, onFilterChanged })
+                    ) : c.lookup ? (
+                      <select
+                        value={filters[c.tableData!.id] ?? ""}
+                        onChange={e => {
+                          setPage(0)
+                          onFilterChanged(c.tableData!.id, e.target.value)
+                        }}
+                        className="w-full rounded border border-bn-border bg-content-box text-foreground px-2 py-1 text-xs focus:border-primary focus:outline-none"
+                      >
+                        <option value="">{t("All")}</option>
+                        {Object.entries(c.lookup).map(([k, v]) => (
+                          <option key={k} value={k}>{String(v)}</option>
+                        ))}
+                      </select>
+                    ) : c.type === "boolean" ? (
+                      <select
+                        value={filters[c.tableData!.id] ?? ""}
+                        onChange={e => {
+                          setPage(0)
+                          onFilterChanged(c.tableData!.id, e.target.value)
+                        }}
+                        className="w-full rounded border border-bn-border bg-content-box text-foreground px-2 py-1 text-xs focus:border-primary focus:outline-none"
+                      >
+                        <option value="">{t("All")}</option>
+                        <option value="true">✓</option>
+                        <option value="false">✗</option>
+                      </select>
                     ) : (
                       <div className="flex items-center gap-1">
                         {operatorOptions(c).length > 1 && (
@@ -559,7 +586,7 @@ export default function Table<RowData extends object>(
                           </select>
                         )}
                         <input
-                          type={c.type === "numeric" ? "number" : "text"}
+                          type={c.type === "numeric" ? "number" : c.type === "date" || c.type === "datetime" ? "date" : "text"}
                           className="w-full rounded border border-bn-border bg-content-box text-foreground px-2 py-1 text-xs focus:border-primary focus:outline-none"
                           onChange={e => {
                             setPage(0)

@@ -11,8 +11,8 @@
     "postinstall": "node ./postinstall.js"
   },
   "dependencies": {
-    "@dashin-dev/dashin": "^2.0.0-alpha.0",
-    "@dashin-dev/auth-local": "^2.0.0-alpha.0",
+    "@dashin-dev/dashin": "^2.0.0-alpha.4",
+    "@dashin-dev/auth-local": "^2.0.0-alpha.4",
     "next": "12.1.6"
   },
   "devDependencies": {

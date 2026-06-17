@@ -1,4 +1,4 @@
-# Dashin TypeScript CRA example
+# Dashin TypeScript Vite example
 
 ## How to use it?
 

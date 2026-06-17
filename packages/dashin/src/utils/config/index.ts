@@ -20,7 +20,7 @@ type EnvTypes = {
   ON_DOC: boolean
   I18N_CODE: string
   ON_MOCK: boolean
-  REACT_APP_IGNORED_PLUGINS: string[]
+  IGNORED_PLUGINS: string[]
   PATHS_WITHOUT_LAYOUT: string[]
   PATHS_WITHOUT_AUTH: string[]
   NOTIFICATION_PLUGIN?: string
@@ -51,7 +51,7 @@ export const ENV: EnvTypes = {
   ON_DOC: v("ON_DOC") === "true",
   I18N_CODE: v("I18N_CODE") || "en",
   ON_MOCK: v("ON_MOCK") === "true",
-  REACT_APP_IGNORED_PLUGINS: strToArr(v("IGNORED_PLUGINS")),
+  IGNORED_PLUGINS: strToArr(v("IGNORED_PLUGINS")),
   PATHS_WITHOUT_LAYOUT: strToArr(v("PATHS_WITHOUT_LAYOUT")),
   PATHS_WITHOUT_AUTH: strToArr(v("PATHS_WITHOUT_AUTH")),
   NOTIFICATION_PLUGIN: v("NOTIFICATION_PLUGIN"),

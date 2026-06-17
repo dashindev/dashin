@@ -7,7 +7,7 @@ for rich text, and ships an **AI-assisted, schema-validated** generation flow.
 ## Install & scaffold
 
 ```bash
-npm install --global dashin-cli
+npm install --global @dashin-dev/cli
 dashin new my-admin
 cd my-admin
 yarn && yarn dev

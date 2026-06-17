@@ -29,8 +29,8 @@ describe("config ENV", () => {
     expect(Array.isArray(ENV.PATHS_WITHOUT_AUTH)).toBe(true)
   })
 
-  it("REACT_APP_IGNORED_PLUGINS is an array", () => {
-    expect(Array.isArray(ENV.REACT_APP_IGNORED_PLUGINS)).toBe(true)
+  it("IGNORED_PLUGINS is an array", () => {
+    expect(Array.isArray(ENV.IGNORED_PLUGINS)).toBe(true)
   })
 
   it("DEFAULT_AUTH_PLUGIN is a non-empty string", () => {

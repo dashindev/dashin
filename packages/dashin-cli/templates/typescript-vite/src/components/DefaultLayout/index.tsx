@@ -37,7 +37,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   }, [])
 
   return (
-    <div className="h-screen bg-white">
+    <div className="h-screen bg-sidebar text-foreground">
       <TopBar
         store={store}
         menuClick={handleDrawerToggle}
@@ -47,17 +47,18 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
       <div className="flex">
         <nav aria-label="left menus">
           <aside
-            className={`relative whitespace-nowrap overflow-x-hidden transition-[width] duration-300 ease-in-out border-r-0 ${
+            className={`relative whitespace-nowrap overflow-x-hidden transition-[width] duration-300 ease-in-out border-r-0 bg-sidebar flex flex-col ${
               open ? "w-[240px]" : "w-[57px] sm:w-[73px]"
             }`}
+            style={{ height: "calc(100vh - 64px)" }}
           >
-            <LeftMenu {...leftMenu} />
+            <LeftMenu {...leftMenu} collapsed={!open} />
           </aside>
         </nav>
         <div
-          className="flex-grow p-[36px] bg-[#EDF1F7] rounded-tl-[10px]"
+          className="flex-grow p-[36px] bg-content-bg rounded-tl-bn overflow-auto"
           style={{
-            height: "calc(100vh - 46px)",
+            height: "calc(100vh - 64px)",
             maxWidth: phoneVertical
               ? "auto"
               : open
@@ -65,7 +66,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
               : "calc(100vw - 73px)"
           }}
         >
-          <div className="bg-white overflow-hidden rounded-[10px] h-full shadow">
+          <div className="bg-content-box overflow-auto rounded-bn shadow" style={{ maxHeight: "calc(100vh - 64px - 72px)" }}>
             {children}
           </div>
         </div>

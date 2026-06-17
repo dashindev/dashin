@@ -1,8 +1,0 @@
-version: "3.6"
-
-services:
-  dashin:
-    image: dashin:v1.1.0-beta.1.4
-    restart: always
-    ports:
-      - "3000"

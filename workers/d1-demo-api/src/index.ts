@@ -35,7 +35,7 @@ const MAX_ROWS_PER_TABLE = 500
 // The demo frontend (Worker "dashin-demo") on any account subdomain, the custom
 // domain, or local dev. Pattern-based so switching CF accounts needs no edits.
 const ORIGIN_RE =
-  /^https:\/\/dashin-demo\.[a-z0-9-]+\.workers\.dev$|^https:\/\/demo\.dashin\.dev$|^http:\/\/(localhost|127\.0\.0\.1):3000$/
+  /^https:\/\/dashin-demo\.[a-z0-9-]+\.workers\.dev$|^https:\/\/demo\.dashin\.dev$|^http:\/\/(localhost|127\.0\.0\.1):\d+$/
 
 /**
  * The seed = single source of truth for demo data (an e-commerce store).

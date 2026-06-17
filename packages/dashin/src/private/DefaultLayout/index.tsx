@@ -122,7 +122,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
             {layout.contentCard === false ? (
               children
             ) : (
-              <div className="bg-content-box overflow-hidden rounded-bn h-full shadow">
+              <div className="bg-content-box overflow-auto rounded-bn shadow" style={{ maxHeight: "calc(100vh - 64px - 72px)" }}>
                 {children}
               </div>
             )}

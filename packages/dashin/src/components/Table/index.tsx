@@ -53,6 +53,7 @@ export default function Table<RowData extends object>(
   const showSearch = options?.search !== false
   const showSelection = !!options?.selection
 
+  const PAGESIZE_KEY = "dashin-table:pageSize"
   const storeKey = qGroup && qName ? `dashin-table:${qGroup}/${qName}` : ""
   const saved = useMemo(() => {
     if (!storeKey) return null
@@ -61,13 +62,31 @@ export default function Table<RowData extends object>(
       return raw ? JSON.parse(raw) : null
     } catch { return null }
   }, [storeKey])
+  const savedPageSize = useMemo(() => {
+    try {
+      const v = sessionStorage.getItem(PAGESIZE_KEY)
+      return v ? Number(v) : null
+    } catch { return null }
+  }, [])
 
-  const [pageSize, setPageSize] = useState(saved?.pageSize || initialPageSize)
+  const [pageSize, setPageSize] = useState(savedPageSize || initialPageSize)
   const [search, setSearch] = useState<string>(saved?.search || "")
   const [filters, setFilters] = useState<Record<number, any>>(saved?.filters || {})
   const [operators, setOperators] = useState<Record<number, string>>(saved?.operators || {})
   const [orderField, setOrderField] = useState<string | undefined>(saved?.orderField)
   const [orderDir, setOrderDir] = useState<Dir>(saved?.orderDir || "asc")
+
+  const prevStoreKey = React.useRef(storeKey)
+  useEffect(() => {
+    if (prevStoreKey.current === storeKey) return
+    prevStoreKey.current = storeKey
+    setSearch(saved?.search || "")
+    setFilters(saved?.filters || {})
+    setOperators(saved?.operators || {})
+    setOrderField(saved?.orderField)
+    setOrderDir(saved?.orderDir || "asc")
+    setPage(0)
+  }, [storeKey, saved])
 
   // column metadata required by filter/edit selectors (material-table parity)
   const cols = useMemo(() => {
@@ -82,13 +101,17 @@ export default function Table<RowData extends object>(
   )
 
   useEffect(() => {
+    try { sessionStorage.setItem(PAGESIZE_KEY, String(pageSize)) } catch {}
+  }, [pageSize])
+
+  useEffect(() => {
     if (!storeKey) return
     try {
       sessionStorage.setItem(storeKey, JSON.stringify({
-        pageSize, search, filters, operators, orderField, orderDir
+        search, filters, operators, orderField, orderDir
       }))
     } catch { /* quota exceeded */ }
-  }, [storeKey, pageSize, search, filters, operators, orderField, orderDir])
+  }, [storeKey, search, filters, operators, orderField, orderDir])
 
   const [allRows, setAllRows] = useState<RowData[]>([])
   const [rows, setRows] = useState<RowData[]>([])

@@ -279,7 +279,7 @@ export default function Table<RowData extends object>(
     }
     return (
       <input
-        className="w-full rounded border border-bn-border px-2 py-1 text-sm focus:border-primary focus:outline-none"
+        className="w-full rounded border border-bn-border bg-content-box text-foreground px-2 py-1 text-sm focus:border-primary focus:outline-none"
         value={(data as any)[field] ?? ""}
         onChange={e => setField(field, e.target.value)}
       />
@@ -549,7 +549,7 @@ export default function Table<RowData extends object>(
                                 [c.tableData!.id]: e.target.value
                               }))
                             }
-                            className="rounded border border-bn-border bg-content-bg px-1 py-1 text-xs text-icon-muted focus:border-primary focus:outline-none"
+                            className="rounded border border-bn-border bg-content-box text-foreground px-1 py-1 text-xs focus:border-primary focus:outline-none"
                           >
                             {operatorOptions(c).map(o => (
                               <option key={o.v} value={o.v}>
@@ -560,7 +560,7 @@ export default function Table<RowData extends object>(
                         )}
                         <input
                           type={c.type === "numeric" ? "number" : "text"}
-                          className="w-full rounded border border-bn-border px-2 py-1 text-xs focus:border-primary focus:outline-none"
+                          className="w-full rounded border border-bn-border bg-content-box text-foreground px-2 py-1 text-xs focus:border-primary focus:outline-none"
                           onChange={e => {
                             setPage(0)
                             onFilterChanged(c.tableData!.id, e.target.value)

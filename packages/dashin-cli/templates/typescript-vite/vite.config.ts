@@ -42,6 +42,12 @@ export default defineConfig(({ mode }) => {
   for (const k of Object.keys(env)) {
     define[`process.env.${k}`] = JSON.stringify(env[k])
   }
+  // @dashin-dev/dashin reads env via a DYNAMIC lookup (process.env[`VITE_${k}`])
+  // so it can compile to CJS lib/. Vite's per-key static `define` above does NOT
+  // replace a computed access, so also define the whole process.env object —
+  // otherwise ENV.MAIN_URL/AUTH_URL are undefined in the browser bundle and
+  // requests hit the current origin instead of the configured API.
+  define["process.env"] = JSON.stringify({ NODE_ENV: mode, ...env })
   return {
     plugins: [dashinGenerator(mode), react()],
     define,

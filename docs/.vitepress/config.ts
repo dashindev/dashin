@@ -8,6 +8,10 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
 
+  // Generate sitemap.xml so Google can discover/index every long-tail page.
+  // Hostname is the canonical serving host (apex + www redirect here).
+  sitemap: { hostname: "https://docs.dashin.dev" },
+
   ignoreDeadLinks: [/^http:\/\/localhost/, /\.tsx?$/, /\.js$/],
 
   head: [
@@ -23,9 +27,9 @@ export default defineConfig({
           "Open-source React admin dashboard scaffold — Vite + Tailwind, plugin-based, with schema-validated CRUD and AI generation. Connectors for PocketBase, Supabase, Appwrite, Directus, Strapi & GraphQL."
       }
     ],
-    ["meta", { property: "og:image", content: "https://dashin.dev/og.png" }],
+    ["meta", { property: "og:image", content: "https://docs.dashin.dev/og.png" }],
     ["meta", { name: "twitter:card", content: "summary_large_image" }],
-    ["meta", { name: "twitter:image", content: "https://dashin.dev/og.png" }]
+    ["meta", { name: "twitter:image", content: "https://docs.dashin.dev/og.png" }]
   ],
 
   // README.md files (kept for GitHub browsing) serve as section indexes.

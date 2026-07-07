@@ -25,6 +25,9 @@ export interface Column<RowData extends object> {
     | "currency"
   lookup?: { [key: string]: any }
   render?: (rowData: RowData) => any
+  /** Richer read-only view used only in the DetailDrawer (view / read-only
+   *  fields), while `render` stays a compact table cell. */
+  renderDetail?: (rowData: RowData) => ReactNode
   editComponent?: (props: EditComponentProps<RowData>) => ReactNode
   filterComponent?: (props: FilterComponentProps<RowData>) => ReactNode
   // material-table internal row metadata used by selectors

@@ -5,13 +5,32 @@ import Input from "../ui/Input"
 import Select from "../ui/Select"
 import Label from "../ui/Label"
 
+/** Best-effort human-readable message from a failed save — walks the Payload
+ *  nested error shape (`errors[0].data.errors[0].message`) plus common shapes.
+ *  Override via the `formatError` prop. */
+function defaultErrorMessage(e: any): string {
+  const body = (e && (e.response?.data ?? e.data)) ?? e
+  const outer = body?.errors?.[0]
+  const msg =
+    outer?.data?.errors?.[0]?.message ||
+    outer?.message ||
+    body?.message ||
+    (typeof e?.message === "string" ? e.message : "")
+  return String(msg || "").trim() || "Something went wrong"
+}
+
 export interface DetailDrawerProps<RowData extends object> {
   row: RowData | null
   columns: Column<RowData>[]
   editable?: EditableData<RowData>
-  mode?: "view" | "create"
+  /** `"edit"` opens straight into the edit form (e.g. an inline row Edit button). */
+  mode?: "view" | "create" | "edit"
   onClose: () => void
   onSaved?: () => void
+  /** Base z-index; overlay = zBase, panel = zBase + 100. Raise it to stack drawers. */
+  zBase?: number
+  /** Map a failed-save error to the inline banner message (default: generic extractor). */
+  formatError?: (e: unknown) => string
 }
 
 export default function DetailDrawer<RowData extends object>({
@@ -20,25 +39,30 @@ export default function DetailDrawer<RowData extends object>({
   editable,
   mode = "view",
   onClose,
-  onSaved
+  onSaved,
+  zBase = 1200,
+  formatError
 }: DetailDrawerProps<RowData>) {
   const isCreate = mode === "create"
-  const [editing, setEditing] = useState(isCreate)
+  const startEditing = isCreate || mode === "edit"
+  const [editing, setEditing] = useState(startEditing)
   const [draft, setDraft] = useState<RowData | null>(isCreate ? {} as RowData : row ? { ...row } : null)
   const [saving, setSaving] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [err, setErr] = useState<string | null>(null)
 
   useEffect(() => {
     setConfirmDelete(false)
     setSaving(false)
+    setErr(null)
     if (isCreate) {
       setEditing(true)
       setDraft({} as RowData)
     } else {
-      setEditing(false)
+      setEditing(mode === "edit")
       setDraft(row ? { ...row } : null)
     }
-  }, [row, isCreate])
+  }, [row, mode])
 
   const open = isCreate || !!row
 
@@ -67,6 +91,7 @@ export default function DetailDrawer<RowData extends object>({
   const handleSave = async () => {
     if (!draft) return
     setSaving(true)
+    setErr(null)
     try {
       if (isCreate) {
         if (!editable?.onRowAdd) return
@@ -78,6 +103,9 @@ export default function DetailDrawer<RowData extends object>({
       setEditing(false)
       onClose()
       onSaved?.()
+    } catch (e) {
+      // Keep the drawer open and show why the save failed (e.g. a duplicate).
+      setErr((formatError ?? defaultErrorMessage)(e))
     } finally {
       setSaving(false)
     }
@@ -106,12 +134,14 @@ export default function DetailDrawer<RowData extends object>({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 z-[1200] transition-opacity"
+        className="fixed inset-0 bg-black/40 transition-opacity"
+        style={{ zIndex: zBase }}
         onClick={onClose}
       />
       {/* Panel */}
       <aside
-        className="fixed inset-y-0 right-0 z-[1300] w-full max-w-md bg-content-box shadow-xl flex flex-col transition-transform duration-300 ease-in-out"
+        className="fixed inset-y-0 right-0 w-full max-w-md bg-content-box shadow-xl flex flex-col transition-transform duration-300 ease-in-out"
+        style={{ zIndex: zBase + 100 }}
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-bn-border px-6 py-4">
@@ -155,7 +185,13 @@ export default function DetailDrawer<RowData extends object>({
 
         {/* Footer */}
         {editing && (
-          <div className="flex items-center justify-between border-t border-bn-border px-6 py-4">
+          <>
+            {err && (
+              <div className="mx-6 mb-1 mt-2 rounded-bn border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">
+                {err}
+              </div>
+            )}
+            <div className="flex items-center justify-between border-t border-bn-border px-6 py-4">
             <div className="flex items-center gap-2">
               {canDelete && !confirmDelete && (
                 <button
@@ -191,9 +227,10 @@ export default function DetailDrawer<RowData extends object>({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => {
-                  if (isCreate) { onClose(); return }
+                  if (isCreate || mode === "edit") { onClose(); return }
                   setEditing(false)
                   setDraft(row ? { ...row } : null)
+                  setErr(null)
                 }}
                 disabled={saving}
                 className="rounded-bn px-3 py-1.5 text-sm font-medium text-icon-muted hover:bg-content-bg transition-colors disabled:opacity-50"
@@ -209,6 +246,7 @@ export default function DetailDrawer<RowData extends object>({
               </button>
             </div>
           </div>
+          </>
         )}
       </aside>
     </>
@@ -229,7 +267,9 @@ function PreviewFields<RowData extends object>({
           <dt className="text-xs font-medium text-icon-muted uppercase tracking-wide mb-1">
             {col.title}
           </dt>
-          <dd className="text-sm text-foreground">{display(col, row) ?? "—"}</dd>
+          <dd className="text-sm text-foreground">
+            {col.renderDetail ? col.renderDetail(row) : display(col, row) ?? "—"}
+          </dd>
         </div>
       ))}
     </dl>
@@ -262,7 +302,7 @@ function EditForm<RowData extends object>({
             <Label className="mb-1 block">{col.title}</Label>
             {readOnly ? (
               <div className="rounded-bn border border-bn-border bg-content-bg px-2.5 py-1.5 text-sm text-icon-muted">
-                {display(col, data) ?? "—"}
+                {col.renderDetail ? col.renderDetail(data) : display(col, data) ?? "—"}
               </div>
             ) : col.editComponent ? (
               <EditComponentWrapper col={col} data={data} value={value} setField={setField} />

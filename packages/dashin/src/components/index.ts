@@ -33,6 +33,11 @@ export { default as ProTip } from "./ProTip"
 export { default as DetailDrawer } from "./DetailDrawer"
 export type { DetailDrawerProps } from "./DetailDrawer"
 
+export { default as CrudTable } from "./CrudTable"
+export type { CrudTableProps } from "./CrudTable"
+
+export * from "./RelatedPreview"
+
 export { default as LeftMenu } from "./LeftMenu"
 export { default as NestedList } from "./NestedMenu"
 export { default as TopBar } from "./TopBar"

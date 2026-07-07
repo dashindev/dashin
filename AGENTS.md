@@ -118,6 +118,55 @@ The UI uses Tailwind CSS with custom design tokens. Use these instead of raw col
 - `bg-primary-gradient` — primary action gradient
 - `shadow-bn` — standard box shadow
 
+## Key components
+
+### CrudTable
+
+`@dashin-dev/dashin` exports `CrudTable` — a batteries-included component that wires
+`<Table>` + `<DetailDrawer>` + the view/create/edit/delete state machine. Use it instead
+of hand-rolling Table + drawer state in every plugin page:
+
+```tsx
+import { CrudTable, useTranslation } from "@dashin-dev/dashin"
+import { dataCtrl, editableCtrl, bulkDeleteCtrl } from "@dashin-dev/source-d1"
+
+export default function MyPage() {
+  const { t } = useTranslation("table")
+  return (
+    <CrudTable
+      title="My Entity"
+      columns={columns}
+      data={query => dataCtrl({ t, tableQuery: query, path: "my-table", searchField: "name" })}
+      editable={editableCtrl({ t, SchemaName: "my-table" })}
+      actions={[bulkDeleteCtrl({ SchemaName: "my-table", t, tableRef })]}
+    />
+  )
+}
+```
+
+### DetailDrawer
+
+Slide-out side panel for record view/create/edit. Supports `mode: "view" | "create" | "edit"`,
+inline error banners via `formatError`, custom read-only renderers via column `renderDetail`,
+and z-index stacking via `zBase`.
+
+### UI primitives
+
+All exported from `@dashin-dev/dashin`: `Button`, `Input`, `Select`, `Card`, `Badge`, `Avatar`,
+`Modal`, `Tabs`, `Toggle`, `Tooltip`, `Dropdown`, `Textarea`, `Label`, `DatePicker`, `ImageEdit`.
+These use the design tokens and support light/dark themes.
+
+### RelatedPreview
+
+Stacked related-record preview with nested editing — for showing associated records
+(e.g. a customer's orders) inside the DetailDrawer.
+
+### Source package helpers
+
+Each `@dashin-dev/source-*` package exports `dataCtrl`, `editableCtrl`, `bulkDeleteCtrl`
+for wiring `CrudTable`. The Payload source also exports `errMessage`, `mediaUrl`,
+`photoThumb`, `photoLarge`, `uploadMedia`, and `payloadCrud`/`payloadCollection` bindings.
+
 ## CLI templates
 
 `packages/dashin-cli/templates/` contains starter project templates (Vite, Next.js).
@@ -174,3 +223,7 @@ Run CI before merging significant changes. For trivial fixes (typos, docs), it's
 - Keep PRs focused; one concern per PR
 - Verified PRs can be merged to `master` immediately (no separate approval wait)
 - Commit messages: conventional commits style (`fix:`, `feat:`, `chore:`, etc.)
+- **Stacked PRs:** if a PR targets another feature branch (not `master`), merging it
+  only lands code on that branch. After the full stack is reviewed, merge the **top**
+  branch into `master` to land all accumulated work. Always check `baseRefName` before
+  assuming a "merged" PR is on `master`.

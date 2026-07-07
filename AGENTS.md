@@ -167,11 +167,35 @@ Each `@dashin-dev/source-*` package exports `dataCtrl`, `editableCtrl`, `bulkDel
 for wiring `CrudTable`. The Payload source also exports `errMessage`, `mediaUrl`,
 `photoThumb`, `photoLarge`, `uploadMedia`, and `payloadCrud`/`payloadCollection` bindings.
 
-## CLI templates
+## When to update downstream artifacts
 
-`packages/dashin-cli/templates/` contains starter project templates (Vite, Next.js).
-When changing the core app's layout, config, or env vars, check whether the templates
-need a matching update — they drift easily.
+After changing core code, check whether these downstream artifacts need a matching update.
+They drift silently and consumers hit the breakage, not you.
+
+| What changed | Update CLI templates? | Update demo plugins? | Update demo backend? | Update docs/READMEs? | Publish new version? |
+|---|---|---|---|---|---|
+| **New/changed component** (e.g. CrudTable, DetailDrawer API) | Yes — plugin template should use the latest pattern | Yes — demo entities should showcase new components | No | Yes — AGENTS.md key components section | Yes |
+| **New UI primitive** (e.g. DatePicker, ImageEdit) | Maybe — add to template if broadly useful | Maybe — use in demo columns if it fits | No | Yes — add to UI primitives list | Yes |
+| **Layout/sidebar/TopBar change** | Yes — `DefaultLayout` in both Vite + Next.js templates | No (demo uses the same core) | No | No | Yes |
+| **Env var rename or new env var** | Yes — `.env.example` in both templates | No (demo uses its own env) | No | Yes — docs referencing env vars | Yes |
+| **Source package change** (dataCtrl, editableCtrl API) | Yes — if plugin template uses it | Yes — demo plugins wire these | No | Maybe | Yes |
+| **Schema/seed data change** | No | Yes — plugins must match new tables | Yes — redeploy worker | No | No (demo-only) |
+| **Bug fix (no API change)** | No | No | No | No | Yes (if consumer-facing) |
+| **Docs/README only** | No | No | No | N/A | No |
+| **Dependency bump** | Maybe — if template pins the dep | No | No | No | Maybe |
+
+### Quick rules
+
+- **CLI templates** = what `npx @dashin-dev/cli` scaffolds. If a new user would get broken or
+  outdated code, update the template. Check: `packages/dashin-cli/templates/typescript-vite/`,
+  `typescript-nextjs/`, and `typescript-plugin/`.
+- **Demo plugins** = the 4 entities in `packages/dashin/src/private/plugins/dashin-plugin-dashin-d1/`.
+  They should always showcase the latest component patterns (currently `CrudTable`).
+- **Demo backend** = `workers/d1-demo-api/`. Only needs a redeploy when schema or API logic changes.
+  Frontend auto-deploys on push to master.
+- **Docs** = `AGENTS.md` (component reference), plugin READMEs, `docs/` site content.
+- **Publish** = any change to code that ships in `@dashin-dev/*` npm packages needs a version bump
+  and publish for consumers to get it. Template-only or demo-only changes do not.
 
 ## Demo deployment
 

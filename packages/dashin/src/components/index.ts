@@ -71,6 +71,8 @@ export { default as Label } from "./ui/Label"
 export type { LabelProps } from "./ui/Label"
 export { default as DatePicker } from "./ui/DatePicker"
 export type { DatePickerProps } from "./ui/DatePicker"
+export { default as ImageEdit } from "./ui/ImageEdit"
+export type { ImageEditProps } from "./ui/ImageEdit"
 
 export interface DefaultLayoutProps {
   children?: any

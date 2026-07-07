@@ -69,6 +69,8 @@ export { default as Textarea } from "./ui/Textarea"
 export type { TextareaProps } from "./ui/Textarea"
 export { default as Label } from "./ui/Label"
 export type { LabelProps } from "./ui/Label"
+export { default as DatePicker } from "./ui/DatePicker"
+export type { DatePickerProps } from "./ui/DatePicker"
 
 export interface DefaultLayoutProps {
   children?: any

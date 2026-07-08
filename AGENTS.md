@@ -158,8 +158,48 @@ These use the design tokens and support light/dark themes.
 
 ### RelatedPreview
 
-Stacked related-record preview with nested editing — for showing associated records
-(e.g. a customer's orders) inside the DetailDrawer.
+Stacked related-record preview system for cross-entity drill-in. Three pieces:
+
+1. **`RelatedPreviewProvider`** — wrap a page component; accepts a `CollectionRegistry`
+   (slug → `{ meta, columns, editable, fetch }`) and renders stacked preview panels.
+   Has breadcrumbs, loop guard, and a configurable depth cap (default 3).
+2. **`RelatedCard`** — compact summary card for a single related record. Lazy-fetches
+   by id or renders instantly from a populated object. Clickable when inside a provider.
+3. **`RelatedList`** — renders an array/page of related records as stacked `RelatedCard`s.
+
+**How to wire it (see demo `collections.tsx` for a working example):**
+
+```tsx
+import { RelatedPreviewProvider, RelatedCard } from "@dashin-dev/dashin"
+
+const registry = {
+  customers: {
+    meta: {
+      label: "Customer",
+      title: r => r.name,
+      subtitle: r => r.email,
+      relations: [{ label: "Orders", slug: "orders", list: true, value: r => r._orders }]
+    },
+    columns: customerColumns,
+    editable: editableCtrl({ t, SchemaName: "customers" }),
+    fetch: id => fetchRow("customers", id)
+  },
+  orders: { /* ... */ }
+}
+
+// In a column definition, use renderDetail to show a RelatedCard:
+{ field: "customer_id", renderDetail: row => <RelatedCard slug="customers" value={row.customer_id} /> }
+
+// Wrap your page with the provider:
+<RelatedPreviewProvider collections={registry}>
+  <CrudTable ... />
+</RelatedPreviewProvider>
+```
+
+**Demo usage:** Orders↔Customers in `dashin-plugin-dashin-d1/collections.tsx`. Click an
+order → detail drawer shows customer as a card → click card → stacked preview with
+customer summary + their orders list → click an order → nested preview (loop guard stops
+revisiting the same record).
 
 ### Source package helpers
 
@@ -190,7 +230,8 @@ They drift silently and consumers hit the breakage, not you.
   outdated code, update the template. Check: `packages/dashin-cli/templates/typescript-vite/`,
   `typescript-nextjs/`, and `typescript-plugin/`.
 - **Demo plugins** = the 4 entities in `packages/dashin/src/private/plugins/dashin-plugin-dashin-d1/`.
-  They should always showcase the latest component patterns (currently `CrudTable`).
+  They should always showcase the latest component patterns (currently `CrudTable` +
+  `RelatedPreview` for orders↔customers). Collection registry: `collections.tsx`.
 - **Demo backend** = `workers/d1-demo-api/`. Only needs a redeploy when schema or API logic changes.
   Frontend auto-deploys on push to master.
 - **Docs** = `AGENTS.md` (component reference), plugin READMEs, `docs/` site content.

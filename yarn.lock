@@ -2762,6 +2762,11 @@
   resolved "https://registry.yarnpkg.com/@tiptap/core/-/core-2.4.0.tgz#6f8eee8beb5b89363582366b201ccc4798ac98a9"
   integrity sha512-YJSahk8pkxpCs8SflCZfTnJpE7IPyUWIylfgXM2DefjRQa5DZ+c6sNY0s/zbxKYFQ6AuHVX40r9pCfcqHChGxQ==
 
+"@tiptap/core@^3.30.4":
+  version "3.30.4"
+  resolved "https://registry.yarnpkg.com/@tiptap/core/-/core-3.30.4.tgz#9e0847c5f4dd53750ae3accc6b83223e37f693b3"
+  integrity sha512-V9yKuUfV8qC9WBrnVxkFWmYLBomc3d1CwXoFSjED5DRu5q2oyxv07F+jOJSRogJAY+feHjuxvjhixwxeHm2DXQ==
+
 "@tiptap/extension-blockquote@^2.4.0":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-blockquote/-/extension-blockquote-2.4.0.tgz#0179076ea2fa12e41a198dad087b81d368653b8d"
@@ -13178,9 +13183,9 @@ write-file-atomic@^6.0.0:
     signal-exit "^4.0.1"
 
 ws@^7, ws@^7.5.11, ws@^7.5.5, ws@^8.18.0:
-  version "7.5.11"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.11.tgz#9460daf1812bb81a423c5b9eac746941a86310fa"
-  integrity sha512-zS54Oen9bITtp7kp2XM3AydrCIq1D+HwJOuH+c+e4LfpL/lotP5osijd+UoMnxwAam1GN8R4KtLAyIrIcBNpiA==
+  version "7.5.13"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.13.tgz#12aa507eaca76c295c278b1aebf4698ab2c1845f"
+  integrity sha512-rsKI6xDBFVf4r/x8XyChGK04QR/XHroxs/jUcoWvtEZM8TPU/X/uIY9B1CsSzYws9ZJb/6bbBu7dPhFW00CAoA==
 
 xdg-basedir@^4.0.0:
   version "4.0.0"

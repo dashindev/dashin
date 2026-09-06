@@ -45,13 +45,16 @@ graph TD
         RelRegistry["CollectionRegistryBuilder (关系图谱注册)"]
     end
 
-    subgraph "Dashin 核心呈现与高阶插件"
+    subgraph "Dashin 核心呈现与通用生态"
         CrudTable["<CrudTable /> (核心表格状态机)"]
         DetailDrawer["<DetailDrawer /> (抽屉查看/编辑)"]
         RelatedPreview["<RelatedPreview /> (层叠关联穿透)"]
-        BlocksPlugin["@dashin-dev/field-blocks (拖拽 Blocks 编辑器)"]
-        ObsPlugin["@dashin-dev/plugin-atomo-observability (投影器运维面板)"]
-        WfPlugin["@dashin-dev/plugin-atomo-workflows (工作流设计器)"]
+        BlocksPlugin["@dashin-dev/field-blocks (通用拖拽 Blocks 编辑器)"]
+    end
+
+    subgraph "Atomo 官方嵌入式控制台 (atomo-admin-ui)"
+        ObsView["CQRS 投影器与队列运维面板"]
+        WfView["响应式工作流与 Action 设计器"]
     end
 
     Meta --> MetaClient
@@ -209,28 +212,27 @@ export function buildAtomoRegistry(schema: AtomoSchemaMeta, client: AtomoClient)
 - 去除对外部特定样式的硬编码依赖，统一接入 Dashin 的 Design Tokens（`bg-content-box`、`border-bn-border` 等）；
 - 提供富文本块、代码块、列表块、引用块、图片块，直接保存在模型的 `json` / `blocks` 字段中。
 
-#### 4.2 投影器与事件运维面板 (`@dashin-dev/plugin-atomo-observability`)
-- 移植 `ObservabilityView`，重构为符合 Dashin 规范的统计大屏；
-- 展示指标：
-  - Event Store 写入吞吐量 (QPS)
-  - 各 Projector 的处理位点与延迟 (Lag)
-  - 错误日志与死信队列
-- 提供功能：一键触发 `Replay Projector`，利用事件重放修复读模型。
+#### 4.2 投影器与事件运维大盘
+- 针对 Atomo 的事件溯源与 CQRS 读模型，打造专用统计大盘与 Projectors 控制面板；
+- 展示指标：Event Store 写入吞吐量、各 Projector 位点与 Lag 积压、异步任务队列；
+- 提供一键触发 `Replay Projector` 重建读模型功能；
+- 部署模式：由 Atomo 官方嵌入式控制台（`atomo-admin-ui`）原生集成，直接打包入后端镜像。
 
-#### 4.3 工作流设计器插件 (`@dashin-dev/plugin-atomo-workflows`)
-- 移植 `WorkflowDesigner`，通过拓扑图可视化展示 Atomo 的 Actions、触发器与外部 Workers 的分发链路。
+#### 4.3 响应式工作流与 Action 设计器
+- 针对 Atomo 的声明式状态机与 Action 管道，提供图形化流程图与列表式步骤编辑器；
+- 部署模式：由 Atomo 官方嵌入式控制台（`atomo-admin-ui`）原生集成，保障单镜像交付。
 
 ---
 
 ### Phase 5: 全栈脚手架闭环与生态切换
 
-#### 5.1 Docker 一键全栈交付
-编写 `docker-compose.fullstack.yml`：
-- `atomo-core`: Rust 后端镜像（暴露 3000 端口，包含 GraphQL 与 /meta/schema）。
-- `postgres`: 带有 `pgvector` 扩展的数据库。
-- `dashin-admin`: Dashin Vite 预构建的 Nginx 静态镜像（暴露 80/443 端口），配置好反向代理。
+#### 5.1 全栈脚手架模板
+- 在 `dashin-cli` 中提供 `fullstack-atomo` 模板（`dashin new my-app --atomo`）；
+- 内置 `docker-compose.yml`：
+  - `atomo-core`: Rust 后端镜像（暴露 3000 端口，含 GraphQL、/meta/schema 与内置 /admin UI）。
+  - `postgres`: 带有 `pgvector` 扩展的数据库。
 
-#### 5.2 官方替代路线与弃用指引
-1. 在 `atomo` 仓库发布公告，正式将 Dashin 作为推荐的官方 Admin UI 解决方案。
-2. 将 `packages/atomo-admin-ui` 置为维护/兼容模式，指引新用户使用 Dashin 全栈模板。
-3. 统一两端文档，形成 **“Atomo 驱动核心，Dashin 驱动体验”** 的品牌合力。
+#### 5.2 官方推荐与协同共建
+1. 在 `atomo` 仓库正式将 Dashin 作为推荐的官方 Admin UI 解决方案。
+2. 保持通用驱动（`source-atomo`, `auth-atomo`, `field-blocks`）在 Dashin 维护，嵌入式单镜像 UI 在 Atomo 维护。
+3. 统一两端文档，形成 **“Atomo 驱动核心，Dashin 驱动体验”** 的强大品牌合力。

@@ -206,6 +206,9 @@ revisiting the same record).
 Each `@dashin-dev/source-*` package exports `dataCtrl`, `editableCtrl`, `bulkDeleteCtrl`
 for wiring `CrudTable`. The Payload source also exports `errMessage`, `mediaUrl`,
 `photoThumb`, `photoLarge`, `uploadMedia`, and `payloadCrud`/`payloadCollection` bindings.
+The Atomo source (`@dashin-dev/source-atomo`) also exports `fetchAtomoMetadata`,
+`atomoFieldsToDashinColumns`, `buildAtomoMenuData`, `buildAtomoRegistry`, `DynamicAtomoEntity`,
+and `DynamicAtomoProvider` for zero-code dynamic schema introspection and automatic `RelatedPreview` wiring.
 
 ## When to update downstream artifacts
 

@@ -8,6 +8,7 @@ Swap the connector import to change backends — the table UI is unchanged.
 
 | Backend | Package | API |
 | --- | --- | --- |
+| **Atomo (Rust Core)** | `@dashin-dev/source-atomo` | `/meta/schema` Introspection + GraphQL / REST |
 | [PocketBase](/pocketbase/) | `@dashin-dev/source-pocketbase` | REST `/api/collections` |
 | [Appwrite](/appwrite/) | `@dashin-dev/source-appwrite` | Databases REST |
 | [Supabase / Postgres](/supabase/) | `@dashin-dev/source-supabase` | PostgREST |

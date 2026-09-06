@@ -11,15 +11,19 @@
 > admin (dashboard + charts, products, orders, customers) running 100% free on Cloudflare D1.
 > Log in with `admin` / `dashin`; it's fully editable and resets every 30 minutes.
 
-**Dashin** is an open-source, plugin-based **React admin dashboard** scaffold built on **Vite + Tailwind CSS + Headless UI**. Point it at your backend — **PocketBase, Payload CMS, Supabase, Appwrite, Directus, Turso, Strapi, or GraphQL/REST** — and Dashin gives you a **schema-validated CRUD admin panel**: tables, forms, filtering/sorting, auth, and i18n, ready to ship. It also supports **AI generation** whose output is validated against your real schema, so even cheap models produce a working admin — never freeform code. Routes, menus, CRUD pages, and auth are all plugins, and TipTap powers rich-text editing.
+**Dashin** is an open-source, plugin-based **React admin dashboard** scaffold built on **Vite + Tailwind CSS + Headless UI**. Point it at your backend — **Atomo (Rust Event Sourcing & CQRS), PocketBase, Payload CMS, Supabase, Appwrite, Directus, Turso, Strapi, or GraphQL/REST** — and Dashin gives you a **schema-validated CRUD admin panel**: tables, forms, filtering/sorting, auth, and i18n, ready to ship. It also supports **AI generation** whose output is validated against your real schema, so even cheap models produce a working admin — never freeform code. Routes, menus, CRUD pages, and auth are all plugins, and TipTap + Field-Blocks power visual and rich-text editing.
 
 Dashin hopes to achieve as many function reuse as possible through simple development methods, so in each Dashin project, **common functions have been built**, such as dynamic routing, multi-level menus, **permission control, data management**, search filtering and sorting, CRUD, **file management, message notification**, documenting your code, etc. You only need to build your own plugin to call it, and the Dashin plugin is also easy to learn and use.
 
 ## Quick start
 
-```
+```bash
 npm install --global @dashin-dev/cli
+
+# Scaffold a project (interactive or flag-based)
 dashin new my-dashin
+# or scaffold a fullstack Rust Atomo + Dashin project:
+dashin new my-dashin --atomo
 ```
 
 Create a plugin
@@ -54,6 +58,7 @@ Bring your own key: set `DASHIN_AI_PROVIDER` (openai | anthropic | ollama) +
 ## Backend connectors
 
 Swap data sources via plugins — same table/CRUD UI on any backend:
+**Atomo (Rust Core)** (`@dashin-dev/source-atomo` + `@dashin-dev/auth-atomo`),
 **PocketBase** (`@dashin-dev/source-pocketbase`), **Payload CMS**
 (`@dashin-dev/source-payload` + `@dashin-dev/auth-payload`), **Appwrite**
 (`@dashin-dev/source-appwrite`), **Supabase**, **Directus**, **Turso**,

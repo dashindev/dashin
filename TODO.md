@@ -13,6 +13,7 @@
 - [x] **Phase 3: 关系穿透升维与一致性策略 (`RelatedPreview` 集成)** (已完成)
 - [x] **Phase 4: Atomo 高阶资产吸收与插件化 (BlocksEditor, Observability, Workflows)** (已完成)
 - [x] **Phase 5: 全栈脚手架闭环、E2E 测试与生态平替** (已完成)
+- [x] **Phase 6: 架构边界治理与 Atomo 嵌入式单镜像交付闭环** (已完成)
 
 ---
 
@@ -118,3 +119,13 @@
 - [x] **5.3 官方生态整合与 `atomo-admin-ui` 平滑平替** *(2026-09-06)*
   - [x] 更新 `atomo` 根目录 `README.md` 与 `README.zh-CN.md`，正式推荐 Dashin 作为 Atomo 官方首选生产级企业 Admin 框架。
   - [x] 整理迁移指南，确保既有 Atomo 用户能够平滑切换到 Dashin，淘汰旧有简易 UI。
+
+---
+
+### Phase 6: 架构边界治理与 Atomo 嵌入式单镜像交付闭环 (Completed)
+- [x] **6.1 通用资产与专属资产清晰划界** *(2026-09-06)*
+  - [x] 在 `dashin` 仓库专注维护标准通用资产：`@dashin-dev/source-atomo`（官方连接器）、`@dashin-dev/auth-atomo`（标准鉴权插件）与 `@dashin-dev/field-blocks`（通用画板字段）。
+  - [x] 将 Atomo 专属的 CQRS 运维大盘与工作流控制台剥离出 Dashin 核心仓库，回归 `atomo/packages/atomo-admin-ui` 内部维护，保持 Dashin 仓库精简中立。
+- [x] **6.2 保障 Atomo 单 Docker 镜像交付优势** *(2026-09-06)*
+  - [x] 确立 Atomo 嵌入式管理台基于 Dashin 架构（依赖 `@dashin-dev/dashin`），并在 `atomo` 仓库内完成自包含静态构建与 Axum `/admin` 原生伺服。
+  - [x] 保障 `docker run -p 3000:3000 atomo-server` 开箱即得生产级 Dashin Admin UI，实现极简部署与高效本地开发闭环。

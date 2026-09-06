@@ -1,6 +1,0 @@
-export * from './types'
-export * from './client'
-export * from './components/MetricCard'
-export * from './components/ProjectorsPanel'
-export * from './components/ObservabilityView'
-export { default as menus } from './menus'

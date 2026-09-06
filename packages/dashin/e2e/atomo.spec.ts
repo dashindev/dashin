@@ -20,20 +20,3 @@ test("Atomo dynamic schema route boots without fatal runtime errors", async ({ p
   expect(errors.filter(e => fatalRe.test(e))).toHaveLength(0)
 })
 
-test("Atomo observability dashboard route boots without fatal runtime errors", async ({ page }) => {
-  const errors = collectErrors(page)
-  await page.goto("/observability")
-  await page.waitForLoadState("networkidle")
-  await page.waitForTimeout(1000)
-
-  expect(errors.filter(e => fatalRe.test(e))).toHaveLength(0)
-})
-
-test("Atomo workflows pipeline route boots without fatal runtime errors", async ({ page }) => {
-  const errors = collectErrors(page)
-  await page.goto("/workflows")
-  await page.waitForLoadState("networkidle")
-  await page.waitForTimeout(1000)
-
-  expect(errors.filter(e => fatalRe.test(e))).toHaveLength(0)
-})

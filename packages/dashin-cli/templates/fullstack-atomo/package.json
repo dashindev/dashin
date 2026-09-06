@@ -20,8 +20,6 @@
     "@dashin-dev/source-atomo": "^2.0.0-alpha.7",
     "@dashin-dev/auth-atomo": "^2.0.0-alpha.7",
     "@dashin-dev/field-blocks": "^2.0.0-alpha.7",
-    "@dashin-dev/plugin-atomo-observability": "^2.0.0-alpha.7",
-    "@dashin-dev/plugin-atomo-workflows": "^2.0.0-alpha.7",
     "lucide-react": "^0.294.0"
   },
   "devDependencies": {

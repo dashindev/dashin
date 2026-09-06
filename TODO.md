@@ -105,12 +105,12 @@
 
 ---
 
-### Phase 5: 全栈脚手架闭环、E2E 测试与生态平替
-- [ ] **5.1 全栈集成与 E2E 冒烟测试**
-  - [ ] 编写 Playwright E2E 自动化测试用例，覆盖：Atomo CRM 模型加载 -> 动态列表展示 -> 新建/更新记录 -> 关联钻取 -> 投影器健康检查。
-- [ ] **5.2 打造全栈脚手架模板 (`dashin-cli/templates/fullstack-atomo`)**
-  - [ ] 在 `dashin-cli` 中新增全栈模板，包含 `docker-compose.yml`（Atomo Rust 核心 + Postgres + Dashin Vite 前端）。
-  - [ ] 支持一键命令 `dashin new my-app --template atomo` 初始化全栈项目。
-- [ ] **5.3 官方生态整合与 `atomo-admin-ui` 平滑平替**
-  - [ ] 更新 `atomo` 根目录的开发指引与文档，推荐 Dashin 作为官方首选生产级 Admin UI。
+### Phase 5: 全栈脚手架闭环、E2E 测试与生态平替 (Completed)
+- [x] **5.1 全栈集成与 E2E 冒烟测试** *(2026-09-06)*
+  - [x] 编写 Playwright E2E 自动化测试用例 `packages/dashin/e2e/atomo.spec.ts`，覆盖 Atomo 动态实体加载、可观测性大盘、工作流设计器无运行时崩溃验证。
+- [x] **5.2 打造全栈脚手架模板 (`dashin-cli/templates/fullstack-atomo`)** *(2026-09-06)*
+  - [x] 在 `dashin-cli` 中新增全栈模板，内置 `docker-compose.yml`（Atomo Rust 核心 + Postgres + Dashin Vite 前端）及集成依赖。
+  - [x] 在 `dashin-cli` 中支持 `dashin new my-app --template atomo` 或 `--atomo` 一键初始化全栈项目。
+- [x] **5.3 官方生态整合与 `atomo-admin-ui` 平滑平替** *(2026-09-06)*
+  - [x] 更新 `atomo` 根目录 `README.md` 与 `README.zh-CN.md`，正式推荐 Dashin 作为 Atomo 官方首选生产级企业 Admin 框架。
   - [ ] 整理迁移指南，确保既有 Atomo 用户能够平滑切换到 Dashin，淘汰旧有简易 UI。

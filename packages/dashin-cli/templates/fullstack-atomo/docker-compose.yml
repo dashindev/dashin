@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: atomo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: atomo_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  atomo-core:
+    image: ghcr.io/atomo-rs/atomo:latest
+    container_name: atomo-core
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432/atomo_db
+      PORT: 8080
+      RUST_LOG: info
+    ports:
+      - "8080:8080"
+
+  admin-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dashin-admin
+    restart: unless-stopped
+    depends_on:
+      - atomo-core
+    environment:
+      VITE_ATOMO_URL: http://localhost:8080
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:

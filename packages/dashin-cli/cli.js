@@ -8,9 +8,10 @@ const meow = require("meow")
 const ui = importJsx("./lib/ui")
 
 const cli = meow(`
-	Create a new project (Vite or Next.js)
+	Create a new project (Vite, Next.js, or Fullstack Atomo)
 	  $ dashin new {name}
 	  $ dashin new {name} --nextjs
+	  $ dashin new {name} --template atomo (or --atomo)
 
     Options
       --plugin  with demo plugin

@@ -5,13 +5,18 @@ const path = require("path")
 
 export default async function newProject(
   name = "my-dashboard",
-  options = { nextjs: false }
+  options: any = { nextjs: false }
 ): Promise<undefined | string> {
   let sourceFolder = path.resolve(DASHIN_CLI_PATH, "templates/typescript-vite")
-  if (options.nextjs) {
+  if (options.nextjs || options.template === "nextjs") {
     sourceFolder = path.resolve(
       DASHIN_CLI_PATH,
       "templates/typescript-nextjs"
+    )
+  } else if (options.atomo || options.template === "atomo") {
+    sourceFolder = path.resolve(
+      DASHIN_CLI_PATH,
+      "templates/fullstack-atomo"
     )
   }
   let errors: undefined | string

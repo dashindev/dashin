@@ -2,12 +2,16 @@
  * @vitest-environment jsdom
  */
 import React from 'react'
-import { describe, it, expect } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect, afterEach } from 'vitest'
+import { render, screen, fireEvent, cleanup } from '@testing-library/react'
 import { BlocksPreviewer } from '../src/BlocksPreviewer'
 import { BlocksField } from '../src/BlocksField'
 
 describe('BlocksPreviewer and BlocksField', () => {
+  afterEach(() => {
+    cleanup()
+  })
+
   it('renders previewer with empty state', () => {
     render(<BlocksPreviewer value={{ nodes: [] }} />)
     expect(screen.getByText('Empty blocks canvas')).toBeTruthy()
@@ -41,6 +45,6 @@ describe('BlocksPreviewer and BlocksField', () => {
     expect(screen.getByText('Page Layout')).toBeTruthy()
     const openBtn = screen.getByText('Edit Canvas (1)')
     fireEvent.click(openBtn)
-    expect(screen.getByText('Page Layout ? Visual Canvas')).toBeTruthy()
+    expect(screen.getByText(/Page Layout.*Visual Canvas/)).toBeTruthy()
   })
 })

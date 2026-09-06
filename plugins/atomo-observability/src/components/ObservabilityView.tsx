@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Activity, AlertTriangle, RefreshCw, ShieldAlert } from 'lucide-react'
+import { Button, Card, Badge } from '@dashin-dev/dashin'
 import { JobStats, RecentJob, ProjectorInfo, AuditLogEntry, ObservabilityConfig } from '../types'
 import { fetchJobStats, fetchRecentJobs, fetchProjectors, fetchAuditLogs } from '../client'
 import { MetricCard } from './MetricCard'
@@ -85,17 +86,17 @@ export function ObservabilityView({
             <span>{title}</span>
           </h1>
           <p className="text-xs text-icon-muted mt-1">
-            Real-time job queue health, event projectors lag, and audit stream ? Refreshed at {lastRefreshed.toLocaleTimeString()}
+            Real-time job queue health, event projectors lag, and audit stream • Refreshed at {lastRefreshed.toLocaleTimeString()}
           </p>
         </div>
-        <button
-          type="button"
+        <Button
+          variant="outline"
+          size="sm"
           onClick={loadAllData}
-          className="px-3 py-1.5 border border-bn-border rounded-bn bg-content-box hover:bg-content-bg flex items-center gap-1.5 text-xs text-foreground font-medium shadow-bn"
         >
           <RefreshCw className={'h-3.5 w-3.5 ' + (loading ? 'animate-spin' : '')} />
           <span>Refresh</span>
-        </button>
+        </Button>
       </div>
 
       {/* Oldest Queued Warning */}
@@ -132,7 +133,7 @@ export function ObservabilityView({
       />
 
       {/* Recent Jobs Table */}
-      <div className="bg-content-box border border-bn-border rounded-bn shadow-bn p-4 space-y-3">
+      <Card className="p-4 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-bn-border pb-2">
           <h3 className="text-sm font-semibold text-foreground">Recent Jobs Execution</h3>
           <select
@@ -166,27 +167,32 @@ export function ObservabilityView({
                   <tr key={job.id} className="hover:bg-content-bg">
                     <td className="py-2.5 font-medium text-foreground">{job.name}</td>
                     <td className="py-2.5">
-                      <span className={'px-2 py-0.5 rounded text-[10px] font-semibold uppercase ' +
-                        (job.status === 'succeeded' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' :
-                         job.status === 'failed' || job.status === 'dead' ? 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300' :
-                         'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300')}>
+                      <Badge
+                        variant={
+                          job.status === 'succeeded'
+                            ? 'success'
+                            : job.status === 'failed' || job.status === 'dead'
+                            ? 'danger'
+                            : 'default'
+                        }
+                      >
                         {job.status}
-                      </span>
+                      </Badge>
                     </td>
-                    <td className="py-2.5 text-icon-muted">{job.duration_ms ? job.duration_ms + 'ms' : '?'}</td>
-                    <td className="py-2.5 text-icon-muted">{job.created_at || '?'}</td>
-                    <td className="py-2.5 text-icon-muted font-mono truncate max-w-xs">{job.error || '?'}</td>
+                    <td className="py-2.5 text-icon-muted">{job.duration_ms ? job.duration_ms + 'ms' : '—'}</td>
+                    <td className="py-2.5 text-icon-muted">{job.created_at || '—'}</td>
+                    <td className="py-2.5 text-icon-muted font-mono truncate max-w-xs">{job.error || '—'}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         )}
-      </div>
+      </Card>
 
       {/* Audit Log Feed */}
       {auditLogs.length > 0 && (
-        <div className="bg-content-box border border-bn-border rounded-bn shadow-bn p-4 space-y-3">
+        <Card className="p-4 space-y-3">
           <h3 className="text-sm font-semibold text-foreground border-b border-bn-border pb-2">Audit Logs Feed</h3>
           <div className="space-y-2">
             {auditLogs.map(log => (
@@ -199,7 +205,7 @@ export function ObservabilityView({
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       )}
     </div>
   )

@@ -1,3 +1,4 @@
+import { Input, Select, Textarea, Label } from '@dashin-dev/dashin'
 import { StepAction } from '../types'
 
 export interface ActionEditorProps {
@@ -14,17 +15,17 @@ export function ActionEditor({ action, onChange }: ActionEditorProps) {
       return (
         <div className="space-y-2 text-xs">
           <div>
-            <label className="block text-icon-muted mb-1">Variable Key</label>
-            <input
+            <Label className="block text-icon-muted mb-1 text-xs">Variable Key</Label>
+            <Input
               type="text"
               value={body.key || ''}
               onChange={(e) => onChange({ SetVariable: { ...body, key: e.target.value } })}
-              className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs"
+              className="w-full text-xs"
             />
           </div>
           <div>
-            <label className="block text-icon-muted mb-1">Value (JSON / Primitive)</label>
-            <input
+            <Label className="block text-icon-muted mb-1 text-xs">Value (JSON / Primitive)</Label>
+            <Input
               type="text"
               value={typeof body.value === 'object' ? JSON.stringify(body.value) : String(body.value ?? '')}
               onChange={(e) => {
@@ -32,7 +33,7 @@ export function ActionEditor({ action, onChange }: ActionEditorProps) {
                 try { val = JSON.parse(e.target.value) } catch {}
                 onChange({ SetVariable: { ...body, value: val } })
               }}
-              className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs font-mono"
+              className="w-full text-xs font-mono"
             />
           </div>
         </div>
@@ -41,12 +42,12 @@ export function ActionEditor({ action, onChange }: ActionEditorProps) {
     case 'Delay':
       return (
         <div className="text-xs">
-          <label className="block text-icon-muted mb-1">Delay Duration (Seconds)</label>
-          <input
+          <Label className="block text-icon-muted mb-1 text-xs">Delay Duration (Seconds)</Label>
+          <Input
             type="number"
             value={body.seconds || 0}
             onChange={(e) => onChange({ Delay: { seconds: Number(e.target.value) || 0 } })}
-            className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs"
+            className="w-full text-xs"
           />
         </div>
       )
@@ -56,33 +57,33 @@ export function ActionEditor({ action, onChange }: ActionEditorProps) {
         <div className="space-y-2 text-xs">
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <label className="block text-icon-muted mb-1">Method</label>
-              <select
+              <Label className="block text-icon-muted mb-1 text-xs">Method</Label>
+              <Select
                 value={body.method || 'GET'}
                 onChange={(e) => onChange({ Http: { ...body, method: e.target.value } })}
-                className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs"
+                className="w-full text-xs"
               >
                 <option value="GET">GET</option>
                 <option value="POST">POST</option>
                 <option value="PUT">PUT</option>
                 <option value="PATCH">PATCH</option>
                 <option value="DELETE">DELETE</option>
-              </select>
+              </Select>
             </div>
             <div className="col-span-2">
-              <label className="block text-icon-muted mb-1">Endpoint URL</label>
-              <input
+              <Label className="block text-icon-muted mb-1 text-xs">Endpoint URL</Label>
+              <Input
                 type="text"
                 value={body.url || ''}
                 onChange={(e) => onChange({ Http: { ...body, url: e.target.value } })}
-                className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs"
+                className="w-full text-xs"
                 placeholder="https://api.example.com"
               />
             </div>
           </div>
           <div>
-            <label className="block text-icon-muted mb-1">Request Body (JSON, Optional)</label>
-            <textarea
+            <Label className="block text-icon-muted mb-1 text-xs">Request Body (JSON, Optional)</Label>
+            <Textarea
               rows={2}
               value={body.body ? JSON.stringify(body.body, null, 2) : ''}
               onChange={(e) => {
@@ -90,7 +91,7 @@ export function ActionEditor({ action, onChange }: ActionEditorProps) {
                 try { if (e.target.value) parsed = JSON.parse(e.target.value) } catch {}
                 onChange({ Http: { ...body, body: parsed } })
               }}
-              className="w-full p-2 border border-bn-border rounded-bn bg-content-box text-foreground text-xs font-mono resize-none"
+              className="w-full text-xs font-mono"
               placeholder="{}"
             />
           </div>
@@ -100,12 +101,12 @@ export function ActionEditor({ action, onChange }: ActionEditorProps) {
     case 'Mutation':
       return (
         <div className="text-xs">
-          <label className="block text-icon-muted mb-1">GraphQL Mutation</label>
-          <textarea
+          <Label className="block text-icon-muted mb-1 text-xs">GraphQL Mutation</Label>
+          <Textarea
             rows={3}
             value={body.query || ''}
             onChange={(e) => onChange({ Mutation: { ...body, query: e.target.value } })}
-            className="w-full p-2 border border-bn-border rounded-bn bg-content-box text-foreground text-xs font-mono resize-none"
+            className="w-full text-xs font-mono"
           />
         </div>
       )

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ArrowUp, ArrowDown, Trash2, Plus, Save, Layers } from 'lucide-react'
+import { Card, Button, Input, Select, Label } from '@dashin-dev/dashin'
 import { WorkflowGraph, WorkflowTrigger } from '../types'
 import { emptyGraph, workflowToGraph, graphToWorkflow, defaultStep } from '../serde'
 import { getWorkflow, registerWorkflow } from '../client'
@@ -98,7 +99,7 @@ export function WorkflowDesigner({
   return (
     <div className="space-y-4">
       {/* Top Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-content-box border border-bn-border rounded-bn shadow-bn">
+      <Card className="flex flex-wrap items-center justify-between gap-3 p-4">
         <div>
           <h2 className="text-base font-bold text-foreground">
             {workflowName ? 'Edit Workflow: ' + workflowName : 'Create Declarative Workflow'}
@@ -109,25 +110,25 @@ export function WorkflowDesigner({
         </div>
         <div className="flex items-center gap-2">
           {onCancel && (
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              size="sm"
               onClick={onCancel}
-              className="px-3 py-1.5 border border-bn-border rounded-bn hover:bg-content-bg text-xs text-foreground"
             >
               Cancel
-            </button>
+            </Button>
           )}
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="sm"
             disabled={saving}
             onClick={handleSave}
-            className="px-4 py-1.5 bg-primary text-white font-medium rounded-bn text-xs flex items-center gap-1.5 shadow-bn"
           >
             <Save className="h-3.5 w-3.5" />
             <span>{saving ? 'Saving...' : 'Save Workflow'}</span>
-          </button>
+          </Button>
         </div>
-      </div>
+      </Card>
 
       {error && (
         <div className="p-3 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 border border-red-300 rounded-bn text-xs">
@@ -140,57 +141,57 @@ export function WorkflowDesigner({
         {/* Left Config Column */}
         <div className="lg:col-span-7 space-y-4">
           {/* Basic Info Card */}
-          <div className="p-4 bg-content-box border border-bn-border rounded-bn shadow-bn space-y-3">
+          <Card className="p-4 space-y-3">
             <h3 className="text-xs font-semibold text-icon-muted uppercase tracking-wider">Trigger & Identity</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <label className="block text-icon-muted mb-1">Workflow Name</label>
-                <input
+                <Label className="block text-icon-muted mb-1 text-xs">Workflow Name</Label>
+                <Input
                   type="text"
                   disabled={!!workflowName}
                   value={graph.name}
                   onChange={(e) => update({ name: e.target.value })}
-                  className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs"
+                  className="w-full text-xs"
                   placeholder="e.g. notify-vip-contact"
                 />
               </div>
               <div>
-                <label className="block text-icon-muted mb-1">Trigger Type</label>
-                <select
+                <Label className="block text-icon-muted mb-1 text-xs">Trigger Type</Label>
+                <Select
                   value={triggerKind}
                   onChange={(e) => setTriggerKind(e.target.value)}
-                  className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs"
+                  className="w-full text-xs"
                 >
                   <option value="Manual">Manual</option>
                   <option value="OnEvent">OnEvent (Reactive Event Stream)</option>
                   <option value="Schedule">Schedule (Cron)</option>
-                </select>
+                </Select>
               </div>
             </div>
 
             {triggerKind === 'OnEvent' && typeof graph.trigger === 'object' && 'OnEvent' in graph.trigger && (
               <div className="grid grid-cols-2 gap-3 text-xs border-t border-bn-border pt-2">
                 <div>
-                  <label className="block text-icon-muted mb-1">Target Model</label>
-                  <input
+                  <Label className="block text-icon-muted mb-1 text-xs">Target Model</Label>
+                  <Input
                     type="text"
                     value={graph.trigger.OnEvent.model}
                     onChange={(e) => update({
                       trigger: { OnEvent: { ...(graph.trigger as any).OnEvent, model: e.target.value } }
                     })}
-                    className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs"
+                    className="w-full text-xs"
                     placeholder="Contact"
                   />
                 </div>
                 <div>
-                  <label className="block text-icon-muted mb-1">Event Type</label>
-                  <input
+                  <Label className="block text-icon-muted mb-1 text-xs">Event Type</Label>
+                  <Input
                     type="text"
                     value={graph.trigger.OnEvent.event_type}
                     onChange={(e) => update({
                       trigger: { OnEvent: { ...(graph.trigger as any).OnEvent, event_type: e.target.value } }
                     })}
-                    className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs"
+                    className="w-full text-xs"
                     placeholder="Created"
                   />
                 </div>
@@ -199,37 +200,38 @@ export function WorkflowDesigner({
 
             {triggerKind === 'Schedule' && typeof graph.trigger === 'object' && 'Schedule' in graph.trigger && (
               <div className="text-xs border-t border-bn-border pt-2">
-                <label className="block text-icon-muted mb-1">Cron Expression (5-6 fields)</label>
-                <input
+                <Label className="block text-icon-muted mb-1 text-xs">Cron Expression (5-6 fields)</Label>
+                <Input
                   type="text"
                   value={graph.trigger.Schedule.cron}
                   onChange={(e) => update({
                     trigger: { Schedule: { cron: e.target.value } }
                   })}
-                  className="w-full px-2 py-1.5 border border-bn-border rounded-bn bg-content-box text-foreground text-xs font-mono"
+                  className="w-full text-xs font-mono"
                   placeholder="0 0 * * *"
                 />
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Action Steps */}
-          <div className="p-4 bg-content-box border border-bn-border rounded-bn shadow-bn space-y-3">
+          <Card className="p-4 space-y-3">
             <div className="flex items-center justify-between border-b border-bn-border pb-2">
               <h3 className="text-xs font-semibold text-icon-muted uppercase tracking-wider">
                 Steps Sequence ({graph.steps.length})
               </h3>
               <div className="flex items-center gap-1">
                 {ACTION_KINDS.map((k) => (
-                  <button
+                  <Button
                     key={k}
-                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => addStep(k)}
-                    className="px-2 py-1 border border-bn-border rounded-bn hover:bg-content-bg text-[11px] text-foreground font-medium flex items-center gap-1"
+                    className="text-[11px] font-medium"
                   >
                     <Plus className="h-3 w-3" />
                     <span>{k}</span>
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -246,40 +248,43 @@ export function WorkflowDesigner({
                       <span className="w-5 h-5 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-[10px]">
                         {idx + 1}
                       </span>
-                      <input
+                      <Input
                         type="text"
                         value={step.name}
                         onChange={(e) => patchStep(step.id, { name: e.target.value })}
-                        className="px-2 py-1 border border-bn-border rounded-bn bg-content-box text-foreground text-xs font-medium flex-1"
+                        className="text-xs font-medium flex-1 py-1"
                         placeholder="Step name"
                       />
                       <div className="flex items-center gap-1">
-                        <button
-                          type="button"
+                        <Button
+                          variant="outline"
+                          size="sm"
                           disabled={idx === 0}
                           onClick={() => moveStep(idx, -1)}
-                          className="p-1 border border-bn-border rounded-bn hover:bg-content-box disabled:opacity-30 text-foreground"
+                          className="p-1 h-7 w-7 min-w-0"
                           title="Move up"
                         >
                           <ArrowUp className="h-3 w-3" />
-                        </button>
-                        <button
-                          type="button"
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
                           disabled={idx === graph.steps.length - 1}
                           onClick={() => moveStep(idx, 1)}
-                          className="p-1 border border-bn-border rounded-bn hover:bg-content-box disabled:opacity-30 text-foreground"
+                          className="p-1 h-7 w-7 min-w-0"
                           title="Move down"
                         >
                           <ArrowDown className="h-3 w-3" />
-                        </button>
-                        <button
-                          type="button"
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           onClick={() => removeStep(step.id)}
-                          className="p-1 border border-bn-border rounded-bn hover:bg-red-50 hover:text-red-600 text-icon-muted"
+                          className="p-1 h-7 w-7 min-w-0 text-icon-muted hover:text-danger hover:bg-danger/10"
                           title="Delete step"
                         >
                           <Trash2 className="h-3 w-3" />
-                        </button>
+                        </Button>
                       </div>
                     </div>
 
@@ -294,11 +299,11 @@ export function WorkflowDesigner({
                 ))}
               </div>
             )}
-          </div>
+          </Card>
         </div>
 
         {/* Right Graph Preview Column */}
-        <div className="lg:col-span-5 p-4 bg-content-box border border-bn-border rounded-bn shadow-bn flex flex-col">
+        <Card className="lg:col-span-5 p-4 flex flex-col">
           <div className="flex items-center justify-between border-b border-bn-border pb-2 mb-2">
             <h3 className="text-xs font-semibold text-icon-muted uppercase tracking-wider flex items-center gap-1.5">
               <Layers className="h-3.5 w-3.5 text-primary" />
@@ -308,7 +313,7 @@ export function WorkflowDesigner({
           <div className="flex-1 overflow-auto flex items-center justify-center min-h-[360px] bg-content-bg rounded-bn border border-bn-border">
             <WorkflowGraphView graph={graph} />
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   )

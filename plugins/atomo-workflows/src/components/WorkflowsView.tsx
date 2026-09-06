@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Workflow as WorkflowIcon, Plus, Play, Trash2, Edit3, CheckCircle, RefreshCw } from 'lucide-react'
+import { Card, Button, Badge } from '@dashin-dev/dashin'
 import { Workflow } from '../types'
 import { listWorkflows, runWorkflow, deleteWorkflow } from '../client'
 import { WorkflowDesigner } from './WorkflowDesigner'
@@ -89,22 +90,22 @@ export function WorkflowsView({ baseUrl = '', token }: WorkflowsViewProps) {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="sm"
             onClick={loadData}
-            className="px-3 py-1.5 border border-bn-border rounded-bn bg-content-box hover:bg-content-bg text-xs text-foreground font-medium shadow-bn flex items-center gap-1.5"
           >
             <RefreshCw className={'h-3.5 w-3.5 ' + (loading ? 'animate-spin' : '')} />
             <span>Refresh</span>
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
             onClick={() => setIsCreating(true)}
-            className="px-3.5 py-1.5 bg-primary text-white rounded-bn text-xs font-semibold shadow-bn flex items-center gap-1.5"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>New Workflow</span>
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -124,7 +125,7 @@ export function WorkflowsView({ baseUrl = '', token }: WorkflowsViewProps) {
       )}
 
       {/* Workflows List */}
-      <div className="bg-content-box border border-bn-border rounded-bn shadow-bn p-4 space-y-3">
+      <Card className="p-4 space-y-3">
         <h3 className="text-sm font-semibold text-foreground border-b border-bn-border pb-2">
           Configured Workflows ({workflows.length})
         </h3>
@@ -138,7 +139,7 @@ export function WorkflowsView({ baseUrl = '', token }: WorkflowsViewProps) {
             {workflows.map((wf) => {
               let triggerDesc = 'Manual'
               if (typeof wf.trigger === 'object' && 'OnEvent' in wf.trigger) {
-                triggerDesc = 'Event: ' + wf.trigger.OnEvent.model + ' ? ' + wf.trigger.OnEvent.event_type
+                triggerDesc = 'Event: ' + wf.trigger.OnEvent.model + ' → ' + wf.trigger.OnEvent.event_type
               } else if (typeof wf.trigger === 'object' && 'Schedule' in wf.trigger) {
                 triggerDesc = 'Cron: ' + wf.trigger.Schedule.cron
               }
@@ -148,40 +149,43 @@ export function WorkflowsView({ baseUrl = '', token }: WorkflowsViewProps) {
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-sm text-foreground">{wf.name}</span>
-                      <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-primary/10 text-primary">
+                      <Badge variant="default" className="text-[10px] uppercase font-bold">
                         {(wf.steps || []).length} steps
-                      </span>
+                      </Badge>
                     </div>
                     <div className="text-xs text-icon-muted mt-1">{triggerDesc}</div>
                   </div>
 
                   <div className="flex items-center justify-between border-t border-bn-border pt-2 text-xs">
-                    <button
-                      type="button"
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => handleRun(wf.name)}
-                      className="px-2.5 py-1 rounded-bn bg-primary-50 text-primary hover:bg-primary/20 font-medium flex items-center gap-1"
+                      className="text-primary hover:bg-primary/10"
                     >
                       <Play className="h-3 w-3" />
                       <span>Run Now</span>
-                    </button>
+                    </Button>
 
                     <div className="flex items-center gap-1">
-                      <button
-                        type="button"
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => setEditingWorkflow(wf.name)}
-                        className="p-1 border border-bn-border rounded-bn hover:bg-content-box text-icon-muted hover:text-foreground"
+                        className="p-1 h-7 w-7 min-w-0 text-icon-muted hover:text-foreground"
                         title="Edit in Designer"
                       >
                         <Edit3 className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => handleDelete(wf.name)}
-                        className="p-1 border border-bn-border rounded-bn hover:bg-red-50 hover:text-red-600 text-icon-muted"
+                        className="p-1 h-7 w-7 min-w-0 text-icon-muted hover:text-danger hover:bg-danger/10"
                         title="Delete"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -189,7 +193,7 @@ export function WorkflowsView({ baseUrl = '', token }: WorkflowsViewProps) {
             })}
           </div>
         )}
-      </div>
+      </Card>
     </div>
   )
 }

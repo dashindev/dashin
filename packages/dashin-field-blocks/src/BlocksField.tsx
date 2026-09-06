@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Layout, Maximize2, Edit3 } from 'lucide-react'
+import { Label, Button } from '@dashin-dev/dashin'
 import { FlowCanvasValue } from './types'
 import { EnhancedBlocksEditor } from './EnhancedBlocksEditor'
 import { BlocksPreviewer } from './BlocksPreviewer'
@@ -38,19 +39,20 @@ export function BlocksField({
     <div className="space-y-1.5">
       {label && (
         <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+          <Label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
             <Layout className="h-3.5 w-3.5 text-primary" />
             <span>{label}</span>
-          </label>
+          </Label>
           {!readOnly && (
-            <button
-              type="button"
+            <Button
+              variant="link"
+              size="sm"
               onClick={() => setIsOpen(true)}
-              className="text-xs text-primary hover:underline flex items-center gap-1"
+              className="text-xs font-normal p-0 h-auto flex items-center gap-1"
             >
               <Edit3 className="h-3 w-3" />
               <span>{nodeCount > 0 ? 'Edit Canvas (' + nodeCount + ')' : 'Open Canvas Editor'}</span>
-            </button>
+            </Button>
           )}
         </div>
       )}
@@ -67,15 +69,15 @@ export function BlocksField({
             <div className="h-12 border-b border-bn-border px-4 flex items-center justify-between bg-content-box">
               <div className="flex items-center gap-2">
                 <Maximize2 className="h-4 w-4 text-primary" />
-                <h2 className="font-semibold text-sm text-foreground">{label} ? Visual Canvas</h2>
+                <h2 className="font-semibold text-sm text-foreground">{label} — Visual Canvas</h2>
               </div>
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setIsOpen(false)}
-                className="px-3 py-1 text-xs border border-bn-border rounded-bn hover:bg-content-bg text-foreground font-medium"
               >
                 Close & Save
-              </button>
+              </Button>
             </div>
 
             <div className="flex-1 overflow-auto p-3">

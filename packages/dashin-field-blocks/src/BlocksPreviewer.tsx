@@ -1,3 +1,4 @@
+import { Badge } from '@dashin-dev/dashin'
 import { FlowCanvasValue } from './types'
 
 export interface BlocksPreviewerProps {
@@ -35,13 +36,13 @@ export function BlocksPreviewer({ value, className = '' }: BlocksPreviewerProps)
       </div>
       <div className="flex flex-wrap gap-1.5">
         {nodes.map(node => (
-          <span
+          <Badge
             key={node.id}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-content-bg border border-bn-border text-foreground"
+            variant="default"
+            className="cursor-default"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            <span className="font-medium">{node.data?.label || node.type}</span>
-          </span>
+            {node.data?.label || node.type}
+          </Badge>
         ))}
       </div>
     </div>

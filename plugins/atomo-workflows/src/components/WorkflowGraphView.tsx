@@ -1,4 +1,5 @@
 import { Zap, ArrowDown } from 'lucide-react'
+import { Card, Badge } from '@dashin-dev/dashin'
 import { WorkflowGraph, WorkflowTrigger, StepAction, FailurePolicy } from '../types'
 
 export interface WorkflowGraphViewProps {
@@ -47,38 +48,40 @@ export function WorkflowGraphView({ graph }: WorkflowGraphViewProps) {
   return (
     <div className="flex flex-col items-center py-4 select-none">
       {/* Trigger Node */}
-      <div className="p-3 border-2 border-primary/50 bg-primary-50 dark:bg-primary-950/40 rounded-bn shadow-bn w-64 text-center">
+      <Card className="p-3 border-2 border-primary/50 bg-primary-50 dark:bg-primary-950/40 w-64 text-center">
         <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider mb-1">
           <Zap className="h-3.5 w-3.5" />
           <span>Trigger</span>
         </div>
         <div className="text-xs font-medium text-foreground truncate">{triggerLabel(graph.trigger)}</div>
-      </div>
+      </Card>
 
       {steps.length === 0 ? (
         <>
           <Connector />
-          <div className="p-3 border border-dashed border-bn-border rounded-bn bg-content-box w-64 text-center text-xs text-icon-muted italic">
+          <Card className="p-3 border-dashed w-64 text-center text-xs text-icon-muted italic">
             No action steps configured
-          </div>
+          </Card>
         </>
       ) : (
         steps.map((step, idx) => (
           <div key={step.id || idx} className="flex flex-col items-center">
             <Connector />
-            <div className="p-3 border border-bn-border rounded-bn bg-content-box shadow-bn w-64 space-y-1.5">
+            <Card className="p-3 w-64 space-y-1.5">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-foreground truncate">{step.name}</span>
-                <span className="text-[10px] text-icon-muted font-mono">#{idx + 1}</span>
+                <Badge variant="outline" className="text-[10px] font-mono px-1.5 py-0">
+                  #{idx + 1}
+                </Badge>
               </div>
-              <div className="px-2 py-1 rounded text-[11px] bg-content-bg text-foreground font-medium truncate">
+              <div className="px-2 py-1 rounded-bn text-[11px] bg-content-bg text-foreground font-medium truncate border border-bn-border/50">
                 {actionLabel(step.action)}
               </div>
               <div className="text-[10px] text-icon-muted flex justify-between">
                 <span>{failureLabel(step.on_failure)}</span>
                 {step.condition && <span>if {step.condition.field}</span>}
               </div>
-            </div>
+            </Card>
           </div>
         ))
       )}

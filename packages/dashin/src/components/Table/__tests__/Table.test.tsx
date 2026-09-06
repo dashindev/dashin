@@ -1,6 +1,6 @@
 import React from "react"
-import { render, screen, fireEvent, within } from "@testing-library/react"
-import { describe, it, expect, vi } from "vitest"
+import { render, screen, fireEvent, within, cleanup } from "@testing-library/react"
+import { describe, it, expect, vi, afterEach } from "vitest"
 import Table from "../index"
 import { Column } from "../models/material-table-shim"
 
@@ -36,6 +36,11 @@ const data: Row[] = [
 const baseOptions = { pageSize: 2, filtering: true }
 
 describe("Table", () => {
+  afterEach(() => {
+    cleanup()
+    sessionStorage.clear()
+  })
+
   it("renders rows and the empty message", () => {
     render(<Table<Row> columns={columns} data={[]} options={baseOptions} />)
     expect(screen.getByText("emptyDataSourceMessage")).toBeInTheDocument()
@@ -71,6 +76,7 @@ describe("Table", () => {
         editable={{ onRowDelete }}
       />
     )
+    fireEvent.click(screen.getAllByTitle("deleteTooltip")[0])
     fireEvent.click(screen.getAllByTitle("deleteTooltip")[0])
     expect(onRowDelete).toHaveBeenCalledWith(data[0])
   })

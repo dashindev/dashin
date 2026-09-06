@@ -1,3 +1,5 @@
+import { Card } from '@dashin-dev/dashin'
+
 export interface MetricCardProps {
   label: string
   value: number | string
@@ -25,12 +27,12 @@ export function MetricCard({
   }
 
   return (
-    <div className="p-4 bg-content-box border border-bn-border rounded-bn shadow-bn flex flex-col justify-between">
+    <Card className="p-4 flex flex-col justify-between">
       <div className="text-xs text-icon-muted uppercase tracking-wider font-medium">{label}</div>
       <div className={'text-2xl font-bold mt-2 mb-1 ' + colorClass}>
-        {loading ? '?' : value}
+        {loading ? '—' : value}
       </div>
       {subtitle && <div className="text-[11px] text-icon-muted truncate">{subtitle}</div>}
-    </div>
+    </Card>
   )
 }

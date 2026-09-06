@@ -10,9 +10,9 @@
 - [x] **Phase 0: 深度调研、架构论证与规范确立** (已完成)
 - [x] **Phase 1: 契约连接器与鉴权层 (`@dashin-dev/source-atomo` & `@dashin-dev/auth-atomo`)** (已完成)
 - [x] **Phase 2: Dashin 运行时动态 Schema 引擎 (Dynamic Schema Engine)** (已完成)
-- [ ] **Phase 3: 关系穿透升维与一致性策略 (`RelatedPreview` 集成)** (待开始)
-- [ ] **Phase 4: Atomo 高阶资产吸收与插件化 (BlocksEditor, Observability, Workflows)** (待开始)
-- [ ] **Phase 5: 全栈脚手架闭环、E2E 测试与生态平替** (待开始)
+- [x] **Phase 3: 关系穿透升维与一致性策略 (`RelatedPreview` 集成)** (已完成)
+- [x] **Phase 4: Atomo 高阶资产吸收与插件化 (BlocksEditor, Observability, Workflows)** (已完成)
+- [x] **Phase 5: 全栈脚手架闭环、E2E 测试与生态平替** (已完成)
 
 ---
 
@@ -102,6 +102,10 @@
   - [x] 适配 Atomo 声明式状态机与 Action 管道（`SetVariable`, `Delay`, `Http`, `Mutation`, `Plugin`），实现步骤上移/下移、增删与参数编辑。
   - [x] 实现 `WorkflowsView` 工作流总览控制台，支持手动一键触发执行、状态运行结果展示与实时双向图渲染。
   - [x] 编写 `workflows.test.tsx` 单元测试，4 个测试全量通过，TypeScript 编译通过。
+- [x] **4.4 Dashin 官方原生设计体系与组件最大化复用 (Design Token & UI Primitives Reuse)** *(2026-09-06)*
+  - [x] 彻底剥离 Atomo 原有 `@radix-ui/react-*`、`@tanstack/react-query` 与 `class-variance-authority` 重度依赖。
+  - [x] 在 `dashin-field-blocks`、`atomo-observability`、`atomo-workflows` 全面直接复用 `@dashin-dev/dashin` 原生导出的 UI Primitives（`Card`, `Button`, `Input`, `Select`, `Textarea`, `Label`, `Badge`）。
+  - [x] 统一接入 Dashin Tailwind 设计 Token（`bg-content-box`, `border-bn-border`, `rounded-bn`, `text-foreground`, `shadow-bn`），开箱自适应深浅主题与全局响应式规范。
 
 ---
 
@@ -113,4 +117,4 @@
   - [x] 在 `dashin-cli` 中支持 `dashin new my-app --template atomo` 或 `--atomo` 一键初始化全栈项目。
 - [x] **5.3 官方生态整合与 `atomo-admin-ui` 平滑平替** *(2026-09-06)*
   - [x] 更新 `atomo` 根目录 `README.md` 与 `README.zh-CN.md`，正式推荐 Dashin 作为 Atomo 官方首选生产级企业 Admin 框架。
-  - [ ] 整理迁移指南，确保既有 Atomo 用户能够平滑切换到 Dashin，淘汰旧有简易 UI。
+  - [x] 整理迁移指南，确保既有 Atomo 用户能够平滑切换到 Dashin，淘汰旧有简易 UI。

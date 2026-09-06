@@ -9,6 +9,7 @@ import {
   AlignRight,
   AlignJustify
 } from 'lucide-react'
+import { Card, Button, Textarea } from '@dashin-dev/dashin'
 import { FlowCanvas } from './BlocksEditor'
 import {
   FlowNode,
@@ -355,31 +356,31 @@ export function EnhancedFlowCanvas({
       {/* JSON Import/Export Modal */}
       {showJsonModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-content-box border border-bn-border rounded-bn shadow-bn w-full max-w-lg p-4 space-y-3">
+          <Card className="w-full max-w-lg p-4 space-y-3">
             <h3 className="font-semibold text-sm text-foreground">Canvas JSON Data</h3>
-            <textarea
+            <Textarea
               rows={12}
               value={jsonString}
               onChange={(e) => setJsonString(e.target.value)}
-              className="w-full p-2 text-xs font-mono border border-bn-border rounded-bn bg-content-bg text-foreground resize-none"
+              className="w-full text-xs font-mono"
             />
             <div className="flex justify-end gap-2 text-xs">
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setShowJsonModal(false)}
-                className="px-3 py-1.5 border border-bn-border rounded-bn hover:bg-content-bg text-foreground"
               >
                 Cancel
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={importJson}
-                className="px-3 py-1.5 bg-primary text-white rounded-bn font-medium"
               >
                 Apply JSON
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
         </div>
       )}
     </div>

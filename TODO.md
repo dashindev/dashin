@@ -15,6 +15,7 @@
 - [x] **Phase 5: 全栈脚手架闭环、E2E 测试与生态平替** (已完成)
 - [x] **Phase 6: 架构边界治理与 Atomo 嵌入式单镜像交付闭环** (已完成)
 - [x] **Phase 7: downstream 本地测试与生产部署验证 (方案二: 容器挂载联调)** (已完成)
+- [x] **Phase 8: Atomo Admin UI 全量页面与基础组件 Dashin 风格/组件全面重构** (已完成)
 
 ---
 
@@ -152,3 +153,29 @@
 - [x] **7.6 整理测试结果与上线部署操作规程** *(2026-09-06)*
   - 汇总测试结果、日志证据与验证结论，确认容器单端口静态托管、SPA 回退路由、JWT 鉴权及模型数据读写权限全部通过。
   - 输出基于 Watchtower 自动拉取与 Portainer 的生产环境标准上线规程。
+
+---
+
+### Phase 8: Atomo Admin UI 全量页面与基础组件 Dashin 风格/组件全面重构 (All Views & UI Primitives Upgrade) (In Progress)
+- [x] **8.1 基础 UI 原语 (UI Primitives) Dashin 规范重构** *(2026-09-06)*
+  - [x] `Card.tsx`: 适配 `bg-content-box border-bn-border rounded-bn shadow-bn text-foreground`，移除硬编码 `bg-white border-gray-200 text-gray-900`。
+  - [x] `Button.tsx`: 适配 Dashin `rounded-bn font-medium shadow-sm transition-all` 与 `primary: bg-primary hover:bg-primary-hover text-white`, `secondary: bg-content-box border-bn-border text-foreground hover:bg-content-bg`, `ghost`, `danger`, `outline` 等变体。
+  - [x] `Badge.tsx`: 适配 Dashin 语义 badge 规范（`default`, `secondary`, `success: bg-emerald-500/10 text-emerald-600 border-emerald-500/20`, `danger: bg-rose-500/10 text-rose-600 border-rose-500/20`, `warning: bg-amber-500/10 text-amber-600 border-amber-500/20`）。
+  - [x] `Input.tsx` & `Textarea.tsx`: 适配 `rounded-bn border-bn-border bg-content-box text-foreground placeholder:text-icon-muted focus:ring-primary/40 focus:border-primary`。
+  - [x] `Table.tsx`: 适配 `border-bn-border text-foreground hover:bg-primary/5`，表头 `bg-content-bg/50 text-icon-muted text-xs uppercase tracking-wider`。
+  - [x] `Select.tsx` & `DropdownMenu.tsx` & `Dialog.tsx`: 适配 `bg-content-box border-bn-border text-foreground shadow-bn rounded-bn` 浮层与项目悬浮态。
+  - [x] `Tabs.tsx`, `Switch.tsx`, `Checkbox.tsx`, `DatePicker.tsx`, `Tooltip.tsx`: 统一 Dashin 圆角、边框与主题色彩。
+- [x] **8.2 核心业务视图 (Views) Dashin 风格与交互升级** *(2026-09-06)*
+  - [x] `ObservabilityView.tsx`: 队列监控卡片升级为 Dashin KPI 统计卡片（`bg-content-box rounded-bn border-bn-border`），重构状态筛选器与任务/审计表格为 Dashin 优雅表格样式。
+  - [x] `WorkflowsView.tsx`: 升级工作流列表卡片、运行结果日志区域及 JSON 注册表单为 Dashin 现代面板与操作按钮组。
+  - [x] `WorkflowDesigner.tsx` & `WorkflowGraphView.tsx` & `ActionEditor.tsx`: 升级步骤卡片、Trigger 节点、连接线及参数配置表单为 Dashin 规范。
+  - [x] `Settings.tsx`: 重构账户信息、服务器构建版本及平台配置展示为 Dashin 卡片组，支持优雅分割线与高对比度元数据行。
+  - [x] `TrashView.tsx`: 重构回收站模型选择器、空状态以及软删除记录列表/操作按钮为 Dashin 风格。
+  - [x] `Help.tsx`: 重构帮助资源卡片网格与版本信息卡片为 Dashin 现代化悬浮卡片。
+  - [x] `EntityDetailView.tsx`: 重构记录详情/创建/编辑页面顶部操作条、Tabs 切换栏、动态表单容器以及变更历史时间线。
+- [x] **8.3 表单与高级过滤器组件 Dashin 风格升级** *(2026-09-06)*
+  - [x] `DynamicForm.tsx` & `FormField.tsx`: 标签文本色彩、帮助提示、验证错误与表单操作栏统一 Dashin 规范。
+  - [x] `AdvancedFilterPanel.tsx` & `TableSettings.tsx` & `EntityTable.tsx`: 侧滑抽屉/浮层、条件输入行、拖拽排序与导出弹窗统一 Dashin 规范。
+- [x] **8.4 编译构建、静态产物更新与本地 downstream 验证** *(2026-09-06)*
+  - [x] 执行 `pnpm build:server` 重新构建 `atomo-admin-ui` 静态产物到 `dist/`（5.69s 编译成功）。
+  - [x] 通过 Playwright 自动化测试脚本验证 `http://localhost:60503/admin` 所有页面（Dashboard, EntityListView, EntityDetailView, Workflows, WorkflowDesigner, Observability, Settings, Trash, Help）渲染完美、设计 Token 全面生效且深浅主题切换正常。

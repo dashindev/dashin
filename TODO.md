@@ -92,9 +92,11 @@
   - [x] 适配 Dashin Tailwind 设计 Token (`bg-content-box`, `border-bn-border`, `text-foreground`, `rounded-bn`) 与深浅主题。
   - [x] 实现 `BlocksPreviewer` 与 `BlocksField`，支持 DetailDrawer 弹窗/抽屉全屏可视化画板编辑与表格单元格徽章预览。
   - [x] 编写 `DragDropHelpers.test.ts`、`BlocksEditor.test.tsx`、`BlocksField.test.tsx` 单元测试，9 个测试全量通过，TypeScript 编译通过。
-- [ ] **4.2 Atomo 事件与投影器运维面板插件 (`@dashin-dev/plugin-atomo-observability`)**
-  - [ ] 移植 `ObservabilityView`，重构为符合 Dashin 风格的数据卡片与健康指标图表。
-  - [ ] 对接 Atomo `/api/projectors` 与指标接口，展示事件延迟、处理吞吐量，并提供一键触发 Replay 操作。
+- [x] **4.2 Atomo 事件与投影器运维面板插件 (`@dashin-dev/plugin-atomo-observability`)** *(2026-09-06)*
+  - [x] 移植并重构 `ObservabilityView` 为独立插件 `plugins/atomo-observability`，采用 Dashin 风格设计 Token (`bg-content-box`, `border-bn-border`, `rounded-bn`) 与深浅主题。
+  - [x] 实时监控异步队列健康（queued, running, succeeded, failed, dead）、最长积压报警、任务执行历史与审计日志流。
+  - [x] 接入 CQRS 读模型投影器（`ProjectorsPanel`），展示 Stream Offset 与 Lag，并提供一键触发全量 Replay 重建能力。
+  - [x] 编写 `observability.test.tsx` 单元测试，4 个测试全量通过，TypeScript 编译通过。
 - [ ] **4.3 Atomo 工作流设计器插件 (`@dashin-dev/plugin-atomo-workflows`)**
   - [ ] 移植 `WorkflowDesigner` 与 `WorkflowGraphView`，重构为 Dashin 插件页面。
   - [ ] 适配 Atomo 的 Actions 声明式状态机，实现可视化节点拖拽与事件链路配置。

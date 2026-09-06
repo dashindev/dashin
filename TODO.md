@@ -87,10 +87,11 @@
 ---
 
 ### Phase 4: Atomo 高阶资产吸收与插件化 (Blocks, Observability, Workflows)
-- [ ] **4.1 拖拽式块编辑器插件 (`@dashin-dev/field-blocks`)**
-  - [ ] 将 `atomo-admin-ui` 中的 `EnhancedBlocksEditor`、`BlocksEditor`、`DragDropHelpers` 提取并重构。
-  - [ ] 适配 Dashin Tailwind 设计 Token 与深浅主题。
-  - [ ] 作为自定义表单组件注册到 Dashin 的 `DetailDrawer` 中，支持 JSON Blocks 字段渲染。
+- [x] **4.1 拖拽式块编辑器插件 (`@dashin-dev/field-blocks`)** *(2026-09-06)*
+  - [x] 将 `atomo-admin-ui` 中的 `EnhancedBlocksEditor`、`BlocksEditor`、`DragDropHelpers` 提取并重构为独立包 `packages/dashin-field-blocks`。
+  - [x] 适配 Dashin Tailwind 设计 Token (`bg-content-box`, `border-bn-border`, `text-foreground`, `rounded-bn`) 与深浅主题。
+  - [x] 实现 `BlocksPreviewer` 与 `BlocksField`，支持 DetailDrawer 弹窗/抽屉全屏可视化画板编辑与表格单元格徽章预览。
+  - [x] 编写 `DragDropHelpers.test.ts`、`BlocksEditor.test.tsx`、`BlocksField.test.tsx` 单元测试，9 个测试全量通过，TypeScript 编译通过。
 - [ ] **4.2 Atomo 事件与投影器运维面板插件 (`@dashin-dev/plugin-atomo-observability`)**
   - [ ] 移植 `ObservabilityView`，重构为符合 Dashin 风格的数据卡片与健康指标图表。
   - [ ] 对接 Atomo `/api/projectors` 与指标接口，展示事件延迟、处理吞吐量，并提供一键触发 Replay 操作。

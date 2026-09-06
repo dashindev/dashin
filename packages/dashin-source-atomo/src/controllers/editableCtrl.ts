@@ -8,7 +8,14 @@ export default function editableCtrl<RowData extends object = any>({
   baseUrl,
   idField = "id",
   formatError,
+  consistencyDelayMs = 0,
 }: AtomoEditableCtrlProps): EditableDataType<RowData> {
+  const waitConsistency = async () => {
+    if (consistencyDelayMs > 0) {
+      await new Promise(resolve => setTimeout(resolve, consistencyDelayMs))
+    }
+  }
+
   const handleError = async (err: any, fallbackKey: string) => {
     const errorMsg = formatError
       ? formatError(err)
@@ -29,7 +36,8 @@ export default function editableCtrl<RowData extends object = any>({
           title: t ? t("Successfully Created") : "Successfully Created",
           severity: "success",
         })
-        return res
+        await waitConsistency()
+        return { ...(newData as any), ...(res || {}) } as RowData
       } catch (err: any) {
         return await handleError(err, "Failed to create record")
       }
@@ -48,7 +56,8 @@ export default function editableCtrl<RowData extends object = any>({
           title: t ? t("Successfully Updated") : "Successfully Updated",
           severity: "success",
         })
-        return res
+        await waitConsistency()
+        return { ...(newData as any), ...(res || {}) } as RowData
       } catch (err: any) {
         return await handleError(err, "Failed to update record")
       }

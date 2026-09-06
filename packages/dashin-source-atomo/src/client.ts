@@ -196,6 +196,20 @@ export async function atomoUpdateRecord<T = any>(
   return camelizeKeys(data.update) as T
 }
 
+export async function atomoGetRecord<T = any>(
+  model: string,
+  id: string,
+  options: AtomoClientOptions = {}
+): Promise<T> {
+  const query = `
+    query GetRecord($model: String!, $id: String!) {
+      record(model: $model, id: $id)
+    }
+  `
+  const data = await atomoGraphQLRequest<{ record: any }>(query, { model, id }, options)
+  return camelizeKeys(data?.record) as T
+}
+
 export async function atomoDeleteRecord(
   model: string,
   id: string,
@@ -211,3 +225,4 @@ export async function atomoDeleteRecord(
     where: { id: { equals: id } },
   }, options)
 }
+

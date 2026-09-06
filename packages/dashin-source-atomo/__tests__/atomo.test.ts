@@ -182,10 +182,11 @@ describe("Atomo controllers", () => {
     const editable = editableCtrl({
       model: "users",
       baseUrl: "http://test.atomo",
+      consistencyDelayMs: 10,
     })
 
-    const added = await editable.onRowAdd!({ name: "Bob" })
-    expect(added).toEqual({ id: "2", name: "Bob" })
+    const added = await editable.onRowAdd!({ name: "Bob", extra: "client-value" })
+    expect(added).toEqual({ id: "2", name: "Bob", extra: "client-value" })
 
     const updated = await editable.onRowUpdate!({ id: "2", name: "Bobby" })
     expect(updated).toEqual({ id: "2", name: "Bobby" })

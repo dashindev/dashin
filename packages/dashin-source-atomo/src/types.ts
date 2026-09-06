@@ -65,6 +65,7 @@ export interface AtomoDataCtrlProps<RowData extends object = any> extends AtomoS
 
 export interface AtomoEditableCtrlProps extends AtomoSharedProps {
   idField?: string
+  consistencyDelayMs?: number
 }
 
 export interface AtomoBulkDeleteCtrlProps extends AtomoSharedProps {

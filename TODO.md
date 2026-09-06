@@ -73,15 +73,16 @@
 
 ---
 
-### Phase 3: 关系穿透升维与一致性策略 (`RelatedPreview` 集成)
-- [ ] **3.1 关系元数据注册器 (`CollectionRegistryBuilder`)**
-  - [ ] 解析 Atomo Schema 中的 `relationships`（多对一、一对多）。
-  - [ ] 自动构建 Dashin `RelatedPreviewProvider` 所需的 `CollectionRegistry` 字典。
-- [ ] **3.2 字段级关系渲染与层叠抽屉穿透**
-  - [ ] 在 `atomoFieldsToDashinColumns` 中，对关系字段注入 `renderDetail: (row) => <RelatedCard slug={targetModel} value={row[foreignKey]} />`。
-  - [ ] 测试跨实体级联钻取（如 Contact -> Company -> Deals），验证防环死循环保护（Loop Guard）与面包屑。
-- [ ] **3.3 CQRS 读模型一致性体验调优 (Read-Your-Own-Writes)**
-  - [ ] 在 `editableCtrl.onRowUpdate` / `onRowAdd` 成功后，加入短时乐观更新或带重试的拉取机制，规避 Atomo 异步投影延迟带来的闪烁。
+### Phase 3: 关系穿透升维与一致性策略 (`RelatedPreview` 集成) (Completed)
+- [x] **3.1 关系元数据注册器 (`CollectionRegistryBuilder`)** *(2026-09-06)*
+  - [x] 解析 Atomo Schema 中的 `relationships`（多对一、一对多），实现 `extractModelRelations` 与 `buildAtomoRegistry`。
+  - [x] 自动构建 Dashin `RelatedPreviewProvider` 所需的 `CollectionRegistry` 字典，配置 `fetch`、`columns`、`editable` 及 `meta`。
+- [x] **3.2 字段级关系渲染与层叠抽屉穿透** *(2026-09-06)*
+  - [x] 在 `atomoFieldsToDashinColumns` 中，对关系字段注入 `renderDetail: (row) => <RelatedCard slug={targetModel} value={row[foreignKey]} />` 与列表页卡片。
+  - [x] 在 `DynamicAtomoProvider` 自动包裹 `<RelatedPreviewProvider collections={registry}>`，跨实体钻取支持面包屑与 Loop Guard。
+- [x] **3.3 CQRS 读模型一致性体验调优 (Read-Your-Own-Writes)** *(2026-09-06)*
+  - [x] 在 `editableCtrl.onRowUpdate` / `onRowAdd` 成功后，合并乐观返回值 `{ ...newData, ...res }`，并提供 `consistencyDelayMs` 支持，消除 Atomo 异步投影延迟闪烁。
+  - [x] 编写 `registryBuilder.test.ts`、`atomo.test.ts` 对应测试，Phase 3 全量 20 个测试通过。
 
 ---
 

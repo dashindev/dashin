@@ -2,10 +2,12 @@ import React, { createContext, useContext, useEffect, useState, useCallback, use
 import { AtomoModelMeta, AtomoSchemaMeta } from "../types"
 import { fetchAtomoMetadata } from "../client"
 import { atomoFieldsToDashinColumns } from "../schemaMapper"
-import { Column } from "@dashin-dev/dashin"
+import { buildAtomoRegistry } from "../registryBuilder"
+import { Column, RelatedPreviewProvider, CollectionRegistry } from "@dashin-dev/dashin"
 
 export interface AtomoContextValue {
   schema: AtomoSchemaMeta | null
+  registry: CollectionRegistry
   loading: boolean
   error: Error | null
   refreshSchema: () => Promise<void>
@@ -14,6 +16,7 @@ export interface AtomoContextValue {
 
 const AtomoContext = createContext<AtomoContextValue>({
   schema: null,
+  registry: {},
   loading: true,
   error: null,
   refreshSchema: async () => {},
@@ -53,18 +56,30 @@ export const DynamicAtomoProvider: React.FC<DynamicAtomoProviderProps> = ({
     }
   }, [refreshSchema, initialSchema])
 
+  const registry = useMemo<CollectionRegistry>(() => {
+    if (!schema) return {}
+    return buildAtomoRegistry(schema, { baseUrl })
+  }, [schema, baseUrl])
+
   const contextValue = useMemo<AtomoContextValue>(
     () => ({
       schema,
+      registry,
       loading,
       error,
       refreshSchema,
       baseUrl,
     }),
-    [schema, loading, error, refreshSchema, baseUrl]
+    [schema, registry, loading, error, refreshSchema, baseUrl]
   )
 
-  return <AtomoContext.Provider value={contextValue}>{children}</AtomoContext.Provider>
+  return (
+    <AtomoContext.Provider value={contextValue}>
+      <RelatedPreviewProvider collections={registry}>
+        {children}
+      </RelatedPreviewProvider>
+    </AtomoContext.Provider>
+  )
 }
 
 export function useAtomoSchema(): AtomoContextValue {

@@ -1,4 +1,5 @@
-import { Column } from "@dashin-dev/dashin"
+import React from "react"
+import { Column, RelatedCard } from "@dashin-dev/dashin"
 import { AtomoModelMeta } from "./types"
 
 export function humanizeTitle(name: string): string {
@@ -42,20 +43,31 @@ export interface SchemaMapperOptions {
   alwaysHiddenFields?: string[]
   /** Override column definitions by field name */
   overrides?: Record<string, Partial<Column<any>>>
+  /** Enable automatic RelatedCard rendering for relation fields */
+  autoRelatedCard?: boolean
 }
 
 export function atomoFieldsToDashinColumns<RowData extends object = any>(
   modelMeta: AtomoModelMeta,
   options: SchemaMapperOptions = {}
 ): Column<RowData>[] {
-  const { formatTitle = humanizeTitle, alwaysHiddenFields = ["id"], overrides = {} } = options
+  const {
+    formatTitle = humanizeTitle,
+    alwaysHiddenFields = ["id"],
+    overrides = {},
+    autoRelatedCard = true,
+  } = options
   const columns: Column<RowData>[] = []
 
   const listView = modelMeta.ui?.listView
 
   for (const [fieldName, field] of Object.entries(modelMeta.fields || {})) {
     const isId = fieldName === "id" || field.attributes?.includes("primary")
-    const isReadonly = isId || field.attributes?.includes("readonly") || fieldName === "createdAt" || fieldName === "updatedAt"
+    const isReadonly =
+      isId ||
+      field.attributes?.includes("readonly") ||
+      fieldName === "createdAt" ||
+      fieldName === "updatedAt"
 
     // Determine hidden status:
     // 1. If explicit listView is provided on the model, honor it.
@@ -76,6 +88,32 @@ export function atomoFieldsToDashinColumns<RowData extends object = any>(
       hidden: isHidden,
       editable: isReadonly ? "never" : undefined,
       filtering: colType !== "datetime" && field.type !== "blocks" && field.type !== "json",
+    }
+
+    // Detect relationship targeting this field
+    let relationTarget: string | undefined = field.relationship?.model
+    if (!relationTarget && modelMeta.relationships) {
+      for (const rel of Object.values(modelMeta.relationships)) {
+        if (
+          rel.foreignKey === fieldName ||
+          rel.model.toLowerCase() === fieldName.toLowerCase().replace(/id$/, "")
+        ) {
+          relationTarget = rel.model
+          break
+        }
+      }
+    }
+
+    if (autoRelatedCard && relationTarget) {
+      const target = relationTarget
+      col.renderDetail = (row: any) => (
+        <RelatedCard slug={target} value={row?.[fieldName]} />
+      )
+      col.render = (row: any) => {
+        const val = row?.[fieldName]
+        if (!val) return <span className="text-icon-muted">—</span>
+        return <RelatedCard slug={target} value={val} />
+      }
     }
 
     // Apply any field-level overrides

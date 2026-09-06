@@ -21,6 +21,8 @@ vi.mock("@dashin-dev/dashin", () => ({
       </ul>
     </div>
   ),
+  RelatedPreviewProvider: ({ children }: any) => <div data-testid="mock-related-preview-provider">{children}</div>,
+  RelatedCard: ({ slug, value }: any) => <div data-testid="mock-related-card">{slug}:{String(value)}</div>,
   CubeSpinner: () => <div data-testid="cube-spinner">Loading...</div>,
   notice: vi.fn(),
   storedToken: vi.fn().mockResolvedValue("token"),

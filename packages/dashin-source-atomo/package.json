@@ -1,0 +1,25 @@
+{
+  "name": "@dashin-dev/source-atomo",
+  "version": "2.0.0-alpha.7",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "devDependencies": {
+    "@dashin-dev/dashin": "^2.0.0-alpha.5",
+    "prettier": "1.19.1",
+    "typescript": "4.8.3",
+    "vitest": "^3.2.6"
+  },
+  "scripts": {
+    "tsc:watch": "tsc -w",
+    "tsc:clean": "tsc --build --clean",
+    "tsc:build": "tsc",
+    "test": "vitest run"
+  }
+}

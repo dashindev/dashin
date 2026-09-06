@@ -14,6 +14,7 @@
 - [x] **Phase 4: Atomo 高阶资产吸收与插件化 (BlocksEditor, Observability, Workflows)** (已完成)
 - [x] **Phase 5: 全栈脚手架闭环、E2E 测试与生态平替** (已完成)
 - [x] **Phase 6: 架构边界治理与 Atomo 嵌入式单镜像交付闭环** (已完成)
+- [x] **Phase 7: downstream 本地测试与生产部署验证 (方案二: 容器挂载联调)** (已完成)
 
 ---
 
@@ -129,3 +130,25 @@
 - [x] **6.2 保障 Atomo 单 Docker 镜像交付优势** *(2026-09-06)*
   - [x] 确立 Atomo 嵌入式管理台基于 Dashin 架构（依赖 `@dashin-dev/dashin`），并在 `atomo` 仓库内完成自包含静态构建与 Axum `/admin` 原生伺服。
   - [x] 保障 `docker run -p 3000:3000 atomo-server` 开箱即得生产级 Dashin Admin UI，实现极简部署与高效本地开发闭环。
+
+---
+
+### Phase 7: downstream 本地测试与生产部署验证 (方案二: 容器挂载联调) (In Progress)
+- [x] **7.1 准备与构建 Admin UI 静态产物** *(2026-09-06)*
+  - 确认/构建基于 base `/admin/` 的静态 SPA 产物（产物位于 `atomo/packages/atomo-admin-ui/dist`），`tsc && vite build --base=/admin/` 构建成功（8.45s）。
+- [x] **7.2 配置 downstream 本地 Docker Compose 挂载** *(2026-09-06)*
+  - 在 `downstream/backend/docker-compose.yml` 中挂载 `../../atomo/packages/atomo-admin-ui/dist:/app/admin:ro` 并显式配置 `ATOMO_ADMIN_DIR: /app/admin`。
+- [x] **7.3 启动本地后端并执行容器服务冒烟** *(2026-09-06)*
+  - 启动 `downstream/backend` 的 `db`、`server`、`migrate` 容器成功（服务端口根据 `.env` 映射至 60503）。
+  - 验证 `http://localhost:60503/meta/schema` 成功返回 downstream 6 个核心模型（`CreditLedger`, `GenerationJob`, `Subscription`, `TrialUsage`, `UsageEvent`, `CreditBalance`）。
+- [x] **7.4 验证 Admin UI 静态伺服与子路径路由** *(2026-09-06)*
+  - HTTP 请求验证 `http://localhost:60503/admin/` 正常返回 200 与 `index.html`。
+  - 验证静态资源（`/admin/assets/index-60938748.css` 和 `/admin/assets/index-0f4acdda.js`）正确返回 200。
+  - 验证 SPA 回退路由（如 `/admin/entities/GenerationJob`）正常回退至 `index.html`，状态码 200，无 404。
+- [x] **7.5 模拟管理员鉴权与 downstream 核心模型数据联调** *(2026-09-06)*
+  - 验证使用管理员凭据成功通过 `/auth/login` 获取真实 JWT Token，并通过 `/auth/me` 校验 Admin 身份。
+  - 通过 GraphQL `paginatedRecords` 成功内省与拉取 downstream 真实业务数据（`GenerationJob` 2 条，`CreditLedger` 8 条）。
+  - 验证 `CreditLedger` 的只读防篡改机制：触发 delete mutation 被后端严格拦截返回 `Access denied for 'delete' on 'CreditLedger'`，与 Dashin 前端权限规则完全匹配。
+- [x] **7.6 整理测试结果与上线部署操作规程** *(2026-09-06)*
+  - 汇总测试结果、日志证据与验证结论，确认容器单端口静态托管、SPA 回退路由、JWT 鉴权及模型数据读写权限全部通过。
+  - 输出基于 Watchtower 自动拉取与 Portainer 的生产环境标准上线规程。

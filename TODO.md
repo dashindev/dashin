@@ -97,9 +97,11 @@
   - [x] 实时监控异步队列健康（queued, running, succeeded, failed, dead）、最长积压报警、任务执行历史与审计日志流。
   - [x] 接入 CQRS 读模型投影器（`ProjectorsPanel`），展示 Stream Offset 与 Lag，并提供一键触发全量 Replay 重建能力。
   - [x] 编写 `observability.test.tsx` 单元测试，4 个测试全量通过，TypeScript 编译通过。
-- [ ] **4.3 Atomo 工作流设计器插件 (`@dashin-dev/plugin-atomo-workflows`)**
-  - [ ] 移植 `WorkflowDesigner` 与 `WorkflowGraphView`，重构为 Dashin 插件页面。
-  - [ ] 适配 Atomo 的 Actions 声明式状态机，实现可视化节点拖拽与事件链路配置。
+- [x] **4.3 Atomo 工作流设计器插件 (`@dashin-dev/plugin-atomo-workflows`)** *(2026-09-06)*
+  - [x] 移植并重构 `WorkflowDesigner` 与 `WorkflowGraphView` 为独立插件 `plugins/atomo-workflows`，采用 Dashin 风格设计 Token。
+  - [x] 适配 Atomo 声明式状态机与 Action 管道（`SetVariable`, `Delay`, `Http`, `Mutation`, `Plugin`），实现步骤上移/下移、增删与参数编辑。
+  - [x] 实现 `WorkflowsView` 工作流总览控制台，支持手动一键触发执行、状态运行结果展示与实时双向图渲染。
+  - [x] 编写 `workflows.test.tsx` 单元测试，4 个测试全量通过，TypeScript 编译通过。
 
 ---
 

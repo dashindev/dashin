@@ -16,6 +16,7 @@
 - [x] **Phase 6: 架构边界治理与 Atomo 嵌入式单镜像交付闭环** (已完成)
 - [x] **Phase 7: 下游应用容器本地联调与生产部署验证 (方案二: 容器挂载联调)** (已完成)
 - [x] **Phase 8: Atomo Admin UI 全量页面与基础组件 Dashin 风格/组件全面重构** (已完成)
+- [x] **Phase 9: Atomo Admin UI 真正接入 Dashin 核心组件库与 RelatedPreview 架构 (方案 A 落地)** (已完成)
 
 ---
 
@@ -179,3 +180,25 @@
 - [x] **8.4 编译构建、静态产物更新与本地业务环境验证** *(2026-09-06)*
   - [x] 执行 `pnpm build:server` 重新构建 `atomo-admin-ui` 静态产物到 `dist/`（5.69s 编译成功）。
   - [x] 通过 Playwright 自动化测试脚本验证 `http://localhost:60503/admin` 所有页面（Dashboard, EntityListView, EntityDetailView, Workflows, WorkflowDesigner, Observability, Settings, Trash, Help）渲染正常、设计 Token 全面生效且深浅主题切换正常。
+
+---
+
+### Phase 9: Atomo Admin UI 真正接入 Dashin 核心组件库与 RelatedPreview 架构 (方案 A 落地) (已完成)
+- [x] **9.1 依赖联通与编译配置 (Dependency Link & Build Configuration)** *(2026-09-06)*
+  - [x] 在 `dashin/packages/dashin-source-atomo` 中修正 `rootDir: ./src` 并打包生成 `dashin-dev-source-atomo-2.0.0-alpha.7.tgz`。
+  - [x] 在 `atomo/packages/atomo-admin-ui` 中通过 pnpm 安装 `@dashin-dev/dashin@2.0.0-alpha.7` 与本地 vendor 归档的 `@dashin-dev/source-atomo`。
+  - [x] 执行 `pnpm run type-check` 验证 TypeScript 零阻碍通过类型检查，保障 Atomo Docker 镜像纯离线构建完全自包含。
+- [x] **9.2 注入 DynamicAtomoProvider 与 RelatedPreview 全局上下文** *(2026-09-06)*
+  - [x] 在 `atomo-admin-ui/src/App.tsx` 顶层配置 `<DynamicAtomoProvider baseUrl={apiClient.baseUrl}>`，自动获取 Atomo Schema 并动态初始化全系统 `CollectionRegistry`。
+  - [x] 注入 `RelatedPreviewProvider`，提供全局 3 层钻取与循环引用保护。
+- [x] **9.3 重构实体路由与视图：全面使用 DynamicAtomoEntity (原生 CrudTable)** *(2026-09-06)*
+  - [x] 将 `/admin/entities/:model` 视图重构为挂载 `<DynamicAtomoEntity>`。
+  - [x] 实体列表直接由 Dashin 官方 `<CrudTable>` 驱动（开箱即用集成排序、搜索、列条件过滤、批量删除与 `<DetailDrawer>`）。
+  - [x] 验证外键关系字段自动渲染为 `<RelatedCard>`，点击即刻触发多层抽屉钻取预览。
+- [x] **9.4 废弃并清理本地手写冗余表格与抽屉逻辑** *(2026-09-06)*
+  - [x] 彻底删除本地手写的 `EntityListView.tsx`、`EntityTable.tsx` 以及旧 `DetailDrawer.tsx`。
+  - [x] 保持工作流（Workflows）、可观测性（Observability）、系统设置（Settings）等 Atomo 特色视图作为外挂模块与 Dashin 优雅共存。
+- [x] **9.5 生产构建、容器挂载与 Playwright 全流程自动化验证** *(2026-09-06)*
+  - [x] 配置 `vite.config.ts` 中的 `commonjsOptions: { strictRequires: true, transformMixedEsModules: true }` 与 `resolve.dedupe: ['react', 'react-dom', 'react-router-dom']`，彻底消除 CJS 初始化与路由上下文隔离问题。
+  - [x] 执行 `pnpm run build:server` 完成静态构建（10.67s 编译成功）。
+  - [x] 编写并执行端到端 Playwright 自动化测试脚本，验证实体列表（CrudTable）、详情抽屉（DetailDrawer View/Edit 模式）正常渲染与交互，生成截图存档。

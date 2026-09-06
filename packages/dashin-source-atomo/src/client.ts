@@ -28,6 +28,7 @@ export function getAtomoBaseUrl(override?: string): string {
   if (typeof window !== "undefined") {
     const w = window as any
     if (w.__ATOMO_URL__) return w.__ATOMO_URL__.replace(/\/+$/, "")
+    return window.location.origin
   }
   return "http://localhost:3000"
 }

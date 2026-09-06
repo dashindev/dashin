@@ -17,6 +17,7 @@
 - [x] **Phase 7: 下游应用容器本地联调与生产部署验证 (方案二: 容器挂载联调)** (已完成)
 - [x] **Phase 8: Atomo Admin UI 全量页面与基础组件 Dashin 风格/组件全面重构** (已完成)
 - [x] **Phase 9: Atomo Admin UI 真正接入 Dashin 核心组件库与 RelatedPreview 架构 (方案 A 落地)** (已完成)
+- [x] **Phase 10: Docker 镜像云端构建与 GitHub Official Release 闭环** (已完成)
 
 ---
 
@@ -202,3 +203,14 @@
   - [x] 配置 `vite.config.ts` 中的 `commonjsOptions: { strictRequires: true, transformMixedEsModules: true }` 与 `resolve.dedupe: ['react', 'react-dom', 'react-router-dom']`，彻底消除 CJS 初始化与路由上下文隔离问题。
   - [x] 执行 `pnpm run build:server` 完成静态构建（10.67s 编译成功）。
   - [x] 编写并执行端到端 Playwright 自动化测试脚本，验证实体列表（CrudTable）、详情抽屉（DetailDrawer View/Edit 模式）正常渲染与交互，生成截图存档。
+
+---
+
+### Phase 10: Docker 镜像云端构建与 GitHub Official Release 闭环 (已完成)
+- [x] **10.1 发布 Docker 镜像至 GitHub Container Registry (GHCR)** *(2026-09-06)*
+  - [x] 触发 GitHub Actions 工作流 `.github/workflows/docker.yml`（Run ID 34014483878）。
+  - [x] 成功在云端构建生产多阶段 Docker 镜像并推送至 `ghcr.io/atomo-cc/atomo-server:v0.6.5` 与 `latest` 标签。
+- [x] **10.2 发布 GitHub Official Release** *(2026-09-06)*
+  - [x] 生成并发布官方 GitHub Release `v0.6.5`（[Release v0.6.5](https://github.com/atomo-cc/atomo/releases/tag/v0.6.5)）。
+  - [x] 包含 Dashin 核心架构演进说明、CrudTable / RelatedPreview 深度整合、设计 Token 全面统一与 Docker 部署拉取说明，并设置为 `Latest` 正式发布版。
+

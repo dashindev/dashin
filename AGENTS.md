@@ -292,3 +292,20 @@ Run CI before merging significant changes. For trivial fixes (typos, docs), it's
   only lands code on that branch. After the full stack is reviewed, merge the **top**
   branch into `master` to land all accumulated work. Always check `baseRefName` before
   assuming a "merged" PR is on `master`.
+
+## Feature Development Standard: TODO-Driven Development (TODO 驱动开发规范)
+
+All future feature development, architectural migrations, and complex integrations across Dashin MUST strictly adhere to the following workflow:
+
+1. **TODO File as First-Class Artifact**:
+   - Before writing implementation code, create or update a dedicated implementation plan (`IMPLEMENTATION_PLAN.md`) and a top-level `TODO.md` (or module-scoped `TODO.md`).
+   - Every feature must be decomposed into granular, verifiable, and atomic checkable tasks (`- [ ]`).
+2. **Real-Time Synchronization (Update As You Implement)**:
+   - **Strictly prohibit batch checking at the end**. Whenever a sub-task, component, or milestone is implemented, the developer or AI agent MUST immediately update the corresponding item from `- [ ]` to `- [x]`.
+   - Add concise context, commit references, or notes next to completed items when applicable.
+   - If implementation realities require scope changes, newly discovered sub-tasks must be added to `TODO.md` immediately rather than performed silently.
+3. **Verification-Gated Completion**:
+   - A TODO item must ONLY be marked completed (`[x]`) after its corresponding verification passes (e.g. `typecheck`, unit test suite, or local UI smoke test). Never mark an item complete based on unverified code.
+4. **State Transparency & Handover**:
+   - The `TODO.md` file serves as the single source of truth for task progress. Any contributor or AI agent taking over the conversation or codebase must be able to understand the exact state of progress and the immediate next step just by reading `TODO.md`.
+

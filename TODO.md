@@ -14,7 +14,7 @@
 - [x] **Phase 4: Atomo 高阶资产吸收与插件化 (BlocksEditor, Observability, Workflows)** (已完成)
 - [x] **Phase 5: 全栈脚手架闭环、E2E 测试与生态平替** (已完成)
 - [x] **Phase 6: 架构边界治理与 Atomo 嵌入式单镜像交付闭环** (已完成)
-- [x] **Phase 7: downstream 本地测试与生产部署验证 (方案二: 容器挂载联调)** (已完成)
+- [x] **Phase 7: 下游应用容器本地联调与生产部署验证 (方案二: 容器挂载联调)** (已完成)
 - [x] **Phase 8: Atomo Admin UI 全量页面与基础组件 Dashin 风格/组件全面重构** (已完成)
 
 ---
@@ -134,29 +134,29 @@
 
 ---
 
-### Phase 7: downstream 本地测试与生产部署验证 (方案二: 容器挂载联调) (In Progress)
+### Phase 7: 下游应用业务模型本地联调与生产部署验证 (方案二: 容器挂载联调) (已完成)
 - [x] **7.1 准备与构建 Admin UI 静态产物** *(2026-09-06)*
   - 确认/构建基于 base `/admin/` 的静态 SPA 产物（产物位于 `atomo/packages/atomo-admin-ui/dist`），`tsc && vite build --base=/admin/` 构建成功（8.45s）。
-- [x] **7.2 配置 downstream 本地 Docker Compose 挂载** *(2026-09-06)*
-  - 在 `downstream/backend/docker-compose.yml` 中挂载 `../../atomo/packages/atomo-admin-ui/dist:/app/admin:ro` 并显式配置 `ATOMO_ADMIN_DIR: /app/admin`。
+- [x] **7.2 配置下游业务后端本地 Docker Compose 挂载** *(2026-09-06)*
+  - 在下游业务服务 `docker-compose.yml` 中挂载 `../../atomo/packages/atomo-admin-ui/dist:/app/admin:ro` 并显式配置 `ATOMO_ADMIN_DIR: /app/admin`。
 - [x] **7.3 启动本地后端并执行容器服务冒烟** *(2026-09-06)*
-  - 启动 `downstream/backend` 的 `db`、`server`、`migrate` 容器成功（服务端口根据 `.env` 映射至 60503）。
-  - 验证 `http://localhost:60503/meta/schema` 成功返回 downstream 6 个核心模型（`CreditLedger`, `GenerationJob`, `Subscription`, `TrialUsage`, `UsageEvent`, `CreditBalance`）。
+  - 启动下游业务后端 `db`、`server`、`migrate` 容器成功（服务端口映射至 60503）。
+  - 验证 `http://localhost:60503/meta/schema` 成功返回业务系统核心数据模型元数据。
 - [x] **7.4 验证 Admin UI 静态伺服与子路径路由** *(2026-09-06)*
   - HTTP 请求验证 `http://localhost:60503/admin/` 正常返回 200 与 `index.html`。
-  - 验证静态资源（`/admin/assets/index-60938748.css` 和 `/admin/assets/index-0f4acdda.js`）正确返回 200。
-  - 验证 SPA 回退路由（如 `/admin/entities/GenerationJob`）正常回退至 `index.html`，状态码 200，无 404。
-- [x] **7.5 模拟管理员鉴权与 downstream 核心模型数据联调** *(2026-09-06)*
+  - 验证静态资源（`/admin/assets/*.css` 和 `/admin/assets/*.js`）正确返回 200。
+  - 验证 SPA 回退路由（如 `/admin/entities/:model`）正常回退至 `index.html`，状态码 200，无 404。
+- [x] **7.5 模拟管理员鉴权与核心模型数据联调** *(2026-09-06)*
   - 验证使用管理员凭据成功通过 `/auth/login` 获取真实 JWT Token，并通过 `/auth/me` 校验 Admin 身份。
-  - 通过 GraphQL `paginatedRecords` 成功内省与拉取 downstream 真实业务数据（`GenerationJob` 2 条，`CreditLedger` 8 条）。
-  - 验证 `CreditLedger` 的只读防篡改机制：触发 delete mutation 被后端严格拦截返回 `Access denied for 'delete' on 'CreditLedger'`，与 Dashin 前端权限规则完全匹配。
+  - 通过 GraphQL `paginatedRecords` 成功内省与拉取真实业务数据记录。
+  - 验证审计台账模型的只读防篡改机制：触发 delete mutation 被后端严格拦截返回 `Access denied for 'delete'`，与 Dashin 前端权限规则完全匹配。
 - [x] **7.6 整理测试结果与上线部署操作规程** *(2026-09-06)*
   - 汇总测试结果、日志证据与验证结论，确认容器单端口静态托管、SPA 回退路由、JWT 鉴权及模型数据读写权限全部通过。
   - 输出基于 Watchtower 自动拉取与 Portainer 的生产环境标准上线规程。
 
 ---
 
-### Phase 8: Atomo Admin UI 全量页面与基础组件 Dashin 风格/组件全面重构 (All Views & UI Primitives Upgrade) (In Progress)
+### Phase 8: Atomo Admin UI 全量页面与基础组件 Dashin 风格/组件全面重构 (All Views & UI Primitives Upgrade) (已完成)
 - [x] **8.1 基础 UI 原语 (UI Primitives) Dashin 规范重构** *(2026-09-06)*
   - [x] `Card.tsx`: 适配 `bg-content-box border-bn-border rounded-bn shadow-bn text-foreground`，移除硬编码 `bg-white border-gray-200 text-gray-900`。
   - [x] `Button.tsx`: 适配 Dashin `rounded-bn font-medium shadow-sm transition-all` 与 `primary: bg-primary hover:bg-primary-hover text-white`, `secondary: bg-content-box border-bn-border text-foreground hover:bg-content-bg`, `ghost`, `danger`, `outline` 等变体。
@@ -176,6 +176,6 @@
 - [x] **8.3 表单与高级过滤器组件 Dashin 风格升级** *(2026-09-06)*
   - [x] `DynamicForm.tsx` & `FormField.tsx`: 标签文本色彩、帮助提示、验证错误与表单操作栏统一 Dashin 规范。
   - [x] `AdvancedFilterPanel.tsx` & `TableSettings.tsx` & `EntityTable.tsx`: 侧滑抽屉/浮层、条件输入行、拖拽排序与导出弹窗统一 Dashin 规范。
-- [x] **8.4 编译构建、静态产物更新与本地 downstream 验证** *(2026-09-06)*
+- [x] **8.4 编译构建、静态产物更新与本地业务环境验证** *(2026-09-06)*
   - [x] 执行 `pnpm build:server` 重新构建 `atomo-admin-ui` 静态产物到 `dist/`（5.69s 编译成功）。
-  - [x] 通过 Playwright 自动化测试脚本验证 `http://localhost:60503/admin` 所有页面（Dashboard, EntityListView, EntityDetailView, Workflows, WorkflowDesigner, Observability, Settings, Trash, Help）渲染完美、设计 Token 全面生效且深浅主题切换正常。
+  - [x] 通过 Playwright 自动化测试脚本验证 `http://localhost:60503/admin` 所有页面（Dashboard, EntityListView, EntityDetailView, Workflows, WorkflowDesigner, Observability, Settings, Trash, Help）渲染正常、设计 Token 全面生效且深浅主题切换正常。

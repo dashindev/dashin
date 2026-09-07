@@ -52,10 +52,18 @@ export default defineConfig({
       { text: "Features", link: "/features/tables" },
       { text: "AI Generation", link: "/ai/" },
       { text: "Connectors", link: "/connectors/" },
+      { text: "Enterprise", link: "/enterprise/" },
       { text: "Pro", link: "/pro" },
       { text: "GitHub", link: "https://github.com/dashindev/dashin" }
     ],
     sidebar: [
+      {
+        text: "Enterprise & Solutions",
+        items: [
+          { text: "Enterprise Solutions", link: "/enterprise/" },
+          { text: "Dashin Pro", link: "/pro" }
+        ]
+      },
       {
         text: "Getting Started",
         items: [

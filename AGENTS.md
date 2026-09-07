@@ -210,6 +210,11 @@ The Atomo source (`@dashin-dev/source-atomo`) also exports `fetchAtomoMetadata`,
 `atomoFieldsToDashinColumns`, `buildAtomoMenuData`, `buildAtomoRegistry`, `DynamicAtomoEntity`,
 and `DynamicAtomoProvider` for zero-code dynamic schema introspection and automatic `RelatedPreview` wiring.
 
+### Enterprise plugins
+
+- **`@dashin-dev/auth-sso`** — Multi-tenant enterprise SSO (Okta, Microsoft Entra ID / Azure AD, Google Workspace, Keycloak, SAML 2.0, OIDC PKCE) with corporate email domain auto-routing, claims-to-role mapping, and `<SsoSignIn />` / `<SsoCallback />` components.
+- **`@dashin-dev/audit-log`** — SOC 2 / ISO 27001 compliant immutable audit trail and change-diff tracker. Computes before/after field diffs (`calculateFieldDiffs`), automatic sensitive credential masking (`password`, `token`, `apiKey`, `secret`), transient timestamp filtering, `<AuditDiffViewer />`, and `<AuditLogDrawer />`.
+
 ## When to update downstream artifacts
 
 After changing core code, check whether these downstream artifacts need a matching update.

@@ -18,6 +18,7 @@
 - [x] **Phase 8: Atomo Admin UI 全量页面与基础组件 Dashin 风格/组件全面重构** (已完成)
 - [x] **Phase 9: Atomo Admin UI 真正接入 Dashin 核心组件库与 RelatedPreview 架构 (方案 A 落地)** (已完成)
 - [x] **Phase 10: Docker 镜像云端构建与 GitHub Official Release 闭环** (已完成)
+- [ ] **Phase 11: 商业化落地与企业级价值交付闭环** (推进中)
 
 ---
 
@@ -213,4 +214,28 @@
 - [x] **10.2 发布 GitHub Official Release** *(2026-09-06)*
   - [x] 生成并发布官方 GitHub Release `v0.6.5`（[Release v0.6.5](https://github.com/atomo-cc/atomo/releases/tag/v0.6.5)）。
   - [x] 包含 Dashin 核心架构演进说明、CrudTable / RelatedPreview 深度整合、设计 Token 全面统一与 Docker 部署拉取说明，并设置为 `Latest` 正式发布版。
+
+---
+
+### Phase 11: 商业化落地与企业级价值交付闭环 (已完成)
+- [x] **11.1 商业化战略与实战路径专区 (`docs/commercialization/STRATEGY.md`)** *(2026-09-08)*
+  - [x] 沉淀经市场校验的商业化战略报告（三阶段推进、定价阶梯、企业级功能门禁矩阵、对标 Retool/Refine/ToolJet 分析）。
+  - [x] 规划“高客单交钥匙实施 + 商业版授权”双轮驱动模型与客户采购沟通指南。
+- [x] **11.2 企业级核心采购刚需：通用 SSO / SAML 身份认证插件 (`plugins/auth-sso`)** *(2026-09-08)*
+  - [x] 初始化 `plugins/auth-sso` 模块，提供标准 OIDC、SAML 2.0、Okta、Azure AD (Entra ID)、Google Workspace 统一对接能力。
+  - [x] 实现灵活的 IDP 路由分发、属性映射（Claims to User/Role mapping）与单点登录拦截重定向。
+  - [x] 编写 Vitest 单元测试覆盖 SSO 流程与配置校验，确保 11 项单测 100% 通过且 TypeScript 零警告编译。
+- [x] **11.3 企业级审计合规追踪器插件 (`plugins/audit-log`)** *(2026-09-08)*
+  - [x] 实现用于满足 SOC2/合规要求的高级审计中间件与可视化抽屉，捕获 CRUD 行为、操作人、IP、时间戳与字段前后差异（Diff）。
+  - [x] 自动脱敏敏感凭据（Password, Secret, API Key）并排除高频时间戳噪点。
+  - [x] 编写 Vitest 单元测试覆盖新增/删除/修改差异比对与拦截器异常抛转，8 项单测 100% 通过且 TypeScript 零警告编译。
+- [x] **11.4 商业化解决方案与企业落地页营销展示 (`docs/enterprise`)** *(2026-09-08)*
+  - [x] 提炼 3 大高利润破局场景：AI Agent & 工作流运维中台（Human-in-the-Loop）、出海高性能 BaaS、单 Docker 私有化合规中台。
+  - [x] 产出高转化的商业化官网文案、方案对比表（Community vs Pro vs Enterprise）与企业咨询（Book an Architecture Review）架构说明。
+  - [x] 成功集成入 VitePress 官方文档导航栏并经由 `vitepress build` 验证 100% 静态编译通过。
+- [x] **11.5 全量构建、测试与质量门禁验证** *(2026-09-08)*
+  - [x] 执行 `yarn tsc:build` 验证全 Monorepo 23 个包并行构建 100% 通过（Lerna Nx 47.33s 全绿）。
+  - [x] 执行 `yarn test` 确保核心框架 140 项单测 + 新增企业模块 19 项单测全部 100% 绿灯通过。
+  - [x] 执行 `yarn workspace @dashin-dev/dashin typecheck` 零警告零错误。
+
 

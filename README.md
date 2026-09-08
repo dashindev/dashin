@@ -116,18 +116,19 @@ From the repo root:
 | `yarn tsc:build`       | Build all packages (lerna) |
 | `yarn turbo:tsc:build` | Build all packages (turbo) |
 
-## Lerna (publish packages)
+## Publishing packages
 
-```
-yarn tsc:build        # build all package lib/ first (publish ships lib/, not src)
+```bash
+# 1. Build all package lib/ first (publish ships lib/, not src)
+yarn tsc:build
 
-# First 2.0 release is an alpha — publish under the `alpha` dist-tag so it
-# doesn't take the default `latest` tag:
-npx lerna publish from-package --dist-tag alpha
+# 2. Publish packages:
+# For accounts using modern WebAuthn / hardware security keys (2FA without TOTP app):
+npm login --auth-type=web    # Confirm login in browser (1st approval)
+yarn release:publish         # Runs scripts/npm-publish-web.js --all (2nd approval, then auto-publishes all packages)
 
-# Later, to cut a stable release:
-#   npx lerna version 2.0.0 --no-private
-#   npx lerna publish from-git
+# Alternatively, for CI / Automation Token environments:
+npx lerna publish from-package --yes
 ```
 
 #### Thanks

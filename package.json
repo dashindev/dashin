@@ -20,7 +20,8 @@
     "turbo:dev": "turbo run dev",
     "docs:dev": "npm run dev --prefix docs",
     "docs:contributors": "bash scripts/gen-docs-contributors.sh",
-    "smoke:template": "node scripts/smoke/template-prod-smoke.mjs"
+    "smoke:template": "node scripts/smoke/template-prod-smoke.mjs",
+    "release:publish": "node scripts/npm-publish-web.js --all"
   },
   "devDependencies": {
     "@esbuild/linux-x64": "0.21.5",

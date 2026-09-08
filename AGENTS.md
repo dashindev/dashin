@@ -59,7 +59,7 @@ module resolution issues.
 
 ## Releasing & publishing
 
-Lerna manages versioning across all 18 `@dashin-dev` packages.
+Lerna manages versioning across all 23 `@dashin-dev` packages.
 Current release line: `2.0.0-alpha.*` (pre-release).
 
 ### Before release
@@ -75,11 +75,29 @@ Current release line: `2.0.0-alpha.*` (pre-release).
 
 ### Release steps
 
-1. **Bump version** in `lerna.json` + all 18 `package.json` files.
+1. **Bump version** in `lerna.json` + all 23 `package.json` files.
    Use the Edit tool or `node -e` — **never** PowerShell `Set-Content` (see encoding warning below).
 2. **Commit and push** — `git add -A && git commit -m "chore(release): X.Y.Z" && git push`
 3. **Build** — `yarn tsc:build`
-4. **Publish** — `npx lerna publish from-package --yes`
+4. **Publish**:
+   - **Option A (Interactive WebAuthn / Security Key — Recommended)**:
+     If your npm account uses modern 2FA (WebAuthn hardware key / biometric without an authenticator app TOTP code), standard `npm publish` or Lerna in subshells fails with `EOTP` because `process.stdin.isTTY` is not detected. Use the dedicated publishing script:
+     ```bash
+     # 1. First web confirmation: Establish login session
+     npm login --auth-type=web
+     # (Browser opens -> Click Authorize in npmjs.com)
+
+     # 2. Second web confirmation & batch publishing
+     yarn release:publish
+     # (Runs `node scripts/npm-publish-web.js --all`)
+     # It activates TTY mode, automatically detects the CLI auth URL (https://www.npmjs.com/auth/cli/<uuid>),
+     # pops up your default browser for the 2nd approval, and then auto-publishes all 23 packages.
+     ```
+   - **Option B (Automation Token / CI)**:
+     If publishing via an NPM Automation Token (`//registry.npmjs.org/:_authToken=...` in `.npmrc`):
+     ```bash
+     npx lerna publish from-package --yes
+     ```
 
 ### After release
 

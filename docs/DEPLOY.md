@@ -86,3 +86,44 @@ npx wrangler deploy -c wrangler.demo.jsonc                  # or: serve packages
 > The sidebar's **Local** section works fully offline. The **Blog** / **Remote**
 > sections expect a live connector backend — to show only the offline-working
 > parts in the public demo, set `VITE_IGNORED_PLUGINS` at build time (follow-up).
+
+---
+
+# Publishing NPM Packages (@dashin-dev/*)
+
+Dashin publishes 23 scoped packages under `@dashin-dev/*`.
+
+## Prerequisites
+
+1. Ensure unit tests pass: `yarn test` (from `packages/dashin`).
+2. Verify TypeScript type checking: `yarn workspace @dashin-dev/dashin typecheck`.
+3. Build all packages: `yarn tsc:build`.
+
+## WebAuthn 2FA Publishing (Security Key / Biometrics)
+
+If your npm account uses hardware security keys (FIDO2 / WebAuthn) without a TOTP authenticator app, direct subshell execution fails with `EOTP` because non-interactive pipes suppress browser prompts.
+
+Use the built-in runner:
+
+```bash
+# 1. Establish web login session (1st browser confirmation)
+npm login --auth-type=web
+
+# 2. Batch publish with automated WebAuth detection (2nd browser confirmation)
+yarn release:publish
+```
+
+`yarn release:publish` invokes `scripts/npm-publish-web.js --all`, which:
+- Verifies registry versions and skips already-published packages.
+- Enables TTY simulation so npm's `otplease` activates browser authorization.
+- Automatically captures `https://www.npmjs.com/auth/cli/<guid>` and opens it in your default browser.
+- Once approved on the webpage, automatically publishes all remaining packages with zero extra prompts.
+
+## Automation Token / CI
+
+For automated CI environments configured with `NODE_AUTH_TOKEN`:
+
+```bash
+npx lerna publish from-package --yes
+```
+

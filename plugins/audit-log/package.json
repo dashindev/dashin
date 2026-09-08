@@ -26,5 +26,6 @@
     "tsc:clean": "tsc --build --clean",
     "tsc:build": "tsc",
     "test": "vitest run"
-  }
+  },
+  "gitHead": "f302e2aaec1722f28bda93a0f703ed6fd9548692"
 }

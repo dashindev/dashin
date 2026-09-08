@@ -42,5 +42,6 @@
     "react-dom": "^18.3.1",
     "typescript": "^5.0.0",
     "vitest": "^1.6.0"
-  }
+  },
+  "gitHead": "f302e2aaec1722f28bda93a0f703ed6fd9548692"
 }

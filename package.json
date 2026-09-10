@@ -36,7 +36,7 @@
     "turbo": "^2.9.16",
     "vite": "^6.4.2",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^3.2.6"
+    "vitest": "^4.1.11"
   },
   "resolutions": {
     "picomatch": "^2.3.2",

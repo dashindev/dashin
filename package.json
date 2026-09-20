@@ -24,9 +24,7 @@
     "release:publish": "node scripts/npm-publish-web.js --all"
   },
   "devDependencies": {
-    "@esbuild/linux-x64": "0.21.5",
-    "@nx/nx-linux-x64-gnu": "22.7.5",
-    "@rollup/rollup-linux-x64-gnu": "^4.60.4",
+    "@babel/helper-hoist-variables": "7.24.7",
     "@testing-library/jest-dom": "^5.16.5",
     "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.0",

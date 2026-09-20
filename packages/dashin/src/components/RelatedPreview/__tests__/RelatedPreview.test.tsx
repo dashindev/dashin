@@ -82,4 +82,25 @@ describe("RelatedPreview", () => {
     fireEvent.click(await screen.findByText("Alice")) // would be frame 2 → blocked
     expect(screen.queryByText("Contracts")).toBeNull()
   })
+
+  it("nested Edit: when save fails, DetailDrawer stays open with error banner and onChanged is not called", async () => {
+    const onChanged = vi.fn()
+    const onRowUpdate = vi.fn().mockRejectedValue(new Error("Nested update rejected by server"))
+    render(
+      <RelatedPreviewProvider collections={makeRegistry({ contractsEditable: { onRowUpdate } }) as any} onChanged={onChanged}>
+        <RelatedCard slug="contracts" value={contractRec} />
+      </RelatedPreviewProvider>
+    )
+    fireEvent.click(screen.getByText("C-1"))
+    fireEvent.click(await screen.findByRole("button", { name: "Edit" }))
+    fireEvent.click(await screen.findByRole("button", { name: "Save" }))
+    await waitFor(() => {
+      const alert = screen.getByRole("alert")
+      expect(alert).toBeInTheDocument()
+      expect(alert).toHaveTextContent("Nested update rejected by server")
+    })
+    expect(onChanged).not.toHaveBeenCalled()
+    // DetailDrawer remains visible with Save button
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
+  })
 })

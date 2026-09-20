@@ -32,6 +32,8 @@ export interface Column<RowData extends object> {
   filterComponent?: (props: FilterComponentProps<RowData>) => ReactNode
   // material-table internal row metadata used by selectors
   tableData?: { id: number; [k: string]: any }
+  required?: boolean | string
+  validate?: (value: any, rowData: RowData) => string | boolean | undefined | null
   [key: string]: any
 }
 
@@ -74,7 +76,7 @@ export interface Action<RowData extends object = any> {
   icon: string | (() => ReactNode)
   tooltip?: string
   isFreeAction?: boolean
-  onClick: (event: any, data: RowData | RowData[]) => void
+  onClick: (event: any, data: RowData | RowData[]) => void | Promise<void>
   disabled?: boolean
 }
 

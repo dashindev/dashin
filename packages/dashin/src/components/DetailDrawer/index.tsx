@@ -83,15 +83,58 @@ export default function DetailDrawer<RowData extends object>({
   )
 
   const setField = useCallback(
-    (field: string, value: any) =>
-      setDraft(d => (d ? { ...d, [field]: value } : d)),
+    (field: string, value: any) => {
+      setErr(null)
+      setDraft(d => (d ? { ...d, [field]: value } : d))
+    },
     []
   )
 
   const handleSave = async () => {
     if (!draft) return
-    setSaving(true)
     setErr(null)
+
+    // Client-side validation: required and validate
+    for (const col of visibleCols) {
+      const notEditable = isCreate
+        ? col.editable === "never" || col.editable === "onUpdate"
+        : col.editable === "never" || col.editable === "onAdd"
+      if (notEditable) continue
+
+      const field = col.field as string
+      if (!field) continue
+      const val = (draft as any)[field]
+
+      if (col.required) {
+        const isEmpty =
+          val === undefined ||
+          val === null ||
+          (typeof val === "string" && val.trim() === "") ||
+          (Array.isArray(val) && val.length === 0)
+        if (isEmpty) {
+          const msg =
+            typeof col.required === "string"
+              ? col.required
+              : `${col.title || field} is required`
+          setErr(msg)
+          return
+        }
+      }
+
+      if (typeof col.validate === "function") {
+        const res = col.validate(val, draft)
+        if (typeof res === "string" && res) {
+          setErr(res)
+          return
+        }
+        if (res === false) {
+          setErr(`${col.title || field} is invalid`)
+          return
+        }
+      }
+    }
+
+    setSaving(true)
     try {
       if (isCreate) {
         if (!editable?.onRowAdd) return
@@ -114,10 +157,15 @@ export default function DetailDrawer<RowData extends object>({
   const handleDelete = async () => {
     if (!row || !editable?.onRowDelete) return
     setSaving(true)
+    setErr(null)
     try {
       await editable.onRowDelete(row)
+      setConfirmDelete(false)
       onClose()
       onSaved?.()
+    } catch (e) {
+      setErr((formatError ?? defaultErrorMessage)(e))
+      setConfirmDelete(false)
     } finally {
       setSaving(false)
     }
@@ -183,15 +231,20 @@ export default function DetailDrawer<RowData extends object>({
           ) : null}
         </div>
 
+        {/* Error banner */}
+        {err && (
+          <div
+            role="alert"
+            aria-live="assertive"
+            className="mx-6 mb-1 mt-2 rounded-bn border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger"
+          >
+            {err}
+          </div>
+        )}
+
         {/* Footer */}
         {editing && (
-          <>
-            {err && (
-              <div className="mx-6 mb-1 mt-2 rounded-bn border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">
-                {err}
-              </div>
-            )}
-            <div className="flex items-center justify-between border-t border-bn-border px-6 py-4">
+          <div className="flex items-center justify-between border-t border-bn-border px-6 py-4">
             <div className="flex items-center gap-2">
               {canDelete && !confirmDelete && (
                 <button
@@ -246,7 +299,6 @@ export default function DetailDrawer<RowData extends object>({
               </button>
             </div>
           </div>
-          </>
         )}
       </aside>
     </>
@@ -322,12 +374,13 @@ function EditForm<RowData extends object>({
                 className="w-full"
                 type={col.type === "numeric" ? "number" : "text"}
                 value={value ?? ""}
-                onChange={e =>
+                onChange={e => {
+                  const raw = e.target.value
                   setField(
                     field,
-                    col.type === "numeric" ? Number(e.target.value) : e.target.value
+                    col.type === "numeric" ? (raw === "" ? "" : Number(raw)) : raw
                   )
-                }
+                }}
               />
             )}
           </div>

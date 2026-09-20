@@ -4,8 +4,8 @@ import Type from "./types"
 
 export const columns = ({ t }: { t: TFunction }): Column<Type>[] => [
   { title: t("Id"), field: "id", editable: "never", width: 80 },
-  { title: t("Name"), field: "name" },
-  { title: t("Slug"), field: "slug" }
+  { title: t("Name"), field: "name", required: true },
+  { title: t("Slug"), field: "slug", required: true }
 ]
 
 export default columns

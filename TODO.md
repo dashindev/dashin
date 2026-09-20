@@ -19,6 +19,7 @@
 - [x] **Phase 9: Atomo Admin UI 真正接入 Dashin 核心组件库与 RelatedPreview 架构 (方案 A 落地)** (已完成)
 - [x] **Phase 10: Docker 镜像云端构建与 GitHub Official Release 闭环** (已完成)
 - [x] **Phase 11: 商业化落地与企业级价值交付闭环** (已完成)
+- [x] **Phase 12: 严格变异契约与 CRUD 错误冒泡治理 (Strict Mutation Contract)** (已完成；待所有者决定是否推送/发起 CI)
 
 ---
 
@@ -247,5 +248,72 @@
     - `@dashin-dev/audit-log@2.0.0-alpha.7`
   - [x] 验证 `npm view <pkg> version` 均已正式上线，Git HEAD 元数据记录并同步至 GitHub master。
 
+---
 
-
+### Phase 12: 严格变异契约与 CRUD 错误冒泡治理 (Strict Mutation Contract) (已完成；待所有者决定是否推送/发起 CI)
+- [x] **12.1 核心请求层业务错误检测治理 (`packages/dashin/src/utils/scripts/request.ts`)** *(2026-09-20)*
+  - [x] 移除全局猜测 `errors` / `success: false` / `ok: false` 的默认行为，改为显式 opt-in（`checkBusinessErrors?: boolean | ((data: any) => string | boolean | undefined | null)`)，默认 `false`，彻底避免误伤包含此类字段的正常业务文档。
+  - [x] 支持端点级判别器与自定义函数判别器。
+- [x] **12.2 超时错误规范化与请求上下文保留 (`packages/dashin/src/utils/scripts/request.ts`)** *(2026-09-20)*
+  - [x] 统一使用 `isDashinRequestError` 属性标识自身错误，避免与 `umi-request` 内部名为 `RequestError` 的超时错误碰撞。
+  - [x] 规范化超时错误，提取 `url`、保留 `status: 504`、提供可读超时信息与 description。
+  - [x] 编写专门的 timeout 自动化单元测试并通过。
+- [x] **12.3 `getResponse: true` 业务错误检测与网络错误 URL 保留** *(2026-09-20)*
+  - [x] 在 `request.use` 中解包 `{ data, response }`，确保开启 `getResponse: true` 时依然能检测业务错误，并将真实的 `response` 保存在 `RequestError` 中。
+  - [x] 提取网络错误下的 `url`（`error.request?.url || error.config?.url` 等）。
+  - [x] 编写 `getResponse: true` 与业务错误检测组合的单元测试（`request.test.ts` 12 个测试全部通过）。
+- [x] **12.4 D1 数据源严格变异契约与错误冒泡 (`packages/dashin-source-d1`)** *(2026-09-20)*
+  - [x] 重构 `services/crud.ts`（`addSer`, `updateSer`, `deleteSer`）：检测到 `res.error` 时必须抛出 `Error`，禁止通过 resolve 返回导致抽屉误关闭。
+  - [x] 重构 `services/bulk.ts`（`bulkDeleteSer`, `bulkUpdateSer`）：当 `fail > 0` 时抛出异常，不再按成功 resolve。
+  - [x] 编写 D1 CRUD 与 Bulk 服务错误拒绝的单元测试（24 个测试全部通过）。
+- [x] **12.5 批量变异操作严格失败语义 (`packages/dashin-source-payload` & `source-d1`)** *(2026-09-20)*
+  - [x] 修复 `packages/dashin-source-payload/services/bulk.ts` 与 `source-d1/services/bulk.ts`：只要 `fail > 0`（包括部分失败）就必须 reject，精准统计成功与失败数量，保留未成功项以便重试。
+  - [x] 编写部分失败 reject 且携带详细统计信息的测试，Payload 与 D1 全部通过。
+- [x] **12.6 HTTP 204 No Content / 空响应合法性保证** *(2026-09-20)*
+  - [x] 修复 `packages/dashin-source-payload/services/crud.ts` 的 `assertPayloadSuccess`：放行 `null`/`undefined` 空响应（204 No Content），避免合法删除被误判为失败。
+  - [x] 编写 204 空响应测试并通过。
+- [x] **12.7 Table 组件编辑路径统一契约与错误横幅 (`packages/dashin/src/components/Table`)** *(2026-09-20)*
+  - [x] 重构 `Table/index.tsx` 中的 `save()` 与 `remove()`：引入 try/catch，失败时保持编辑行打开，渲染 `role="alert"` 与 `aria-live="assertive"` 错误横幅。
+  - [x] 行内编辑增加 `Column.required` 与 `Column.validate` 客户端校验；数值输入清空时保留 `""`。
+  - [x] 编写 `Table` 行内编辑与删除失败保留、错误横幅渲染与校验测试（11 个测试全部通过）。
+- [x] **12.8 补齐边界用例与 Demo 配置** *(2026-09-20)*
+  - [x] 覆盖测试：正常业务文档字段碰撞（包含 errors 或 ok:false 字段不被误判）、`ok: false` 与 `success: false` 独立用例、create handler rejection。
+  - [x] 检查并规范 Demo 实体所有必填列的 `required` 配置（customers, orders, products, categories）。
+  - [x] 消除 `git diff --check` 中的尾部空行错误（0 报错）。
+- [x] **12.9 首轮历史门禁快照（已由 12.14/12.16 最终结果取代）** *(2026-09-20)*
+  - [x] 全 Monorepo 23 包 `yarn tsc:build` 全部绿灯编译通过（70.51s）。
+  - [x] `yarn workspace @dashin-dev/dashin typecheck` 零错误通过。
+  - [x] 首轮 `packages/dashin` 核心框架单测 26 个测试套件、166 项单测通过；最终结果见 12.14（175 项）。
+  - [x] 首轮 `packages/dashin-source-payload` 36 项、`packages/dashin-source-d1` 24 项通过；最终结果见 12.14/12.16（40/27 项）。
+  - [x] 文档站点 `npm run build --prefix docs` 10.46s 编译成功并通过。
+  - [x] 遵循返工原则：在用户正式合并与发布前，暂不标记全流程完结，不建议家赞管理后台（jiazan-admin）在此刻提前移除防护层。
+- [x] **12.10 Table 批量异步变异契约返工** *(2026-09-20 独立复核；Table 16 项测试通过)*
+  - [x] 自定义批量 action 必须 await；成功才清空选择，reject 时展示错误并保留可重试选择；若错误携带可映射的 `resList`，只保留失败项。
+  - [x] 内置 bulk delete/update 捕获 rejection，失败不清选择、不 reload，成功才清选择并 reload。
+  - [x] `Action.onClick` 类型支持 `void | Promise<void>`，Table 测试覆盖成功、reject、部分失败重试和内置 delete/update reject。
+- [x] **12.11 Request 判别器与 response/URL 精确契约** *(2026-09-20 独立复核；request 16 项测试通过)*
+  - [x] 明确并实现 `string/true = 检测到失败`、`false/undefined/null = 无错误`，四类返回值均有测试。
+  - [x] 业务错误优先使用 `response.url`；`getResponse: true` 测试精确断言 response 对象身份与最终 URL。
+- [x] **12.12 D1 批量 transport failure 逐项统计** *(2026-09-20 独立复核；D1 bulk 8 项测试通过)*
+  - [x] bulk delete/update 对每项 execute throw 逐项捕获、继续执行、汇总 notice 并在失败时携带计数和 `resList` reject。
+  - [x] delete/update 分别覆盖全成功、部分失败、全部失败与 transport throw，并验证计数、`resList`、severity 和 rejection。
+- [x] **12.13 模板生产冒烟可靠性返工** *(2026-09-20 独立复核；最终脚本连续两次通过)*
+  - [x] 使用动态空闲端口和本次临时模板唯一标记，服务启动早退立即失败，避免旧服务造成假阳性。
+  - [x] Windows 可靠终止完整 preview 进程树；清理后断言端口释放和临时目录删除。
+  - [x] template smoke 连续两次通过（动态端口 61977、61082），第二次无残留进程、端口冲突或旧页面误判。
+- [x] **12.14 Node 20 干净安装与全量门禁** *(2026-09-20 独立复核)*
+  - [x] 修复平台绑定直接依赖和 lockfile/Babel helper；Windows Node 20.20.2 隔离依赖树 `yarn install --frozen-lockfile` 成功，并验证仅安装 Windows 平台包。
+  - [x] `yarn tsc:build`（23 包）、Dashin typecheck、Dashin/Payload/D1 三组完整单测（175/40/27）、文档构建与 `git diff --check` 全绿。
+  - [x] Playwright E2E 为 6 passed / 3 skipped / 0 failed；最终版 template smoke 连续两次通过且无残留端口/进程。
+- [x] **12.15 最终交付清理与状态核对** *(2026-09-20 独立复核)*
+  - [x] `TODO.md` 与实际门禁一致；Playwright、template smoke 与 clean-install 临时产物均已清理。
+  - [x] 该轮交接时保持未提交、未发布，未升级家赞依赖、未删除家赞下游防御层；后续提交由 12.17 的明确授权完成。
+- [x] **12.16 Payload bulk 完整验收矩阵补测** *(2026-09-20 最终交叉核对新增；Payload 40 项测试通过)*
+  - [x] Payload delete/update 分别显式覆盖全成功、部分失败、全部失败和 transport throw。
+  - [x] 各路径验证计数、`resList`、notice severity、继续处理剩余项与最终 rejection；Payload 全套测试重跑通过。
+- [x] **12.17 文档收尾与提交前准备** *(2026-09-20)*
+  - [x] 统一首轮历史测试数字与最终结果，公开文档说明严格变异契约、自定义异步 action 与部分失败重试语义。
+  - [x] 新增 `2.0.0-alpha.8` 迁移说明并接入 VitePress 导航；VitePress 构建通过。
+  - [x] 审计公共导出、依赖/lockfile、GitHub Actions Node 20/Linux 配置和无关产物；构建/test-results 等门禁产物已清理。
+  - [x] Node 20.20.2 Windows 全部门禁通过；WSL2 Ubuntu 隔离验证 frozen install、23 包构建、typecheck、175/40/27 单测、文档、Playwright 6/3/0 与两次 template smoke 全绿。分支未推送，因此 GitHub 手动 CI 未触发。
+  - [x] 按 fix/test/docs 创建三个聚焦提交；保持未推送、未合并、未发布，家赞防御层不变。

@@ -68,13 +68,15 @@ export default defineConfig({
         text: "Getting Started",
         items: [
           { text: "Introduction", link: "/guide/getting-started" },
-          { text: "Flagship demo", link: "/guide/demo" }
+          { text: "Flagship demo", link: "/guide/demo" },
+          { text: "Migrate to 2.0.0-alpha.8", link: "/guide/migration-alpha-8" }
         ]
       },
       {
         text: "Features",
         items: [
           { text: "Tables & CRUD", link: "/features/tables" },
+          { text: "Strict mutation contract", link: "/features/strict-mutation-contract" },
           { text: "Theming", link: "/features/theming" },
           { text: "Layout & regions", link: "/features/layout" },
           { text: "UI Primitives", link: "/features/ui-primitives" },

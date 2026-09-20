@@ -53,7 +53,10 @@ language by the connector. The toolbar search box maps to the connector's
 
 `editable={editableCtrl(...)}` wires inline add/edit/delete; `onBulkUpdate`
 handles multi-row edits. `bulkDeleteCtrl` adds a "delete selected" toolbar action.
-All map to the connector's CRUD services.
+All map to the connector's CRUD services. Mutation handlers follow Dashin's
+[strict mutation contract](/features/strict-mutation-contract): only a resolved
+handler is treated as success, while rejected handlers keep the relevant row or
+selection available for retry.
 
 ## Data sources
 

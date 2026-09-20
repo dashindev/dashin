@@ -69,10 +69,17 @@ Create a **second** Workers project from the same repo:
 | Production branch | `master` |
 | Root directory | *(repo root)* |
 | Build command | `yarn tsc:build && yarn workspace @dashin-dev/dashin build` |
-| Deploy command | `npx wrangler deploy -c wrangler.demo.jsonc` |
+| Production Deploy command | `npx wrangler deploy -c wrangler.demo.jsonc` |
+| Preview Version command | `npx wrangler versions upload -c wrangler.demo.jsonc` |
 
 `yarn tsc:build` builds all plugin `lib/` (the Vite plugin generator needs them)
 **before** `vite build`. Node is pinned to 20 by the repo-root `.node-version`.
+The production command deploys and routes the new version to production traffic.
+For non-production branches, the preview command uploads a version without routing
+production traffic. Both commands must pass `-c wrangler.demo.jsonc`; otherwise
+Wrangler searches for a default config in the root directory and cannot discover
+the demo's `assets.directory`. See Cloudflare's
+[Workers Builds troubleshooting guide](https://developers.cloudflare.com/workers/ci-cd/builds/troubleshoot/).
 Then add the custom domain **`demo.dashin.dev`**.
 
 ## Local

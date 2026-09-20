@@ -11,8 +11,11 @@
 //   npx wrangler deploy -c wrangler.demo.jsonc
 //
 // In the Cloudflare "Workers Builds" UI use:
-//   Build command:  yarn tsc:build && yarn workspace @dashin-dev/dashin build
-//   Deploy command: npx wrangler deploy -c wrangler.demo.jsonc
+//   Build command:               yarn tsc:build && yarn workspace @dashin-dev/dashin build
+//   Production Deploy command:   npx wrangler deploy -c wrangler.demo.jsonc
+//   Preview Version command:     npx wrangler versions upload -c wrangler.demo.jsonc
+// Both deployment commands must select this non-default config explicitly so
+// Wrangler can find assets.directory from the repository root.
 {
   "name": "dashin-demo",
   "compatibility_date": "2025-01-01",

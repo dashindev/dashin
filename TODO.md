@@ -20,6 +20,7 @@
 - [x] **Phase 10: Docker 镜像云端构建与 GitHub Official Release 闭环** (已完成)
 - [x] **Phase 11: 商业化落地与企业级价值交付闭环** (已完成)
 - [x] **Phase 12: 严格变异契约与 CRUD 错误冒泡治理 (Strict Mutation Contract)** (已完成；待所有者决定是否推送/发起 CI)
+- [ ] **Phase 13: `smol-toml` 构建工具链 DoS 安全修复** (进行中)
 
 ---
 
@@ -317,3 +318,21 @@
   - [x] 审计公共导出、依赖/lockfile、GitHub Actions Node 20/Linux 配置和无关产物；构建/test-results 等门禁产物已清理。
   - [x] Node 20.20.2 Windows 全部门禁通过；WSL2 Ubuntu 隔离验证 frozen install、23 包构建、typecheck、175/40/27 单测、文档、Playwright 6/3/0 与两次 template smoke 全绿。分支未推送，因此 GitHub 手动 CI 未触发。
   - [x] 按 fix/test/docs 创建三个聚焦提交；保持未推送、未合并、未发布，家赞防御层不变。
+
+---
+
+### Phase 13: `smol-toml` 构建工具链 DoS 安全修复 (进行中)
+- [x] **13.1 公告与依赖链核验** *(2026-09-20)*
+  - [x] 确认 GHSA-7w5x-hrqm-74c2 影响 `smol-toml <=1.7.0`，最低修复版本为 `1.7.1`。
+  - [x] 确认当前链路为 `lerna@9.0.7 -> nx@22.7.5 -> smol-toml@1.6.1`，属于构建工具链依赖。
+- [x] **13.2 最小依赖修复** *(2026-09-20)*
+  - [x] 通过 Yarn 1 `resolutions` 将 `smol-toml` 固定到最低安全版本 `1.7.1`；lockfile 仅替换对应单一条目。
+  - [x] `yarn why` 与已安装元数据均确认只解析到 `1.7.1`；正常/恶意 TOML 解析冒烟及 frozen install 通过。
+- [x] **13.3 完整回归门禁** *(2026-09-20)*
+  - [x] Node 20.20.2 frozen install、23 包构建、Dashin typecheck 与生产 Vite build 通过。
+  - [x] Dashin/Payload/D1 单测（175/40/27）、Playwright E2E（6 passed / 3 expected skipped）与 template smoke 连续两次通过。
+  - [x] 首次 template smoke 在生产构建成功后遇到一次瞬时 `networkidle` 超时；未扩大本安全 PR，随后从第一次重新连续两次通过（动态端口 49659、55225）。
+  - [x] 文档构建、`smol-toml` 解析/审计、`git diff --check` 与产物清理通过，无测试或 smoke 临时目录残留。
+- [ ] **13.4 独立安全 PR 与远端检查**
+  - [x] 创建聚焦提交并推送独立分支，PR #166 不包含 Phase 12 或家赞改动。
+  - [ ] GitHub CI、Cloudflare checks 与 Dependabot 最终状态完成核对；不发布 npm、不打 tag。

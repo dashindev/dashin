@@ -340,7 +340,7 @@
 
 ---
 
-### Phase 14: `2.0.0-alpha.8` 发布准备 (进行中；禁止未经授权发布)
+### Phase 14: `2.0.0-alpha.8` 发布候选准备 (已完成；等待所有者发布授权)
 - [x] **14.1 建立独立发布分支与计划** *(2026-09-20)*
   - [x] 从最新 `master` (`87645e7bf3834689cbb9a740d9a925c13bc1d5ff`) 创建 `release/2.0.0-alpha.8`。
   - [x] 新建 `RELEASE_PLAN_ALPHA_8.md`，明确版本范围、门禁、pack 审计与发布授权边界。
@@ -357,6 +357,6 @@
   - [x] 修正 `@dashin-dev/field-blocks` manifest 的 JS/类型入口，使其指向实际打包的 `lib/src/index.*`。
   - [x] 从 `@dashin-dev/cli` tarball 排除编译后的 AI 测试，同时保留三个模板必需的 `.env.example`。
   - [x] 确认 tarball 不包含测试产物、临时目录、录屏、敏感配置或其他无关文件。
-- [ ] **14.5 发布候选交付**
-  - [ ] 在准确发布提交上推送分支并运行远端检查，记录 commit SHA 与真实结果。
-  - [ ] 未经所有者再次明确授权，不执行 npm publish、不创建 npm/Git tag、不升级家赞依赖或删除其首轮防御层。
+- [x] **14.5 发布候选交付** *(2026-09-20)*
+  - [x] 推送 `release/2.0.0-alpha.8` 候选提交 `b0f3dd07f063e18c0fdbec520e1b8f6b4b4cda50`；GitHub CI Run 35554907501 的 build-test、e2e、template-smoke 与 Cloudflare Pages、Workers Builds 全部成功。
+  - [x] 未执行 npm publish，未创建 npm/Git tag，未升级家赞依赖或删除其首轮防御层；后续发布仍需所有者再次明确授权。

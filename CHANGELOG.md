@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.0.0-alpha.8 (release candidate; not yet published)
+
 ### Migration note for 2.0.0-alpha.8
 
 - Standard `CrudTable` users normally need no code changes for the strict

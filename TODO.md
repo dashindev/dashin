@@ -321,7 +321,7 @@
 
 ---
 
-### Phase 13: `smol-toml` 构建工具链 DoS 安全修复 (进行中)
+### Phase 13: `smol-toml` 构建工具链 DoS 安全修复 (已完成)
 - [x] **13.1 公告与依赖链核验** *(2026-09-20)*
   - [x] 确认 GHSA-7w5x-hrqm-74c2 影响 `smol-toml <=1.7.0`，最低修复版本为 `1.7.1`。
   - [x] 确认当前链路为 `lerna@9.0.7 -> nx@22.7.5 -> smol-toml@1.6.1`，属于构建工具链依赖。
@@ -333,6 +333,30 @@
   - [x] Dashin/Payload/D1 单测（175/40/27）、Playwright E2E（6 passed / 3 expected skipped）与 template smoke 连续两次通过。
   - [x] 首次 template smoke 在生产构建成功后遇到一次瞬时 `networkidle` 超时；未扩大本安全 PR，随后从第一次重新连续两次通过（动态端口 49659、55225）。
   - [x] 文档构建、`smol-toml` 解析/审计、`git diff --check` 与产物清理通过，无测试或 smoke 临时目录残留。
-- [ ] **13.4 独立安全 PR 与远端检查**
+- [x] **13.4 独立安全 PR 与远端检查** *(2026-09-20)*
   - [x] 创建聚焦提交并推送独立分支，PR #166 不包含 Phase 12 或家赞改动。
-  - [ ] GitHub CI、Cloudflare checks 与 Dependabot 最终状态完成核对；不发布 npm、不打 tag。
+  - [x] PR #166 以 merge commit `87645e7bf3834689cbb9a740d9a925c13bc1d5ff` 合入 master；GitHub CI、Cloudflare Pages、Workers Builds 与两个 Dependabot checks 全绿。
+  - [x] Dependabot #462 自动重评估为 `fixed`（`dismissed_at=null`）；未发布 npm、未打 tag、未升级家赞依赖，安全修复分支继续保留。
+
+---
+
+### Phase 14: `2.0.0-alpha.8` 发布准备 (进行中；禁止未经授权发布)
+- [x] **14.1 建立独立发布分支与计划** *(2026-09-20)*
+  - [x] 从最新 `master` (`87645e7bf3834689cbb9a740d9a925c13bc1d5ff`) 创建 `release/2.0.0-alpha.8`。
+  - [x] 新建 `RELEASE_PLAN_ALPHA_8.md`，明确版本范围、门禁、pack 审计与发布授权边界。
+- [x] **14.2 同步发布版本** *(2026-09-20)*
+  - [x] 将 `lerna.json` 与 23 个可发布 `@dashin-dev/*` 包的版本统一为 `2.0.0-alpha.8`。
+  - [x] 将 3 个 CLI 模板中的 9 个 `@dashin-dev/*` 依赖统一为 `^2.0.0-alpha.8`。
+  - [x] 审核 lockfile、内部依赖和变更范围；`yarn.lock` 无变化，未升级家赞或无关依赖。
+- [x] **14.3 发布提交门禁** *(2026-09-20；候选提交前首轮)*
+  - [x] Node 20.20.2 / Yarn 1.22.22 frozen install、23 包构建、Dashin typecheck 与生产构建通过。
+  - [x] Dashin/Payload/D1 全套单测（175/40/27）与 Playwright E2E（6 passed / 3 expected skipped）通过。
+  - [x] 文档构建、template smoke 连续两次（动态端口 52519、62166）与 `git diff --check` 通过；最终候选 SHA 将再次执行同套门禁。
+- [x] **14.4 npm pack 内容审计** *(2026-09-20)*
+  - [x] 对 23 个发布包执行 `npm pack --dry-run --json`，确认 package/version、入口文件、类型声明与必要资源齐全（共 1,019 个文件，约 2.22 MiB unpacked）。
+  - [x] 修正 `@dashin-dev/field-blocks` manifest 的 JS/类型入口，使其指向实际打包的 `lib/src/index.*`。
+  - [x] 从 `@dashin-dev/cli` tarball 排除编译后的 AI 测试，同时保留三个模板必需的 `.env.example`。
+  - [x] 确认 tarball 不包含测试产物、临时目录、录屏、敏感配置或其他无关文件。
+- [ ] **14.5 发布候选交付**
+  - [ ] 在准确发布提交上推送分支并运行远端检查，记录 commit SHA 与真实结果。
+  - [ ] 未经所有者再次明确授权，不执行 npm publish、不创建 npm/Git tag、不升级家赞依赖或删除其首轮防御层。

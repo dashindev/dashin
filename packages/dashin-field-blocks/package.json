@@ -1,12 +1,12 @@
 {
   "name": "@dashin-dev/field-blocks",
-  "version": "2.0.0-alpha.7",
+  "version": "2.0.0-alpha.8",
   "publishConfig": {
     "access": "public"
   },
   "description": "Visual drag-and-drop block canvas and form field editor for Dashin",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
   "files": [
     "lib"
   ],

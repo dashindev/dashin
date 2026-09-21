@@ -2,7 +2,7 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend } from "umi-request"
+import { extend, RequestOptionsInit } from "umi-request"
 import { ENV } from "../config"
 
 let codeMessage: { [key: number]: string } = {
@@ -41,37 +41,140 @@ if (ENV.I18N_CODE === "zh")
     504: "网关超时。"
   }
 
-interface ErrorResponse extends Response {
+export interface ErrorResponse {
   error: {
     description?: string
     message?: string
+  } | string
+  status?: number
+  data?: any
+  response?: Response
+}
+
+export interface RequestErrorDetails {
+  status?: number
+  url?: string
+  data?: any
+  response?: Response
+  message: string
+  description?: string
+  code?: number | string
+}
+
+export class RequestError extends Error implements RequestErrorDetails {
+  readonly isDashinRequestError = true
+  status?: number
+  url?: string
+  data?: any
+  response?: Response
+  description?: string
+  code?: number | string
+
+  constructor(details: RequestErrorDetails) {
+    super(details.message)
+    this.name = "RequestError"
+    this.status = details.status
+    this.url = details.url
+    this.data = details.data
+    this.response = details.response
+    this.description = details.description
+    this.code = details.code || details.status
+    Object.setPrototypeOf(this, RequestError.prototype)
   }
+}
+
+export interface RequestOptionsInitWithLegacy extends RequestOptionsInit {
+  legacyResolveError?: boolean
+  /**
+   * Opt-in business error validator for APIs that return HTTP 200 with business errors
+   * (e.g. GraphQL, D1 Worker, Payload mutations).
+   * Can be `true` (standard check: errors non-empty array, success: false, ok: false)
+   * or a custom discriminator function: `(data: any) => string | boolean | undefined | null`.
+   * A non-empty string is the failure reason, `true` means a failure was detected,
+   * and `false` / `undefined` / `null` mean no business error.
+   * Defaults to `false` so normal document payloads (GET / data queries) are never misjudged.
+   */
+  checkBusinessErrors?: boolean | ((data: any) => string | boolean | undefined | null)
 }
 
 /**
  * 异常处理程序
  */
-const errorHandler = (error: { response: Response }): ErrorResponse => {
+export const errorHandler = (error: any): ErrorResponse => {
   console.warn(error)
-  const { response } = error
+  if (error?.isDashinRequestError) {
+    if (error?.request?.options?.legacyResolveError) {
+      return ({ error: error.message, status: error.status, data: error.data, response: error.response } as unknown) as ErrorResponse
+    }
+    throw error
+  }
+
+  const { response } = error || {}
+  let normalizedError: RequestError
+
   if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText
+    const errorText = codeMessage[response.status] || response.statusText || "Request failed"
     const { status, url } = response
 
     console.error({
       message: `request error ${status}: ${url}`,
       description: errorText
     })
-    return ({ error: errorText } as unknown) as ErrorResponse
-  } else if (!response) {
+
+    const payloadMsg =
+      error.data?.errors?.[0]?.data?.errors?.[0]?.message ||
+      error.data?.errors?.[0]?.message ||
+      error.data?.message ||
+      (typeof error.data === "string" ? error.data : "")
+
+    if (error?.request?.options?.legacyResolveError) {
+      return ({ error: errorText, status, data: error.data, response } as unknown) as ErrorResponse
+    }
+
+    normalizedError = new RequestError({
+      message: payloadMsg || errorText,
+      description: errorText,
+      status,
+      url,
+      data: error.data,
+      response
+    })
+  } else {
+    const isTimeout =
+      error?.type === "Timeout" ||
+      error?.name === "TimeoutError" ||
+      /timeout/i.test(error?.message || "")
+    const url =
+      error?.request?.url ||
+      error?.config?.url ||
+      error?.url ||
+      error?.request?.options?.url ||
+      ""
     const errorMsg = {
-      description: "您的网络发生异常，无法连接服务器",
-      message: "网络异常"
+      description: isTimeout
+        ? (ENV.I18N_CODE === "zh" ? "请求超时，请检查网络后重试" : "Request timed out, please check your network and try again.")
+        : (ENV.I18N_CODE === "zh" ? "您的网络发生异常，无法连接服务器" : "Network error, cannot connect to server."),
+      message: isTimeout
+        ? (ENV.I18N_CODE === "zh" ? `请求超时${url ? `: ${url}` : ""}` : `Request Timeout${url ? `: ${url}` : ""}`)
+        : (ENV.I18N_CODE === "zh" ? "网络异常" : "Network Error")
     }
     console.error(errorMsg)
-    return { error: errorMsg } as ErrorResponse
+
+    if (error?.request?.options?.legacyResolveError) {
+      return { error: errorMsg, status: isTimeout ? 504 : undefined, url } as ErrorResponse
+    }
+
+    normalizedError = new RequestError({
+      message: isTimeout ? errorMsg.message : (error?.message || errorMsg.message),
+      description: errorMsg.description,
+      status: isTimeout ? 504 : undefined,
+      url,
+      data: error?.data,
+      response: undefined
+    })
   }
-  return response as ErrorResponse
+
+  throw normalizedError
 }
 
 /**
@@ -85,6 +188,75 @@ const request = extend({
   redirect: "follow",
   headers: {
     "Content-Type": "application/json"
+  }
+})
+
+// Middleware to detect HTTP 200 with business errors (e.g. GraphQL or Payload errors in 200 OK)
+request.use(async (ctx, next) => {
+  await next()
+  const res = ctx.res
+  let data = res
+  let response = (ctx as any).response
+
+  // Support getResponse: true -> ctx.res is { data, response }
+  if (res && typeof res === "object" && "data" in res && "response" in res) {
+    data = res.data
+    response = res.response
+  }
+
+  const options = (ctx.req?.options as RequestOptionsInitWithLegacy) || {}
+  const checkOption = options.checkBusinessErrors
+
+  // Only check business errors when explicitly opted in (checkBusinessErrors: true or custom fn)
+  if (checkOption && data && typeof data === "object") {
+    let isError = false
+    let message = ""
+
+    if (typeof checkOption === "function") {
+      const checkRes = checkOption(data)
+      if (typeof checkRes === "string" && checkRes) {
+        isError = true
+        message = checkRes
+      } else if (checkRes === true) {
+        isError = true
+        message = data.message || data.error || "Business operation failed"
+      }
+    } else if (checkOption === true) {
+      const hasErrors = Array.isArray(data.errors) && data.errors.length > 0
+      const hasExplicitFailure = data.success === false || data.ok === false
+
+      if (hasErrors || hasExplicitFailure) {
+        isError = true
+        const firstError = hasErrors ? data.errors[0] : undefined
+        message =
+          firstError?.data?.errors?.[0]?.message ||
+          firstError?.message ||
+          data.message ||
+          (hasExplicitFailure ? (data.error || "Operation failed") : "Business operation failed")
+      }
+    }
+
+    if (isError) {
+      const businessError = new RequestError({
+        message,
+        description: message,
+        status: response?.status || 200,
+        url: response?.url || ctx.req?.url,
+        data,
+        response
+      })
+
+      if (options.legacyResolveError) {
+        if (res && typeof res === "object" && "data" in res) {
+          res.data = { error: message, data }
+        } else {
+          ctx.res = { error: message, data }
+        }
+        return
+      }
+
+      throw businessError
+    }
   }
 })
 

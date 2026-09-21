@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Migration note for 2.0.0-alpha.8
+
+- Standard `CrudTable` users normally need no code changes for the strict
+  mutation contract.
+- Custom asynchronous `Action.onClick` handlers must return their Promise so the
+  Table can await success and preserve retry context on rejection.
+- See `docs/guide/migration-alpha-8.md` and
+  `docs/features/strict-mutation-contract.md` for request discriminator and bulk
+  failure semantics. This version has not been published yet.
+
 ### Added
 
 - **`@dashin-dev/auth-payload`** — auth plugin for a Payload CMS backend

@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -25,12 +27,22 @@ jobs:
       - name: App type-check
         working-directory: packages/dashin
         run: yarn typecheck
-      - name: Unit tests (Vitest)
+      - name: Unit tests (Dashin)
         working-directory: packages/dashin
+        run: yarn test
+      - name: Unit tests (Payload source)
+        working-directory: packages/dashin-source-payload
+        run: yarn test
+      - name: Unit tests (D1 source)
+        working-directory: packages/dashin-source-d1
         run: yarn test
       - name: Production build (Vite)
         working-directory: packages/dashin
         run: yarn build
+      - name: Documentation build
+        run: npm ci --prefix docs && npm run build --prefix docs
+      - name: Patch hygiene
+        run: git diff --check origin/master...HEAD
 
   # Heavy job (installs Playwright browsers). Manual-only like the rest; runs
   # when CI is triggered by hand.
@@ -39,6 +51,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -61,6 +75,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -69,5 +85,7 @@ jobs:
       - run: yarn tsc:build
       - name: Install Playwright browser (chromium)
         run: npx playwright install --with-deps chromium
-      - name: Template prod-build smoke
-        run: node scripts/smoke/template-prod-smoke.mjs
+      - name: Template prod-build smoke (twice; verifies cleanup)
+        run: |
+          node scripts/smoke/template-prod-smoke.mjs
+          node scripts/smoke/template-prod-smoke.mjs

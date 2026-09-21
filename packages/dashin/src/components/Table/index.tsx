@@ -121,6 +121,7 @@ export default function Table<RowData extends object>(
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
   const [editing, setEditing] = useState<Editing<RowData>>(null)
   const [selected, setSelected] = useState<Set<number>>(new Set())
+  const [bulkBusy, setBulkBusy] = useState(false)
 
   // Columns participating in grouping (defaultGroupOrder set), ordered.
   const groupCols = useMemo(
@@ -256,24 +257,87 @@ export default function Table<RowData extends object>(
     setFilters(f => ({ ...f, [id]: value }))
 
   // editing helpers
-  const startAdd = () => setEditing({ mode: "add", data: {} as RowData })
-  const startEdit = (row: RowData) =>
+  const [tableErr, setTableErr] = useState<string | null>(null)
+  const startAdd = () => {
+    setTableErr(null)
+    setEditing({ mode: "add", data: {} as RowData })
+  }
+  const startEdit = (row: RowData) => {
+    setTableErr(null)
     setEditing({ mode: "update", data: { ...row }, original: row })
-  const cancel = () => setEditing(null)
-  const setField = (field: string, v: any) =>
+  }
+  const cancel = () => {
+    setTableErr(null)
+    setEditing(null)
+  }
+  const setField = (field: string, v: any) => {
+    setTableErr(null)
     setEditing(e => (e ? { ...e, data: { ...e.data, [field]: v } } : e))
+  }
   const save = async () => {
     if (!editing || !editable) return cancel()
-    if (editing.mode === "add" && editable.onRowAdd)
-      await editable.onRowAdd(editing.data)
-    if (editing.mode === "update" && editable.onRowUpdate)
-      await editable.onRowUpdate(editing.data, editing.original)
-    cancel()
-    reload()
+    setTableErr(null)
+
+    // Client-side validation: required and validate
+    for (const c of cols) {
+      const notEditable = editing.mode === "add"
+        ? c.editable === "never" || c.editable === "onUpdate"
+        : c.editable === "never" || c.editable === "onAdd"
+      if (notEditable) continue
+
+      const field = c.field as string
+      if (!field) continue
+      const val = (editing.data as any)[field]
+
+      if (c.required) {
+        const isEmpty =
+          val === undefined ||
+          val === null ||
+          (typeof val === "string" && val.trim() === "") ||
+          (Array.isArray(val) && val.length === 0)
+        if (isEmpty) {
+          const msg =
+            typeof c.required === "string"
+              ? c.required
+              : `${c.title || field} is required`
+          setTableErr(msg)
+          return
+        }
+      }
+
+      if (typeof c.validate === "function") {
+        const res = c.validate(val, editing.data)
+        if (typeof res === "string" && res) {
+          setTableErr(res)
+          return
+        }
+        if (res === false) {
+          setTableErr(`${c.title || field} is invalid`)
+          return
+        }
+      }
+    }
+
+    try {
+      if (editing.mode === "add" && editable.onRowAdd)
+        await editable.onRowAdd(editing.data)
+      if (editing.mode === "update" && editable.onRowUpdate)
+        await editable.onRowUpdate(editing.data, editing.original)
+      cancel()
+      reload()
+    } catch (e: any) {
+      setTableErr(e?.message || "Operation failed")
+    }
   }
   const remove = async (row: RowData) => {
-    if (editable?.onRowDelete) await editable.onRowDelete(row)
-    reload()
+    if (!editable?.onRowDelete) return
+    setTableErr(null)
+    try {
+      await editable.onRowDelete(row)
+      reload()
+    } catch (e: any) {
+      setTableErr(e?.message || "Delete failed")
+    }
   }
 
   // A2: bulk operations over the current page's selected rows.
@@ -282,19 +346,84 @@ export default function Table<RowData extends object>(
     [rows, selected]
   )
   const clearSelection = () => setSelected(new Set())
+  const selectedIndexes = () =>
+    [...selected].filter(i => i >= 0 && i < rows.length).sort((a, b) => a - b)
+  const errorMessage = (error: any, fallback: string) =>
+    error?.message || error?.error?.message || error?.error || fallback
+  const retainFailedFromResults = (error: any, indexes: number[]) => {
+    const results = error?.resList
+    if (!Array.isArray(results) || results.length !== indexes.length) return false
+
+    const failedOffsets = results
+      .map((result: any, index: number) =>
+        result && typeof result === "object" && result.error ? index : -1
+      )
+      .filter((index: number) => index >= 0)
+    if (
+      failedOffsets.length === 0 ||
+      (typeof error?.failCount === "number" && failedOffsets.length !== error.failCount)
+    ) return false
+
+    setSelected(new Set(failedOffsets.map((offset: number) => indexes[offset])))
+    return true
+  }
   const bulkDelete = async () => {
-    if (!editable?.onRowDelete) return
-    for (const r of selectedRows) await editable.onRowDelete(r)
-    clearSelection()
-    reload()
+    if (!editable?.onRowDelete || bulkBusy) return
+    setTableErr(null)
+    setBulkBusy(true)
+    const indexes = selectedIndexes()
+    const failures: { index: number; error: any }[] = []
+    try {
+      for (let i = 0; i < selectedRows.length; i++) {
+        try {
+          await editable.onRowDelete(selectedRows[i])
+        } catch (error) {
+          failures.push({ index: indexes[i], error })
+        }
+      }
+      if (failures.length > 0) {
+        setSelected(new Set(failures.map(failure => failure.index)))
+        setTableErr(errorMessage(failures[0].error, "Bulk delete failed"))
+        return
+      }
+      clearSelection()
+      reload()
+    } finally {
+      setBulkBusy(false)
+    }
   }
   const bulkUpdate = async () => {
-    if (!editable?.onBulkUpdate) return
+    if (!editable?.onBulkUpdate || bulkBusy) return
+    setTableErr(null)
+    setBulkBusy(true)
+    const indexes = selectedIndexes()
     const changes: Record<number, { oldData: RowData; newData: RowData }> = {}
     selectedRows.forEach((r, i) => (changes[i] = { oldData: r, newData: r }))
-    await editable.onBulkUpdate(changes)
-    clearSelection()
-    reload()
+    try {
+      await editable.onBulkUpdate(changes)
+      clearSelection()
+      reload()
+    } catch (error: any) {
+      if (!retainFailedFromResults(error, indexes)) setSelected(new Set(indexes))
+      setTableErr(errorMessage(error, "Bulk update failed"))
+    } finally {
+      setBulkBusy(false)
+    }
+  }
+  const runBulkAction = async (action: any, event: any) => {
+    if (bulkBusy) return
+    setTableErr(null)
+    setBulkBusy(true)
+    const indexes = selectedIndexes()
+    try {
+      await action.onClick(event, selectedRows)
+      clearSelection()
+    } catch (error: any) {
+      if (!retainFailedFromResults(error, indexes)) setSelected(new Set(indexes))
+      setTableErr(errorMessage(error, "Bulk action failed"))
+    } finally {
+      setBulkBusy(false)
+    }
   }
 
   const canAdd = !!editable?.onRowAdd || !!onAdd
@@ -329,8 +458,12 @@ export default function Table<RowData extends object>(
     return (
       <input
         className="w-full rounded border border-bn-border bg-content-box text-foreground px-2 py-1 text-sm focus:border-primary focus:outline-none"
+        type={c.type === "numeric" ? "number" : "text"}
         value={(data as any)[field] ?? ""}
-        onChange={e => setField(field, e.target.value)}
+        onChange={e => {
+          const raw = e.target.value
+          setField(field, c.type === "numeric" ? (raw === "" ? "" : Number(raw)) : raw)
+        }}
       />
     )
   }
@@ -439,6 +572,23 @@ export default function Table<RowData extends object>(
 
   return (
     <div id="dashin-table" className="rounded bg-content-box">
+      {/* Error banner */}
+      {tableErr && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="mx-4 my-2 rounded-bn border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger flex items-center justify-between"
+        >
+          <span>{tableErr}</span>
+          <button
+            onClick={() => setTableErr(null)}
+            className="text-danger hover:opacity-80 text-sm ml-2 font-bold"
+            aria-label="Dismiss error"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       {/* toolbar */}
       {showSelection && selectedCount > 0 ? (
         <div className="flex items-center justify-between gap-3 bg-primary/10 px-4 py-3">
@@ -449,6 +599,7 @@ export default function Table<RowData extends object>(
             {editable?.onBulkUpdate && (
               <button
                 onClick={bulkUpdate}
+                disabled={bulkBusy}
                 className="rounded px-3 py-1 text-sm text-primary hover:bg-primary/10"
               >
                 {t("editTooltip")}
@@ -457,6 +608,7 @@ export default function Table<RowData extends object>(
             {editable?.onRowDelete && (
               <button
                 onClick={bulkDelete}
+                disabled={bulkBusy}
                 className="rounded px-3 py-1 text-sm text-danger hover:bg-danger/10"
               >
                 {t("deleteTooltip")}
@@ -466,10 +618,8 @@ export default function Table<RowData extends object>(
               <button
                 key={i}
                 title={a.tooltip}
-                onClick={e => {
-                  a.onClick(e, selectedRows)
-                  clearSelection()
-                }}
+                onClick={e => runBulkAction(a, e)}
+                disabled={bulkBusy || a.disabled}
                 className="rounded p-1.5 text-icon-muted hover:bg-content-bg"
               >
                 {typeof a.icon === "function" ? a.icon() : "•"}
@@ -477,6 +627,7 @@ export default function Table<RowData extends object>(
             ))}
             <button
               onClick={clearSelection}
+              disabled={bulkBusy}
               className="rounded p-1.5 text-icon-muted hover:bg-content-bg"
             >
               ✕

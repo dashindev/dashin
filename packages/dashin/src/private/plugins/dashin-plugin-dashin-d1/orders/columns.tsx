@@ -11,12 +11,14 @@ export const columns = ({ t }: { t: TFunction }): Column<Type>[] => [
     title: t("Customer"),
     field: "customer_id",
     lookup: CUSTOMER_LOOKUP,
+    required: true,
     renderDetail: (row: Type) => <RelatedCard slug="customers" value={row.customer_id} />
   },
   {
     title: t("Total"),
     field: "total",
     type: "numeric",
+    required: true,
     render: (row: Type) => money(row.total)
   },
   { title: t("Status"), field: "status", lookup: ORDER_STATUS_LOOKUP },

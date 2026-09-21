@@ -5,12 +5,13 @@ import { CATEGORY_LOOKUP, PRODUCT_STATUS_LOOKUP, money } from "../lookups"
 
 export const columns = ({ t }: { t: TFunction }): Column<Type>[] => [
   { title: t("Id"), field: "id", editable: "never", width: 80 },
-  { title: t("Name"), field: "name" },
-  { title: t("Category"), field: "category_id", lookup: CATEGORY_LOOKUP },
+  { title: t("Name"), field: "name", required: true },
+  { title: t("Category"), field: "category_id", lookup: CATEGORY_LOOKUP, required: true },
   {
     title: t("Price"),
     field: "price",
     type: "numeric",
+    required: true,
     render: (row: Type) => money(row.price)
   },
   { title: t("Stock"), field: "stock", type: "numeric" },

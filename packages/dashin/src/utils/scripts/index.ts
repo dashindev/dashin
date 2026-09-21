@@ -8,7 +8,8 @@ export {
 } from "./handlePlugin"
 export { default as initData } from "./initData"
 export { fixTreeDataTr } from "./muiTable"
-export { default as request } from "./request"
+export { default as request, errorHandler, RequestError } from "./request"
+export type { ErrorResponse, RequestErrorDetails, RequestOptionsInitWithLegacy } from "./request"
 export { default as storedToken } from "./storedToken"
 
 /**

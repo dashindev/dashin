@@ -10,12 +10,15 @@
  * "already registered" / "must be unique" and swap in your own text).
  */
 export function errMessage(e: any, fallback = "Request failed"): string {
+  if (typeof e === "string" && e.trim()) return e.trim()
   const body = (e && (e.response?.data ?? e.data)) ?? e
-  const outer = body?.errors?.[0]
+  const outer = body?.errors?.[0] || e?.errors?.[0]
   const msg =
     outer?.data?.errors?.[0]?.message ||
     outer?.message ||
     body?.message ||
+    body?.error ||
+    e?.description ||
     (typeof e?.message === "string" ? e.message : "")
   return String(msg || "").trim() || fallback
 }

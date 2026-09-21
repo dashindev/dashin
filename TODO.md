@@ -334,5 +334,5 @@
   - [x] 首次 template smoke 在生产构建成功后遇到一次瞬时 `networkidle` 超时；未扩大本安全 PR，随后从第一次重新连续两次通过（动态端口 49659、55225）。
   - [x] 文档构建、`smol-toml` 解析/审计、`git diff --check` 与产物清理通过，无测试或 smoke 临时目录残留。
 - [ ] **13.4 独立安全 PR 与远端检查**
-  - [ ] 创建聚焦提交并推送独立分支，PR 不包含 Phase 12 或家赞改动。
+  - [x] 创建聚焦提交并推送独立分支，PR #166 不包含 Phase 12 或家赞改动。
   - [ ] GitHub CI、Cloudflare checks 与 Dependabot 最终状态完成核对；不发布 npm、不打 tag。

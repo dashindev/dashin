@@ -20,6 +20,11 @@
 
 ### Fixed
 
+- **Build toolchain security** — root Yarn resolutions pin the transitive
+  `smol-toml` dependency to `1.7.1`, the first release patched for
+  [GHSA-7w5x-hrqm-74c2](https://github.com/advisories/GHSA-7w5x-hrqm-74c2).
+  The dependency is used through Lerna/Nx tooling and is not shipped in the
+  browser runtime.
 - **Production build crash** — the Vite template now sets
   `build.commonjsOptions.strictRequires`, so production builds no longer throw
   `Object.defineProperty called on non-object` (Rollup evaluating a CommonJS

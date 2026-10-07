@@ -364,11 +364,25 @@
 
 ---
 
-### Phase 15: 家赞差异盘点与可靠性缺口返工 (Jiazan Generalization Phase 1+2) (进行中)
+### Phase 15: 家赞差异盘点与可靠性缺口返工 (Jiazan Generalization Phase 1+2) (本地完成；未推送/发布)
+
+#### 2026-10-07 独立复核返工（基线 e5338a4，保留原有 4 个本地提交）
+- [x] 复核 G01–G12 当前代码与只读参考，区分 alpha.8 已发布能力和本地未发布修复。（npm 元数据、tag 0aa17ff 实际公共导出、参考 HEAD 28f34fc；§5.1 已更正“组件完全等价”结论）
+- [x] 认证：外部 token 存储与身份事务失败回滚、通知失败不产生未处理 rejection、必要成功字段类型校验及实际事务回归。（共享助手 15 项；Chromium 实际 IndexedDB 的 7 类失败 + 修改后成功通过）
+- [x] 查询：旧失败/最新失败/连续三次/切路由及数据源切换守卫，重试成功清除查询错误。（Table 30 项及 orders 浏览器可控 A/B/C 通过；Refresh 实际重查）
+- [x] 批量：显式 getRowId 保持跨页/排序选择，结构化失败与未知网络结果可审阅；失败重试只执行失败项。（Table + D1 28/Payload 41 单测、products 跨页浏览器通过；504 按未知而非确认失败）
+- [x] 布局：折叠菜单键盘进入/退出及隐藏项不可聚焦；抽屉稳定焦点与 Tab 约束；同步 CLI 布局。（en/zh 390×480、18 项菜单和末列可达真实断言通过；模板最终门禁另记）
+- [x] 关联预览：加载失败可读横幅与重试，堆叠关闭只弹顶层，回到父表单保留草稿及焦点。（RelatedPreview 7 单测 + nested browser；dialogFocus 2 单测；禁用提交导致 body focus 的 Escape 边界已补）
+- [x] 扩展 axe 到列表/导航：修正表头与分页文字对比度、菜单原生 button 语义；CrudTable 透传 options 与删除失败常驻横幅。（zh/en scoped axe 0 违规；CrudTable 6 项单测）
+- [x] 公共文档与第三阶段最小接口方案（含非养老资源、能力边界、默认兼容行为）。（VitePress 导航接入，文档构建通过；第三阶段仅设计，不实施权限/媒体大重构）
+- [x] 执行当前工具链 build/typecheck/受影响单测/浏览器可靠性回归/文档/template smoke，记录真实结果并清理产物。（Node 20.20.2：23 包 build/typecheck/prod build；Dashin 214 / D1 28 / Payload 41 / auth-payload 5 / auth-atomo 5 / auth-pocketbase 3；E2E scheduled 16，13 passed / 3 expected skipped / 0 failed；文档与两次模板 smoke 全过；§5.4）
+- [x] 按 auth / table+bulk / a11y+fixtures / docs 分组本地提交；保留原有 4 个本地提交，不推送/发布、不改家赞；test-results 与 smoke 临时目录已清理/自动回收。
 
 > **依据**：`studio-strategy/handoffs/dashin-jiazan-generalization-20261007.md`；
 > 差异表与实施边界见 `IMPLEMENTATION_PLAN.md` 第五节。
 > **边界**：只改 Dashin；不改家赞；不推送、不发布、不部署；通用化、向后兼容。
+
+以下 15.1–15.6 为 e5338a4 的首轮历史记录，保留追溯；当前最终结果以本节独立复核项与 IMPLEMENTATION_PLAN.md §5.4 为准。
 
 - [x] **15.1 第一阶段 G01–G12 差异盘点** *(2026-10-07)*
   - [x] 按当前 `2.0.0-alpha.8` 源码核对 12 项能力的状态（已有/部分/缺失）、上游位置与缺口，差异表落盘于 `IMPLEMENTATION_PLAN.md` §5.1。

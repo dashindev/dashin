@@ -78,33 +78,53 @@
 > **边界**：只改 Dashin 仓库；不修改家赞；不推送、不发布 npm、不部署。核心只表达通用
 > 表格/字段/关系/操作/媒体/认证能力，不写死任何养老业务概念；新行为向后兼容、显式 opt-in。
 
-### 5.1 第一阶段：G01–G12 全历史差异盘点（以 `2.0.0-alpha.8` 当前源码为准）
+### 5.1 第一阶段：G01–G12 全历史差异盘点（2026-10-07 独立复核）
 
-| 编号 | 能力 | Dashin 上游位置 | 盘点时状态 | 与家赞的差异 / 缺口 | 处置 |
-| --- | --- | --- | --- | --- | --- |
-| G01 | 详情抽屉与操作入口 | `components/CrudTable`、`components/DetailDrawer` | **已有**（alpha.8 已发布） | 行操作 stopPropagation 不触发预览、抽屉草稿独立、错误横幅/校验齐备；抽屉按钮文案仍为硬编码英文，缺 i18n 与焦点恢复 | Phase 2-D 已补齐 i18n/焦点 |
-| G02 | 多账号切换与退出 | `TopBar/UserMenu`（Switch account / Add another / Logout），users 表按 username 索引多账号，logout 仅删除当前账号行并清指针 | **部分** | 已有基础存储/切换/退出语义；家赞 AccountSwitcher 的内联切换器、移除与切换的差异交互未上游 | Phase 3 接口方案 |
-| G03 | 权限菜单与路由 | `NestedMenu.isAllowedRole`（按 item.role 过滤） | **部分** | 菜单隐藏 ≠ 路由拒绝；路由层无角色守卫，capability 回调注入缺失 | Phase 3 |
-| G04 | 日期编辑器 | `components/ui/DatePicker` | **已有** | YYYY-MM-DD 字符串无时区漂移、i18n 月/星期名、清空/Today；周起始日固定周一不可配、日历网格无键盘导航 | Phase 3 增强 |
-| G05 | 鉴权媒体与预览 | `components/ui/ImageEdit`（注入式上传/预览） | **部分** | 缺鉴权 blob 加载（AuthImage）、URL allowlist/同源策略、按身份隔离的缓存与撤销、PDF/原图失败恢复 | Phase 3 |
-| G06 | 关联摘要与堆叠编辑 | `components/RelatedPreview`（Provider/RelatedCard/RelatedList、loop guard、depth cap） | **已有**（alpha.8 已发布） | 与家赞 PreviewStack 等价；焦点恢复可补强 | Phase 2-D 已补齐焦点/Escape |
-| G07 | 查询竞争与重复请求 | `Table.loadRemote`（Table/index.tsx） | **缺失 → 已实施** | 无版本/卸载守卫：旧响应可覆盖新列表；请求 reject → isLoading 永久悬挂 + unhandled rejection；卸载/路由切换可写回失效页；挂载时双发初始请求。统计已分离（computeStats 独立 + cancelled 标记），不复制家赞 pageSize=1 判别 | **Phase 2-B 已实施** |
-| G08 | 长菜单与宽表布局 | `NestedMenu`、`DefaultLayout`、`Table` | **缺失 → 已实施** | max-h-96 截断 >12 项子菜单；aside 无纵向滚动；折叠 flyout 不受视口约束、无键盘焦点；连续展开用过期 open state；菜单项 li 无键盘/aria；表无最小宽度策略（内容被压窄而非滚动）；外层+卡片双滚动容器 | **Phase 2-D 已实施** |
-| G09 | 严格失败与表单验证 | `request.ts`、sources、Table/DetailDrawer | **已有**（Phase 12，alpha.8） | 严格 reject 契约、opt-in 业务判别器、抽屉/行内校验、错误横幅 | — |
-| G10 | 认证拒绝遗漏 | `plugins/auth-*/sign-in/controllers/submitController.ts` | **缺失 → 已实施**（payload/local/strapi/pocketbase/atomo） | 请求层 strict reject 后 submit 无 catch → unhandled rejection、isSubmitting 悬挂、无用户可读错误；JSON.stringify(res) 直出原始响应；DB put 中途失败 → 半写入身份；strapi /users/me 二次请求同样裸奔；local/strapi/pocketbase 用 router.push("/") 不触发重新认证（payload 注释已记录该坑）；payload/atomo `role \|\| "admin"` 缺角色时默认提权。auth-atomo 有 try/catch 但先写 localStorage 后写库仍可能半写入；auth-sso callback 已闭环 | **Phase 2-A 已实施** |
-| G11 | 关系联动与复合编辑 | `Selector`（静态 lookup）、`RelatedCard` | **部分** | 无异步分页搜索关系选择器、父级联动清空、已选项跨页保留、多值时间/明细复合字段编辑器 | Phase 3 |
-| G12 | 筛选/批量/水印 | Table 内建筛选行、批量契约 | **部分 → 已实施（局部）** | 内建筛选控件无原生可访问名称；批量已有 resList/retain-failed 契约但文案无结构化计数、换页后选择索引漂移；鉴权媒体导出与水印扩展未上游 | Phase 2-C/D 已实施局部；媒体/水印归 Phase 3 |
+发布基线：npm 查询确认 core alpha.8 存在；本地 tag `v2.0.0-alpha.8` 指向 `0aa17ff`，
+其 `src/main.ts → components/index.ts` 实际导出 CrudTable/DetailDrawer/RelatedPreview/DatePicker/ImageEdit。
+不能由 PR 编号推断组件等价或已发布。当前 4 个本地主题提交及本轮返工均**未发布**。
+家赞参考只读 HEAD 为 `28f34fcb0e0d7b77d6e552001984915bfcea9c7b`，不读取主工作区候选。
+下列 Dashin 路径以 `packages/dashin/src/` 为前缀（plugins、sources、templates 除外）。
 
-核对：历史 PR #143–149 已将 CrudTable/DetailDrawer/RelatedPreview/ImageEdit/DatePicker/严格变异契约带入 alpha.8，家赞 `_shared` 同名组件为其下游防御副本；`payloadRequest` 严格传输层与 alpha.8 strict contract 等价，属业务适配器边界，不重复上游化（家赞侧 opt-in 判别器模式与 Phase 12 `checkBusinessErrors` 对齐）。
+| 编号 | 状态 / 发布情况 | 当前代码证据 | 家赞参考与真实差异 | 复用回归 / 优先级 |
+| --- | --- | --- | --- | --- |
+| G01 | 基础已有，alpha.8；可靠性增强未发布 | `components/CrudTable`、`DetailDrawer` | `_shared/EditDrawer.tsx`、`CrudTable.tsx`：状态机、严格失败、草稿保留已复用；本轮补稳定焦点、Tab、原生字段名称、zh/en | DetailDrawer/CrudTable unit + browser drawer；P0 |
+| G02 | 部分，基础 alpha.8 | `components/TopBar/TopBarRightMenu/UserMenu.tsx`、`core/auth` | `AccountSwitcher`：已有按 username 的多账号、仅删当前账号+清指针；删除/退出/切换独立策略、外部 token/cache 清理一致性仍缺，不宣称全覆盖 | 既有 auth/authorization unit；Phase 3 身份接口 |
+| G03 | 部分，基础 alpha.8 | `components/NestedMenu.isAllowedRole`、`router.ts` | `RoleGate`、`menuByRole`：菜单隐藏不等于直接路由拒绝；capability/路由守卫未实现，本轮仅补子菜单沿用现有 role 过滤 | NestedMenu unit；Phase 3 权限接口，服务端仍是授权边界 |
+| G04 | 部分，基础 alpha.8 | `components/ui/DatePicker` | `_shared/DatePicker`：date-only 字符串、清空、i18n 已有；周起始日、日历键盘与 instant/timezone 策略尚缺 | DatePicker unit；Phase 3（不能标为完全等价） |
+| G05 | 部分，基础 alpha.8 | `components/ui/ImageEdit`、Payload media helpers | `AvatarEdit/AuthImage`：已有注入上传与普通预览；鉴权 allowlist、身份缓存/blob 回收、PDF/导出恢复缺失 | ImageEdit/Payload media unit；Phase 3 |
+| G06 | 部分，基础 alpha.8；本轮可靠性未发布 | `components/RelatedPreview/{PreviewStack,RelatedCard,types}` | `PreviewStack/collectionMeta`：registry、loop guard、cap 已有，不等价于全部下游行为；本轮补嵌套失败、加载失败重试与键盘/焦点；非 id 主键、异步关系选择仍待方案 | RelatedPreview unit + nested browser；P0 / Phase 3 |
+| G07 | 发布基线缺失；本地已补 | `components/Table.loadRemote`、`computeStats` | `_shared/CrudTable` DEF-008：seq/abort/mount/route/data-source 守卫，旧成功/失败丢弃、最新失败恢复、刷新实际重查；统计独立，不复制 pageSize=1 业务猜测 | 可控 A/B/C、卸载/换源/路由 unit + orders browser；P0 |
+| G08 | 部分，基础 alpha.8；本地已补 | `NestedMenu`、`private/DefaultLayout`、`Table`；3 CLI layouts | 下游 DEF-003/011：长菜单可滚、函数式展开、flyout 钳制+键盘；显式列宽/minTableWidth、单纵滚容器、窄屏抽屉；不复制 CSS 选择器补丁 | en/zh 390×480 真滚动/点击、18 子菜单、axe + template smoke；P0 |
+| G09 | 已有，alpha.8；不重复重写 | `utils/scripts/request`、sources CRUD、`DetailDrawer` | `_shared/api/EditDrawer`：严格 reject、业务判别 opt-in、必填/空数组/数字空值及 0 已有；保留家赞防御层，不能泛化全局 success:false 判定 | request、Table、DetailDrawer、D1/Payload unit；复用 |
+| G10 | 发布基线缺失；本地已补 | `utils/scripts/signIn`；`plugins/auth-{payload,local,strapi,pocketbase,atomo}` controllers | `PayloadSignIn` DEF-025：catch/finally、类型校验、事务身份写入；Atomo 两 token key 失败补偿，本轮真实 IndexedDB 验证；SSO 自有闭环保持 | signIn、5 类插件、Atomo compensation + auth browser；P0 |
+| G11 | 部分，基础 alpha.8 | `Table/components/Selector`、`RelatedPreview/types` | `CatalogPicker`：静态 lookup/摘要已存在，异步搜索分页、历史选项、父级清空、复合明细编辑缺失；医疗规则不上游 | 既有 lookup/RelatedPreview 回归；Phase 3 |
+| G12 | 部分，基础 alpha.8；批量增强未发布 | `Table`、`utils/scripts/bulkMutation`、D1/Payload bulk | `HeaderFilter/reviewBatch/EvidencePhoto`：本轮显式 getRowId 跨页/排序选择、每项 outcome/ID/cause/count、未知结果提示/仅失败项重试；typed filter/媒体水印未实现 | Table + D1 products/Payload orders unit + browser；P0 / Phase 3 |
 
-### 5.2 第二阶段实施项（可靠性缺口，2026-10-07 已实施）
+历史核对：#143 错误/媒体 helpers，#144 DatePicker，#145 抽屉 edit 模式，#148 ImageEdit；
+CrudTable 与 RelatedPreview 以 tag 中的实际源码与公共导出为依据，而非笼统把 #143–149 全部判为同一能力。
+`payloadRequest` 与核心在“传输失败 reject、业务判断归适配器”的边界上对齐，但不宣称响应格式或全部实现等价。
+第三阶段最小接口、默认兼容行为、数据源职责和非养老案例见 `docs/design/generalization-interfaces.md`。
 
-- **A 认证失败闭环（G10）**：核心新增共享提交助手 `completeSignIn`（`utils/scripts/signIn.ts`）：统一 sign-in 结果校验（`user.username` 必填、可按 `requireToken` 要求 token）、Dexie 事务内原子写入 `users`+`settings`（失败不产生半写入身份）、成功才执行 `afterPersist` 副作用（如插件自管 token 存储）与导航、失败统一可读错误（`signInErrorMessage`：RequestError message/description → `errors`/`message` → 回退 `t("Sign in failed")`，不 `JSON.stringify` 原始响应）、`setSubmitting(false)` finally 保证、默认 `window.location.assign("/")` 全量导航（修复 local/strapi/pocketbase 的 router.push 不重新认证缺陷，可被 `navigate` 覆盖）。五个 sign-in + strapi sign-up 控制器统一接入；payload/atomo `role || "admin"` 缺失默认改为 fail-closed `"user"`。
-- **B 列表查询生命周期（G07）**：Table 增加查询序号守卫 + AbortController（`Query.signal` 可选透传给适配器）+ `mountedRef` 卸载守卫；旧成功/旧失败均不写回；最新失败 → 可访问错误横幅并复位 loading；查询/翻页/筛选触发新一轮；远程或本地数据重算时清空页相对失效选择（修复翻页后索引漂移误删）；合并挂载期双重 remote load 为一次。
-- **C 批量结构化失败（G12 局部）**：内置 bulkDelete 聚合结构化 i18n 消息（`bulkFailureSummary` 成功/失败计数 + 每项行标识 `id/uuid/_id/页内序号` 与原因），与既有 resList 保留失败项语义一致；不宣称整批事务；`bulkUpdateSer`（D1/Payload）改用 `primaryKey` 支持非标准主键。
-- **D 布局与原生可访问性（G08 + G12 局部）**：NestedMenu 函数式展开态、`max-h-96` → `max-h-[60vh] overflow-y-auto`、flyout 视口钳制+滚动+Escape 回焦+`role="menu"`/`menuitem` 键盘操作、菜单项 `role="button"`/`tabIndex`/`aria-current`/`aria-expanded`；DefaultLayout aside `overflow-y-auto` + 内容区单滚动责任（外层唯一纵滚容器，卡片不再限高纵滚）；Table `options.minTableWidth` 表最小宽度 + 列 `width`/`minWidth` 最小列宽、行/全选/筛选值/筛选算子/分页/展开控件 i18n aria 名称（en/zh，de 为 stub 兜底英文）；DetailDrawer 文案 i18n 化 + `role="dialog"`/`aria-modal` + 打开聚焦与关闭焦点恢复；PreviewStack frame `role="dialog"`、逐帧焦点捕获/恢复、仅顶层响应 Escape 且编辑抽屉打开时让位。
+### 5.2 第二阶段实施项（独立复核后的当前实现，未发布）
 
-### 5.3 验证策略与结果（2026-10-07）
+- **A 认证**：共享 `completeSignIn` 校验非空 string username/token（local 显式不要求 token），catch/finally 闭环；Dexie 原子 users/settings 写入，短 `afterPersist` 在提交前执行，`rollbackPersist` 补偿外部 token。Atomo 两 key 捕获旧值并恢复；success notice 失败不把已提交身份误报失败。浏览器真实 IndexedDB 中途缺主键写入/外部存储失败均回滚，不留活跃身份；不使用真实账号。
+- **B 查询**：seq/abort/mount 守卫及 route storeKey、remote/local 换源失效；旧成功/失败均丢弃，最新失败退出 loading、Refresh 实际重查并清错误；统计独立取消。CrudTable 关闭未变更预览不刷新，成功保存只刷新一次；没有引入全局缓存。
+- **C 批量**：`getRowId` 显式开启跨页/排序选择，缓存最后加载的选中行；默认页内索引行为保留。D1/Payload 使用配置 primaryKey；`BulkMutationError` 保留 legacy resList/counts 并新增每项 outcomes（id/succeeded/failed/unknown/cause）。未知网络/超时提示先核对，不自动重放；部分失败仅保留失败项，不宣称整批事务；批量通知失败不覆盖结构化结果。
+- **D 布局/a11y**：原生菜单 button、隐藏项 tabIndex=-1、18+ 子菜单滚动、flyout 视口钳制/箭头/Escape 回焦；Table 显式最小宽度+列宽、筛选/选择/输入原生名称、表头/分页文字对比度；CrudTable 透传 options、单笔删除失败常驻横幅；3 CLI 布局同步单纵滚容器与窄屏间距。
+- **E 抽屉/预览**：稳定 onClose ref，最高模态层拥有键盘（包括提交按钮禁用后 focus 落到 body），Tab 约束/逐层回焦，引用计数滚动锁；RelatedCard 键盘可进入，lazy card 与 frame 加载失败有错误/重试，嵌套保存失败保留父草稿。zh/en 浏览器 axe 覆盖列表/导航/抽屉及真实滚动/点击。
+
+公共文档 `docs/features/reliability.md` 标记为 alpha.8 **之后未发布增强**；接口增量默认兼容，
+仅显式配置开启跨页选择，不复制家赞字段、角色、端点或媒体。
+`afterPersist` 的执行时点已明确为提交前（首轮本地 helper 无已发布兼容调用方）。
+如果外部存储本身也拒绝补偿，无法保证跨存储原子性；文档明确这一恢复边界。
+
+### 5.3 首轮历史验证（e5338a4；不作为独立返工最终门禁）
+
+独立复核追加：原先本节为 e5338a4 的首轮历史结果，不作为最终验收。现从
+`fix/generalization-reliability-20261007` 保留并复核 4 个本地提交；新增 TODO 覆盖认证跨存储回滚、
+显式行标识跨页选择、最新查询失败与重试、键盘路径、CLI 布局同步和真实浏览器门禁。
+先保留无配置选择行为，用 `getRowId` 显式开启跨页选择；不猜测业务字段作为主键。
 
 - 认证：`signIn.test.ts` fake db/notify 覆盖成功/拒绝/缺字段/存储失败/重试成功（9 项）；auth-payload 控制器回归（2 项）+ service fail-closed（3 项）；auth-pocketbase（3 项）/auth-atomo（3 项）service 回归。
 - Table：可控延迟 Promise 矩阵——挂载仅一次查询、旧慢新快丢弃旧响应、AbortSignal 透传+旧请求 aborted、远程失败横幅+退出 loading、卸载后写回忽略、新结果清空选择（Table 25 项全过）。
@@ -113,3 +133,60 @@
 - 门禁结果：`yarn tsc:build` 23 包全绿；`yarn workspace @dashin-dev/dashin typecheck` 0 错误；`packages/dashin` 27 文件/195 项单测全过；受影响插件与源包（auth-payload 5 / auth-pocketbase 3 / auth-atomo 3 / source-d1 27 / source-payload 40）全过；`git diff --check` 0 报错（期间发现 TODO/PLAN 曾被写入 CRLF 行尾，已归一为 LF）。
 - Playwright E2E：6 passed / 3 skipped / 0 failed（与既有基线一致；3 个 skipped 为需真实后端的 ecommerce 用例）。sign-in 路由与实体表路由在改动后无致命运行时错误。
 - 未执行：docs 构建与 template smoke（本轮无模板/docs 构建物变更）；发布、推送、部署均按边界未执行。
+
+### 5.4 独立返工最终门禁与交付（2026-10-07）
+
+环境：Windows、Node **20.20.2**（逐命令 PATH 隔离，未切换全局 Node）、Yarn **1.22.22**。
+门禁执行时为基线 e5338a4 + 本轮 dirty 改动；随后无代码变更分组提交，代码 HEAD 为
+`3af14d3`。文档收尾另有提交，不把历史 195 或 Phase 12 的 175 当作当前结果。
+
+| 命令 / 范围 | scheduled / passed / skipped / failed 或真实结果 |
+| --- | --- |
+| `yarn install --frozen-lockfile` | 通过；提交后再次运行 Already up-to-date，lock 未漂移 |
+| `yarn tsc:build` | 23 projects 成功 |
+| `yarn workspace @dashin-dev/dashin typecheck` | exit 0 |
+| `yarn workspace @dashin-dev/dashin build` | Vite production build 成功 |
+| `yarn workspace @dashin-dev/dashin test` | 29 files；214 / 214 / 0 / 0 |
+| `yarn workspace @dashin-dev/source-d1 test` | 4 files；28 / 28 / 0 / 0 |
+| `yarn workspace @dashin-dev/source-payload test` | 8 files；41 / 41 / 0 / 0 |
+| `yarn workspace @dashin-dev/auth-payload test` | 2 files；5 / 5 / 0 / 0 |
+| `yarn workspace @dashin-dev/auth-atomo test` | 2 files；5 / 5 / 0 / 0 |
+| `yarn workspace @dashin-dev/auth-pocketbase test` | 1 file；3 / 3 / 0 / 0 |
+| `yarn workspace @dashin-dev/dashin e2e --workers=1` | 16 / 13 / 3 expected / 0（串行最终轮） |
+| `npm run build --prefix docs` | VitePress build 通过，已加入 2 页导航 |
+| `yarn smoke:template` 连续两次 | 都完成 pack/install/prod-build/headless assert；端口 50904、49964；不是 build-only |
+| `git diff --check`、`git diff --check origin/master...HEAD` | 都 exit 0（含原有 4 个本地提交） |
+
+受影响单测总计 **296 passed / 0 skipped / 0 failed**。auth-local/Strapi 无独立 test script，
+由共享 helper 回归、类型检查及 23 包编译覆盖；未声称真实认证后台验证。
+7 项新增 browser 用例均为合成 orders/products：真实 IndexedDB 的失败写入回滚/修改后成功、
+可控 A/B/C 请求、跨页只重试失败产品、zh/en 短移动视口菜单/末列/抽屉路径、嵌套失败回焦与
+父草稿，以及未变更关闭不重查/成功保存只刷新一次。列表、导航、抽屉 scoped axe WCAG2 A/AA
+均 0 违规；auth fixture 收集的 pageerror 为 0。3 个跳过为既有需真实电商后台的用例。
+
+中间失败如实保留：初版 E2E 模块加载问题已修正；axe 发现对比度和 list 语义失败后已修正；
+嵌套保存后的 body focus 导致 Escape 失效已修正。另一次同仓 Vite build 与 E2E 并发运行出现
+`auth plugin is required`（12 passed / 3 skipped / 1 failed），推断是共享生成文件/HMR 竞争；
+改为 build → unit → E2E 串行后完整 13/3/0。今后避免并发操作同一 `.dashin` 生成目录。
+
+本地主题提交（未推送）：
+
+- `5876cc2` — auth helper 与 Atomo token 补偿回归。
+- `c4d06e8` — Table/CrudTable query、显式选择、D1/Payload bulk metadata 与测试。
+- `3af14d3` — 原生菜单、抽屉/预览焦点、3 CLI layouts、browser fixtures 与 axe。
+- docs 收尾 — 当前差异表、公开可靠性说明、第三阶段接口方案、真实门禁/TODO。
+
+依赖审计：只新增测试 devDependency `axe-core@4.10.3` 及对应 5 行 lock 条目，未改其他依赖；
+smol-toml 实际仍为 **1.7.1**。已检查编译后的公共 d.ts 导出
+`completeSignIn`/`CompleteSignInOptions`、`BulkMutationError`/outcome types、
+`TableProps.getRowId`、`Options.minTableWidth`、`CrudTableProps.getRowId/options`。
+测试夹具在 e2e 目录，不进入只包含 lib/plugin.js 的 core npm files。
+
+边界与风险：仅本地 Windows/Chromium，未触发 GitHub/Linux CI、未部署、未发布/打 tag；
+Next.js/fullstack-atomo 本轮只同步布局，未单独做其运行时 smoke（现有 smoke 为 Vite）。
+既有 Nx 循环任务图/不匹配 resolution、React act、Rollup circular chunk、模板大 chunk 与
+上游 deprecated 依赖警告为非阻断，未扩大范围升级工具链。
+外部 token 补偿不是分布式事务；网络未知不能盲目重放；跨页行快照须服务端校验。
+第三阶段权限、身份生命周期、日期/关系/媒体/复合字段只提供接口设计，没有隐式实施。
+清理了本轮 test-results（仅最后运行元数据），两个 smoke 临时目录由脚本自动删除；
+保留已有 gitignored lib/dist 构建输出，不删除用户既有产物。家赞参考目录未写入。

@@ -14,7 +14,13 @@ const t = ((k: string) => k) as any
 function fakeDb() {
   const users: any[] = []
   const settings: any[] = []
-  const txImpl = vi.fn(async (_mode: string, _t1: any, _t2: any, fn: () => Promise<void>) => fn())
+  const txImpl = vi.fn(async (_mode: string, _t1: any, _t2: any, fn: () => Promise<void>) => {
+    const userLength = users.length, settingLength = settings.length
+    try { await fn() } catch (error) {
+      users.splice(userLength); settings.splice(settingLength)
+      throw error
+    }
+  })
   return {
     users: { put: vi.fn(async (row: any) => { users.push(row); return row.id }) },
     settings: { put: vi.fn(async (row: any) => { settings.push(row); return row.name }) },
@@ -44,6 +50,43 @@ describe("signInErrorMessage", () => {
 })
 
 describe("completeSignIn", () => {
+  it("a failed success notice does not misreport committed authentication", async () => {
+    const db = fakeDb(), navigate = vi.fn()
+    expect(await completeSignIn({ t, db, navigate, signIn: async () => goodResult,
+      notify: async () => { throw new Error("Notice unavailable") }
+    })).toBe(true)
+    expect(db._users).toHaveLength(1)
+    expect(navigate).toHaveBeenCalledOnce()
+  })
+  it("rolls identity and external storage back when the token hook fails", async () => {
+    const db = fakeDb(), notify = vi.fn(), navigate = vi.fn(), rollbackPersist = vi.fn()
+    expect(await completeSignIn({ t, db, notify, navigate,
+      signIn: async () => goodResult,
+      afterPersist: async () => { throw new Error("Token storage unavailable") }, rollbackPersist
+    })).toBe(false)
+    expect(db._users).toHaveLength(0)
+    expect(db._settings).toHaveLength(0)
+    expect(rollbackPersist).toHaveBeenCalledOnce()
+    expect(navigate).not.toHaveBeenCalled()
+    expect(notify).toHaveBeenCalledWith(expect.objectContaining({ severity: "error" }))
+  })
+
+  it("settles rejection even when the notice sink also rejects", async () => {
+    const setSubmitting = vi.fn()
+    await expect(completeSignIn({ t, db: fakeDb(), setSubmitting,
+      signIn: async () => { throw new Error("Offline") },
+      notify: async () => { throw new Error("Notice storage failed") }
+    })).resolves.toBe(false)
+    expect(setSubmitting).toHaveBeenCalledWith(false)
+  })
+
+  it.each([true, 123, " "])("rejects invalid token %s", async token => {
+    const db = fakeDb()
+    expect(await completeSignIn({ t, db, notify: vi.fn(), navigate: vi.fn(),
+      signIn: async () => ({ ...goodResult, token: token as any })
+    })).toBe(false)
+    expect(db._users).toHaveLength(0)
+  })
   beforeEach(() => {
     vi.restoreAllMocks()
   })

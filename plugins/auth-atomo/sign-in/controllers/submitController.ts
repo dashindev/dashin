@@ -10,17 +10,25 @@ interface Props {
 }
 
 const submitController = async ({ t, values, setSubmitting }: Props) => {
+  let previous: Array<[string, string | null]> | undefined
   await completeSignIn({
     t,
     setSubmitting,
     signIn: () => userSignInService(values),
     // The Atomo client SDK reads its token from localStorage — but only write
-    // it after the identity is durably persisted, never on a failed attempt.
+    // it after identity writes, before commit; compensate if either fails.
     afterPersist: res => {
       if (typeof window !== "undefined" && res.token) {
+        previous = ["atomo_auth_token", "token"].map(key => [key, localStorage.getItem(key)])
         localStorage.setItem("atomo_auth_token", res.token)
         localStorage.setItem("token", res.token)
       }
+    },
+    rollbackPersist: () => {
+      previous?.forEach(([key, value]) => {
+        if (value === null) localStorage.removeItem(key)
+        else localStorage.setItem(key, value)
+      })
     }
   })
 }

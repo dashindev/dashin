@@ -1,4 +1,5 @@
 import type { TFunction } from "i18next"
+import Dexie from "dexie"
 import { Primary } from "@/core/auth/schema"
 import noticeController from "@/core/notice/controllers/noticeController"
 import { BA_DB, DashinDatabase } from "../database"
@@ -14,8 +15,8 @@ import { SETTING_NAMES } from "../config"
  * - transport rejections (401/403/network/timeout), malformed 2xx envelopes
  *   and storage failures all release the submitting state and surface a
  *   readable notice — never a raw `JSON.stringify(response)` dump;
- * - `afterPersist` side effects (e.g. a plugin's own token store) run only
- *   after the identity is durably persisted;
+ * - `afterPersist` runs inside the identity transaction; external stores use
+ *   `rollbackPersist` to compensate if that hook or transaction fails;
  * - success navigates via a full page load by default so the app re-checks
  *   auth (a client-side `router.push("/")` from the sign-in page leaves the
  *   form mounted).
@@ -46,8 +47,10 @@ export interface CompleteSignInOptions {
   db?: DashinDatabase
   /** Notice sink — injectable for tests; defaults to the app notice controller. */
   notify?: (n: { title: string; severity?: "success" | "error"; content?: string }) => unknown
-  /** Runs only after the identity is durably persisted (e.g. plugin token stores). */
+  /** Runs after identity writes, before transaction commit. Keep this hook short. */
   afterPersist?: (res: SignInResult) => void | Promise<void>
+  /** Compensates external storage if the hook or identity transaction fails. */
+  rollbackPersist?: () => void | Promise<void>
   /** Post-success navigation (default: full reload to "/"). */
   navigate?: () => void
   successTitle?: string
@@ -85,16 +88,19 @@ export async function completeSignIn(options: CompleteSignInOptions): Promise<bo
     db = BA_DB,
     notify = noticeController,
     afterPersist,
+    rollbackPersist,
     navigate = () => window.location.assign("/"),
     successTitle,
     failureTitle
   } = options
   const failTitle = failureTitle || t("Sign in failed") || "Sign in failed"
+  let persisted = false
 
   try {
     const res = await signIn()
     const user = res?.user
-    if (!user?.username || (requireToken && !res?.token)) {
+    if (typeof user?.username !== "string" || !user.username.trim() ||
+        (requireToken && (typeof res?.token !== "string" || !res.token.trim()))) {
       await notify({
         title: failTitle,
         severity: "error",
@@ -118,14 +124,22 @@ export async function completeSignIn(options: CompleteSignInOptions): Promise<bo
       })
       await db.settings.put({ name: Primary, value: user.username, updated_at })
       await db.settings.put({ name: SETTING_NAMES.role, value: user.role ?? "", updated_at })
+      if (afterPersist) await Dexie.waitFor(Promise.resolve(afterPersist(res!)))
     })
+    persisted = true
 
-    await afterPersist?.(res!)
-    await notify({ title: successTitle || t("Sign in successful") || "Sign in successful" })
+    // A notice is not authentication: failure to display it must not turn a
+    // committed identity into a reported credential/storage failure.
+    try { await notify({ title: successTitle || t("Sign in successful") || "Sign in successful" }) } catch { /* Best effort. */ }
     navigate()
     return true
   } catch (e) {
-    await notify({ title: failTitle, severity: "error", content: signInErrorMessage(e, failTitle) })
+    if (!persisted) {
+      try { await rollbackPersist?.() } catch { /* Preserve the original failure. */ }
+    }
+    try {
+      await notify({ title: failTitle, severity: "error", content: signInErrorMessage(e, failTitle) })
+    } catch { /* A failed notice sink must not create an unhandled rejection. */ }
     return false
   } finally {
     setSubmitting?.(false)

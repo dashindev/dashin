@@ -11,6 +11,9 @@ async function userSignInService(params: SignInParamsType) {
 
   return {
     id: username,
+    // Local auth has no real token — keep the historical marker so the stored
+    // user record keeps the same shape as before.
+    token: "fake_token",
     user: {
       username: username,
       role: "admin"

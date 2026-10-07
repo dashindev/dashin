@@ -14,13 +14,14 @@ describe("mapPayloadAuth", () => {
     })
   })
 
-  it("falls back email -> phone -> provided value, and defaults role to admin", () => {
+  it("falls back email -> phone -> provided value, and defaults role to a non-privileged value", () => {
+    // Fail closed: a missing role field must not silently grant admin menus.
     expect(
       mapPayloadAuth({ token: "t", user: { id: 1, phone: "13800001234" } }).user
-    ).toEqual({ username: "13800001234", role: "admin" })
+    ).toEqual({ username: "13800001234", role: "user" })
     expect(
       mapPayloadAuth({ token: "t", user: { id: 1 } }, "fallback@x.io").user
-    ).toEqual({ username: "fallback@x.io", role: "admin" })
+    ).toEqual({ username: "fallback@x.io", role: "user" })
   })
 
   it("returns errors when token/user missing", () => {

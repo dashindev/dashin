@@ -20,7 +20,8 @@ export function mapPayloadAuth(res: any, fallbackEmail?: string) {
     token: res.token,
     user: {
       username: res.user.email || res.user.phone || fallbackEmail,
-      role: res.user.role || "admin"
+      // Fail closed: a missing role field must not silently grant admin menus.
+      role: res.user.role || "user"
     }
   }
 }

@@ -1,0 +1,16 @@
+{
+  "name": "dashin-isolated-payload3-fixture",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "type": "module",
+  "scripts": { "start": "node server.mjs" },
+  "dependencies": {
+    "payload": "3.90.2",
+    "@payloadcms/next": "3.90.2",
+    "@payloadcms/db-sqlite": "3.90.2",
+    "next": "15.4.11",
+    "react": "19.0.8",
+    "react-dom": "19.0.8",
+    "graphql": "16.11.0"
+  }
+}

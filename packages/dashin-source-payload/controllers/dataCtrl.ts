@@ -1,6 +1,7 @@
 import listSer from "../services/listSer"
 import { DataCtrl, ListService } from "../types"
-import { notice, QueryResult } from "@dashin-dev/dashin"
+import { QueryResult } from "@dashin-dev/dashin"
+import { errMessage } from "../services/errors"
 
 export default async function dataCtrl<RowData extends object>({
   t,
@@ -11,18 +12,19 @@ export default async function dataCtrl<RowData extends object>({
   let data: any, errors, totalCount = 0
 
   if (listService) {
-    const r = await listService(); data = r.data; errors = r.errors; totalCount = r.totalCount
+    const r = await listService(tableQuery); data = r.data; errors = r.errors; totalCount = r.totalCount
   } else if (path) {
     const r = await listSer({ path, ...sharedProps } as ListService<RowData>)
     data = r.data; errors = r.errors; totalCount = r.totalCount
   } else {
-    await notice({ title: t ? t("One of the listService or path is required") : "path required", severity: "error" })
-    return { page: tableQuery.page, data: [], totalCount: 0 }
+    throw new Error(t ? t("One of the listService or path is required") : "path required")
   }
 
-  if (errors) {
-    await notice({ title: t ? t("Request Failed") : "Request Failed", severity: "error", content: JSON.stringify(errors) })
-    return { page: tableQuery.page, data: [], totalCount: 0 }
+  if (errors && (!Array.isArray(errors) || errors.length)) {
+    if (errors instanceof Error) throw errors
+    throw Object.assign(new Error(errMessage(Array.isArray(errors) ? { errors } : errors)), {
+      data: { errors }, cause: errors
+    })
   }
   return { page: tableQuery.page, data, totalCount }
 }

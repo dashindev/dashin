@@ -16,12 +16,14 @@ export function assertPayloadSuccess(res: any, fallback = "Operation failed"): v
       const msg = errMessage(res, fallback)
       const err = new Error(msg) as any
       err.data = res
+      err.outcome = "failed"
       throw err
     }
     if (res.success === false || res.ok === false) {
       const msg = res.message || res.error || errMessage(res, fallback)
       const err = new Error(msg) as any
       err.data = res
+      err.outcome = "failed"
       throw err
     }
   }

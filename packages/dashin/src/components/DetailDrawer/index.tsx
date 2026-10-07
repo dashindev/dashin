@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Column, EditComponentProps, EditableData } from "../Table/models/material-table-shim"
 import { display } from "../Table/models/tableLogic"
 import Input from "../ui/Input"
 import Select from "../ui/Select"
 import Label from "../ui/Label"
+import { isTopDialog, lockDialogScroll } from "../dialogFocus"
 
 /** Best-effort human-readable message from a failed save — walks the Payload
  *  nested error shape (`errors[0].data.errors[0].message`) plus common shapes.
@@ -43,6 +45,7 @@ export default function DetailDrawer<RowData extends object>({
   zBase = 1200,
   formatError
 }: DetailDrawerProps<RowData>) {
+  const { t } = useTranslation("table")
   const isCreate = mode === "create"
   const startEditing = isCreate || mode === "edit"
   const [editing, setEditing] = useState(startEditing)
@@ -66,16 +69,46 @@ export default function DetailDrawer<RowData extends object>({
 
   const open = isCreate || !!row
 
+  // Focus management: move focus into the dialog on open and return it to the
+  // previously-focused control on close, so keyboard/screen-reader users are
+  // not stranded behind the modal.
+  const panelRef = useRef<HTMLElement>(null)
+  const prevFocusRef = useRef<HTMLElement | null>(null)
+  const closeRef = useRef(onClose)
+  closeRef.current = onClose
+
   useEffect(() => {
     if (!open) return
-    document.body.style.overflow = "hidden"
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose() }
+    prevFocusRef.current = document.activeElement as HTMLElement | null
+    panelRef.current?.focus()
+    const unlockScroll = lockDialogScroll()
+    const onKey = (e: KeyboardEvent) => {
+      // Nested previews/drawers own their keyboard events while focused.
+      if (!isTopDialog(panelRef.current)) return
+      if (e.key === "Escape") closeRef.current()
+      if (e.key !== "Tab") return
+      const controls = Array.from(panelRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]'
+      ) ?? []).filter(el => !el.hidden)
+      const first = controls[0], last = controls[controls.length - 1]
+      if (!first) { e.preventDefault(); panelRef.current?.focus(); return }
+      if (!panelRef.current?.contains(document.activeElement)) {
+        e.preventDefault(); (e.shiftKey ? last : first).focus(); return
+      }
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === panelRef.current)) {
+        e.preventDefault(); last.focus()
+      } else if (!e.shiftKey && (document.activeElement === last || document.activeElement === panelRef.current)) {
+        e.preventDefault(); first.focus()
+      }
+    }
     document.addEventListener("keydown", onKey)
     return () => {
-      document.body.style.overflow = ""
+      unlockScroll()
       document.removeEventListener("keydown", onKey)
+      prevFocusRef.current?.focus?.()
+      prevFocusRef.current = null
     }
-  }, [open, onClose])
+  }, [open])
 
   const visibleCols = useMemo(
     () => columns.filter(c => !c.hidden && c.field),
@@ -115,7 +148,7 @@ export default function DetailDrawer<RowData extends object>({
           const msg =
             typeof col.required === "string"
               ? col.required
-              : `${col.title || field} is required`
+              : `${col.title || field} ${t("is required")}`
           setErr(msg)
           return
         }
@@ -128,7 +161,7 @@ export default function DetailDrawer<RowData extends object>({
           return
         }
         if (res === false) {
-          setErr(`${col.title || field} is invalid`)
+          setErr(`${col.title || field} ${t("is invalid")}`)
           return
         }
       }
@@ -176,7 +209,7 @@ export default function DetailDrawer<RowData extends object>({
 
   if (!open) return null
 
-  const title = isCreate ? "New" : editing ? "Edit" : "Details"
+  const title = isCreate ? t("New") : editing ? t("Edit") : t("Details")
 
   return (
     <>
@@ -188,7 +221,12 @@ export default function DetailDrawer<RowData extends object>({
       />
       {/* Panel */}
       <aside
-        className="fixed inset-y-0 right-0 w-full max-w-md bg-content-box shadow-xl flex flex-col transition-transform duration-300 ease-in-out"
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        tabIndex={-1}
+        className="fixed inset-y-0 right-0 w-full max-w-md bg-content-box shadow-xl flex flex-col transition-transform duration-300 ease-in-out focus:outline-none"
         style={{ zIndex: zBase + 100 }}
       >
         {/* Header */}
@@ -202,13 +240,13 @@ export default function DetailDrawer<RowData extends object>({
                 onClick={() => setEditing(true)}
                 className="rounded-bn px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
               >
-                Edit
+                {t("Edit")}
               </button>
             )}
             <button
               onClick={onClose}
               className="rounded-bn p-1.5 text-icon-muted hover:bg-content-bg transition-colors"
-              aria-label="Close"
+              aria-label={t("Close")}
             >
               <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
                 <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
@@ -252,17 +290,17 @@ export default function DetailDrawer<RowData extends object>({
                   disabled={saving}
                   className="rounded-bn px-3 py-1.5 text-sm font-medium text-danger hover:bg-danger/10 transition-colors disabled:opacity-50"
                 >
-                  Delete
+                  {t("Delete")}
                 </button>
               )}
               {canDelete && confirmDelete && (
                 <>
-                  <span className="text-xs text-danger">Delete?</span>
+                  <span className="text-xs text-danger">{t("Delete?")}</span>
                   <button
                     onClick={handleDelete}
                     disabled={saving}
                     className="rounded-bn px-2 py-1 text-sm font-medium text-danger hover:bg-danger/10 transition-colors disabled:opacity-50"
-                    title="Confirm delete"
+                    title={t("Confirm delete")}
                   >
                     ✓
                   </button>
@@ -270,7 +308,7 @@ export default function DetailDrawer<RowData extends object>({
                     onClick={() => setConfirmDelete(false)}
                     disabled={saving}
                     className="rounded-bn px-2 py-1 text-sm font-medium text-icon-muted hover:bg-content-bg transition-colors disabled:opacity-50"
-                    title="Cancel"
+                    title={t("Cancel")}
                   >
                     ✕
                   </button>
@@ -286,16 +324,16 @@ export default function DetailDrawer<RowData extends object>({
                   setErr(null)
                 }}
                 disabled={saving}
-                className="rounded-bn px-3 py-1.5 text-sm font-medium text-icon-muted hover:bg-content-bg transition-colors disabled:opacity-50"
+                className="rounded-bn px-3 py-1.5 text-sm font-medium text-foreground hover:bg-content-bg transition-colors disabled:opacity-50"
               >
-                Cancel
+                {t("Cancel")}
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
                 className="rounded-bn bg-primary-gradient px-4 py-1.5 text-sm font-medium text-primary-foreground shadow-bn hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                {saving ? "Saving…" : isCreate ? "Create" : "Save"}
+                {saving ? t("Saving…") : isCreate ? t("Create") : t("Save")}
               </button>
             </div>
           </div>
@@ -361,6 +399,7 @@ function EditForm<RowData extends object>({
             ) : col.lookup ? (
               <Select
                 className="w-full"
+                aria-label={String(col.title || field)}
                 value={value ?? ""}
                 onChange={e => setField(field, e.target.value)}
               >
@@ -372,6 +411,7 @@ function EditForm<RowData extends object>({
             ) : (
               <Input
                 className="w-full"
+                aria-label={String(col.title || field)}
                 type={col.type === "numeric" ? "number" : "text"}
                 value={value ?? ""}
                 onChange={e => {

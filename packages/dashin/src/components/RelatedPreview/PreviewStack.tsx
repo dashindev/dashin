@@ -3,6 +3,8 @@ import { CollectionsContext, OpenPreview, PreviewContext } from "./context"
 import { CollectionRegistry } from "./types"
 import { RelatedCard, RelatedList } from "./RelatedCard"
 import DetailDrawer from "../DetailDrawer"
+import { useTranslation } from "react-i18next"
+import { isTopDialog, lockDialogScroll } from "../dialogFocus"
 
 type Frame = { key: number; slug: string; value: any }
 const idOf = (v: any) => (v && typeof v === "object" ? v.id : v)
@@ -81,17 +83,64 @@ function PreviewFrame({
   onChanged?: () => void
 }) {
   const registry = useContext(CollectionsContext)
+  const { t } = useTranslation("table")
   const entry = registry[frame.slug]
   const meta = entry?.meta
   const [rec, setRec] = useState<any>(frame.value && typeof frame.value === "object" ? frame.value : null)
   const [editing, setEditing] = useState(false)
   const [tick, setTick] = useState(0)
+  const [error, setError] = useState<string | null>(null)
   const id = idOf(frame.value)
+
+  // Dialog semantics: each frame captures focus on mount and restores it on
+  // unmount (stacked frames chain correctly — each restores to its own
+  // invoker, typically the previous frame or page control).
+  const panelRef = useRef<HTMLElement>(null)
+  const prevFocus = useRef<HTMLElement | null>(null)
+  useEffect(() => {
+    prevFocus.current = document.activeElement as HTMLElement | null
+    panelRef.current?.focus()
+    const unlockScroll = lockDialogScroll()
+    return () => {
+      unlockScroll()
+      prevFocus.current?.focus?.()
+      prevFocus.current = null
+    }
+  }, [])
+
+  // Escape pops ONLY the top frame — nested frames must not all consume it.
+  // While the nested DetailDrawer is open it owns Escape (its own listener),
+  // so this handler steps aside.
+  const isTop = index === stack.length - 1
+  useEffect(() => {
+    if (!isTop || editing) return
+    const onKey = (e: KeyboardEvent) => {
+      if (!isTopDialog(panelRef.current)) return
+      if (e.key === "Escape") onBack()
+      if (e.key === "Tab") {
+        const controls = Array.from(panelRef.current!.querySelectorAll<HTMLElement>('button:not([disabled]), [tabindex="0"]'))
+        const first = controls[0], last = controls[controls.length - 1]
+        if (!panelRef.current?.contains(document.activeElement)) {
+          e.preventDefault(); (e.shiftKey ? last : first)?.focus(); return
+        }
+        if (e.shiftKey && (document.activeElement === first || document.activeElement === panelRef.current)) {
+          e.preventDefault(); last?.focus()
+        } else if (!e.shiftKey && (document.activeElement === last || document.activeElement === panelRef.current)) {
+          e.preventDefault(); first?.focus()
+        }
+      }
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [isTop, editing, onBack])
 
   useEffect(() => {
     let on = true
+    setError(null)
     if (id != null && entry?.fetch) {
-      entry.fetch(id).then(r => on && setRec(r)).catch(() => {})
+      Promise.resolve().then(() => entry.fetch!(id)).then(r => on && setRec(r)).catch(e => {
+        if (on) setError(e?.message || t("Request Failed"))
+      })
     } else if (frame.value && typeof frame.value === "object") {
       setRec(frame.value)
     }
@@ -107,7 +156,12 @@ function PreviewFrame({
     <>
       <div className="fixed inset-0 bg-black/30" style={{ zIndex: zBase }} onClick={onBack} />
       <aside
-        className="fixed inset-y-0 right-0 flex w-full max-w-md flex-col bg-content-box shadow-xl"
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={meta?.label || frame.slug}
+        tabIndex={-1}
+        className="fixed inset-y-0 right-0 flex w-full max-w-md flex-col bg-content-box shadow-xl focus:outline-none"
         style={{ zIndex: zBase + 10 }}
       >
         <div className="flex items-center justify-between gap-2 border-b border-bn-border px-5 py-3">
@@ -121,14 +175,16 @@ function PreviewFrame({
               </React.Fragment>
             ))}
           </div>
-          <button onClick={onCloseAll} className="shrink-0 p-1 text-icon-muted hover:text-foreground" aria-label="Close">
+          <button onClick={onCloseAll} className="shrink-0 p-1 text-icon-muted hover:text-foreground" aria-label={t("Close")}>
             ✕
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
-          {!rec || !meta ? (
-            <div className="text-sm text-icon-muted">Loading…</div>
+          {error ? (
+            <div><p role="alert">{error}</p><button onClick={() => setTick(value => value + 1)}>{t("Retry")}</button></div>
+          ) : !rec || !meta ? (
+            <div className="text-sm text-icon-muted">{t("Loading…")}</div>
           ) : (
             <>
               <div className="flex items-center gap-3">
@@ -175,14 +231,14 @@ function PreviewFrame({
 
         <div className="flex items-center justify-between border-t border-bn-border px-5 py-3">
           <button onClick={onBack} className="text-sm text-icon-muted hover:text-foreground">
-            Back
+            {t("Back")}
           </button>
           {canEdit && (
             <button
               onClick={() => setEditing(true)}
               className="rounded-bn bg-primary-gradient px-4 py-1.5 text-sm font-medium text-primary-foreground shadow-bn hover:opacity-90"
             >
-              Edit
+              {t("Edit")}
             </button>
           )}
         </div>

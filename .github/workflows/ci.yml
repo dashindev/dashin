@@ -89,3 +89,9 @@ jobs:
         run: |
           node scripts/smoke/template-prod-smoke.mjs
           node scripts/smoke/template-prod-smoke.mjs
+      - name: Next template build and runtime smoke (twice)
+        run: |
+          node scripts/smoke/template-prod-smoke.mjs --template=typescript-nextjs
+          node scripts/smoke/template-prod-smoke.mjs --template=typescript-nextjs
+      - name: Atomo template frontend runtime smoke
+        run: node scripts/smoke/template-prod-smoke.mjs --template=fullstack-atomo

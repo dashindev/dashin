@@ -312,4 +312,35 @@ describe("DetailDrawer enhancements", () => {
     )
     expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument()
   })
+
+  it("exposes role='dialog' and moves focus into the panel on open", () => {
+    render(
+      <DetailDrawer row={{ name: "A" } as any} columns={columns} mode="view" onClose={() => {}} />
+    )
+    const dialog = screen.getByRole("dialog")
+    expect(dialog).toHaveAttribute("aria-modal", "true")
+    expect(dialog).toHaveFocus()
+  })
+
+  it("restores focus to the previously-focused control on close", () => {
+    function Host() {
+      const [row, setRow] = React.useState<any>(null)
+      return (
+        <>
+          <button onClick={() => setRow({ name: "A" })}>open</button>
+          <DetailDrawer row={row} columns={columns} mode="view" onClose={() => setRow(null)} />
+        </>
+      )
+    }
+    render(<Host />)
+
+    const opener = screen.getByRole("button", { name: "open" })
+    opener.focus()
+    fireEvent.click(opener)
+    expect(screen.getByRole("dialog")).toHaveFocus()
+
+    fireEvent.keyDown(document, { key: "Escape" })
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    expect(opener).toHaveFocus()
+  })
 })

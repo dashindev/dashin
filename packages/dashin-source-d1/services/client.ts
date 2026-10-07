@@ -20,12 +20,14 @@ function arg(v: any): any {
 /** Execute one SQL statement against the D1 gateway Worker. */
 export async function execute(
   stmt: Stmt,
-  prefix?: string
+  prefix?: string,
+  signal?: AbortSignal
 ): Promise<{ rows: any[]; affectedRows: number; error?: any }> {
   const token = await storedToken()
   const res = await request(`/query`, {
     prefix: prefix || ENV.MAIN_URL || ENV.AUTH_URL,
     method: "POST",
+    signal,
     headers: token
       ? { Authorization: `Bearer ${String(token).replace(/^Bearer /, "")}` }
       : {},

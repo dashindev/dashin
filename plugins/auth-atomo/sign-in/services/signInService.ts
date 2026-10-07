@@ -15,9 +15,10 @@ export function mapAtomoAuth(res: any, fallbackEmail?: string) {
     id: user.id || "user",
     token: res.token,
     user: {
-      username: email,
-      role: user.role || "admin",
       ...user,
+      username: user.username || email,
+      // Fail closed: a missing role field must not silently grant admin menus.
+      role: user.role || "user",
     },
   }
 }
@@ -31,9 +32,8 @@ export default async function userSignInService(params: SignInParamsType) {
     data: { email: username, password },
   })
 
-  const mapped = mapAtomoAuth(res, username)
-  if (mapped.token && typeof window !== "undefined") {
-    localStorage.setItem("atomo_auth_token", mapped.token)
-  }
-  return mapped
+  // Pure mapping — the atomo_auth_token localStorage write moved to the
+  // submit controller's afterPersist hook so a failed/partial sign-in can
+  // never leave a stored token behind.
+  return mapAtomoAuth(res, username)
 }

@@ -20,7 +20,8 @@
 - [x] **Phase 10: Docker 镜像云端构建与 GitHub Official Release 闭环** (已完成)
 - [x] **Phase 11: 商业化落地与企业级价值交付闭环** (已完成)
 - [x] **Phase 12: 严格变异契约与 CRUD 错误冒泡治理 (Strict Mutation Contract)** (已完成；待所有者决定是否推送/发起 CI)
-- [ ] **Phase 13: `smol-toml` 构建工具链 DoS 安全修复** (进行中)
+- [x] **Phase 13: `smol-toml` 构建工具链 DoS 安全修复** (已完成)
+- [ ] **Phase 15: 家赞差异盘点与可靠性缺口返工 (Jiazan Generalization Phase 1+2)** (进行中)
 
 ---
 
@@ -360,3 +361,84 @@
 - [x] **14.5 发布候选交付** *(2026-09-20)*
   - [x] 推送 `release/2.0.0-alpha.8` 候选提交 `b0f3dd07f063e18c0fdbec520e1b8f6b4b4cda50`；GitHub CI Run 35554907501 的 build-test、e2e、template-smoke 与 Cloudflare Pages、Workers Builds 全部成功。
   - [x] 未执行 npm publish，未创建 npm/Git tag，未升级家赞依赖或删除其首轮防御层；后续发布仍需所有者再次明确授权。
+
+---
+
+### Phase 15: 家赞差异盘点与可靠性缺口返工 (Jiazan Generalization Phase 1+2) (已推送，Linux CI 通过；未发布)
+
+#### 2026-10-07 独立复核返工（基线 e5338a4，保留原有 4 个本地提交）
+#### 2026-10-07 三项可靠性收尾复核（基线 5567954；本地及 Linux CI 完成，未发布）
+- [x] 跨页批量 E2E 按 product-1/product-3 行定位、等待翻页数据就绪并确认选择状态，不再位置勾选。（retries=0，7 项完整 reliability ×3 = 21 passed；再做串行连续全 E2E）
+- [x] Payload/D1 查询完整链透传 Query.signal；业务错误及无效配置 reject，保留错误上下文，真实空列表仍 resolve；补适配器链回归。（两条真实 controller → service → request 链各 7 项通过；23 包构建与 typecheck 通过）
+- [x] mutationFailureOutcome 默认 unknown，HTTP 状态不证明回滚；只有适配器显式确认才 failed；补 4xx/5xx/timeout 矩阵。（core 12 项判定/metadata、Payload 51/D1 38 全套单测通过，包括 500/502/503 保守判定与显式确认）
+- [x] 连续执行完整 reliability 套件且 retries=0，复跑 build/typecheck/受影响单测/全 E2E/文档；记录结果与远端 CI 授权边界。（326 单测通过；全 E2E workers=1 连续两轮 26 passed / 6 expected skipped / 0 failed；生产/文档构建、frozen install、template smoke 两次及 diff --check 通过，详见计划 §5.5）
+- [x] 推送候选分支并触发、等待该 SHA 的 GitHub CI。（所有者本轮授权推送/CI；bc7f97ebe997625e4754b46bc701884f6f1318bc，Run 37579450935 三 job 全绿；Linux 单测 224/51/38，E2E 13 passed / 3 expected skipped / 0 failed，template smoke 两次通过；未创建 PR/发布）
+
+#### PR #171 后续隔离验证与发现项修复（基线 abf8df7；本地完成，本轮已授权提交/推送与远端 CI）
+- [x] 盘点后台与模板现有验证入口。（只有 Vite smoke；D1 本地 Worker/SQLite 可用；未配置专用 Payload 后台；Next 12 模板；Atomo Compose 缺 Dockerfile 且引用 latest 镜像；WSL Docker Engine 28.3.3 / Compose 2.39.1 已验证可用）
+- [x] 扩展隔离模板 smoke 入口并运行原样模板。（Vite、fullstack-atomo 前端 build/runtime 通过；Next 构建失败，详见独立待办；不静默补配置/升级框架）
+- [x] Next 模板独立缺陷：补齐 packagePath，并在编译前等待插件准备。（保留 Next 12；最终配置回归 3/3 与完整 build/start/browser 连续两次通过）
+- [x] Next 浏览器发现的关联缺陷：认证接入当前生成的插件索引及显式可选类型。（完整 smoke root len 9073，登录/欢迎页就绪，无 pageerror；不是仅 build 成功）
+- [x] 保持 Next 插件准备仅开发/构建阶段执行，next start 不重新生成文件。（配置回归 3/3，核心全套 239/239；最终 smoke 连续两次门禁另记）
+- [x] 本地独立 D1 状态目录 + loopback Worker 的 HTTP 查询/空结果/拒绝验证。（6/6，包含取消及真实 SQL 部分失败重试；本地 workerd/SQLite，不代表云 D1）
+- [x] 盘点 Payload 隔离集成可行性。（用户选择 Payload 3；采用官方 REST handlers + SQLite 的专用 Docker 服务，不是协议 mock，不验证 Next UI/SSR）
+- [x] 依用户选择创建 Payload 3 独立临时后台。（3.90.2 + SQLite，WSL Docker / Node 20.20.2 / pnpm 9.15.9；真实 REST 5/5，分页/空结果/查询拒绝/在途取消/部分变异及失败 ID 重试；容器与数据库已清理，不连接家赞）
+- [x] 记录运行时结果、首次真实失败和后续建议，复核格式与临时进程/目录清理。（§5.6；Node 语法/patch hygiene 通过；专用容器无残留，原有 test-results 文件哈希不变；新增 harness/文档未提交、未推送）
+- [x] 清理 request HTTP 400/404 中英文旧 description 中“未写入/未操作”的乐观文案。（新增双语 12 项及原 request 16 项通过；保留 status/body/message/legacy 契约，未改 outcome）
+- [x] 本轮修复后重跑门禁。（23 包构建/typecheck；最终核心 239、Payload 51、D1 38；最终 Next 完整 smoke 连续两次、Vite smoke；真实 Payload REST 5/5、本地 D1 6/6；差异检查通过；异常与边界见 §5.7，未提交/推送/发布）
+
+#### PR #171 新修复远端交付（本轮授权；不合并/发布）
+- [x] 核对分支/PR/差异，排除用户原有 test-results；根 package.json/yarn.lock 未修改。
+- [x] 扩充既有 template-smoke job 的 Next 连续两次与 Atomo 前端验证。（YAML 解析/三个 Node 20 job 核对通过；Linux 实际运行另设门禁；隔离后台仍为本地 opt-in）
+- [x] 按修复、验证脚手架/CI、文档聚焦提交并推送。（8e7f276 / d2832d0 / 93b5a47；远端 HEAD 93b5a47cfc4eba1d643dbf58c074e1368bfeea82）
+- [x] 更新 PR #171 说明，区分历史 CI、本地集成和新 SHA Linux 证据。（REST 更新并读回验证；保留已知风险与不合并/发布边界）
+- [x] 手动触发新 SHA 的 GitHub CI。（93b5a47；Run 37589709672，未重跑，结果待完成）
+- [x] 等候三个 GitHub CI job 完成成功，并核验实际日志。（93b5a47；Run 37589709672 首次全绿；Linux 单测 239/51/38，E2E 13 passed/3 expected skipped；Vite×2、Next×2、Atomo 前端×1 全通过）
+- [x] 等候新 SHA 的 Cloudflare Pages/Workers Builds 成功；复核工作树与用户文件。（93b5a47 两项 SUCCESS，PR OPEN/MERGEABLE/CLEAN，reviews=[]；原有 test-results 哈希不变）
+
+> 本节运行证据对应代码/测试/首份文档 SHA 93b5a47；证据整理为独立文档提交后再核验最终 HEAD。
+> 最新精确 SHA 与最终 CI/Cloudflare 状态见 PR #171 的 Final delivery verification，避免文档自引用 SHA 或以旧 Run 代替新 HEAD 门禁。
+
+#### 已完成的首批独立返工（5567954，历史）
+- [x] 复核 G01–G12 当前代码与只读参考，区分 alpha.8 已发布能力和本地未发布修复。（npm 元数据、tag 0aa17ff 实际公共导出、参考 HEAD 28f34fc；§5.1 已更正“组件完全等价”结论）
+- [x] 认证：外部 token 存储与身份事务失败回滚、通知失败不产生未处理 rejection、必要成功字段类型校验及实际事务回归。（共享助手 15 项；Chromium 实际 IndexedDB 的 7 类失败 + 修改后成功通过）
+- [x] 查询：旧失败/最新失败/连续三次/切路由及数据源切换守卫，重试成功清除查询错误。（Table 30 项及 orders 浏览器可控 A/B/C 通过；Refresh 实际重查）
+- [x] 批量：显式 getRowId 保持跨页/排序选择，结构化失败与未知网络结果可审阅；失败重试只执行失败项。（Table + D1 28/Payload 41 单测、products 跨页浏览器通过；504 按未知而非确认失败）
+- [x] 布局：折叠菜单键盘进入/退出及隐藏项不可聚焦；抽屉稳定焦点与 Tab 约束；同步 CLI 布局。（en/zh 390×480、18 项菜单和末列可达真实断言通过；模板最终门禁另记）
+- [x] 关联预览：加载失败可读横幅与重试，堆叠关闭只弹顶层，回到父表单保留草稿及焦点。（RelatedPreview 7 单测 + nested browser；dialogFocus 2 单测；禁用提交导致 body focus 的 Escape 边界已补）
+- [x] 扩展 axe 到列表/导航：修正表头与分页文字对比度、菜单原生 button 语义；CrudTable 透传 options 与删除失败常驻横幅。（zh/en scoped axe 0 违规；CrudTable 6 项单测）
+- [x] 公共文档与第三阶段最小接口方案（含非养老资源、能力边界、默认兼容行为）。（VitePress 导航接入，文档构建通过；第三阶段仅设计，不实施权限/媒体大重构）
+- [x] 执行当前工具链 build/typecheck/受影响单测/浏览器可靠性回归/文档/template smoke，记录真实结果并清理产物。（Node 20.20.2：23 包 build/typecheck/prod build；Dashin 214 / D1 28 / Payload 41 / auth-payload 5 / auth-atomo 5 / auth-pocketbase 3；E2E scheduled 16，13 passed / 3 expected skipped / 0 failed；文档与两次模板 smoke 全过；§5.4）
+- [x] 按 auth / table+bulk / a11y+fixtures / docs 分组本地提交；保留原有 4 个本地提交，不推送/发布、不改家赞；test-results 与 smoke 临时目录已清理/自动回收。
+
+> **依据**：`studio-strategy/handoffs/dashin-jiazan-generalization-20261007.md`；
+> 差异表与实施边界见 `IMPLEMENTATION_PLAN.md` 第五节。
+> **边界**：只改 Dashin；不改家赞；不推送、不发布、不部署；通用化、向后兼容。
+
+以下 15.1–15.6 为 e5338a4 的首轮历史记录，保留追溯；当前最终结果以本节独立复核项与 IMPLEMENTATION_PLAN.md §5.4 为准。
+
+- [x] **15.1 第一阶段 G01–G12 差异盘点** *(2026-10-07)*
+  - [x] 按当前 `2.0.0-alpha.8` 源码核对 12 项能力的状态（已有/部分/缺失）、上游位置与缺口，差异表落盘于 `IMPLEMENTATION_PLAN.md` §5.1。
+  - [x] 确认 G07（查询竞争）、G08（布局）、G10（认证遗漏）为第二阶段缺口；G09 已由 Phase 12 覆盖；G02/G03/G05/G11 大部分及 G12 残余归入第三阶段接口方案。
+- [x] **15.2 认证失败闭环（G10）** *(2026-10-07；signIn 9 项 + auth-payload 5 项测试通过)*
+  - [x] 核心 `utils/scripts/signIn.ts`：`completeSignIn` + `signInErrorMessage`；Dexie 事务原子写 users/settings；`afterPersist` 成功钩子；默认 `window.location.assign("/")` 导航；失败仅可读 notice，`setSubmitting(false)` 保证。
+  - [x] 公共导出接入（`utils/scripts/index.ts` 导出 `completeSignIn`/`signInErrorMessage` 与类型）。
+  - [x] auth-payload、auth-local、auth-pocketbase、auth-strapi（sign-in + sign-up）、auth-atomo 六个控制器接入共享助手；payload/atomo `role || "admin"` 改 fail-closed（`"user"`）；atomo token 写入移至 `afterPersist`。
+  - [x] 测试：成功/拒绝/缺字段/存储失败/重试成功（`signIn.test.ts` 9 项）；auth-payload 控制器回归 2 项 + service fail-closed 3 项。
+- [x] **15.3 列表查询生命周期（G07）** *(2026-10-07；Table 25 项测试通过)*
+  - [x] Table `loadRemote` 查询序号守卫 + AbortController（`Query.signal` 可选透传适配器）+ `mountedRef` 卸载守卫 + 最新失败 `role="alert"` 错误横幅；合并挂载双发 load 为单路径；远程/本地数据重算时清空页相对失效选择。
+  - [x] 测试：挂载仅一次查询、旧慢响应被丢弃、AbortSignal 透传与旧请求 abort、远程失败横幅+退出 loading、卸载后写回忽略、新结果到达清空选择。
+- [x] **15.4 批量结构化失败（G12 局部）** *(2026-10-07；Table 25 + D1 27 + Payload 40 项测试通过)*
+  - [x] 内置 bulkDelete 聚合结构化 i18n 消息（`bulkFailureSummary`：成功/失败计数 + 行标识 `id/uuid/_id/页内序号` + 逐项原因），保留失败项选择；不宣称整批事务。
+  - [x] `bulkUpdateSer`（D1 + Payload）使用 `primaryKey` 而非硬编码 `id`，支持非标准主键。
+  - [x] 测试：部分失败文案（"1 succeeded, 1 failed." + `#2` + 原因）与失败项保留。
+- [x] **15.5 布局与原生可访问性（G08 + G12 局部）** *(2026-10-07；NestedMenu 4 + DetailDrawer 14 + RelatedPreview 5 + Table 25 项测试通过)*
+  - [x] NestedMenu：函数式 setOpen、去 `max-h-96` 改为 `max-h-[60vh] overflow-y-auto`、flyout 视口钳制 + `max-h`/`overflow-y-auto` + Escape 关闭并回焦触发项 + `role="menu"`/`menuitem`/键盘 Enter-Space、菜单项 `role="button"`/`tabIndex`/`aria-current`/`aria-expanded`。
+  - [x] DefaultLayout：aside `overflow-y-auto`；内容区单滚动责任（外层唯一纵滚容器，内容卡片不再限高纵滚）。
+  - [x] Table：`options.minTableWidth` 表最小宽度 + 列 `width`/`minWidth` 作最小列宽；行选/全选/筛选值/筛选算子/分页/展开控件 aria 名称（en/zh i18n 键齐全，de 为 stub 沿用英文兜底）。
+  - [x] DetailDrawer：按钮文案 i18n（新增 New/Edit/Close/Delete/Delete?/Confirm delete/Cancel/Create/Saving… 键）、`role="dialog"`/`aria-modal`/`aria-label`、打开聚焦 + 关闭焦点恢复；PreviewStack frame `role="dialog"`、逐帧焦点捕获/恢复、仅顶层响应 Escape 且编辑抽屉打开时让位。
+  - [x] 测试：Table aria 名称断言、minTableWidth 断言、DetailDrawer `role="dialog"`/焦点进出断言。
+- [x] **15.6 门禁与交付** *(2026-10-07)*
+  - [x] `yarn tsc:build`（23 包全绿）、`yarn workspace @dashin-dev/dashin typecheck`（0 错误）、`packages/dashin` 全量单测（27 文件/195 项全过）、auth-payload（5）/auth-pocketbase（3）/auth-atomo（3）/source-d1（27）/source-payload（40）测试全过、`git diff --check`（行尾归一后 0 报错）。
+  - [x] Playwright E2E（6 passed / 3 expected skipped / 0 failed）：应用启动、sign-in 路由、实体表路由均无致命运行时错误；需真实后端的 ecommerce 用例按既有设计跳过。docs/template smoke 未执行（本轮无模板/docs 构建物变更）。
+  - [x] 按主题分组本地提交（auth / table+bulk / a11y / docs 共 4 个）；**不推送、不发布**。

@@ -35,8 +35,7 @@ describe("d1 listSer", () => {
 
   it("surfaces an execute error", async () => {
     execute.mockResolvedValue({ rows: [], affectedRows: 0, error: { message: "boom" } })
-    const res = await listSer({ tableQuery: { ...query, filters: [] } as any, path: "posts" })
-    expect(res.errors).toBeTruthy()
-    expect(res.totalCount).toBe(0)
+    await expect(listSer({ tableQuery: { ...query, filters: [] } as any, path: "posts" })).rejects.toThrow("boom")
+    expect(execute).toHaveBeenCalledTimes(1)
   })
 })

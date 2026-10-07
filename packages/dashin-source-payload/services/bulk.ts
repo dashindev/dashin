@@ -1,15 +1,15 @@
-import { request, notice, BulkDeleteProps, BulkUpdateProps } from "@dashin-dev/dashin"
+import { request, notice, BulkDeleteProps, BulkUpdateProps, BulkMutationError, mutationFailureOutcome } from "@dashin-dev/dashin"
 import { plHeaders, apiPath, apiBase } from "./plConfig"
 import { assertPayloadSuccess } from "./crud"
 import { errMessage } from "./errors"
 
 async function batchNotice(t: any, n: number, ok: number, fail: number, errorSummary?: string) {
   const content = `${n} items${ok ? `, ${ok} success` : ""}${fail ? `, ${fail} failure.` : ""}${errorSummary ? ` (${errorSummary})` : ""}`
-  await notice({
+  try { await notice({
     title: t(`Batch Request Completed`),
     severity: ok === n ? "success" : fail === n ? "error" : "warning",
     content
-  })
+  }) } catch { /* Notification failure must not replace mutation metadata. */ }
 }
 
 export async function bulkDeleteSer<T extends object>({
@@ -33,7 +33,7 @@ export async function bulkDeleteSer<T extends object>({
       fail++
       const msg = errMessage(e, "Delete failed")
       errorMessages.push(msg)
-      resList.push({ error: msg, item })
+      resList.push({ error: msg, item, id: (item as any)[primaryKey], outcome: mutationFailureOutcome(e), cause: e })
     }
   }
 
@@ -41,20 +41,17 @@ export async function bulkDeleteSer<T extends object>({
   await batchNotice(t, data.length, ok, fail, errorSummary)
 
   if (fail > 0) {
-    const error = new Error(
+    const error = new BulkMutationError(
       ok === 0
         ? `All ${fail} bulk delete operations failed${errorSummary ? `: ${errorSummary}` : ""}`
         : `${fail} of ${data.length} bulk delete operations failed${errorSummary ? `: ${errorSummary}` : ""}`
-    ) as any
-    error.resList = resList
-    error.okCount = ok
-    error.failCount = fail
+    , resList, data.map(item => (item as any)[primaryKey]))
     throw error
   }
   return resList
 }
 
-export async function bulkUpdateSer<T>({ t, SchemaName, changes }: BulkUpdateProps<T>) {
+export async function bulkUpdateSer<T>({ t, SchemaName, primaryKey = "id", changes }: BulkUpdateProps<T>) {
   const headers = await plHeaders()
   const list = Object.values(changes)
   let ok = 0, fail = 0
@@ -64,7 +61,7 @@ export async function bulkUpdateSer<T>({ t, SchemaName, changes }: BulkUpdatePro
   for (const c of list) {
     const { oldData, newData } = c as any
     try {
-      const res = await request(apiPath(SchemaName, oldData.id), {
+      const res = await request(apiPath(SchemaName, (oldData as any)[primaryKey]), {
         prefix: apiBase(), method: "PATCH", headers, data: newData, checkBusinessErrors: true
       } as any)
       assertPayloadSuccess(res, t("Save Failed"))
@@ -74,7 +71,7 @@ export async function bulkUpdateSer<T>({ t, SchemaName, changes }: BulkUpdatePro
       fail++
       const msg = errMessage(e, "Update failed")
       errorMessages.push(msg)
-      resList.push({ error: msg, oldData, newData })
+      resList.push({ error: msg, oldData, newData, id: (oldData as any)[primaryKey], outcome: mutationFailureOutcome(e), cause: e })
     }
   }
 
@@ -82,14 +79,11 @@ export async function bulkUpdateSer<T>({ t, SchemaName, changes }: BulkUpdatePro
   await batchNotice(t, list.length, ok, fail, errorSummary)
 
   if (fail > 0) {
-    const error = new Error(
+    const error = new BulkMutationError(
       ok === 0
         ? `All ${fail} bulk update operations failed${errorSummary ? `: ${errorSummary}` : ""}`
         : `${fail} of ${list.length} bulk update operations failed${errorSummary ? `: ${errorSummary}` : ""}`
-    ) as any
-    error.resList = resList
-    error.okCount = ok
-    error.failCount = fail
+    , resList, list.map(c => (c.oldData as any)[primaryKey]))
     throw error
   }
   return resList

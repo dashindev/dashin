@@ -1,6 +1,6 @@
 import React from "react"
 import { describe, it, expect, vi } from "vitest"
-import { render, screen, fireEvent } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (k: string) => k, i18n: { language: "en" } })
@@ -11,8 +11,8 @@ vi.mock("react-i18next", () => ({
 // appended per-row action column, and how it wires onRowClick/onAdd.
 vi.mock("../../Table", () => ({
   __esModule: true,
-  default: ({ columns, data, onRowClick, onAdd }: any) => (
-    <div>
+  default: ({ columns, data, onRowClick, onAdd, options, getRowId }: any) => (
+    <div data-testid="table" data-min-width={options?.minTableWidth} data-row-id={getRowId?.(data[0])}>
       <button onClick={() => onAdd && onAdd()} disabled={!onAdd}>
         __add
       </button>
@@ -39,6 +39,23 @@ const columns: any[] = [{ title: "Name", field: "name" }]
 const data = [{ id: 1, name: "Alice" }]
 
 describe("CrudTable", () => {
+  it("forwards explicit row IDs and width options without changing defaults", () => {
+    render(<CrudTable title="Products" columns={columns} data={data} getRowId={row => `SKU-${row.id}`} options={{ minTableWidth: 1200 }} />)
+    expect(screen.getByTestId("table")).toHaveAttribute("data-min-width", "1200")
+    expect(screen.getByTestId("table")).toHaveAttribute("data-row-id", "SKU-1")
+  })
+  it("keeps a readable delete error and allows retry without opening the drawer", async () => {
+    const confirmation = vi.spyOn(window, "confirm").mockReturnValue(true)
+    const onRowDelete = vi.fn().mockRejectedValueOnce(new Error("Product locked")).mockResolvedValueOnce(undefined)
+    render(<CrudTable title="Products" columns={columns} data={data} editable={{ onRowDelete }} />)
+    fireEvent.click(screen.getByRole("button", { name: "Delete" }))
+    expect(await screen.findByRole("alert")).toHaveTextContent("Product locked")
+    expect(screen.queryByTestId("drawer")).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Delete" }))
+    await waitFor(() => expect(onRowDelete).toHaveBeenCalledTimes(2))
+    await waitFor(() => expect(screen.queryByRole("alert")).not.toBeInTheDocument())
+    confirmation.mockRestore()
+  })
   it("opens the drawer in view on row click", () => {
     render(<CrudTable title="People" columns={columns} data={data as any} editable={{ onRowUpdate: async () => {} } as any} />)
     expect(screen.getByText("Alice")).toBeInTheDocument()

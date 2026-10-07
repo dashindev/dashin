@@ -77,6 +77,7 @@ export default defineConfig({
         items: [
           { text: "Tables & CRUD", link: "/features/tables" },
           { text: "Strict mutation contract", link: "/features/strict-mutation-contract" },
+          { text: "Reliability (unreleased)", link: "/features/reliability" },
           { text: "Theming", link: "/features/theming" },
           { text: "Layout & regions", link: "/features/layout" },
           { text: "UI Primitives", link: "/features/ui-primitives" },
@@ -102,7 +103,10 @@ export default defineConfig({
       },
       {
         text: "Project",
-        items: [{ text: "Docs contributors", link: "/CONTRIBUTORS" }]
+        items: [
+          { text: "Docs contributors", link: "/CONTRIBUTORS" },
+          { text: "Generalization interfaces (proposal)", link: "/design/generalization-interfaces" }
+        ]
       }
     ],
     socialLinks: [

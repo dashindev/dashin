@@ -11,6 +11,10 @@ export { fixTreeDataTr } from "./muiTable"
 export { default as request, errorHandler, RequestError } from "./request"
 export type { ErrorResponse, RequestErrorDetails, RequestOptionsInitWithLegacy } from "./request"
 export { default as storedToken } from "./storedToken"
+export { completeSignIn, signInErrorMessage } from "./signIn"
+export type { CompleteSignInOptions, SignInResult } from "./signIn"
+export { BulkMutationError, mutationFailureOutcome } from "./bulkMutation"
+export type { BulkItemOutcome, MutationOutcome } from "./bulkMutation"
 
 /**
  * handle PATHS_WITHOUT_LAYOUT

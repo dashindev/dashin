@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useCollection, usePreviewOpen } from "./context"
+import { useTranslation } from "react-i18next"
 
 const idOf = (v: any) => (v && typeof v === "object" ? v.id : v)
 
@@ -11,25 +12,35 @@ const idOf = (v: any) => (v && typeof v === "object" ? v.id : v)
  * without one it's read-only.
  */
 export function RelatedCard({ slug, value }: { slug: string; value: any }) {
+  const { t } = useTranslation("table")
   const entry = useCollection(slug)
   const open = usePreviewOpen()
   const [rec, setRec] = useState<any>(value && typeof value === "object" ? value : null)
+  const [error, setError] = useState<string | null>(null)
+  const [retry, setRetry] = useState(0)
 
   useEffect(() => {
     let on = true
+    setError(null)
     if (value && typeof value === "object") {
       setRec(value)
     } else if (value != null && entry?.fetch) {
-      entry.fetch(value).then(r => on && setRec(r)).catch(() => {})
+      setRec(null)
+      Promise.resolve().then(() => entry.fetch!(value)).then(r => on && setRec(r)).catch(e => {
+        if (on) setError(e?.message || t("Request Failed"))
+      })
+    } else {
+      setRec(null)
     }
     return () => {
       on = false
     }
-  }, [slug, value, entry])
+  }, [slug, value, entry, retry])
 
   if (value == null) return <span className="text-icon-muted">—</span>
   const meta = entry?.meta
   if (!meta) return <span className="text-icon-muted">{String(idOf(value) ?? "")}</span>
+  if (error) return <div><span role="alert">{error}</span><button onClick={() => setRetry(value => value + 1)}>{t("Retry")}</button></div>
   if (!rec) return <span className="text-icon-muted">…</span>
 
   const thumb = meta.avatarUrl ? meta.avatarUrl(rec) : null
@@ -37,6 +48,12 @@ export function RelatedCard({ slug, value }: { slug: string; value: any }) {
   return (
     <div
       role={clickable ? "button" : undefined}
+      tabIndex={clickable ? 0 : undefined}
+      onKeyDown={clickable ? event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault(); open!(slug, rec)
+        }
+      } : undefined}
       onClick={clickable ? () => open!(slug, rec) : undefined}
       className={`flex items-center gap-2.5 rounded-bn border border-bn-border bg-content-bg px-2.5 py-2${
         clickable ? " cursor-pointer transition hover:border-primary hover:bg-content-box" : ""

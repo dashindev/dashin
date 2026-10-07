@@ -248,3 +248,145 @@ build-test（frozen install、23 包、typecheck、core 224/Payload 51/D1 38 单
 Nx/resolution、React act、Rollup circular chunks、模板 deprecated/large chunk 为既有
 非阻断警告。入场时用户已有未跟踪 test-results/.last-run.json，已备份并原样恢复，
 不将其纳入提交；本轮 smoke 临时目录由脚本自动清理，保留已有 gitignored 构建产物。
+
+### 5.6 PR #171 后续隔离后台及其他模板验证（基线 abf8df7；完成验证，Next 待修复）
+
+授权为盘点并补充安全验证，不包含合并/发布、生产写入、家赞变更或框架大版本升级。
+先验证原样模板；若发现模板缺陷，记录可重现首个错误，不静默修复后宣称原样通过。
+本次新增 smoke/诊断和结果先保留本地，不自动更新已验证 PR HEAD。
+
+| 对象 | 已有入口与限制 | 安全验证方式 |
+| --- | --- | --- |
+| D1 | workers/d1-demo-api，已安装 Wrangler 3.114.17；生产重置需要凭证，不能使用 | 独立临时持久化目录、loopback、显式 local，仅合成/自带示例数据；只能称本地 workerd/D1 模拟 |
+| Payload | 仓库没有 Payload 服务配置/专用测试账号，只有 adapter 的 mock 网络测试 | 不读家赞配置或假定 localhost 是测试后台；先评估可启动的专用后台，需要明确版本/数据存储后再做真实集成 |
+| Next.js | 模板 Next 12.1.6，postinstall 改安装副本的 Dashin router；没有 smoke | 临时脚手架、候选 tarball、构建与 next start 浏览器验证，禁用遥测并拒绝外域网络 |
+| fullstack-atomo | 前端 Vite，Compose 使用 latest 镜像/固定容器名/端口/卷；缺 Dockerfile；WSL Docker Engine 28.3.3 / Compose 2.39.1 已连接验证 | 临时前端 build/preview；不直接启动现有 Compose；前端 runtime smoke 不等于 Atomo+Postgres 端到端 |
+
+Cloudflare/wrangler 技能用于限制本地验证。官方 D1 local-development 文档说明可用
+Wrangler 3+ 做 local-only 会话与独立 persist-to；保持现有锁定 CLI，不升级仓库依赖。
+官方参考：https://developers.cloudflare.com/d1/best-practices/local-development/
+
+#### 本地独立验证结果（不是远端 CI 证据）
+
+- Node 20.20.2；新增 opt-in 入口说明见 scripts/integration/README.md。
+- D1：实际 gateway 源码经 Miniflare/workerd、独立 SQLite、真实 HTTP/request/
+  controller/SQL 链验证 6/6。覆盖分页、真实空结果、COUNT/SELECT 拒绝、取消、
+  部分更新状态读回及仅失败 ID 重试；没有配置可选 rate limiter，不验证云 D1。
+  脚手架开发首轮 1 passed/5 failed，原因是 URL 尾斜线导致 /query 路径不匹配；
+  修正后 4 passed/2 failed，原因是 SQLite 双引号字段可能按字符串处理，错误注入
+  未真正触发；改用实际 gateway 表名拒绝和 SQL LIMIT 类型错误后 6/6。
+  Windows workerd 在取消/连接清理附近输出 WSARecv #64；取消后查询与批量读回仍通过，
+  不把它宣称为零服务端警告。独立状态目录已清理。
+- Vite 严格 smoke：通过，root len 15118，实际登录/欢迎内容就绪、无 pageerror，
+  临时目录 dashin-smoke-ougzUJ 已删除。
+- fullstack-atomo 原样前端 smoke：通过，root len 9073，实际登录/欢迎内容就绪、
+  无 pageerror，临时目录 dashin-smoke-5QQQrt 已删除；不代表其后台 Compose 通过。
+- Next 原样模板：安装及 typecheck 通过，首次 production build 失败：
+  ERR_INVALID_ARG_TYPE: readFileSync received undefined -> getPluginNames
+  (dashin/lib/utils/node/plugin-action.js:96) -> dashin/plugin.js:56 ->
+  next.config.js:31。该配置调用 dashinPlugin 时未传 packagePath，未到 next start。
+  未静默修改消费者模板；临时目录 dashin-smoke-NRIPlx 已删除，保留独立修复待办。
+- Payload：用户明确选择 Payload 3 当前主线独立临时后台。固定 3.90.2，使用
+  官方 REST handlers 和 SQLite，不假冒协议、不验证 Next UI/SSR。WSL runner 开发时
+  先出现 /app/package.json ENOENT（跨 Windows/WSL 复制未落入预期目录），随后
+  EACCES（Docker 自动创建 workdir 所有权）；这是脚手架失败，不是 adapter 通过。
+  已改为 WSL 原生复制和 Docker API 复制，并保留退出容器日志直到读完再清理。
+  npm 两次在 reify 阶段停滞（约 270 秒 / 150 秒），registry ping/wget 正常；
+  手动停止的是本次专用容器，不将未确定的 npm 根因归因于 adapter。
+  改为容器内固定 pnpm 9.15.9 后完成安装、启动，并在真实 REST/SQLite 上 5/5
+  首次通过。用户选择的 Payload 3.90.2、数据库和断言没有放宽。
+  Node 宿主/容器均 20.20.2，镜像实际 ID：
+  sha256:11cedc39e663e7c5d5cb9cc77a461a0d2adc25537b94e6831a6108f09cb2001b。
+  每次 run nonce 校验专用后台；成功查询、空结果、400 hook 拒绝、后台已收到 GET
+  后的客户端取消，以及成功/失败混合 PATCH 与读回、仅失败 ID 重试均通过。
+  HTTP 400 的部分变异保持 unknown，不用状态码推断未写入。
+  临时目录 dashin-payload3-RjG9A0Ze 和专用容器已清理；不使用现有 Docker 卷。
+  未验证认证流程、Payload Admin UI/Next SSR 或生产数据库。
+
+新增观察：request 的 HTTP 400 英文 description 仍含“server did not create or modify
+any data”的旧文案；结构化 outcome 已保守标为 unknown，但该文本可能误导消费者。
+本轮只记为独立文案修复建议，不静默修改已通过远端 CI 的实现。
+Next 模板构建失败、Atomo 后台未验证以及 Windows workerd 的连接清理警告仍需
+明确保留；不能宣称所有模板/云后台全绿。没有 push、merge、publish、Tag 或家赞变更。
+
+最终复核：D1 第二次独立执行仍 6/6（共两次成功），4 个 mjs 的 Node 20 语法检查
+通过；已跟踪差异与新增 scripts/integration 文件 patch hygiene 均通过。
+Docker 的本轮 smoke 标签容器无残留。原有 test-results/.last-run.json 哈希仍为
+91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903。
+分支仍 fix/generalization-reliability-20261007，HEAD abf8df7ae21c37b62c0ac5606141b5c071cb3bb9；
+新增验证脚手架/文档保持未提交，不改变 PR #171 的已验证 SHA。
+
+### 5.7 隔离验证发现项修复（所有者已确认；本地，不推送/发布）
+
+- [x] Next 模板：传入当前项目 package.json；把异步插件准备放在配置加载阶段等待，
+  避免 webpack 同步 hook 启动未等待的任务。保持 Next 12.1.6，不升级框架。
+- [x] 请求错误：仅修正 HTTP 400/404 中英文描述，不由状态推断写入/回滚；保留
+  业务 message 优先级、body/status/url、legacyResolveError 与 mutation outcome。
+- [x] 补充配置等待/拒绝/生产启动回归与中英文 400/404 错误文案、元数据回归。（最终新增 3+12，核心全套 239/239；原 request 16 仍通过）
+- [x] Node 20 构建/typecheck/受影响全套单测；Next 完整 build/start/browser 两次、
+  Vite smoke；隔离 Payload/D1 实际网络回归；格式与用户文件/临时资源复核。
+
+入场工作树包括上一轮本地 harness/文档和用户已有未跟踪 test-results；全部保留。
+无提交、推送、PR 更新、合并、部署或发布授权；不读取或修改家赞。
+
+首次修复后 Next build/start 均成功，但浏览器失败：Cannot find module
+'./@dashin-dev/auth-local'。_app 仍使用旧动态目录查找；当前 generator 的 index.js
+按完整包名建立映射。新增明确任务：认证从当前生成索引读取，缺失插件仍拒绝，
+不修改 auth 默认配置来绕过测试。临时目录 dashin-smoke-Q68PpL 已自动清理。
+
+第二次 Next 尝试在 typecheck 揭示生成映射是具体键类型，不能直接用任意 string
+索引；改为显式 Record<string, IAuthPlugin | undefined> 边界，保留缺失插件拒绝。
+临时目录 dashin-smoke-Tv8AFj 已自动清理。首次配置单测的 import.meta URL 在 jsdom
+环境不为 file 协议，改为遵循仓库规定的 packages/dashin 测试 cwd 后 30/30 通过。
+23 包构建、typecheck 和 Dashin 238 / Payload 51 / D1 38 全套单测已通过。
+
+本轮 Payload 重验证在安装前段异常退出（宿主 runner exit 1 未给错误，容器 exit
+255 / OOMKilled=false，安装日志到 resolved 13）；未运行测试，不算成功。
+原因未确定，不归因于 adapter。仅删除本次已退出、nonce 标签匹配的专用容器和
+realpath 核对后的 /tmp/dashin-payload3-FDL5dRHs；等待 Next 完成后再串行验证。
+
+清理时该临时目录已不存在（WSL 实例状态曾发生变化，根因未证实），已确认不存在；
+专用容器已删除，未删除或重启其他项目服务。保留异常记录，不以重试掩盖。
+认证索引修正后 Mlw5cL/yMNxvz 两次完整 Next smoke 均通过，root len 9073。
+随后补充生产启动阶段保护：只在 development-server/production-build 准备插件，
+next start 不再写生成文件。配置回归增加到 3/3，最终核心全套 239/239。
+最终配置仍需重新连续两次 smoke，先前两次只作为中间版本证据。
+Next 12 官方配置加载会 await normalizeConfig；webpack hook 不 await 返回的 Promise，
+因此没有将 hook 改为 async：
+https://github.com/vercel/next.js/blob/v12.1.6/packages/next/server/config.ts
+https://github.com/vercel/next.js/blob/v12.1.6/packages/next/build/webpack-config.ts
+
+#### §5.7 最终结果（本地修复验证历史，推送授权前）
+
+| 门禁 | 真实结果 |
+| --- | --- |
+| Node / 23 包构建 / core typecheck | Node 20.20.2；均通过 |
+| 核心 / Payload / D1 全套单测 | 最终 239 / 51 / 38 passed，0 failed |
+| 最终 Next 12 模板完整 smoke 连续两次 | BU7xh4、AI7by3；build/typecheck/start/browser 均通过；root len 9073；登录/欢迎内容就绪，无 pageerror；生产 start 未重新准备插件 |
+| Vite 完整 smoke | ROMG2Y；通过；root len 15118，无致命运行时错误 |
+| 本地 D1 gateway/workerd/SQLite | zQMqrC；真实 HTTP/controller/request/SQL 6/6；取消与部分更新读回/失败 ID 重试通过 |
+| Payload 3.90.2 REST/SQLite | 串行专用后台 LhyRY55w；5/5；新的保守 400 description 已在真实请求中验证；容器/数据库自动清理 |
+| 差异格式 | tracked diff --check 与所有新增测试/集成文件的 no-index check 通过 |
+
+此前的 Next 运行时/类型错误以及 Payload 安装前段异常退出均保留在上文，不改写
+为首轮成功。Payload 串行重验使用相同版本、服务实现与断言，没有放宽测试。
+Next 仍为 12.1.6，没有框架/根依赖/锁文件升级；新 core tests 被 pack tsconfig 排除，
+未进入 lib。已知 WSARecv #64、Next ESLint/SWC lockfile 临时补丁、deprecated 包和
+Vite large chunk 警告保留；不代表生产 D1、Atomo 后台或认证端到端已验证。
+本轮修复改变消费者模板与错误文字，未改变请求拒绝、元数据或 bulk outcome 契约。
+所有本轮修改未提交；HEAD 仍 abf8df7ae21c37b62c0ac5606141b5c071cb3bb9，未推送或
+更新 PR，故本轮没有新的远端 CI 证据。未发布、Tag、部署、合并或修改家赞。
+
+### 5.8 新修复提交与远端验证（所有者已授权；不合并/发布）
+
+- [x] 入场分支 fix/generalization-reliability-20261007，HEAD abf8df7；PR #171
+  base master / 同名 head；无已暂存修改。保留原有 test-results，排除提交。
+- [x] CI 仍三个 Node 20 job；template-smoke 增加 Next 两次与 Atomo 前端一次，
+  避免只跑 Vite 却宣称 Linux Next 验证。Payload/D1 隔离集成不自动加入 Linux CI。
+- [ ] 修复、测试/CI、文档聚焦提交并推送；不包含构建物、日志、临时目录或凭证。
+- [ ] 更新 PR，手动 CI 验证准确 head SHA；等待 GitHub 三 job 和 Cloudflare 两项。
+- [ ] 记录成功/失败、Run URL、工作树与剩余风险；不得合并/发布/删除分支或改家赞。
+
+§5.6–5.7 的未提交/未推送描述是此前验证时状态；本轮远端交付以本节为准。
+修复提交 8e7f276、测试/CI 提交 d2832d0 已完成；YAML 解析、Node 20 三 job 和
+staged patch hygiene 通过。文档、推送及新 SHA 远端结果仍待完成。

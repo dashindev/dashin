@@ -374,7 +374,28 @@
 - [x] 连续执行完整 reliability 套件且 retries=0，复跑 build/typecheck/受影响单测/全 E2E/文档；记录结果与远端 CI 授权边界。（326 单测通过；全 E2E workers=1 连续两轮 26 passed / 6 expected skipped / 0 failed；生产/文档构建、frozen install、template smoke 两次及 diff --check 通过，详见计划 §5.5）
 - [x] 推送候选分支并触发、等待该 SHA 的 GitHub CI。（所有者本轮授权推送/CI；bc7f97ebe997625e4754b46bc701884f6f1318bc，Run 37579450935 三 job 全绿；Linux 单测 224/51/38，E2E 13 passed / 3 expected skipped / 0 failed，template smoke 两次通过；未创建 PR/发布）
 
-#### 已完成的首批独立返工（5567954）
+#### PR #171 后续隔离验证与发现项修复（基线 abf8df7；本地完成，本轮已授权提交/推送与远端 CI）
+- [x] 盘点后台与模板现有验证入口。（只有 Vite smoke；D1 本地 Worker/SQLite 可用；未配置专用 Payload 后台；Next 12 模板；Atomo Compose 缺 Dockerfile 且引用 latest 镜像；WSL Docker Engine 28.3.3 / Compose 2.39.1 已验证可用）
+- [x] 扩展隔离模板 smoke 入口并运行原样模板。（Vite、fullstack-atomo 前端 build/runtime 通过；Next 构建失败，详见独立待办；不静默补配置/升级框架）
+- [x] Next 模板独立缺陷：补齐 packagePath，并在编译前等待插件准备。（保留 Next 12；最终配置回归 3/3 与完整 build/start/browser 连续两次通过）
+- [x] Next 浏览器发现的关联缺陷：认证接入当前生成的插件索引及显式可选类型。（完整 smoke root len 9073，登录/欢迎页就绪，无 pageerror；不是仅 build 成功）
+- [x] 保持 Next 插件准备仅开发/构建阶段执行，next start 不重新生成文件。（配置回归 3/3，核心全套 239/239；最终 smoke 连续两次门禁另记）
+- [x] 本地独立 D1 状态目录 + loopback Worker 的 HTTP 查询/空结果/拒绝验证。（6/6，包含取消及真实 SQL 部分失败重试；本地 workerd/SQLite，不代表云 D1）
+- [x] 盘点 Payload 隔离集成可行性。（用户选择 Payload 3；采用官方 REST handlers + SQLite 的专用 Docker 服务，不是协议 mock，不验证 Next UI/SSR）
+- [x] 依用户选择创建 Payload 3 独立临时后台。（3.90.2 + SQLite，WSL Docker / Node 20.20.2 / pnpm 9.15.9；真实 REST 5/5，分页/空结果/查询拒绝/在途取消/部分变异及失败 ID 重试；容器与数据库已清理，不连接家赞）
+- [x] 记录运行时结果、首次真实失败和后续建议，复核格式与临时进程/目录清理。（§5.6；Node 语法/patch hygiene 通过；专用容器无残留，原有 test-results 文件哈希不变；新增 harness/文档未提交、未推送）
+- [x] 清理 request HTTP 400/404 中英文旧 description 中“未写入/未操作”的乐观文案。（新增双语 12 项及原 request 16 项通过；保留 status/body/message/legacy 契约，未改 outcome）
+- [x] 本轮修复后重跑门禁。（23 包构建/typecheck；最终核心 239、Payload 51、D1 38；最终 Next 完整 smoke 连续两次、Vite smoke；真实 Payload REST 5/5、本地 D1 6/6；差异检查通过；异常与边界见 §5.7，未提交/推送/发布）
+
+#### PR #171 新修复远端交付（本轮授权；不合并/发布）
+- [x] 核对分支/PR/差异，排除用户原有 test-results；根 package.json/yarn.lock 未修改。
+- [x] 扩充既有 template-smoke job 的 Next 连续两次与 Atomo 前端验证。（YAML 解析/三个 Node 20 job 核对通过；Linux 实际运行另设门禁；隔离后台仍为本地 opt-in）
+- [ ] 按修复、验证脚手架/CI、文档聚焦提交并推送。（修复 8e7f276，测试/CI d2832d0 已提交；文档与推送待完成）
+- [ ] 更新 PR #171 说明，区分历史 CI、本地集成和新 SHA Linux 证据。
+- [ ] 手动触发并等候新 SHA 的三个 GitHub CI job 完成成功。
+- [ ] 等候新 SHA 的 Cloudflare Pages/Workers Builds 成功；复核工作树与用户文件。
+
+#### 已完成的首批独立返工（5567954，历史）
 - [x] 复核 G01–G12 当前代码与只读参考，区分 alpha.8 已发布能力和本地未发布修复。（npm 元数据、tag 0aa17ff 实际公共导出、参考 HEAD 28f34fc；§5.1 已更正“组件完全等价”结论）
 - [x] 认证：外部 token 存储与身份事务失败回滚、通知失败不产生未处理 rejection、必要成功字段类型校验及实际事务回归。（共享助手 15 项；Chromium 实际 IndexedDB 的 7 类失败 + 修改后成功通过）
 - [x] 查询：旧失败/最新失败/连续三次/切路由及数据源切换守卫，重试成功清除查询错误。（Table 30 项及 orders 浏览器可控 A/B/C 通过；Refresh 实际重查）

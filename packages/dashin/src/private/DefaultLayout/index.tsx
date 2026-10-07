@@ -107,7 +107,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
             no longer caps its own height, so nested vertical scrollbars are
             impossible. */}
         <div
-          className="flex-grow p-[36px] bg-content-bg rounded-tl-bn overflow-y-auto overflow-x-hidden"
+          className="min-w-0 flex-grow p-3 sm:p-[36px] bg-content-bg rounded-tl-bn overflow-y-auto overflow-x-hidden"
           style={{
             height: "calc(100vh - 64px)",
             maxWidth: phoneVertical
@@ -138,6 +138,6 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
   )
 
   function handleDrawerToggle() {
-    setOpen(!open)
+    setOpen(value => !value)
   }
 }

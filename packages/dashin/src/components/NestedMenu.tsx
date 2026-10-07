@@ -26,6 +26,15 @@ export default function NestedList({ data, collapsed }: Props): any {
   const [flyoutPos, setFlyoutPos] = useState({ top: 0, left: 0 })
   const closeTimer = useRef(0)
   const flyoutTrigger = useRef<HTMLElement | null>(null)
+  const flyoutRef = useRef<HTMLDivElement>(null)
+  const focusFlyout = useRef(false)
+  const restoringFocus = useRef(false)
+  useEffect(() => {
+    if (flyoutTarget && focusFlyout.current) {
+      focusFlyout.current = false
+      flyoutRef.current?.querySelector<HTMLElement>('[role="menuitem"]')?.focus()
+    }
+  }, [flyoutTarget])
 
   const showFlyout = (name: string, el: HTMLElement) => {
     window.clearTimeout(closeTimer.current)
@@ -40,14 +49,18 @@ export default function NestedList({ data, collapsed }: Props): any {
       8,
       window.innerHeight - Math.min(estHeight, window.innerHeight - 16) - 8
     )
-    setFlyoutPos({ top: Math.min(rect.top, maxTop), left: rect.right })
+    setFlyoutPos({ top: Math.max(8, Math.min(rect.top, maxTop)), left: Math.max(8, Math.min(rect.right, window.innerWidth - 188)) })
     flyoutTrigger.current = el
     setFlyoutTarget(name)
   }
   const closeFlyout = (restoreFocus = false) => {
     window.clearTimeout(closeTimer.current)
     setFlyoutTarget(null)
-    if (restoreFocus) flyoutTrigger.current?.focus()
+    if (restoreFocus) {
+      restoringFocus.current = true
+      flyoutTrigger.current?.focus()
+      restoringFocus.current = false
+    }
   }
   // Escape closes the flyout and returns focus to the trigger menu item.
   useEffect(() => {
@@ -152,7 +165,7 @@ export default function NestedList({ data, collapsed }: Props): any {
     <>
       {!collapsed && (
         <div className="px-4 pt-4 pb-1 text-[11px] font-semibold tracking-wider text-icon-muted uppercase">
-          Main
+          {t("Main")}
         </div>
       )}
       {collapsed && <div className="pt-2" />}
@@ -174,20 +187,30 @@ export default function NestedList({ data, collapsed }: Props): any {
           })
 
         return (
-          <ul key={name} className="w-full max-w-[360px] bg-sidebar p-0 list-none">
-            <li
-              className={`flex items-center ${
+          <div key={name} className="w-full max-w-[360px] bg-sidebar p-0">
+            <button type="button"
+              className={`w-full text-left flex items-center ${
                 collapsed ? "justify-center mx-1 px-2" : "mx-2 px-3"
               } py-2 cursor-pointer rounded-bn hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-bn ${
                 isActive ? "bg-primary/10 text-primary font-medium" : "text-foreground"
               }`}
               role="button"
               tabIndex={0}
+              aria-label={t(label || name)}
+              aria-haspopup={collapsed ? "menu" : undefined}
               aria-current={isActive ? "page" : undefined}
               aria-expanded={hasChildren && !collapsed ? !!open[name] : undefined}
               onClick={() => !collapsed && handleClick({ name, slug })}
               onKeyDown={e => {
-                if (collapsed) return
+                if (collapsed) {
+                  if (["Enter", " ", "ArrowRight", "ArrowDown"].includes(e.key)) {
+                    e.preventDefault()
+                    const first = flyoutRef.current?.querySelector<HTMLElement>('[role="menuitem"]')
+                    if (first) first.focus()
+                    else { focusFlyout.current = true; showFlyout(name, e.currentTarget) }
+                  }
+                  return
+                }
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault()
                   handleClick({ name, slug })
@@ -195,7 +218,7 @@ export default function NestedList({ data, collapsed }: Props): any {
               }}
               onMouseEnter={collapsed ? e => showFlyout(name, e.currentTarget) : undefined}
               onMouseLeave={collapsed ? delayHideFlyout : undefined}
-              onFocus={collapsed ? e => showFlyout(name, e.currentTarget) : undefined}
+              onFocus={collapsed ? e => { if (!restoringFocus.current) showFlyout(name, e.currentTarget) } : undefined}
               onBlur={collapsed ? delayHideFlyout : undefined}
             >
               <span className={`${collapsed ? "" : "mr-3"} flex items-center`}>
@@ -211,11 +234,12 @@ export default function NestedList({ data, collapsed }: Props): any {
                   )}
                 </span>
               )}
-            </li>
+            </button>
             {!collapsed && hasChildren && (
-              <ul className={`list-none p-0 transition-all duration-300 ${open[name] ? "max-h-[60vh] overflow-y-auto" : "max-h-0 overflow-hidden"}`}>
+              <div aria-hidden={!open[name]} className={`p-0 transition-all duration-300 ${open[name] ? "max-h-[60vh] overflow-y-auto" : "max-h-0 overflow-hidden"}`}>
                 {children.map(item => {
                   const { name, label, parent } = item
+                  if (item.role && !isAllowedRole(currentRole, item.role)) return null
                   let { slug } = item
                   if (slug) slug = specialPluginSlug(slug)
                   const isSelected = slug === `/${qGroup}/${qName}`
@@ -224,11 +248,11 @@ export default function NestedList({ data, collapsed }: Props): any {
                     setSelectedRootName(parent)
 
                   return (
-                    <li
+                    <button type="button"
                       key={name}
-                      className={`pl-10 pr-4 py-2 cursor-pointer rounded-bn transition-[padding-left] duration-500 ease-in-out hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-bn ${isSelected ? "bg-primary/10 text-primary" : "text-foreground"}`}
+                      className={`block w-full text-left pl-10 pr-4 py-2 cursor-pointer rounded-bn transition-[padding-left] duration-500 ease-in-out hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-bn ${isSelected ? "bg-primary/10 text-primary" : "text-foreground"}`}
                       role="button"
-                      tabIndex={0}
+                      tabIndex={open[item.parent] ? 0 : -1}
                       aria-current={isSelected ? "page" : undefined}
                       onClick={() => handleClick({ name, slug })}
                       onKeyDown={e => {
@@ -239,20 +263,32 @@ export default function NestedList({ data, collapsed }: Props): any {
                       }}
                     >
                       <span className="text-sm">{t(label || name)}</span>
-                    </li>
+                    </button>
                   )
                 })}
-              </ul>
+              </div>
             )}
-          </ul>
+          </div>
         )
       })}
 
       {collapsed && flyoutTarget && createPortal(
         <div
+          ref={flyoutRef}
           role="menu"
+          aria-label={t(rootItems.find(item => item.name === flyoutTarget)?.label || flyoutTarget)}
           className="fixed bg-sidebar border border-bn-border rounded-r-bn shadow-xl py-1 z-[1400] min-w-[180px] max-h-[calc(100vh-16px)] overflow-y-auto"
-          style={{ left: flyoutPos.left, top: flyoutPos.top }}
+          style={{ left: flyoutPos.left, top: flyoutPos.top, maxWidth: "calc(100vw - 16px)" }}
+          onFocus={keepFlyout}
+          onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget)) delayHideFlyout() }}
+          onKeyDown={e => {
+            const items = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('[role="menuitem"]'))
+            const index = items.indexOf(document.activeElement as HTMLElement)
+            if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+              e.preventDefault()
+              items[(index + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length]?.focus()
+            }
+          }}
           onMouseEnter={keepFlyout}
           onMouseLeave={() => setFlyoutTarget(null)}
         >
@@ -289,6 +325,7 @@ export default function NestedList({ data, collapsed }: Props): any {
                   {t(target.label || target.name)}
                 </div>
                 {children.map(child => {
+                  if (child.role && !isAllowedRole(currentRole, child.role)) return null
                   let s = child.slug
                   if (s) s = specialPluginSlug(s)
                   const isSelected = s === `/${qGroup}/${qName}`

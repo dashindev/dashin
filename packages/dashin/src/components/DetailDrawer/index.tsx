@@ -5,6 +5,7 @@ import { display } from "../Table/models/tableLogic"
 import Input from "../ui/Input"
 import Select from "../ui/Select"
 import Label from "../ui/Label"
+import { isTopDialog, lockDialogScroll } from "../dialogFocus"
 
 /** Best-effort human-readable message from a failed save — walks the Payload
  *  nested error shape (`errors[0].data.errors[0].message`) plus common shapes.
@@ -73,21 +74,41 @@ export default function DetailDrawer<RowData extends object>({
   // not stranded behind the modal.
   const panelRef = useRef<HTMLElement>(null)
   const prevFocusRef = useRef<HTMLElement | null>(null)
+  const closeRef = useRef(onClose)
+  closeRef.current = onClose
 
   useEffect(() => {
     if (!open) return
     prevFocusRef.current = document.activeElement as HTMLElement | null
     panelRef.current?.focus()
-    document.body.style.overflow = "hidden"
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose() }
+    const unlockScroll = lockDialogScroll()
+    const onKey = (e: KeyboardEvent) => {
+      // Nested previews/drawers own their keyboard events while focused.
+      if (!isTopDialog(panelRef.current)) return
+      if (e.key === "Escape") closeRef.current()
+      if (e.key !== "Tab") return
+      const controls = Array.from(panelRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]'
+      ) ?? []).filter(el => !el.hidden)
+      const first = controls[0], last = controls[controls.length - 1]
+      if (!first) { e.preventDefault(); panelRef.current?.focus(); return }
+      if (!panelRef.current?.contains(document.activeElement)) {
+        e.preventDefault(); (e.shiftKey ? last : first).focus(); return
+      }
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === panelRef.current)) {
+        e.preventDefault(); last.focus()
+      } else if (!e.shiftKey && (document.activeElement === last || document.activeElement === panelRef.current)) {
+        e.preventDefault(); first.focus()
+      }
+    }
     document.addEventListener("keydown", onKey)
     return () => {
-      document.body.style.overflow = ""
+      unlockScroll()
       document.removeEventListener("keydown", onKey)
       prevFocusRef.current?.focus?.()
       prevFocusRef.current = null
     }
-  }, [open, onClose])
+  }, [open])
 
   const visibleCols = useMemo(
     () => columns.filter(c => !c.hidden && c.field),
@@ -127,7 +148,7 @@ export default function DetailDrawer<RowData extends object>({
           const msg =
             typeof col.required === "string"
               ? col.required
-              : `${col.title || field} is required`
+              : `${col.title || field} ${t("is required")}`
           setErr(msg)
           return
         }
@@ -140,7 +161,7 @@ export default function DetailDrawer<RowData extends object>({
           return
         }
         if (res === false) {
-          setErr(`${col.title || field} is invalid`)
+          setErr(`${col.title || field} ${t("is invalid")}`)
           return
         }
       }
@@ -303,7 +324,7 @@ export default function DetailDrawer<RowData extends object>({
                   setErr(null)
                 }}
                 disabled={saving}
-                className="rounded-bn px-3 py-1.5 text-sm font-medium text-icon-muted hover:bg-content-bg transition-colors disabled:opacity-50"
+                className="rounded-bn px-3 py-1.5 text-sm font-medium text-foreground hover:bg-content-bg transition-colors disabled:opacity-50"
               >
                 {t("Cancel")}
               </button>
@@ -378,6 +399,7 @@ function EditForm<RowData extends object>({
             ) : col.lookup ? (
               <Select
                 className="w-full"
+                aria-label={String(col.title || field)}
                 value={value ?? ""}
                 onChange={e => setField(field, e.target.value)}
               >
@@ -389,6 +411,7 @@ function EditForm<RowData extends object>({
             ) : (
               <Input
                 className="w-full"
+                aria-label={String(col.title || field)}
                 type={col.type === "numeric" ? "number" : "text"}
                 value={value ?? ""}
                 onChange={e => {

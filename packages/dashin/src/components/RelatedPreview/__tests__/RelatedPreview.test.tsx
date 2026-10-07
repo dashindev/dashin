@@ -33,6 +33,25 @@ function makeRegistry(overrides: any = {}) {
 }
 
 describe("RelatedPreview", () => {
+  it("a lazy related card shows an error and resolves after retry", async () => {
+    const registry = makeRegistry()
+    registry.contracts.fetch = vi.fn().mockRejectedValueOnce(new Error("Relation offline")).mockResolvedValue(contractRec)
+    render(<RelatedPreviewProvider collections={registry as any}><RelatedCard slug="contracts" value={1} /></RelatedPreviewProvider>)
+    expect(await screen.findByRole("alert")).toHaveTextContent("Relation offline")
+    fireEvent.click(screen.getByRole("button", { name: "Retry" }))
+    expect(await screen.findByRole("button", { name: "C-1" })).toBeInTheDocument()
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
+  })
+  it("shows failed fetch persistently and retries without losing the parent frame", async () => {
+    const registry = makeRegistry()
+    registry.contracts.fetch = vi.fn().mockRejectedValueOnce(new Error("Catalog unavailable")).mockResolvedValue(contractRec)
+    render(<RelatedPreviewProvider collections={registry as any}><RelatedCard slug="contracts" value={contractRec} /></RelatedPreviewProvider>)
+    fireEvent.click(screen.getByText("C-1"))
+    expect(await screen.findByRole("alert")).toHaveTextContent("Catalog unavailable")
+    fireEvent.click(screen.getByRole("button", { name: "Retry" }))
+    await waitFor(() => expect(screen.queryByRole("alert")).not.toBeInTheDocument())
+    expect(screen.getAllByRole("dialog")).toHaveLength(1)
+  })
   it("clicking a card opens a preview with its summary + relations", async () => {
     render(
       <RelatedPreviewProvider collections={makeRegistry() as any}>

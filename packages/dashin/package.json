@@ -75,6 +75,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-test-renderer": "^18.3.0",
     "@vitest/coverage-v8": "^1.6.0",
+    "axe-core": "4.10.3",
     "husky": "^4.2.5",
     "prettier": "1.19.1",
     "pretty-quick": "^2.0.1",

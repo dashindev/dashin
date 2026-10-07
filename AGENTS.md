@@ -304,8 +304,8 @@ or `gh workflow run ci.yml`. It does not run automatically on push/PR to avoid s
 Jobs:
 - **build-test:** `yarn tsc:build` → typecheck → unit tests → production build
 - **e2e:** Playwright end-to-end smoke tests
-- **template-smoke:** scaffold the Vite template against locally-packed tarballs, run `vite build`,
-  headless-load the preview — catches prod-only regressions (CJS init crashes, missing i18n globs, unstyled shell)
+- **template-smoke:** scaffold against locally-packed tarballs; run Vite twice, Next.js build/start/browser twice,
+  and the Atomo frontend once — catches prod-only regressions. Does not run the opt-in adapter backend integrations.
 
 Run CI before merging significant changes. For trivial fixes (typos, docs), it's optional.
 
@@ -334,4 +334,3 @@ All future feature development, architectural migrations, and complex integratio
    - A TODO item must ONLY be marked completed (`[x]`) after its corresponding verification passes (e.g. `typecheck`, unit test suite, or local UI smoke test). Never mark an item complete based on unverified code.
 4. **State Transparency & Handover**:
    - The `TODO.md` file serves as the single source of truth for task progress. Any contributor or AI agent taking over the conversation or codebase must be able to understand the exact state of progress and the immediate next step just by reading `TODO.md`.
-

@@ -390,10 +390,14 @@
 #### PR #171 新修复远端交付（本轮授权；不合并/发布）
 - [x] 核对分支/PR/差异，排除用户原有 test-results；根 package.json/yarn.lock 未修改。
 - [x] 扩充既有 template-smoke job 的 Next 连续两次与 Atomo 前端验证。（YAML 解析/三个 Node 20 job 核对通过；Linux 实际运行另设门禁；隔离后台仍为本地 opt-in）
-- [ ] 按修复、验证脚手架/CI、文档聚焦提交并推送。（修复 8e7f276，测试/CI d2832d0 已提交；文档与推送待完成）
-- [ ] 更新 PR #171 说明，区分历史 CI、本地集成和新 SHA Linux 证据。
-- [ ] 手动触发并等候新 SHA 的三个 GitHub CI job 完成成功。
-- [ ] 等候新 SHA 的 Cloudflare Pages/Workers Builds 成功；复核工作树与用户文件。
+- [x] 按修复、验证脚手架/CI、文档聚焦提交并推送。（8e7f276 / d2832d0 / 93b5a47；远端 HEAD 93b5a47cfc4eba1d643dbf58c074e1368bfeea82）
+- [x] 更新 PR #171 说明，区分历史 CI、本地集成和新 SHA Linux 证据。（REST 更新并读回验证；保留已知风险与不合并/发布边界）
+- [x] 手动触发新 SHA 的 GitHub CI。（93b5a47；Run 37589709672，未重跑，结果待完成）
+- [x] 等候三个 GitHub CI job 完成成功，并核验实际日志。（93b5a47；Run 37589709672 首次全绿；Linux 单测 239/51/38，E2E 13 passed/3 expected skipped；Vite×2、Next×2、Atomo 前端×1 全通过）
+- [x] 等候新 SHA 的 Cloudflare Pages/Workers Builds 成功；复核工作树与用户文件。（93b5a47 两项 SUCCESS，PR OPEN/MERGEABLE/CLEAN，reviews=[]；原有 test-results 哈希不变）
+
+> 本节运行证据对应代码/测试/首份文档 SHA 93b5a47；证据整理为独立文档提交后再核验最终 HEAD。
+> 最新精确 SHA 与最终 CI/Cloudflare 状态见 PR #171 的 Final delivery verification，避免文档自引用 SHA 或以旧 Run 代替新 HEAD 门禁。
 
 #### 已完成的首批独立返工（5567954，历史）
 - [x] 复核 G01–G12 当前代码与只读参考，区分 alpha.8 已发布能力和本地未发布修复。（npm 元数据、tag 0aa17ff 实际公共导出、参考 HEAD 28f34fc；§5.1 已更正“组件完全等价”结论）

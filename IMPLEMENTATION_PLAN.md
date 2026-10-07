@@ -383,10 +383,40 @@ Vite large chunk 警告保留；不代表生产 D1、Atomo 后台或认证端到
   base master / 同名 head；无已暂存修改。保留原有 test-results，排除提交。
 - [x] CI 仍三个 Node 20 job；template-smoke 增加 Next 两次与 Atomo 前端一次，
   避免只跑 Vite 却宣称 Linux Next 验证。Payload/D1 隔离集成不自动加入 Linux CI。
-- [ ] 修复、测试/CI、文档聚焦提交并推送；不包含构建物、日志、临时目录或凭证。
-- [ ] 更新 PR，手动 CI 验证准确 head SHA；等待 GitHub 三 job 和 Cloudflare 两项。
-- [ ] 记录成功/失败、Run URL、工作树与剩余风险；不得合并/发布/删除分支或改家赞。
+- [x] 修复、测试/CI、文档聚焦提交并推送；不包含构建物、日志、临时目录或凭证。
+- [x] 更新 PR，手动 CI 验证准确 head SHA；等待 GitHub 三 job 和 Cloudflare 两项。（93b5a47；37589709672 首次全绿，REST 更新 PR 并读回验证）
+- [x] 记录成功/失败、Run URL、工作树与剩余风险；不得合并/发布/删除分支或改家赞。（下方证据；所有禁止项保持）
 
 §5.6–5.7 的未提交/未推送描述是此前验证时状态；本轮远端交付以本节为准。
 修复提交 8e7f276、测试/CI 提交 d2832d0 已完成；YAML 解析、Node 20 三 job 和
 staged patch hygiene 通过。文档、推送及新 SHA 远端结果仍待完成。
+
+文档提交 93b5a47 已与 8e7f276/d2832d0 一并推送，准确 head SHA 为
+93b5a47cfc4eba1d643dbf58c074e1368bfeea82。手动 CI Run 37589709672 已触发：
+https://github.com/dashindev/dashin/actions/runs/37589709672
+此时 Pages success、Workers Builds in progress，三个 CI job 尚未宣称通过。
+
+Run 37589709672 在准确 SHA 93b5a47cfc4eba1d643dbf58c074e1368bfeea82 上
+completed/success，三个 job 首次运行全部 success，没有重跑失败任务：
+
+| Linux / Node 20.20.2 证据 | 结果 |
+| --- | --- |
+| build-test | frozen install、23 包构建、typecheck、单测、Vite 生产/文档构建、origin/master...HEAD patch hygiene 全通过 |
+| 核心 / Payload / D1 单测日志 | 31/9/5 文件；239/51/38 passed；0 failed |
+| E2E | 13 passed / 3 expected skipped / 0 failed |
+| template-smoke | Vite×2 root len 15118；Next×2 root len 9073；Atomo 前端×1 root len 9073；五次完整 build/start/browser 均通过，无致命/pageerror |
+| Cloudflare checks（同 SHA） | Pages / Workers Builds: dashin-demo 均 COMPLETED / SUCCESS |
+| PR #171 | OPEN / base master / head fix/generalization-reliability-20261007 / MERGEABLE / CLEAN；reviews=[] |
+
+PR 正文已更新并读回，区分旧 bc7f97e/abf8df7、当前代码 SHA、真实本地 adapter
+集成与 Linux template/frontend CI；不宣称这些 Linux job 跑了 opt-in adapter 后台。
+gh pr edit 因旧 GraphQL projectCards 接口失败；第一次 REST PowerShell stdin JSON
+编码也失败（HTTP 400）；改用 Node execFileSync 明确 UTF-8 JSON input 的 REST PATCH
+后成功，不修改令牌或账户。两次失败均未改变 PR refs/代码。
+
+本证据独立文档提交不改实现；推送后再手动执行最终 HEAD 的 CI 并等 Cloudflare。
+最新精确文档 HEAD SHA、最终 Run URL 和 checks 以
+https://github.com/dashindev/dashin/pull/171 的 Final delivery verification 为准；
+不能用上方代码 SHA 的 Run 代替新文档 SHA 门禁。保持功能分支，不合并/发布/Tag。
+保留 WSL exit 255 根因未知、Windows workerd WSARecv #64、Next 12/工具链旧警告与
+默认分支依赖告警；云 D1、Atomo 后台、认证端到端及 Payload Next/Admin 未验证。

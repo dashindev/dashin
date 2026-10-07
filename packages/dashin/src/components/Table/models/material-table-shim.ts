@@ -64,6 +64,13 @@ export interface Query<RowData extends object = any> {
   search: string
   orderBy?: Column<RowData>
   orderDirection: "asc" | "desc"
+  /**
+   * Aborted when this query is superseded by a newer one (filter/sort/page
+   * change) or when the table unmounts. Data adapters may pass it to their
+   * transport (e.g. `request(url, { signal })`); adapters that ignore it are
+   * unaffected — stale results are discarded by the table either way.
+   */
+  signal?: AbortSignal
 }
 
 export interface QueryResult<RowData extends object = any> {

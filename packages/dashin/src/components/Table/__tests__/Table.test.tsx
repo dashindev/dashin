@@ -1,15 +1,37 @@
 import React from "react"
-import { render, screen, fireEvent, within, cleanup, waitFor } from "@testing-library/react"
+import { act, render, screen, fireEvent, within, cleanup, waitFor } from "@testing-library/react"
 import { describe, it, expect, vi, afterEach } from "vitest"
 import Table from "../index"
 import { Column } from "../models/material-table-shim"
+
+// English strings for keys whose templates matter in assertions (the real
+// en.ts values). Unknown keys fall back to the key itself, like before.
+const TABLE_EN: Record<string, string> = {
+  labelDisplayedRows: "{from}-{to} of {count}",
+  nRowsSelected: "{0} row(s) selected",
+  bulkFailureSummary: "{0} succeeded, {1} failed.",
+  selectAllAriaLabel: "Select all rows",
+  selectRowAriaLabel: "Select row {0}",
+  filterOperatorAriaLabel: "Filter operator for {0}",
+  filterValueAriaLabel: "Filter value for {0}",
+  detailToggleAriaLabel: "Toggle details",
+  labelRowsPerPage: "Rows per page:",
+  firstAriaLabel: "First Page",
+  previousAriaLabel: "Previous Page",
+  nextAriaLabel: "Next Page",
+  lastAriaLabel: "Last Page",
+  firstTooltip: "First Page",
+  previousTooltip: "Previous Page",
+  nextTooltip: "Next Page",
+  lastTooltip: "Last Page"
+}
 
 // --- mocks: isolate Table from router / i18n / env ---
 vi.mock("@/router", () => ({
   useRouter: () => ({ query: { group: "g", name: "n" }, push: vi.fn() })
 }))
 vi.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (k: string) => k })
+  useTranslation: () => ({ t: (k: string) => TABLE_EN[k] ?? k })
 }))
 vi.mock("@/utils", () => ({ ENV: { SITE_NAME: "Test" }, DynamicRoute: "/d" }))
 
@@ -338,5 +360,175 @@ describe("Table", () => {
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Bulk update rejected")
     expect(rowCheckbox.checked).toBe(true)
+  })
+
+  // ---- remote query lifecycle -------------------------------------------
+
+  it("issues the remote query exactly once on mount", async () => {
+    const query = vi.fn().mockResolvedValue({ data: [], totalCount: 0, page: 0 })
+    render(<Table<Row> columns={columns} data={query} options={baseOptions} />)
+    await waitFor(() => expect(query).toHaveBeenCalledTimes(1))
+  })
+
+  it("discards a stale remote response so the newest query wins", async () => {
+    const resolvers: Array<(v: any) => void> = []
+    const query = vi.fn(() => new Promise<any>(r => resolvers.push(r)))
+    render(
+      <Table<Row>
+        columns={columns}
+        data={query}
+        options={baseOptions}
+        title="stale-test"
+      />
+    )
+    expect(query).toHaveBeenCalledTimes(1)
+
+    // Trigger a newer query via the toolbar search box.
+    fireEvent.change(screen.getByPlaceholderText("searchPlaceholder"), {
+      target: { value: "newer" }
+    })
+    expect(query).toHaveBeenCalledTimes(2)
+
+    // Newest resolves first, then the stale one — stale must be ignored.
+    await act(async () => {
+      resolvers[1]({
+        data: [{ id: 9, name: "newest", qty: 0, team: "A" }],
+        totalCount: 1,
+        page: 0
+      })
+    })
+    await act(async () => {
+      resolvers[0]({
+        data: [{ id: 8, name: "stale", qty: 0, team: "B" }],
+        totalCount: 1,
+        page: 0
+      })
+    })
+
+    expect(screen.getByText("newest")).toBeInTheDocument()
+    expect(screen.queryByText("stale")).not.toBeInTheDocument()
+  })
+
+  it("passes an AbortSignal and aborts the superseded request", async () => {
+    const signals: AbortSignal[] = []
+    const query = vi.fn((q: any) => {
+      signals.push(q.signal)
+      return new Promise<any>(() => {})
+    })
+    render(<Table<Row> columns={columns} data={query} options={baseOptions} title="abort-test" />)
+    expect(query).toHaveBeenCalledTimes(1)
+
+    fireEvent.change(screen.getByPlaceholderText("searchPlaceholder"), {
+      target: { value: "x" }
+    })
+    expect(query).toHaveBeenCalledTimes(2)
+    expect(signals[0].aborted).toBe(true)
+    expect(signals[1].aborted).toBe(false)
+  })
+
+  it("shows an alert and leaves the loading state when the remote query rejects", async () => {
+    const query = vi.fn().mockRejectedValue(new Error("List offline"))
+    render(<Table<Row> columns={columns} data={query} options={baseOptions} title="err-test" />)
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("List offline")
+    expect(screen.getByText("emptyDataSourceMessage")).toBeInTheDocument()
+  })
+
+  it("ignores a remote response that resolves after unmount", async () => {
+    let resolve: ((v: any) => void) | undefined
+    const query = vi.fn(() => new Promise<any>(r => { resolve = r }))
+    const { unmount } = render(
+      <Table<Row> columns={columns} data={query} options={baseOptions} title="unmount-test" />
+    )
+    unmount()
+    await act(async () => {
+      resolve?.({ data: [{ id: 1, name: "late", qty: 0, team: "A" }], totalCount: 1, page: 0 })
+    })
+    // no crash, nothing rendered
+    expect(screen.queryByText("late")).not.toBeInTheDocument()
+  })
+
+  it("clears the selection when a fresh remote page loads", async () => {
+    const query = vi.fn().mockResolvedValue({
+      data: [
+        { id: 1, name: "alpha", qty: 5, team: "A" },
+        { id: 2, name: "beta", qty: 10, team: "B" }
+      ],
+      totalCount: 4,
+      page: 0
+    })
+    render(
+      <Table<Row>
+        columns={columns}
+        data={query}
+        options={{ pageSize: 2, selection: true }}
+        title="sel-test"
+      />
+    )
+    await screen.findByText("alpha")
+
+    const rowCheckbox = screen.getAllByRole("checkbox")[1] as HTMLInputElement
+    fireEvent.click(rowCheckbox)
+    expect(screen.getByText("1 row(s) selected")).toBeInTheDocument()
+
+    // A new query (sort change via the Name column header) clears the
+    // page-relative selection.
+    fireEvent.click(screen.getByRole("button", { name: "Name" }))
+    await waitFor(() =>
+      expect(screen.queryByText("1 row(s) selected")).not.toBeInTheDocument()
+    )
+  })
+
+  // ---- accessibility ------------------------------------------------------
+
+  it("exposes accessible names on selection, filter and pagination controls", async () => {
+    render(
+      <Table<Row>
+        columns={columns}
+        data={data}
+        options={{ ...baseOptions, selection: true }}
+      />
+    )
+    expect(screen.getByLabelText("Select all rows")).toBeInTheDocument()
+    expect(screen.getByLabelText("Select row 1")).toBeInTheDocument()
+    expect(screen.getByLabelText("Filter value for Name")).toBeInTheDocument()
+    expect(screen.getByLabelText("Filter operator for Id")).toBeInTheDocument()
+    expect(screen.getByLabelText("Next Page")).toBeInTheDocument()
+    expect(screen.getByLabelText("Previous Page")).toBeInTheDocument()
+  })
+
+  it("applies options.minTableWidth to the table element", () => {
+    const { container } = render(
+      <Table<Row>
+        columns={columns}
+        data={data}
+        options={{ ...baseOptions, minTableWidth: 960 }}
+      />
+    )
+    expect(container.querySelector("table")).toHaveStyle({ minWidth: "960px" })
+  })
+
+  it("bulk delete failure banner summarizes counts and row identity", async () => {
+    const onRowDelete = vi.fn()
+      .mockResolvedValueOnce(undefined)
+      .mockRejectedValueOnce(new Error("Row locked"))
+    render(
+      <Table<Row>
+        columns={columns}
+        data={data}
+        options={{ ...baseOptions, selection: true }}
+        editable={{ onRowDelete }}
+      />
+    )
+
+    const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[]
+    fireEvent.click(checkboxes[1])
+    fireEvent.click(checkboxes[2])
+    fireEvent.click(await screen.findByText("deleteTooltip"))
+
+    const alert = await screen.findByRole("alert")
+    expect(alert).toHaveTextContent("1 succeeded, 1 failed.")
+    expect(alert).toHaveTextContent("#2")
+    expect(alert).toHaveTextContent("Row locked")
   })
 })

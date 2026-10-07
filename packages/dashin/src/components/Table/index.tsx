@@ -118,6 +118,23 @@ export default function Table<RowData extends object>(
   const [page, setPage] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+
+  // Query lifecycle: every remote load gets a monotonically increasing
+  // sequence number and an AbortController. A response may only write rows /
+  // totalCount / loading when it is still the newest request AND the table is
+  // still mounted — so a slow stale query can never overwrite a newer result,
+  // and an unmounted/route-changed table never writes back. Stats go through
+  // `computeStats` (separate cancellation flag), not this path.
+  const querySeq = React.useRef(0)
+  const queryAbort = React.useRef<AbortController | null>(null)
+  const mountedRef = React.useRef(true)
+  useEffect(() => {
+    mountedRef.current = true
+    return () => {
+      mountedRef.current = false
+      queryAbort.current?.abort()
+    }
+  }, [])
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
   const [editing, setEditing] = useState<Editing<RowData>>(null)
   const [selected, setSelected] = useState<Set<number>>(new Set())
@@ -136,12 +153,13 @@ export default function Table<RowData extends object>(
     operators[c.tableData!.id] ?? defaultOperator(c)
 
   const buildQuery = useCallback(
-    (p: number): Query<RowData> => ({
+    (p: number, signal?: AbortSignal): Query<RowData> => ({
       page: p,
       pageSize,
       search,
       orderBy,
       orderDirection: orderDir,
+      signal,
       filters: cols
         .filter(
           c =>
@@ -159,14 +177,34 @@ export default function Table<RowData extends object>(
 
   const loadRemote = useCallback(
     async (p: number) => {
+      const seq = ++querySeq.current
+      queryAbort.current?.abort()
+      const abort = new AbortController()
+      queryAbort.current = abort
+
       setIsLoading(true)
-      const res: QueryResult<RowData> = await (data as any)(buildQuery(p))
-      setRows(res.data || [])
-      setTotalCount(res.totalCount || 0)
-      setPage(res.page ?? p)
-      setIsLoading(false)
+      try {
+        const res: QueryResult<RowData> = await (data as any)(buildQuery(p, abort.signal))
+        // Stale or unmounted: discard — never overwrite the newer list state.
+        if (!mountedRef.current || seq !== querySeq.current) return
+        setRows(res.data || [])
+        setTotalCount(res.totalCount || 0)
+        setPage(res.page ?? p)
+        // Selection indexes are page-relative — a fresh result set makes any
+        // previous selection point at different rows. Clear it (material-table
+        // parity) rather than risk acting on the wrong records.
+        setSelected(new Set())
+      } catch (e: any) {
+        // Aborted/stale requests fail silently; only the newest failure is shown.
+        if (!mountedRef.current || seq !== querySeq.current) return
+        if (e?.name === "AbortError") return
+        setTableErr(errorMessage(e, t("Request Failed")))
+      } finally {
+        if (mountedRef.current && seq === querySeq.current) setIsLoading(false)
+      }
     },
-    [data, buildQuery]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, buildQuery, t]
   )
 
   // Push real list-page stats (total + per-enum distribution) up to the
@@ -187,21 +225,19 @@ export default function Table<RowData extends object>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, isRemote])
 
-  // initial / data change
+  // local data: keep the working copy in sync with the `data` prop
   useEffect(() => {
-    if (isRemote) loadRemote(0)
-    else {
-      const arr = (data as RowData[]) || []
-      setAllRows(arr)
-    }
+    if (!isRemote) setAllRows((data as RowData[]) || [])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
-  // remote: reload on query change
+  // remote: single reload path — covers mount, `data` identity changes and any
+  // query change. (Previously the mount also fired the [data] effect, issuing
+  // the first page twice.)
   useEffect(() => {
     if (isRemote) loadRemote(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, orderBy, orderDir, filters, operators, pageSize])
+  }, [data, search, orderBy, orderDir, filters, operators, pageSize])
 
   // local: derive filtered/sorted/paged rows
   useEffect(() => {
@@ -231,6 +267,9 @@ export default function Table<RowData extends object>(
     }
     setTotalCount(r.length)
     setRows(r.slice(page * pageSize, page * pageSize + pageSize))
+    // Page-relative selection indexes would silently point at different rows
+    // after a local re-slice (sort/search/filter/page change) — clear them.
+    setSelected(new Set())
   }, [allRows, filters, search, orderBy, orderDir, page, pageSize, isRemote, cols])
 
   const reload = () =>
@@ -367,6 +406,10 @@ export default function Table<RowData extends object>(
     setSelected(new Set(failedOffsets.map((offset: number) => indexes[offset])))
     return true
   }
+  // Row identity for failure reports — adapters may use non-numeric IDs
+  // (string, uuid) or no ID at all; fall back to the 1-based page index.
+  const rowRef = (row: RowData, index: number) =>
+    (row as any)?.id ?? (row as any)?.uuid ?? (row as any)?._id ?? index + 1
   const bulkDelete = async () => {
     if (!editable?.onRowDelete || bulkBusy) return
     setTableErr(null)
@@ -383,7 +426,19 @@ export default function Table<RowData extends object>(
       }
       if (failures.length > 0) {
         setSelected(new Set(failures.map(failure => failure.index)))
-        setTableErr(errorMessage(failures[0].error, "Bulk delete failed"))
+        const succeeded = indexes.length - failures.length
+        const details = failures
+          .map(
+            ({ index, error }) =>
+              `#${rowRef(rows[index], index)} ${errorMessage(error, "")}`
+          )
+          .join("; ")
+          .trim()
+        setTableErr(
+          `${t("bulkFailureSummary")
+            .replace("{0}", String(succeeded))
+            .replace("{1}", String(failures.length))} ${details}`.trim()
+        )
         return
       }
       clearSelection()
@@ -495,6 +550,8 @@ export default function Table<RowData extends object>(
                   e.stopPropagation()
                   setExpanded(expanded === ri ? null : ri)
                 }}
+                aria-label={t("detailToggleAriaLabel")}
+                aria-expanded={expanded === ri}
                 className="text-icon-muted hover:text-primary"
               >
                 {expanded === ri ? "▾" : "▸"}
@@ -505,6 +562,7 @@ export default function Table<RowData extends object>(
             <td className="px-4 py-2" onClick={e => e.stopPropagation()}>
               <input
                 type="checkbox"
+                aria-label={t("selectRowAriaLabel").replace("{0}", String(ri + 1))}
                 checked={selected.has(ri)}
                 onChange={() =>
                   setSelected(s => {
@@ -678,8 +736,14 @@ export default function Table<RowData extends object>(
         </div>
       )}
 
+      {/* `options.minTableWidth` (material-table-compatible `Options`) keeps
+          wide tables readable: below it the container scrolls instead of
+          crushing columns into unreadable slivers. */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
+        <table
+          className="w-full border-collapse text-sm"
+          style={options?.minTableWidth ? { minWidth: options.minTableWidth } : undefined}
+        >
           <thead>
             <tr className="border-b border-bn-border text-left">
               {hasDetail && <th className="sticky top-0 z-10 bg-content-box w-8 px-4 py-2" />}
@@ -687,7 +751,7 @@ export default function Table<RowData extends object>(
                 <th className="sticky top-0 z-10 bg-content-box w-8 px-4 py-2">
                   <input
                     type="checkbox"
-                    aria-label="select all"
+                    aria-label={t("selectAllAriaLabel")}
                     checked={rows.length > 0 && selected.size === rows.length}
                     onChange={() =>
                       setSelected(s =>
@@ -705,7 +769,10 @@ export default function Table<RowData extends object>(
                 return (
                   <th
                     key={c.tableData!.id}
-                    style={{ width: c.width }}
+                    // `width` doubles as the floor (`minWidth`) so explicit
+                    // column widths can't be crushed to zero on narrow view-
+                    // ports; `minWidth` overrides it when given separately.
+                    style={{ width: c.width, minWidth: c.minWidth ?? c.width }}
                     aria-sort={
                       sorted
                         ? orderDir === "asc"
@@ -741,6 +808,7 @@ export default function Table<RowData extends object>(
                     ) : c.lookup ? (
                       <select
                         value={filters[c.tableData!.id] ?? ""}
+                        aria-label={t("filterValueAriaLabel").replace("{0}", String(c.title ?? c.field ?? ""))}
                         onChange={e => {
                           setPage(0)
                           onFilterChanged(c.tableData!.id, e.target.value)
@@ -755,6 +823,7 @@ export default function Table<RowData extends object>(
                     ) : c.type === "boolean" ? (
                       <select
                         value={filters[c.tableData!.id] ?? ""}
+                        aria-label={t("filterValueAriaLabel").replace("{0}", String(c.title ?? c.field ?? ""))}
                         onChange={e => {
                           setPage(0)
                           onFilterChanged(c.tableData!.id, e.target.value)
@@ -770,6 +839,7 @@ export default function Table<RowData extends object>(
                         {operatorOptions(c).length > 1 && (
                           <select
                             value={opOf(c)}
+                            aria-label={t("filterOperatorAriaLabel").replace("{0}", String(c.title ?? c.field ?? ""))}
                             onChange={e =>
                               setOperators(o => ({
                                 ...o,
@@ -787,6 +857,7 @@ export default function Table<RowData extends object>(
                         )}
                         <input
                           type={c.type === "numeric" ? "number" : c.type === "date" || c.type === "datetime" ? "date" : "text"}
+                          aria-label={t("filterValueAriaLabel").replace("{0}", String(c.title ?? c.field ?? ""))}
                           value={filters[c.tableData!.id] ?? ""}
                           className="w-full rounded border border-bn-border bg-content-box text-foreground px-2 py-1 text-xs focus:border-primary focus:outline-none"
                           onChange={e => {

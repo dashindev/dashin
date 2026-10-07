@@ -54,7 +54,7 @@ export async function bulkDeleteSer<T extends object>({
   return resList
 }
 
-export async function bulkUpdateSer<T>({ t, SchemaName, changes }: BulkUpdateProps<T>) {
+export async function bulkUpdateSer<T>({ t, SchemaName, primaryKey = "id", changes }: BulkUpdateProps<T>) {
   const headers = await plHeaders()
   const list = Object.values(changes)
   let ok = 0, fail = 0
@@ -64,7 +64,7 @@ export async function bulkUpdateSer<T>({ t, SchemaName, changes }: BulkUpdatePro
   for (const c of list) {
     const { oldData, newData } = c as any
     try {
-      const res = await request(apiPath(SchemaName, oldData.id), {
+      const res = await request(apiPath(SchemaName, (oldData as any)[primaryKey]), {
         prefix: apiBase(), method: "PATCH", headers, data: newData, checkBusinessErrors: true
       } as any)
       assertPayloadSuccess(res, t("Save Failed"))

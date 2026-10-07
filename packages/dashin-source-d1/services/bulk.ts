@@ -60,7 +60,7 @@ export async function bulkDeleteSer<T extends object>({
   return resList
 }
 
-export async function bulkUpdateSer<T>({ t, SchemaName, changes }: BulkUpdateProps<T>) {
+export async function bulkUpdateSer<T>({ t, SchemaName, primaryKey = "id", changes }: BulkUpdateProps<T>) {
   const list = Object.values(changes)
   let ok = 0, fail = 0
   const resList: any[] = []
@@ -69,7 +69,7 @@ export async function bulkUpdateSer<T>({ t, SchemaName, changes }: BulkUpdatePro
   for (const c of list) {
     const { oldData, newData } = c as any
     try {
-      const res = await execute(buildUpdate(SchemaName, newData, "id", oldData.id))
+      const res = await execute(buildUpdate(SchemaName, newData, primaryKey, (oldData as any)[primaryKey]))
       resList.push(res)
       if (res.error) {
         fail++

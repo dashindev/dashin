@@ -23,14 +23,24 @@ const captureError = async (promise: Promise<any>) => {
 }
 
 describe("payload bulk services - strict mutation contract", () => {
-  it("reports nonstandard order IDs and confirmed HTTP failures", async () => {
+  it.each([500, 502, 503])("keeps HTTP %s unknown unless the adapter confirms failure", async status => {
+    const cause = Object.assign(new Error("Server error"), { status })
+    request.mockRejectedValueOnce(cause)
+    const error = await captureError(bulkDeleteSer({ t, SchemaName: "products", primaryKey: "sku", data: [{ sku: "product-3" }] } as any))
+    expect(error.outcomes).toMatchObject([{ id: "product-3", outcome: "unknown", error: cause }])
+    expect(error.resList[0].cause).toBe(cause)
+    request.mockRejectedValueOnce(Object.assign(cause, { outcome: "failed" }))
+    const confirmed = await captureError(bulkDeleteSer({ t, SchemaName: "products", primaryKey: "sku", data: [{ sku: "product-3" }] } as any))
+    expect(confirmed.outcomes[0].outcome).toBe("failed")
+  })
+  it("reports nonstandard order IDs without inferring rollback from HTTP failures", async () => {
     request.mockResolvedValueOnce({ id: "ORDER-1" }).mockRejectedValueOnce(Object.assign(new Error("Forbidden"), { status: 403 }))
     const error = await captureError(bulkUpdateSer({ t, SchemaName: "orders", primaryKey: "number", changes: {
       0: { oldData: { number: "ORDER-1" }, newData: { total: 1 } },
       1: { oldData: { number: "ORDER-2" }, newData: { total: 2 } }
     } } as any))
     expect(request.mock.calls[1][0]).toContain("ORDER-2")
-    expect(error.outcomes).toMatchObject([{ id: "ORDER-1", outcome: "succeeded" }, { id: "ORDER-2", outcome: "failed" }])
+    expect(error.outcomes).toMatchObject([{ id: "ORDER-1", outcome: "succeeded" }, { id: "ORDER-2", outcome: "unknown" }])
     expect(error.resList[1].cause.status).toBe(403)
   })
   beforeEach(() => {

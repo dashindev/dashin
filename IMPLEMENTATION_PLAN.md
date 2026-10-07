@@ -136,6 +136,10 @@ CrudTable 与 RelatedPreview 以 tag 中的实际源码与公共导出为依据�
 
 ### 5.4 独立返工最终门禁与交付（2026-10-07）
 
+后续复核发现跨页测试定位、真实适配器查询信号/rejection 及 HTTP 失败确认仍有缺口。
+本节是 5567954 首批门禁历史，不代表三项收尾已完成；本轮按 TODO 收尾项逐项验证，
+既有代码小范围修正，不推倒重写、不推送/发布、不改家赞。
+
 环境：Windows、Node **20.20.2**（逐命令 PATH 隔离，未切换全局 Node）、Yarn **1.22.22**。
 门禁执行时为基线 e5338a4 + 本轮 dirty 改动；随后无代码变更分组提交，代码 HEAD 为
 `3af14d3`。文档收尾另有提交，不把历史 195 或 Phase 12 的 175 当作当前结果。
@@ -190,3 +194,45 @@ Next.js/fullstack-atomo 本轮只同步布局，未单独做其运行时 smoke�
 第三阶段权限、身份生命周期、日期/关系/媒体/复合字段只提供接口设计，没有隐式实施。
 清理了本轮 test-results（仅最后运行元数据），两个 smoke 临时目录由脚本自动删除；
 保留已有 gitignored lib/dist 构建输出，不删除用户既有产物。家赞参考目录未写入。
+
+### 5.5 三项可靠性收尾复核（基线 5567954；2026-10-07）
+
+本轮只收尾复核指出的三个缺口，不重做 Phase 15，不改变家赞或已发布 alpha.8。
+
+- 跨页选择改为按精确 SKU 单元格定位 product-1/product-3 行；等待旧行离开、
+  目标行可见、上一页可用/下一页禁用及复选框选中，再执行批量操作。断言失败横幅、
+  保留选择及提交 ID；重试记录必须为 product-1/product-3/product-3，不能重复成功项。
+- Payload controller → listSer → GET、D1 controller → listSer → execute → COUNT/SELECT
+  均传递同一个 Query.signal。业务失败和缺少配置 reject，保留原始错误/上下文；
+  COUNT 失败不再继续 SELECT，查询控制器不发瞬时 notice，真正空列表仍正常 resolve。
+  自定义 listService 接收 Query，零参数旧回调仍兼容，自定义网络取消由回调负责。
+- 核心结果判定不再从任何 HTTP 状态推断“未写入”，默认 unknown；只有适配器的
+  显式 outcome 才确认 failed。覆盖 400/401/403/408/409/422/500/502/503/504，
+  并在 Payload/D1 各补 500/502/503 与显式 failed 对照。业务包判别仍在适配器，
+  没有开启核心全局 errors/ok/success 字段猜测，也不自动重放未知变异。
+
+验证环境为 Windows、Node **20.20.2**、Yarn **1.22.22**、Chromium。当前真实结果：
+
+| 门禁 | 结果 |
+| --- | --- |
+| frozen install | 通过；package.json/yarn.lock 本轮无变化 |
+| 23 包 tsc:build / core typecheck | 通过；公开 d.ts 包含可选 execute signal 与 listService(Query) |
+| Core / Payload / D1 单测 | **224 / 51 / 38 passed** |
+| auth-payload / auth-atomo / auth-pocketbase 单测 | **5 / 5 / 3 passed**；合计单测 **326 passed** |
+| reliability.spec.ts ×3，retries=0 | **21 passed / 0 skipped / 0 failed**（3 workers 压力重复） |
+| 全套 E2E 连续两轮，workers=1、retries=0 | scheduled **32**，**26 passed / 6 expected skipped / 0 failed**；每轮 13/3/0 |
+| Vite production build / VitePress build | 通过 |
+| template smoke 连续两次 | 均通过；preview 65203 / 60952，挂载且无致命错误 |
+| git diff --check | 通过 |
+
+没有本轮失败后只挑单测重跑的“假绿”：修正后第一次完整 reliability 三次重复即通过，
+之后全套 E2E 串行两轮也均通过。六个跳过是两轮各三个依赖未配置真实后端的既有
+ecommerce 测试，不是新增可靠性用例跳过。合成 fixtures 与 mocked transport 不宣称
+证明生产后端事务；两条 adapter 单测仅替换网络边界，未 mock controller/listSer/execute。
+
+GitHub CI 工作流已核对为 Node 20、manual-only，覆盖 core/Payload/D1、E2E 与模板。
+本轮尚未推送或触发 CI；必须另获推送授权后在此候选 SHA 上运行，不能拿旧远端 SHA
+的绿色记录代替。保持功能分支和已有提交，不创建 PR/Tag/Release、不部署、不发布。
+Nx/resolution、React act、Rollup circular chunks、模板 deprecated/large chunk 为既有
+非阻断警告。入场时用户已有未跟踪 test-results/.last-run.json，已备份并原样恢复，
+不将其纳入提交；本轮 smoke 临时目录由脚本自动清理，保留已有 gitignored 构建产物。

@@ -21,6 +21,16 @@ const captureError = async (promise: Promise<any>) => {
 }
 
 describe("d1 bulk services", () => {
+  it.each([500, 502, 503])("keeps HTTP %s unknown unless the adapter confirms failure", async status => {
+    const cause = Object.assign(new Error("Server error"), { status })
+    execute.mockRejectedValueOnce(cause)
+    const error = await captureError(bulkDeleteSer({ t, SchemaName: "products", primaryKey: "sku", data: [{ sku: "product-3" }] } as any))
+    expect(error.outcomes).toMatchObject([{ id: "product-3", outcome: "unknown", error: cause }])
+    expect(error.resList[0].cause).toBe(cause)
+    execute.mockRejectedValueOnce(Object.assign(cause, { outcome: "failed" }))
+    const confirmed = await captureError(bulkDeleteSer({ t, SchemaName: "products", primaryKey: "sku", data: [{ sku: "product-3" }] } as any))
+    expect(confirmed.outcomes[0].outcome).toBe("failed")
+  })
   it("reports nonstandard product IDs and unknown network outcomes", async () => {
     execute.mockResolvedValueOnce({ rows: [], affectedRows: 1 }).mockRejectedValueOnce(new Error("Connection lost"))
     const error = await captureError(bulkUpdateSer({ t, SchemaName: "products", primaryKey: "sku", changes: {

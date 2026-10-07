@@ -55,6 +55,16 @@ const loadOrders = async (query: Query<Order>) => {
 <Table columns={orderColumns} data={loadOrders} />
 ```
 
+Payload forwards the signal to its GET request. D1 forwards it to both COUNT and
+SELECT; a failed COUNT does not start SELECT. Their controllers reject transport
+and adapter-specific business errors instead of notifying and resolving an empty
+list. A genuine empty result still resolves successfully. Table owns the latest
+query's error banner, avoiding notices from superseded queries.
+
+Custom `listService` callbacks receive the `Query` (existing zero-argument callbacks
+remain compatible); forward `query.signal` to your own transport. Return an empty
+`errors` array for no errors, or reject/return a nonempty `errors` value for failure.
+
 Use stable data callbacks and column definitions to avoid accidental reloads.
 Statistics have their own lifecycle; do not identify a statistics request by
 `pageSize === 1`. Closing an unchanged CrudTable preview does not reload the list;
@@ -94,10 +104,11 @@ only failed entries remain selected when the result list matches the submitted
 batch. A malformed/missing result list conservatively retains the submitted
 selection rather than guessing which rows succeeded.
 
-Transport loss and timeouts can mean the server committed without returning an
+Transport loss, timeouts and HTTP errors (including 500/502/503) can mean the server committed without returning an
 acknowledgement. These are `unknown`, not proof of rollback. The persistent banner
 instructs users to verify server state before retrying a non-idempotent operation.
-An adapter can explicitly confirm `outcome: "failed"`; there is no automatic
+No HTTP status alone proves rollback, including 4xx. An adapter can explicitly
+confirm `outcome: "failed"` based on its backend contract; there is no automatic
 replay or claim of an atomic transaction across separate HTTP requests.
 
 ## Layout and keyboard behavior

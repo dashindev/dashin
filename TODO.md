@@ -367,6 +367,14 @@
 ### Phase 15: 家赞差异盘点与可靠性缺口返工 (Jiazan Generalization Phase 1+2) (本地完成；未推送/发布)
 
 #### 2026-10-07 独立复核返工（基线 e5338a4，保留原有 4 个本地提交）
+#### 2026-10-07 三项可靠性收尾复核（基线 5567954；本地完成，远端待授权）
+- [x] 跨页批量 E2E 按 product-1/product-3 行定位、等待翻页数据就绪并确认选择状态，不再位置勾选。（retries=0，7 项完整 reliability ×3 = 21 passed；再做串行连续全 E2E）
+- [x] Payload/D1 查询完整链透传 Query.signal；业务错误及无效配置 reject，保留错误上下文，真实空列表仍 resolve；补适配器链回归。（两条真实 controller → service → request 链各 7 项通过；23 包构建与 typecheck 通过）
+- [x] mutationFailureOutcome 默认 unknown，HTTP 状态不证明回滚；只有适配器显式确认才 failed；补 4xx/5xx/timeout 矩阵。（core 12 项判定/metadata、Payload 51/D1 38 全套单测通过，包括 500/502/503 保守判定与显式确认）
+- [x] 连续执行完整 reliability 套件且 retries=0，复跑 build/typecheck/受影响单测/全 E2E/文档；记录结果与远端 CI 授权边界。（326 单测通过；全 E2E workers=1 连续两轮 26 passed / 6 expected skipped / 0 failed；生产/文档构建、frozen install、template smoke 两次及 diff --check 通过，详见计划 §5.5）
+- [ ] 推送候选分支并触发、等待该 SHA 的 GitHub CI。（原交接禁止推送/PR/发布，本轮未越界；待所有者明确授权）
+
+#### 已完成的首批独立返工（5567954）
 - [x] 复核 G01–G12 当前代码与只读参考，区分 alpha.8 已发布能力和本地未发布修复。（npm 元数据、tag 0aa17ff 实际公共导出、参考 HEAD 28f34fc；§5.1 已更正“组件完全等价”结论）
 - [x] 认证：外部 token 存储与身份事务失败回滚、通知失败不产生未处理 rejection、必要成功字段类型校验及实际事务回归。（共享助手 15 项；Chromium 实际 IndexedDB 的 7 类失败 + 修改后成功通过）
 - [x] 查询：旧失败/最新失败/连续三次/切路由及数据源切换守卫，重试成功清除查询错误。（Table 30 项及 orders 浏览器可控 A/B/C 通过；Refresh 实际重查）

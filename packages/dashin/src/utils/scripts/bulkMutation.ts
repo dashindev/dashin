@@ -9,10 +9,9 @@ export interface BulkItemOutcome {
 /** Adapters can explicitly confirm failure; transport loss is conservative. */
 export function mutationFailureOutcome(error: any): "failed" | "unknown" {
   if (error?.outcome === "failed" || error?.outcome === "unknown") return error.outcome
-  // RequestError uses a synthetic 504 for a client timeout: no server
-  // acknowledgement exists, so it must not become a confirmed failure.
-  if ([408, 504].includes(Number(error?.status ?? error?.response?.status))) return "unknown"
-  return Number(error?.status ?? error?.response?.status) >= 400 ? "failed" : "unknown"
+  // Neither HTTP rejection (including 4xx/5xx) nor transport loss proves
+  // that the backend did not commit. Only an adapter can confirm failure.
+  return "unknown"
 }
 
 /** Additive metadata: legacy resList entries and their ordering stay intact. */

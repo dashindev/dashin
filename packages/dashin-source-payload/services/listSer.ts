@@ -6,6 +6,7 @@ import { request } from "@dashin-dev/dashin"
 import { ListService } from "../types"
 import { buildParams } from "./filter"
 import { plHeaders, apiPath, apiBase } from "./plConfig"
+import { assertPayloadSuccess } from "./crud"
 
 export default async function listSer<RowData extends object>({
   tableQuery,
@@ -28,8 +29,10 @@ export default async function listSer<RowData extends object>({
     params,
     prefix: apiBase(prefix),
     method: "GET",
+    signal: tableQuery.signal,
     headers: await plHeaders()
   })
+  assertPayloadSuccess(res, "Request failed")
 
   return {
     data: (res && res.docs) || [],

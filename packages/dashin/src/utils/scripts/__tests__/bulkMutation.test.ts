@@ -16,8 +16,13 @@ describe("bulk mutation metadata", () => {
   it("requires adapter confirmation for unknown transport failures", () => {
     expect(mutationFailureOutcome(new Error("Timeout"))).toBe("unknown")
     expect(mutationFailureOutcome({ status: 504, isDashinRequestError: true })).toBe("unknown")
-    expect(mutationFailureOutcome({ status: 403 })).toBe("failed")
+    expect(mutationFailureOutcome({ status: 403 })).toBe("unknown")
     expect(mutationFailureOutcome({ outcome: "failed" })).toBe("failed")
     expect(mutationFailureOutcome({ response: { status: 500 }, outcome: "unknown" })).toBe("unknown")
+  })
+  it.each([400, 401, 403, 408, 409, 422, 500, 502, 503, 504])("does not infer rollback from HTTP %s", status => {
+    expect(mutationFailureOutcome({ status })).toBe("unknown")
+    expect(mutationFailureOutcome({ response: { status } })).toBe("unknown")
+    expect(mutationFailureOutcome({ status, outcome: "failed" })).toBe("failed")
   })
 })

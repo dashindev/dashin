@@ -3,7 +3,7 @@ import { Query, ListServiceRes } from "@dashin-dev/dashin"
 
 export type DataCtrl<RowData extends object> = {
   t?: TFunction
-  listService?: () => Promise<ListServiceRes>
+  listService?: (query: Query<RowData>) => Promise<ListServiceRes>
   tableQuery: ListService<RowData>["tableQuery"]
   path?: ListService<RowData>["path"]
   prefix?: ListService<RowData>["prefix"]

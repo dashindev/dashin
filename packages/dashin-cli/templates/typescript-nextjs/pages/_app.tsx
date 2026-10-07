@@ -21,6 +21,7 @@ import {
 import "@dashin-dev/dashin/lib/utils/i18n"
 import "../public/index.css"
 import { YOUR_DB } from "../utils/database"
+import authPlugins from "../.dashin/dynamic"
 
 const App = ({ Component, pageProps }: AppProps) => {
   const { i18n } = useTranslation()
@@ -47,9 +48,8 @@ const App = ({ Component, pageProps }: AppProps) => {
     ;(async () => {
       const authPluginName =
         process.env.VITE_AUTH_PLUGIN || DEFAULT_AUTH_PLUGIN
-      const authPlugin: IAuthPlugin = await import(
-        `../.dashin/dynamic/${authPluginName}`
-      )
+      const authPlugin = (authPlugins as Record<string, IAuthPlugin | undefined>)[authPluginName]
+      if (!authPlugin) throw new Error("auth plugin is required")
       let pluginsData: PluginData[] = require("../.dashin/dynamic/pluginsData.json")
       const plugins = require("../.dashin/dynamic/pluginsData")
       if (plugins && plugins.data)

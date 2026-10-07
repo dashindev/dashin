@@ -231,8 +231,20 @@ ecommerce 测试，不是新增可靠性用例跳过。合成 fixtures 与 mocke
 证明生产后端事务；两条 adapter 单测仅替换网络边界，未 mock controller/listSer/execute。
 
 GitHub CI 工作流已核对为 Node 20、manual-only，覆盖 core/Payload/D1、E2E 与模板。
-本轮尚未推送或触发 CI；必须另获推送授权后在此候选 SHA 上运行，不能拿旧远端 SHA
-的绿色记录代替。保持功能分支和已有提交，不创建 PR/Tag/Release、不部署、不发布。
+本地收尾时尚未推送；之后所有者明确授权进入推送与远端 CI 阶段。已推送分支
+`fix/generalization-reliability-20261007`，本地/远端及 CI headSha 均为
+`bc7f97ebe997625e4754b46bc701884f6f1318bc`。
+[GitHub CI Run 37579450935](https://github.com/dashindev/dashin/actions/runs/37579450935)
+在 ubuntu-latest / Node 20.20.2 上 completed / success，三个 job 均 success：
+build-test（frozen install、23 包、typecheck、core 224/Payload 51/D1 38 单测、生产与
+文档构建、committed patch hygiene），e2e（16 scheduled、13 passed / 3 expected skipped /
+0 failed），template-smoke（两次均 app mounted、no fatal errors）。首次运行即全绿，未重跑。
+保持功能分支和已有提交，未创建 PR/Tag/Release、未手动部署、未发布，未修改家赞。
+真实后台集成与非 Vite 模板运行时覆盖仍未完成，不能由这次 Linux CI 推断通过。
+推送时 GitHub 另提示默认分支 140 项依赖漏洞（9 critical / 43 high / 76 moderate / 12 low）；
+该仓库级提示未逐项核验归因，本轮未修改依赖，不宣称依赖安全审计已通过。
+本段和 TODO 的 CI 证据在运行结束后整理为独立本地文档提交，不改变实现代码。
+上述 CI 验证的准确提交为 bc7f97e；后续文档提交不宣称已在同一个 Run 中执行。
 Nx/resolution、React act、Rollup circular chunks、模板 deprecated/large chunk 为既有
 非阻断警告。入场时用户已有未跟踪 test-results/.last-run.json，已备份并原样恢复，
 不将其纳入提交；本轮 smoke 临时目录由脚本自动清理，保留已有 gitignored 构建产物。

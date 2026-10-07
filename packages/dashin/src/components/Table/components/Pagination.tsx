@@ -27,7 +27,7 @@ export default function Pagination({
   const { t } = useTranslation("table")
   const btn = "rounded px-2 py-1 disabled:opacity-30"
   return (
-    <div className="flex items-center justify-end gap-4 px-4 py-2 text-sm text-icon-muted">
+    <div className="flex items-center justify-end gap-4 px-4 py-2 text-sm text-foreground">
       {pageSizeOptions && pageSizeOptions.length > 1 && onPageSizeChange && (
         <div className="flex items-center gap-1">
           <span>{t("labelRowsPerPage")}</span>

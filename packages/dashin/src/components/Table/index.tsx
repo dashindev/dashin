@@ -29,6 +29,7 @@ import Input from "../ui/Input"
 import { useTranslation } from "react-i18next"
 import { ENV, DynamicRoute } from "@/utils"
 import { useRouter } from "@/router"
+import { mutationFailureOutcome } from "@/utils/scripts/bulkMutation"
 
 export function TableHead({ title }: { title?: string }) {
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function Table<RowData extends object>(
   const { t } = useTranslation("table")
   const router = useRouter()
   const { group: qGroup, name: qName } = router.query
-  const { columns, data, title, editable, options, actions, detailPanel, onRowClick, onAdd } = props
+  const { columns, data, title, editable, options, actions, detailPanel, onRowClick, onAdd, getRowId } = props
   const isRemote = typeof data === "function"
   const { setStats } = useContext(StatsContext)
   const initialPageSize: number =
@@ -137,7 +138,19 @@ export default function Table<RowData extends object>(
   }, [])
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
   const [editing, setEditing] = useState<Editing<RowData>>(null)
-  const [selected, setSelected] = useState<Set<number>>(new Set())
+  const [selected, setSelected] = useState<Set<string | number>>(new Set())
+  const selectionRows = React.useRef(new Map<string | number, RowData>())
+  useEffect(() => {
+    if (getRowId) rows.forEach(row => {
+      const key = getRowId(row)
+      if (selected.has(key)) selectionRows.current.set(key, row)
+    })
+  }, [rows, selected, getRowId])
+  const keyOf = (row: RowData, index: number) => getRowId ? getRowId(row) : index
+  useEffect(() => {
+    setSelected(new Set())
+    selectionRows.current.clear()
+  }, [storeKey, getRowId])
   const [bulkBusy, setBulkBusy] = useState(false)
 
   // Columns participating in grouping (defaultGroupOrder set), ordered.
@@ -183,6 +196,7 @@ export default function Table<RowData extends object>(
       queryAbort.current = abort
 
       setIsLoading(true)
+      setTableErr(null)
       try {
         const res: QueryResult<RowData> = await (data as any)(buildQuery(p, abort.signal))
         // Stale or unmounted: discard — never overwrite the newer list state.
@@ -193,7 +207,7 @@ export default function Table<RowData extends object>(
         // Selection indexes are page-relative — a fresh result set makes any
         // previous selection point at different rows. Clear it (material-table
         // parity) rather than risk acting on the wrong records.
-        setSelected(new Set())
+        if (!getRowId) setSelected(new Set())
       } catch (e: any) {
         // Aborted/stale requests fail silently; only the newest failure is shown.
         if (!mountedRef.current || seq !== querySeq.current) return
@@ -204,7 +218,7 @@ export default function Table<RowData extends object>(
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, buildQuery, t]
+    [data, buildQuery, t, getRowId]
   )
 
   // Push real list-page stats (total + per-enum distribution) up to the
@@ -223,7 +237,7 @@ export default function Table<RowData extends object>(
       setStats(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title, isRemote])
+  }, [title, isRemote, storeKey])
 
   // local data: keep the working copy in sync with the `data` prop
   useEffect(() => {
@@ -236,8 +250,17 @@ export default function Table<RowData extends object>(
   // the first page twice.)
   useEffect(() => {
     if (isRemote) loadRemote(0)
+    else {
+      ++querySeq.current
+      queryAbort.current?.abort()
+      setIsLoading(false)
+    }
+    return () => {
+      ++querySeq.current
+      queryAbort.current?.abort()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, search, orderBy, orderDir, filters, operators, pageSize])
+  }, [data, search, orderBy, orderDir, filters, operators, pageSize, storeKey])
 
   // local: derive filtered/sorted/paged rows
   useEffect(() => {
@@ -269,7 +292,7 @@ export default function Table<RowData extends object>(
     setRows(r.slice(page * pageSize, page * pageSize + pageSize))
     // Page-relative selection indexes would silently point at different rows
     // after a local re-slice (sort/search/filter/page change) — clear them.
-    setSelected(new Set())
+    if (!getRowId) setSelected(new Set())
   }, [allRows, filters, search, orderBy, orderDir, page, pageSize, isRemote, cols])
 
   const reload = () =>
@@ -338,7 +361,7 @@ export default function Table<RowData extends object>(
           const msg =
             typeof c.required === "string"
               ? c.required
-              : `${c.title || field} is required`
+              : `${c.title || field} ${t("is required")}`
           setTableErr(msg)
           return
         }
@@ -351,7 +374,7 @@ export default function Table<RowData extends object>(
           return
         }
         if (res === false) {
-          setTableErr(`${c.title || field} is invalid`)
+          setTableErr(`${c.title || field} ${t("is invalid")}`)
           return
         }
       }
@@ -379,17 +402,32 @@ export default function Table<RowData extends object>(
     }
   }
 
-  // A2: bulk operations over the current page's selected rows.
+  // With an explicit row ID, bulk operations include selected rows on other pages.
   const selectedRows = useMemo(
-    () => rows.filter((_, i) => selected.has(i)),
-    [rows, selected]
+    () => getRowId
+      ? [...selected].map(key => rows.find(row => getRowId(row) === key) ?? selectionRows.current.get(key)!).filter(Boolean)
+      : rows.filter((_, i) => selected.has(i)),
+    [rows, selected, getRowId]
   )
-  const clearSelection = () => setSelected(new Set())
+  const clearSelection = () => { setSelected(new Set()); selectionRows.current.clear() }
   const selectedIndexes = () =>
-    [...selected].filter(i => i >= 0 && i < rows.length).sort((a, b) => a - b)
+    getRowId ? selectedRows.map(row => getRowId(row)) :
+      [...selected].filter((i): i is number => typeof i === "number" && i >= 0 && i < rows.length).sort((a, b) => a - b)
   const errorMessage = (error: any, fallback: string) =>
     error?.message || error?.error?.message || error?.error || fallback
-  const retainFailedFromResults = (error: any, indexes: number[]) => {
+  const mutationMessage = (error: any, outcome?: string) =>
+    `${errorMessage(error, t("Request Failed"))}${(outcome ?? mutationFailureOutcome(error)) === "unknown" ? ` ${t("mutationOutcomeUnknown")}` : ""}`
+  const bulkErrorMessage = (error: any, fallback: string, batch: RowData[]) => {
+    if (!Array.isArray(error?.resList)) return mutationMessage(error)
+    const failed = error.resList.filter((result: any) => result?.error)
+    const summary = t("bulkFailureSummary")
+      .replace("{0}", String(error.okCount ?? error.resList.length - failed.length))
+      .replace("{1}", String(error.failCount ?? failed.length))
+    const details = error.resList.map((result: any, index: number) => result?.error
+      ? `#${result.id ?? (getRowId && batch[index] ? getRowId(batch[index]) : rowRef(batch[index], index))} ${mutationMessage(result.cause ?? result.error, result.outcome)}` : "").filter(Boolean).join("; ")
+    return `${summary} ${details}`.trim()
+  }
+  const retainFailedFromResults = (error: any, indexes: (string | number)[]) => {
     const results = error?.resList
     if (!Array.isArray(results) || results.length !== indexes.length) return false
 
@@ -406,22 +444,20 @@ export default function Table<RowData extends object>(
     setSelected(new Set(failedOffsets.map((offset: number) => indexes[offset])))
     return true
   }
-  // Row identity for failure reports — adapters may use non-numeric IDs
-  // (string, uuid) or no ID at all; fall back to the 1-based page index.
-  const rowRef = (row: RowData, index: number) =>
-    (row as any)?.id ?? (row as any)?.uuid ?? (row as any)?._id ?? index + 1
+  // No ID-field guessing: without getRowId, report the 1-based batch position.
+  const rowRef = (_row: RowData, index: number) => index + 1
   const bulkDelete = async () => {
     if (!editable?.onRowDelete || bulkBusy) return
     setTableErr(null)
     setBulkBusy(true)
     const indexes = selectedIndexes()
-    const failures: { index: number; error: any }[] = []
+    const failures: { index: string | number; row: RowData; offset: number; error: any }[] = []
     try {
       for (let i = 0; i < selectedRows.length; i++) {
         try {
           await editable.onRowDelete(selectedRows[i])
         } catch (error) {
-          failures.push({ index: indexes[i], error })
+          failures.push({ index: indexes[i], row: selectedRows[i], offset: i, error })
         }
       }
       if (failures.length > 0) {
@@ -429,8 +465,8 @@ export default function Table<RowData extends object>(
         const succeeded = indexes.length - failures.length
         const details = failures
           .map(
-            ({ index, error }) =>
-              `#${rowRef(rows[index], index)} ${errorMessage(error, "")}`
+            ({ row, offset, error }) =>
+              `#${getRowId ? getRowId(row) : rowRef(row, offset)} ${mutationMessage(error)}`
           )
           .join("; ")
           .trim()
@@ -460,7 +496,7 @@ export default function Table<RowData extends object>(
       reload()
     } catch (error: any) {
       if (!retainFailedFromResults(error, indexes)) setSelected(new Set(indexes))
-      setTableErr(errorMessage(error, "Bulk update failed"))
+      setTableErr(bulkErrorMessage(error, t("Request Failed"), selectedRows))
     } finally {
       setBulkBusy(false)
     }
@@ -475,7 +511,7 @@ export default function Table<RowData extends object>(
       clearSelection()
     } catch (error: any) {
       if (!retainFailedFromResults(error, indexes)) setSelected(new Set(indexes))
-      setTableErr(errorMessage(error, "Bulk action failed"))
+      setTableErr(bulkErrorMessage(error, t("Request Failed"), selectedRows))
     } finally {
       setBulkBusy(false)
     }
@@ -513,6 +549,7 @@ export default function Table<RowData extends object>(
     return (
       <input
         className="w-full rounded border border-bn-border bg-content-box text-foreground px-2 py-1 text-sm focus:border-primary focus:outline-none"
+        aria-label={String(c.title || field)}
         type={c.type === "numeric" ? "number" : "text"}
         value={(data as any)[field] ?? ""}
         onChange={e => {
@@ -536,7 +573,7 @@ export default function Table<RowData extends object>(
   const renderRow = (row: RowData, ri: number) => {
     const isEditing = editing?.mode === "update" && editing.original === row
     return (
-      <React.Fragment key={ri}>
+      <React.Fragment key={keyOf(row, ri)}>
         <tr
           className={`border-b border-bn-border hover:bg-content-bg ${
             onRowClick ? "cursor-pointer" : ""
@@ -562,12 +599,15 @@ export default function Table<RowData extends object>(
             <td className="px-4 py-2" onClick={e => e.stopPropagation()}>
               <input
                 type="checkbox"
+                disabled={bulkBusy || isLoading}
                 aria-label={t("selectRowAriaLabel").replace("{0}", String(ri + 1))}
-                checked={selected.has(ri)}
+                checked={selected.has(keyOf(row, ri))}
                 onChange={() =>
                   setSelected(s => {
                     const n = new Set(s)
-                    n.has(ri) ? n.delete(ri) : n.add(ri)
+                    const key = keyOf(row, ri)
+                    if (n.has(key)) { n.delete(key); selectionRows.current.delete(key) }
+                    else { n.add(key); selectionRows.current.set(key, row) }
                     return n
                   })
                 }
@@ -641,7 +681,7 @@ export default function Table<RowData extends object>(
           <button
             onClick={() => setTableErr(null)}
             className="text-danger hover:opacity-80 text-sm ml-2 font-bold"
-            aria-label="Dismiss error"
+            aria-label={t("Dismiss error")}
           >
             ✕
           </button>
@@ -685,6 +725,7 @@ export default function Table<RowData extends object>(
             ))}
             <button
               onClick={clearSelection}
+              aria-label={t("Clear selection")}
               disabled={bulkBusy}
               className="rounded p-1.5 text-icon-muted hover:bg-content-bg"
             >
@@ -699,6 +740,7 @@ export default function Table<RowData extends object>(
             {showSearch && (
               <Input
                 placeholder={t("searchPlaceholder")}
+                aria-label={t("searchPlaceholder")}
                 value={search}
                 onChange={e => {
                   setPage(0)
@@ -727,7 +769,8 @@ export default function Table<RowData extends object>(
             ))}
             <button
               title={t("Refresh Data")}
-              onClick={() => router.push(DynamicRoute, `/${qGroup}/${qName}`)}
+              aria-label={t("Refresh Data")}
+              onClick={reload}
               className="rounded p-1.5 text-icon-muted hover:bg-content-bg"
             >
               ⟳
@@ -751,14 +794,20 @@ export default function Table<RowData extends object>(
                 <th className="sticky top-0 z-10 bg-content-box w-8 px-4 py-2">
                   <input
                     type="checkbox"
+                    disabled={bulkBusy || isLoading}
                     aria-label={t("selectAllAriaLabel")}
-                    checked={rows.length > 0 && selected.size === rows.length}
+                    checked={rows.length > 0 && rows.every((row, i) => selected.has(keyOf(row, i)))}
                     onChange={() =>
-                      setSelected(s =>
-                        s.size === rows.length
-                          ? new Set()
-                          : new Set(rows.map((_, i) => i))
-                      )
+                      setSelected(s => {
+                        const next = new Set(s)
+                        const all = rows.every((row, i) => s.has(keyOf(row, i)))
+                        rows.forEach((row, i) => {
+                          const key = keyOf(row, i)
+                          if (all) { next.delete(key); selectionRows.current.delete(key) }
+                          else { next.add(key); selectionRows.current.set(key, row) }
+                        })
+                        return next
+                      })
                     }
                     className="h-4 w-4 rounded border-bn-border text-primary"
                   />
@@ -780,7 +829,7 @@ export default function Table<RowData extends object>(
                           : "descending"
                         : "none"
                     }
-                    className="sticky top-0 z-10 bg-content-box px-4 py-2 font-semibold text-icon-muted"
+                    className="sticky top-0 z-10 bg-content-box px-4 py-2 font-semibold text-foreground"
                   >
                     <button
                       type="button"
@@ -795,7 +844,7 @@ export default function Table<RowData extends object>(
                   </th>
                 )
               })}
-              {hasRowActions && <th className="sticky top-0 z-10 bg-content-box px-4 py-2 font-semibold text-icon-muted">{t("actions")}</th>}
+              {hasRowActions && <th className="sticky top-0 z-10 bg-content-box px-4 py-2 font-semibold text-foreground">{t("actions")}</th>}
             </tr>
             {showFiltering && (
               <tr className="border-b border-bn-border">

@@ -33,6 +33,7 @@ const zh = {
     "Request Failed": "请求失败"
   },
   plugins: {
+    Main: "主菜单",
     // LeftMenu
     User: "用户",
     Users: "用户"
@@ -121,6 +122,15 @@ const zh = {
     searchPlaceholder: "请输入关键词",
     nRowsSelected: "{0} 条 已选",
     bulkFailureSummary: "成功 {0} 条，失败 {1} 条。",
+    mutationOutcomeUnknown: "结果未知。重试非幂等操作前，请先核对服务端状态。",
+    Retry: "重试",
+    "Clear selection": "清空选择",
+    "Dismiss error": "关闭错误提示",
+    "is required": "为必填项",
+    "is invalid": "无效",
+    "Request Failed": "请求失败",
+    Back: "返回",
+    "Loading…": "加载中…",
     selectAllAriaLabel: "全选当前页",
     selectRowAriaLabel: "选择第 {0} 行",
     filterOperatorAriaLabel: "{0} 的筛选条件",

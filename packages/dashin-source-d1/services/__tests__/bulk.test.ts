@@ -3,7 +3,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 const execute = vi.fn()
 const notice = vi.fn()
 vi.mock("../client", () => ({ execute: (...a: any[]) => execute(...a) }))
-vi.mock("@dashin-dev/dashin", () => ({ notice: (...a: any[]) => notice(...a) }))
+vi.mock("@dashin-dev/dashin", async () => ({
+  ...(await import("../../../dashin/src/utils/scripts/bulkMutation")),
+  notice: (...a: any[]) => notice(...a)
+}))
 
 import { bulkDeleteSer, bulkUpdateSer } from "../bulk"
 
@@ -18,6 +21,16 @@ const captureError = async (promise: Promise<any>) => {
 }
 
 describe("d1 bulk services", () => {
+  it("reports nonstandard product IDs and unknown network outcomes", async () => {
+    execute.mockResolvedValueOnce({ rows: [], affectedRows: 1 }).mockRejectedValueOnce(new Error("Connection lost"))
+    const error = await captureError(bulkUpdateSer({ t, SchemaName: "products", primaryKey: "sku", changes: {
+      0: { oldData: { sku: "SKU-1" }, newData: { name: "One" } },
+      1: { oldData: { sku: "SKU-2" }, newData: { name: "Two" } }
+    } } as any))
+    expect(execute.mock.calls[1][0].args).toContain("SKU-2")
+    expect(error.outcomes).toMatchObject([{ id: "SKU-1", outcome: "succeeded" }, { id: "SKU-2", outcome: "unknown" }])
+    expect(error.resList[1].cause.message).toBe("Connection lost")
+  })
   beforeEach(() => {
     execute.mockReset().mockResolvedValue({ rows: [], affectedRows: 1 })
     notice.mockReset()

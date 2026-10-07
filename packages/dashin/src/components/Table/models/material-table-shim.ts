@@ -109,11 +109,15 @@ export interface Localization {
 export type Icons = { [name: string]: any }
 
 export interface Options<RowData extends object = any> {
+  /** Explicit minimum width (CSS pixels), enabling horizontal scrolling. */
+  minTableWidth?: number
   [key: string]: any
 }
 
 /** Props accepted by the dashin <Table/> (material-table compatible subset). */
 export interface MaterialTableProps<RowData extends object> {
+  /** Explicit stable ID enables selection across pages/sorts. No field guessing. */
+  getRowId?: (row: RowData) => string | number
   title?: string | ReactNode
   columns: Column<RowData>[]
   data: RowData[] | ((query: Query<RowData>) => Promise<QueryResult<RowData>>)

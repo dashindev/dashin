@@ -2,7 +2,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const request = vi.fn()
 const notice = vi.fn()
-vi.mock("@dashin-dev/dashin", () => ({
+vi.mock("@dashin-dev/dashin", async () => ({
+  ...(await import("../../../dashin/src/utils/scripts/bulkMutation")),
   ENV: { MAIN_URL: "http://pl.test", AUTH_URL: "http://pl.test" },
   request: (...a: any[]) => request(...a),
   storedToken: async () => "tok",
@@ -22,6 +23,16 @@ const captureError = async (promise: Promise<any>) => {
 }
 
 describe("payload bulk services - strict mutation contract", () => {
+  it("reports nonstandard order IDs and confirmed HTTP failures", async () => {
+    request.mockResolvedValueOnce({ id: "ORDER-1" }).mockRejectedValueOnce(Object.assign(new Error("Forbidden"), { status: 403 }))
+    const error = await captureError(bulkUpdateSer({ t, SchemaName: "orders", primaryKey: "number", changes: {
+      0: { oldData: { number: "ORDER-1" }, newData: { total: 1 } },
+      1: { oldData: { number: "ORDER-2" }, newData: { total: 2 } }
+    } } as any))
+    expect(request.mock.calls[1][0]).toContain("ORDER-2")
+    expect(error.outcomes).toMatchObject([{ id: "ORDER-1", outcome: "succeeded" }, { id: "ORDER-2", outcome: "failed" }])
+    expect(error.resList[1].cause.status).toBe(403)
+  })
   beforeEach(() => {
     request.mockReset()
     notice.mockReset()

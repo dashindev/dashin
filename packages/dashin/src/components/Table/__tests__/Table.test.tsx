@@ -27,8 +27,9 @@ const TABLE_EN: Record<string, string> = {
 }
 
 // --- mocks: isolate Table from router / i18n / env ---
+const routerQuery = vi.hoisted(() => ({ group: "g", name: "n" }))
 vi.mock("@/router", () => ({
-  useRouter: () => ({ query: { group: "g", name: "n" }, push: vi.fn() })
+  useRouter: () => ({ query: routerQuery, push: vi.fn() })
 }))
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (k: string) => TABLE_EN[k] ?? k })
@@ -58,6 +59,68 @@ const data: Row[] = [
 const baseOptions = { pageSize: 2, filtering: true }
 
 describe("Table", () => {
+  it("invalidates queries on a route change even with the same data callback", async () => {
+    const pending: Array<(value: any) => void> = []
+    const query = () => new Promise<any>(resolve => pending.push(resolve))
+    const { rerender } = render(<Table<Row> columns={columns} data={query} options={baseOptions} />)
+    routerQuery.name = "products"
+    rerender(<Table<Row> columns={columns} data={query} options={baseOptions} />)
+    await act(async () => pending[pending.length - 1]({ data, totalCount: 3, page: 0 }))
+    await act(async () => pending[0]({ data: [{ ...data[0], name: "stale order" }], totalCount: 1, page: 0 }))
+    expect(screen.queryByText("stale order")).not.toBeInTheDocument()
+    expect(screen.getByText("alpha")).toBeInTheDocument()
+    routerQuery.name = "n"
+  })
+  it("preserves explicitly keyed selection when sorting products", async () => {
+    const getRowId = (row: Row) => row.id
+    const onRowDelete = vi.fn().mockResolvedValue(undefined)
+    render(<Table<Row> columns={columns} data={data} getRowId={getRowId} options={{ ...baseOptions, selection: true }} editable={{ onRowDelete }} />)
+    fireEvent.click(screen.getByLabelText("Select row 1"))
+    fireEvent.click(screen.getByText("Name")); fireEvent.click(screen.getByText("Name"))
+    fireEvent.click(screen.getByText("deleteTooltip"))
+    await waitFor(() => expect(onRowDelete).toHaveBeenCalledOnce())
+    expect(onRowDelete.mock.calls[0][0].id).toBe(1)
+  })
+  it("keeps explicit IDs across pages and retries only failed products", async () => {
+    const onRowDelete = vi.fn().mockResolvedValueOnce(undefined).mockRejectedValueOnce(new Error("Product locked")).mockResolvedValueOnce(undefined)
+    const getRowId = (row: Row) => `product:${row.id}`
+    render(<Table<Row> columns={columns} data={data} getRowId={getRowId}
+      options={{ ...baseOptions, selection: true }} editable={{ onRowDelete }} />)
+    fireEvent.click(screen.getByLabelText("Select row 1"))
+    fireEvent.click(screen.getByLabelText("Next Page"))
+    fireEvent.click(screen.getByLabelText("Select row 1"))
+    expect(screen.getByText("2 row(s) selected")).toBeInTheDocument()
+    fireEvent.click(screen.getByText("deleteTooltip"))
+    expect(await screen.findByRole("alert")).toHaveTextContent("product:3")
+    expect(onRowDelete.mock.calls.map(call => call[0].id)).toEqual([1, 3])
+    fireEvent.click(screen.getByText("deleteTooltip"))
+    await waitFor(() => expect(onRowDelete).toHaveBeenCalledTimes(3))
+    expect(onRowDelete.mock.calls[2][0].id).toBe(3)
+  })
+
+  it("ignores old failures after latest failure and clears the error on a successful retry", async () => {
+    const pending: Array<{ resolve: (value: any) => void; reject: (error: any) => void }> = []
+    const query = vi.fn(() => new Promise<any>((resolve, reject) => pending.push({ resolve, reject })))
+    render(<Table<Row> columns={columns} data={query} options={baseOptions} />)
+    fireEvent.change(screen.getByPlaceholderText("searchPlaceholder"), { target: { value: "B" } })
+    await act(async () => pending[1].reject(new Error("Latest failed")))
+    await act(async () => pending[0].reject(new Error("Old failed")))
+    expect(screen.getByRole("alert")).toHaveTextContent("Latest failed")
+    fireEvent.change(screen.getByPlaceholderText("searchPlaceholder"), { target: { value: "C" } })
+    await act(async () => pending[2].resolve({ data, totalCount: 3, page: 0 }))
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
+    expect(screen.getByText("alpha")).toBeInTheDocument()
+  })
+
+  it("invalidates a pending remote request when changing to local products", async () => {
+    let resolve!: (value: any) => void
+    const query = () => new Promise<any>(r => { resolve = r })
+    const { rerender } = render(<Table<Row> columns={columns} data={query} options={baseOptions} />)
+    rerender(<Table<Row> columns={columns} data={data} options={baseOptions} />)
+    await act(async () => resolve({ data: [{ ...data[0], name: "stale" }], totalCount: 1, page: 0 }))
+    expect(screen.getByText("alpha")).toBeInTheDocument()
+    expect(screen.queryByText("stale")).not.toBeInTheDocument()
+  })
   afterEach(() => {
     cleanup()
     sessionStorage.clear()

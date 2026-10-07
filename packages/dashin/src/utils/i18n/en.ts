@@ -33,6 +33,7 @@ const en = {
     "Request Failed": "Request Failed"
   },
   plugins: {
+    Main: "Main",
     // LeftMenu
     User: "User",
     Users: "Users"
@@ -121,6 +122,15 @@ const en = {
     searchPlaceholder: "Search",
     nRowsSelected: "{0} row(s) selected",
     bulkFailureSummary: "{0} succeeded, {1} failed.",
+    mutationOutcomeUnknown: "Outcome unknown. Verify the server state before retrying a non-idempotent operation.",
+    Retry: "Retry",
+    "Clear selection": "Clear selection",
+    "Dismiss error": "Dismiss error",
+    "is required": "is required",
+    "is invalid": "is invalid",
+    "Request Failed": "Request Failed",
+    Back: "Back",
+    "Loading…": "Loading…",
     selectAllAriaLabel: "Select all rows",
     selectRowAriaLabel: "Select row {0}",
     filterOperatorAriaLabel: "Filter operator for {0}",

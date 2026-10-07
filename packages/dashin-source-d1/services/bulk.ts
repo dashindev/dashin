@@ -1,14 +1,14 @@
-import { notice, BulkDeleteProps, BulkUpdateProps } from "@dashin-dev/dashin"
+import { notice, BulkDeleteProps, BulkUpdateProps, BulkMutationError, mutationFailureOutcome } from "@dashin-dev/dashin"
 import { buildDelete, buildUpdate } from "./sql"
 import { execute } from "./client"
 
 async function batchNotice(t: any, n: number, ok: number, fail: number, errorSummary?: string) {
   const content = `${n} items${ok ? `, ${ok} success` : ""}${fail ? `, ${fail} failure.` : ""}${errorSummary ? ` (${errorSummary})` : ""}`
-  await notice({
+  try { await notice({
     title: t(`Batch Request Completed`),
     severity: ok === n ? "success" : fail === n ? "error" : "warning",
     content
-  })
+  }) } catch { /* Notification failure must not replace mutation metadata. */ }
 }
 
 function errorMessage(error: any, fallback: string) {
@@ -26,7 +26,7 @@ export async function bulkDeleteSer<T extends object>({
     try {
       // @ts-ignore
       const res = await execute(buildDelete(SchemaName, primaryKey, item[primaryKey]))
-      resList.push(res)
+      resList.push(res.error ? { ...res, outcome: "failed" } : res)
       if (res.error) {
         fail++
         const msg = errorMessage(res, "Delete failed")
@@ -38,7 +38,7 @@ export async function bulkDeleteSer<T extends object>({
       fail++
       const msg = errorMessage(error, "Delete failed")
       errorMessages.push(msg)
-      resList.push({ error: msg, item })
+      resList.push({ error: msg, item, id: (item as any)[primaryKey], outcome: mutationFailureOutcome(error), cause: error })
     }
   }
 
@@ -46,14 +46,11 @@ export async function bulkDeleteSer<T extends object>({
   await batchNotice(t, data.length, ok, fail, errorSummary)
 
   if (fail > 0) {
-    const err = new Error(
+    const err = new BulkMutationError(
       ok === 0
         ? `All ${fail} bulk delete operations failed${errorSummary ? `: ${errorSummary}` : ""}`
         : `${fail} of ${data.length} bulk delete operations failed${errorSummary ? `: ${errorSummary}` : ""}`
-    ) as any
-    err.resList = resList
-    err.okCount = ok
-    err.failCount = fail
+    , resList, data.map(item => (item as any)[primaryKey]))
     throw err
   }
 
@@ -70,7 +67,7 @@ export async function bulkUpdateSer<T>({ t, SchemaName, primaryKey = "id", chang
     const { oldData, newData } = c as any
     try {
       const res = await execute(buildUpdate(SchemaName, newData, primaryKey, (oldData as any)[primaryKey]))
-      resList.push(res)
+      resList.push(res.error ? { ...res, outcome: "failed" } : res)
       if (res.error) {
         fail++
         const msg = errorMessage(res, "Update failed")
@@ -82,7 +79,7 @@ export async function bulkUpdateSer<T>({ t, SchemaName, primaryKey = "id", chang
       fail++
       const msg = errorMessage(error, "Update failed")
       errorMessages.push(msg)
-      resList.push({ error: msg, oldData, newData })
+      resList.push({ error: msg, oldData, newData, id: (oldData as any)[primaryKey], outcome: mutationFailureOutcome(error), cause: error })
     }
   }
 
@@ -90,14 +87,11 @@ export async function bulkUpdateSer<T>({ t, SchemaName, primaryKey = "id", chang
   await batchNotice(t, list.length, ok, fail, errorSummary)
 
   if (fail > 0) {
-    const err = new Error(
+    const err = new BulkMutationError(
       ok === 0
         ? `All ${fail} bulk update operations failed${errorSummary ? `: ${errorSummary}` : ""}`
         : `${fail} of ${list.length} bulk update operations failed${errorSummary ? `: ${errorSummary}` : ""}`
-    ) as any
-    err.resList = resList
-    err.okCount = ok
-    err.failCount = fail
+    , resList, list.map(c => (c.oldData as any)[primaryKey]))
     throw err
   }
 

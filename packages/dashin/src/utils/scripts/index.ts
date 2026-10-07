@@ -13,6 +13,8 @@ export type { ErrorResponse, RequestErrorDetails, RequestOptionsInitWithLegacy }
 export { default as storedToken } from "./storedToken"
 export { completeSignIn, signInErrorMessage } from "./signIn"
 export type { CompleteSignInOptions, SignInResult } from "./signIn"
+export { BulkMutationError, mutationFailureOutcome } from "./bulkMutation"
+export type { BulkItemOutcome, MutationOutcome } from "./bulkMutation"
 
 /**
  * handle PATHS_WITHOUT_LAYOUT

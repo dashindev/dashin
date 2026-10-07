@@ -3,12 +3,14 @@ import { useTranslation } from "react-i18next"
 import Table, { TableHead } from "../Table"
 import tableIcons from "../Table/models/tableIcons"
 import { TableDefaultProps } from "../Table/models/defaultProps"
-import { Action, Column, EditableData, Query, QueryResult } from "../Table/models/material-table-shim"
+import { Action, Column, EditableData, Options, Query, QueryResult } from "../Table/models/material-table-shim"
 import DetailDrawer from "../DetailDrawer"
 
 const theme = { dashin: { iconColor: "#8f9bb3" } }
 
 export interface CrudTableProps<T extends object> {
+  getRowId?: (row: T) => string | number
+  options?: Options<T>
   title: string
   columns: Column<T>[]
   /** Row source — the same shape <Table/> accepts (array, or an async query fn
@@ -42,13 +44,17 @@ export default function CrudTable<T extends object>({
   editable,
   actions,
   disableAdd,
-  formatError
+  formatError,
+  getRowId,
+  options
 }: CrudTableProps<T>) {
   const { t } = useTranslation("table")
   const tableRef = createRef<any>()
   const [drawerRow, setDrawerRow] = useState<T | null>(null)
   const [drawerMode, setDrawerMode] = useState<"view" | "edit" | "create">("view")
   const [refreshKey, setRefreshKey] = useState(0)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState(false)
 
   const reload = () => setRefreshKey(k => k + 1)
   const openCreate = () => {
@@ -69,13 +75,17 @@ export default function CrudTable<T extends object>({
   }
 
   const deleteRow = async (row: T) => {
-    if (!editable?.onRowDelete) return
+    if (!editable?.onRowDelete || deleting) return
     if (typeof window !== "undefined" && !window.confirm(t("Delete this record? This cannot be undone."))) return
+    setDeleteError(null)
+    setDeleting(true)
     try {
       await editable.onRowDelete(row)
       reload()
-    } catch {
-      // the delete controller surfaces its own error notice
+    } catch (error) {
+      setDeleteError(formatError ? formatError(error) : (error as any)?.message || t("Request Failed"))
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -105,6 +115,7 @@ export default function CrudTable<T extends object>({
             <button
               type="button"
               className="text-sm font-medium text-danger hover:underline"
+              disabled={deleting}
               onClick={() => deleteRow(row)}
             >
               {t("Delete")}
@@ -114,7 +125,7 @@ export default function CrudTable<T extends object>({
       )
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [editable, t]
+    [editable, t, deleting, formatError]
   )
 
   const hasRowActions = !!(editable?.onRowUpdate || editable?.onRowDelete)
@@ -126,14 +137,16 @@ export default function CrudTable<T extends object>({
   return (
     <>
       <TableHead title={title} />
+      {deleteError && <div role="alert" aria-live="assertive">{deleteError}</div>}
       <Table<T>
+        getRowId={getRowId}
         key={refreshKey}
         tableRef={tableRef}
         title={title}
         columns={tableColumns}
         style={TableDefaultProps.style}
         icons={tableIcons({ theme })}
-        options={{ ...TableDefaultProps.options, filtering: true }}
+        options={{ ...TableDefaultProps.options, filtering: true, ...options }}
         data={data}
         actions={actions}
         // `editable` is intentionally NOT passed to the table → no in-cell editing;

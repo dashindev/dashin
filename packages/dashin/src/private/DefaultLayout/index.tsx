@@ -78,7 +78,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
       <div className="flex">
         <nav aria-label="left menus">
           <aside
-            className={`relative whitespace-nowrap overflow-x-hidden transition-[width] duration-300 ease-in-out border-r-0 bg-sidebar flex flex-col ${
+            className={`relative whitespace-nowrap overflow-x-hidden overflow-y-auto transition-[width] duration-300 ease-in-out border-r-0 bg-sidebar flex flex-col ${
               open ? "w-[240px]" : "w-[57px] sm:w-[73px]"
             }`}
             style={{ height: "calc(100vh - 64px)" }}
@@ -102,8 +102,12 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
             />
           </aside>
         </nav>
+        {/* Single scroll responsibility: this region is the only vertical
+            scroller (stat band + content scroll together); the content card
+            no longer caps its own height, so nested vertical scrollbars are
+            impossible. */}
         <div
-          className="flex-grow p-[36px] bg-content-bg rounded-tl-bn overflow-auto"
+          className="flex-grow p-[36px] bg-content-bg rounded-tl-bn overflow-y-auto overflow-x-hidden"
           style={{
             height: "calc(100vh - 64px)",
             maxWidth: phoneVertical
@@ -123,7 +127,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
             {layout.contentCard === false ? (
               children
             ) : (
-              <div className="bg-content-box overflow-auto rounded-bn shadow" style={{ maxHeight: "calc(100vh - 64px - 72px)" }}>
+              <div className="bg-content-box overflow-x-auto rounded-bn shadow">
                 {children}
               </div>
             )}

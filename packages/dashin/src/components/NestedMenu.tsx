@@ -25,13 +25,39 @@ export default function NestedList({ data, collapsed }: Props): any {
   const [flyoutTarget, setFlyoutTarget] = useState<string | null>(null)
   const [flyoutPos, setFlyoutPos] = useState({ top: 0, left: 0 })
   const closeTimer = useRef(0)
+  const flyoutTrigger = useRef<HTMLElement | null>(null)
 
   const showFlyout = (name: string, el: HTMLElement) => {
     window.clearTimeout(closeTimer.current)
     const rect = el.getBoundingClientRect()
-    setFlyoutPos({ top: rect.top, left: rect.right })
+    // Keep the flyout inside the viewport: estimate its height (header +
+    // child rows), cap at viewport-16px, then shift `top` up when it would
+    // overflow the bottom edge. The flyout itself also scrolls (max-h/overflow
+    // below) so very long child lists stay reachable.
+    const children = data.filter(i => i.parent === name)
+    const estHeight = 44 + Math.max(children.length, 1) * 36
+    const maxTop = Math.max(
+      8,
+      window.innerHeight - Math.min(estHeight, window.innerHeight - 16) - 8
+    )
+    setFlyoutPos({ top: Math.min(rect.top, maxTop), left: rect.right })
+    flyoutTrigger.current = el
     setFlyoutTarget(name)
   }
+  const closeFlyout = (restoreFocus = false) => {
+    window.clearTimeout(closeTimer.current)
+    setFlyoutTarget(null)
+    if (restoreFocus) flyoutTrigger.current?.focus()
+  }
+  // Escape closes the flyout and returns focus to the trigger menu item.
+  useEffect(() => {
+    if (!flyoutTarget) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeFlyout(true)
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [flyoutTarget])
   const delayHideFlyout = () => {
     closeTimer.current = window.setTimeout(() => setFlyoutTarget(null), 150)
   }
@@ -72,10 +98,9 @@ export default function NestedList({ data, collapsed }: Props): any {
   }, [])
 
   const handleOpen = ({ name }: { name: string }) => {
-    setOpen({
-      ...open,
-      [name]: !open[name]
-    })
+    // Functional update — rapid consecutive toggles must not read a stale
+    // `open` snapshot from this render.
+    setOpen(o => ({ ...o, [name]: !o[name] }))
   }
 
   const handleClick = ({ name, slug }: { name: string; slug?: string }) => {
@@ -153,12 +178,25 @@ export default function NestedList({ data, collapsed }: Props): any {
             <li
               className={`flex items-center ${
                 collapsed ? "justify-center mx-1 px-2" : "mx-2 px-3"
-              } py-2 cursor-pointer rounded-bn hover:bg-primary/10 ${
+              } py-2 cursor-pointer rounded-bn hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-bn ${
                 isActive ? "bg-primary/10 text-primary font-medium" : "text-foreground"
               }`}
+              role="button"
+              tabIndex={0}
+              aria-current={isActive ? "page" : undefined}
+              aria-expanded={hasChildren && !collapsed ? !!open[name] : undefined}
               onClick={() => !collapsed && handleClick({ name, slug })}
+              onKeyDown={e => {
+                if (collapsed) return
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  handleClick({ name, slug })
+                }
+              }}
               onMouseEnter={collapsed ? e => showFlyout(name, e.currentTarget) : undefined}
               onMouseLeave={collapsed ? delayHideFlyout : undefined}
+              onFocus={collapsed ? e => showFlyout(name, e.currentTarget) : undefined}
+              onBlur={collapsed ? delayHideFlyout : undefined}
             >
               <span className={`${collapsed ? "" : "mr-3"} flex items-center`}>
                 <MenuIcon name={name} icon={icon} icon_type={icon_type} />
@@ -175,7 +213,7 @@ export default function NestedList({ data, collapsed }: Props): any {
               )}
             </li>
             {!collapsed && hasChildren && (
-              <ul className={`list-none p-0 overflow-hidden transition-all duration-300 ${open[name] ? "max-h-96" : "max-h-0"}`}>
+              <ul className={`list-none p-0 transition-all duration-300 ${open[name] ? "max-h-[60vh] overflow-y-auto" : "max-h-0 overflow-hidden"}`}>
                 {children.map(item => {
                   const { name, label, parent } = item
                   let { slug } = item
@@ -188,8 +226,17 @@ export default function NestedList({ data, collapsed }: Props): any {
                   return (
                     <li
                       key={name}
-                      className={`pl-10 pr-4 py-2 cursor-pointer rounded-bn transition-[padding-left] duration-500 ease-in-out hover:bg-primary/10 ${isSelected ? "bg-primary/10 text-primary" : "text-foreground"}`}
+                      className={`pl-10 pr-4 py-2 cursor-pointer rounded-bn transition-[padding-left] duration-500 ease-in-out hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-bn ${isSelected ? "bg-primary/10 text-primary" : "text-foreground"}`}
+                      role="button"
+                      tabIndex={0}
+                      aria-current={isSelected ? "page" : undefined}
                       onClick={() => handleClick({ name, slug })}
+                      onKeyDown={e => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault()
+                          handleClick({ name, slug })
+                        }
+                      }}
                     >
                       <span className="text-sm">{t(label || name)}</span>
                     </li>
@@ -203,7 +250,8 @@ export default function NestedList({ data, collapsed }: Props): any {
 
       {collapsed && flyoutTarget && createPortal(
         <div
-          className="fixed bg-sidebar border border-bn-border rounded-r-bn shadow-xl py-1 z-[1400] min-w-[180px]"
+          role="menu"
+          className="fixed bg-sidebar border border-bn-border rounded-r-bn shadow-xl py-1 z-[1400] min-w-[180px] max-h-[calc(100vh-16px)] overflow-y-auto"
           style={{ left: flyoutPos.left, top: flyoutPos.top }}
           onMouseEnter={keepFlyout}
           onMouseLeave={() => setFlyoutTarget(null)}
@@ -218,8 +266,17 @@ export default function NestedList({ data, collapsed }: Props): any {
               if (s) s = specialPluginSlug(s)
               return (
                 <div
-                  className="px-3 py-2 text-sm text-foreground cursor-pointer hover:bg-primary/10 rounded-r-bn"
+                  role="menuitem"
+                  tabIndex={0}
+                  className="px-3 py-2 text-sm text-foreground cursor-pointer hover:bg-primary/10 rounded-r-bn focus:outline-none focus-visible:ring-2 focus-visible:ring-bn"
                   onClick={() => { handleClick({ name: target.name, slug: s }); setFlyoutTarget(null) }}
+                  onKeyDown={e => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault()
+                      handleClick({ name: target.name, slug: s })
+                      setFlyoutTarget(null)
+                    }
+                  }}
                 >
                   {t(target.label || target.name)}
                 </div>
@@ -238,10 +295,20 @@ export default function NestedList({ data, collapsed }: Props): any {
                   return (
                     <div
                       key={child.name}
-                      className={`px-3 py-2 text-sm cursor-pointer hover:bg-primary/10 ${
+                      role="menuitem"
+                      tabIndex={0}
+                      aria-current={isSelected ? "page" : undefined}
+                      className={`px-3 py-2 text-sm cursor-pointer hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-bn ${
                         isSelected ? "bg-primary/10 text-primary font-medium" : "text-foreground"
                       }`}
                       onClick={() => { handleClick({ name: child.name, slug: s }); setFlyoutTarget(null) }}
+                      onKeyDown={e => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault()
+                          handleClick({ name: child.name, slug: s })
+                          setFlyoutTarget(null)
+                        }
+                      }}
                     >
                       {t(child.label || child.name)}
                     </div>

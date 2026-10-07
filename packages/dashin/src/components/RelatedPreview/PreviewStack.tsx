@@ -88,6 +88,33 @@ function PreviewFrame({
   const [tick, setTick] = useState(0)
   const id = idOf(frame.value)
 
+  // Dialog semantics: each frame captures focus on mount and restores it on
+  // unmount (stacked frames chain correctly — each restores to its own
+  // invoker, typically the previous frame or page control).
+  const panelRef = useRef<HTMLElement>(null)
+  const prevFocus = useRef<HTMLElement | null>(null)
+  useEffect(() => {
+    prevFocus.current = document.activeElement as HTMLElement | null
+    panelRef.current?.focus()
+    return () => {
+      prevFocus.current?.focus?.()
+      prevFocus.current = null
+    }
+  }, [])
+
+  // Escape pops ONLY the top frame — nested frames must not all consume it.
+  // While the nested DetailDrawer is open it owns Escape (its own listener),
+  // so this handler steps aside.
+  const isTop = index === stack.length - 1
+  useEffect(() => {
+    if (!isTop || editing) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onBack()
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [isTop, editing, onBack])
+
   useEffect(() => {
     let on = true
     if (id != null && entry?.fetch) {
@@ -107,7 +134,12 @@ function PreviewFrame({
     <>
       <div className="fixed inset-0 bg-black/30" style={{ zIndex: zBase }} onClick={onBack} />
       <aside
-        className="fixed inset-y-0 right-0 flex w-full max-w-md flex-col bg-content-box shadow-xl"
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={meta?.label || frame.slug}
+        tabIndex={-1}
+        className="fixed inset-y-0 right-0 flex w-full max-w-md flex-col bg-content-box shadow-xl focus:outline-none"
         style={{ zIndex: zBase + 10 }}
       >
         <div className="flex items-center justify-between gap-2 border-b border-bn-border px-5 py-3">

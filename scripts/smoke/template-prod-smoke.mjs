@@ -22,9 +22,14 @@ import path from "node:path"
 import { randomUUID } from "node:crypto"
 
 const repo = process.cwd()
+const templateName = process.argv.find(arg => arg.startsWith("--template="))?.split("=")[1] || "typescript-vite"
+if (!["typescript-vite", "typescript-nextjs", "fullstack-atomo"].includes(templateName)) {
+  throw new Error(`unsupported template: ${templateName}`)
+}
+const isNext = templateName === "typescript-nextjs"
 const templateDir = path.join(
   repo,
-  "packages/dashin-cli/templates/typescript-vite"
+  "packages/dashin-cli/templates", templateName
 )
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "dashin-smoke-"))
 const BUILD_ONLY = process.env.SMOKE_BUILD_ONLY === "1"
@@ -138,11 +143,13 @@ async function main() {
 
   // A per-run marker prevents an unrelated or leaked preview from satisfying
   // readiness checks for this newly-scaffolded application.
-  const indexPath = path.join(tmp, "index.html")
+  const indexPath = path.join(tmp, isNext ? "pages/_document.tsx" : "index.html")
   const indexHtml = fs.readFileSync(indexPath, "utf8")
   fs.writeFileSync(
     indexPath,
-    indexHtml.replace("</head>", `  <meta name="dashin-smoke-run" content="${RUN_ID}" />\n</head>`)
+    indexHtml.replace(isNext ? "<Head>" : "</head>", isNext
+      ? `<Head><meta name="dashin-smoke-run" content="${RUN_ID}" />`
+      : `  <meta name="dashin-smoke-run" content="${RUN_ID}" />\n</head>`)
   )
 
   // Point @dashin-dev/* at locally-packed tarballs of the workspace packages.
@@ -153,10 +160,28 @@ async function main() {
   const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"))
   pkg.dependencies["@dashin-dev/dashin"] = packLocal("packages/dashin", tgzDir)
   pkg.dependencies["@dashin-dev/auth-local"] = packLocal("plugins/auth-local", tgzDir)
+  // Pack every Dashin dependency used by these templates, not registry alpha.8.
+  for (const scope of ["packages", "plugins"]) {
+    for (const directory of fs.readdirSync(path.join(repo, scope))) {
+      const manifest = path.join(repo, scope, directory, "package.json")
+      if (!fs.existsSync(manifest)) continue
+      const local = JSON.parse(fs.readFileSync(manifest, "utf8"))
+      if (pkg.dependencies[local.name] && !pkg.dependencies[local.name].startsWith("file:")) {
+        pkg.dependencies[local.name] = packLocal(`${scope}/${directory}`, tgzDir)
+      }
+    }
+  }
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
 
   // Materialize .env (default template auth-local — no backend needed).
   fs.copyFileSync(path.join(tmp, ".env.example"), path.join(tmp, ".env"))
+  // Never let a template example URL contact a live backend during smoke.
+  const envFile = path.join(tmp, ".env")
+  fs.writeFileSync(envFile, fs.readFileSync(envFile, "utf8").replace(
+    /^(VITE_(?:MAIN_URL|AUTH_URL|UPLOAD_URL|SITE_URLS|ATOMO_URL))=.*$/gm,
+    "$1=http://127.0.0.1:1"
+  ))
+  process.env.NEXT_TELEMETRY_DISABLED = "1"
 
   log("npm install (local @dashin-dev/* + deps)")
   execSync("npm install --no-audit --no-fund --no-save=false", {
@@ -164,20 +189,21 @@ async function main() {
     stdio: "inherit"
   })
 
-  log("vite build (production)")
-  execSync("npx vite build", { cwd: tmp, stdio: "inherit" })
+  log(isNext ? "next build (production)" : "vite build (production)")
+  execSync(isNext ? "npm run build" : "npx vite build", { cwd: tmp, stdio: "inherit" })
 
   if (BUILD_ONLY) {
     log("SMOKE_BUILD_ONLY=1 — built OK, skipping browser check")
     return
   }
 
-  log("vite preview")
+  log(isNext ? "next start" : "vite preview")
   port = await getFreePort()
-  const viteBin = path.join(tmp, "node_modules", "vite", "bin", "vite.js")
+  const viteBin = path.join(tmp, "node_modules", isNext ? "next/dist/bin/next" : "vite/bin/vite.js")
   server = spawn(
     process.execPath,
-    [viteBin, "preview", "--host", "127.0.0.1", "--port", String(port), "--strictPort"],
+    isNext ? [viteBin, "start", "--hostname", "127.0.0.1", "--port", String(port)]
+      : [viteBin, "preview", "--host", "127.0.0.1", "--port", String(port), "--strictPort"],
     {
       cwd: tmp,
       stdio: "inherit",
@@ -196,21 +222,32 @@ async function main() {
   const browser = await chromium.launch()
   const page = await browser.newPage()
   const errors = []
+  const pageErrors = []
+  await page.route("**/*", route => {
+    const hostname = new URL(route.request().url()).hostname
+    return ["127.0.0.1", "localhost"].includes(hostname) ? route.continue() : route.abort()
+  })
+  page.on("pageerror", error => pageErrors.push(error.message))
   page.on("pageerror", (e) => errors.push(e.message))
   page.on("console", (m) => m.type() === "error" && errors.push(m.text()))
 
   await page.goto(base, { waitUntil: "networkidle" })
+  let ready = true
+  try {
+    await page.waitForFunction(() => /Sign in|Welcome|登录|登入|欢迎/.test(document.body.innerText), null, { timeout: 15_000 })
+  } catch { ready = false }
   const marker = await page.locator(`meta[name="dashin-smoke-run"][content="${RUN_ID}"]`).count()
-  const rootHtml = (await page.locator("#root").innerHTML().catch(() => "")) || ""
+  const rootHtml = (await page.locator(isNext ? "#__next" : "#root").innerHTML().catch(() => "")) || ""
   await browser.close()
 
   const fatal = errors.filter((e) => FATAL.test(e))
-  if (fatal.length) {
-    throw new Error(`fatal runtime errors:\n${fatal.join("\n")}`)
+  if (fatal.length || pageErrors.length) {
+    throw new Error(`fatal runtime errors:\n${[...new Set([...fatal, ...pageErrors])].join("\n")}`)
   }
   if (!rootHtml.trim()) {
     throw new Error("#root is empty — app did not mount")
   }
+  if (!ready) throw new Error("app never reached a sign-in or welcome screen (spinner/blank content is not a pass)")
   if (marker !== 1) {
     throw new Error("loaded page does not belong to the current smoke run")
   }

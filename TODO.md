@@ -20,7 +20,8 @@
 - [x] **Phase 10: Docker 镜像云端构建与 GitHub Official Release 闭环** (已完成)
 - [x] **Phase 11: 商业化落地与企业级价值交付闭环** (已完成)
 - [x] **Phase 12: 严格变异契约与 CRUD 错误冒泡治理 (Strict Mutation Contract)** (已完成；待所有者决定是否推送/发起 CI)
-- [ ] **Phase 13: `smol-toml` 构建工具链 DoS 安全修复** (进行中)
+- [x] **Phase 13: `smol-toml` 构建工具链 DoS 安全修复** (已完成)
+- [ ] **Phase 15: 家赞差异盘点与可靠性缺口返工 (Jiazan Generalization Phase 1+2)** (进行中)
 
 ---
 
@@ -360,3 +361,37 @@
 - [x] **14.5 发布候选交付** *(2026-09-20)*
   - [x] 推送 `release/2.0.0-alpha.8` 候选提交 `b0f3dd07f063e18c0fdbec520e1b8f6b4b4cda50`；GitHub CI Run 35554907501 的 build-test、e2e、template-smoke 与 Cloudflare Pages、Workers Builds 全部成功。
   - [x] 未执行 npm publish，未创建 npm/Git tag，未升级家赞依赖或删除其首轮防御层；后续发布仍需所有者再次明确授权。
+
+---
+
+### Phase 15: 家赞差异盘点与可靠性缺口返工 (Jiazan Generalization Phase 1+2) (进行中)
+
+> **依据**：`studio-strategy/handoffs/dashin-jiazan-generalization-20261007.md`；
+> 差异表与实施边界见 `IMPLEMENTATION_PLAN.md` 第五节。
+> **边界**：只改 Dashin；不改家赞；不推送、不发布、不部署；通用化、向后兼容。
+
+- [x] **15.1 第一阶段 G01–G12 差异盘点** *(2026-10-07)*
+  - [x] 按当前 `2.0.0-alpha.8` 源码核对 12 项能力的状态（已有/部分/缺失）、上游位置与缺口，差异表落盘于 `IMPLEMENTATION_PLAN.md` §5.1。
+  - [x] 确认 G07（查询竞争）、G08（布局）、G10（认证遗漏）为第二阶段缺口；G09 已由 Phase 12 覆盖；G02/G03/G05/G11 大部分及 G12 残余归入第三阶段接口方案。
+- [x] **15.2 认证失败闭环（G10）** *(2026-10-07；signIn 9 项 + auth-payload 5 项测试通过)*
+  - [x] 核心 `utils/scripts/signIn.ts`：`completeSignIn` + `signInErrorMessage`；Dexie 事务原子写 users/settings；`afterPersist` 成功钩子；默认 `window.location.assign("/")` 导航；失败仅可读 notice，`setSubmitting(false)` 保证。
+  - [x] 公共导出接入（`utils/scripts/index.ts` 导出 `completeSignIn`/`signInErrorMessage` 与类型）。
+  - [x] auth-payload、auth-local、auth-pocketbase、auth-strapi（sign-in + sign-up）、auth-atomo 六个控制器接入共享助手；payload/atomo `role || "admin"` 改 fail-closed（`"user"`）；atomo token 写入移至 `afterPersist`。
+  - [x] 测试：成功/拒绝/缺字段/存储失败/重试成功（`signIn.test.ts` 9 项）；auth-payload 控制器回归 2 项 + service fail-closed 3 项。
+- [x] **15.3 列表查询生命周期（G07）** *(2026-10-07；Table 25 项测试通过)*
+  - [x] Table `loadRemote` 查询序号守卫 + AbortController（`Query.signal` 可选透传适配器）+ `mountedRef` 卸载守卫 + 最新失败 `role="alert"` 错误横幅；合并挂载双发 load 为单路径；远程/本地数据重算时清空页相对失效选择。
+  - [x] 测试：挂载仅一次查询、旧慢响应被丢弃、AbortSignal 透传与旧请求 abort、远程失败横幅+退出 loading、卸载后写回忽略、新结果到达清空选择。
+- [x] **15.4 批量结构化失败（G12 局部）** *(2026-10-07；Table 25 + D1 27 + Payload 40 项测试通过)*
+  - [x] 内置 bulkDelete 聚合结构化 i18n 消息（`bulkFailureSummary`：成功/失败计数 + 行标识 `id/uuid/_id/页内序号` + 逐项原因），保留失败项选择；不宣称整批事务。
+  - [x] `bulkUpdateSer`（D1 + Payload）使用 `primaryKey` 而非硬编码 `id`，支持非标准主键。
+  - [x] 测试：部分失败文案（"1 succeeded, 1 failed." + `#2` + 原因）与失败项保留。
+- [x] **15.5 布局与原生可访问性（G08 + G12 局部）** *(2026-10-07；NestedMenu 4 + DetailDrawer 14 + RelatedPreview 5 + Table 25 项测试通过)*
+  - [x] NestedMenu：函数式 setOpen、去 `max-h-96` 改为 `max-h-[60vh] overflow-y-auto`、flyout 视口钳制 + `max-h`/`overflow-y-auto` + Escape 关闭并回焦触发项 + `role="menu"`/`menuitem`/键盘 Enter-Space、菜单项 `role="button"`/`tabIndex`/`aria-current`/`aria-expanded`。
+  - [x] DefaultLayout：aside `overflow-y-auto`；内容区单滚动责任（外层唯一纵滚容器，内容卡片不再限高纵滚）。
+  - [x] Table：`options.minTableWidth` 表最小宽度 + 列 `width`/`minWidth` 作最小列宽；行选/全选/筛选值/筛选算子/分页/展开控件 aria 名称（en/zh i18n 键齐全，de 为 stub 沿用英文兜底）。
+  - [x] DetailDrawer：按钮文案 i18n（新增 New/Edit/Close/Delete/Delete?/Confirm delete/Cancel/Create/Saving… 键）、`role="dialog"`/`aria-modal`/`aria-label`、打开聚焦 + 关闭焦点恢复；PreviewStack frame `role="dialog"`、逐帧焦点捕获/恢复、仅顶层响应 Escape 且编辑抽屉打开时让位。
+  - [x] 测试：Table aria 名称断言、minTableWidth 断言、DetailDrawer `role="dialog"`/焦点进出断言。
+- [x] **15.6 门禁与交付** *(2026-10-07)*
+  - [x] `yarn tsc:build`（23 包全绿）、`yarn workspace @dashin-dev/dashin typecheck`（0 错误）、`packages/dashin` 全量单测（27 文件/195 项全过）、auth-payload（5）/auth-pocketbase（3）/auth-atomo（3）/source-d1（27）/source-payload（40）测试全过、`git diff --check`（行尾归一后 0 报错）。
+  - [x] Playwright E2E（6 passed / 3 expected skipped / 0 failed）：应用启动、sign-in 路由、实体表路由均无致命运行时错误；需真实后端的 ecommerce 用例按既有设计跳过。docs/template smoke 未执行（本轮无模板/docs 构建物变更）。
+  - [x] 按主题分组本地提交（auth / table+bulk / a11y / docs 共 4 个）；**不推送、不发布**。

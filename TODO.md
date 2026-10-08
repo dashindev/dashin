@@ -442,3 +442,22 @@
   - [x] `yarn tsc:build`（23 包全绿）、`yarn workspace @dashin-dev/dashin typecheck`（0 错误）、`packages/dashin` 全量单测（27 文件/195 项全过）、auth-payload（5）/auth-pocketbase（3）/auth-atomo（3）/source-d1（27）/source-payload（40）测试全过、`git diff --check`（行尾归一后 0 报错）。
   - [x] Playwright E2E（6 passed / 3 expected skipped / 0 failed）：应用启动、sign-in 路由、实体表路由均无致命运行时错误；需真实后端的 ecommerce 用例按既有设计跳过。docs/template smoke 未执行（本轮无模板/docs 构建物变更）。
   - [x] 按主题分组本地提交（auth / table+bulk / a11y / docs 共 4 个）；**不推送、不发布**。
+# Security toolchain follow-up (2026-10-07)
+
+Scope: independent PR from master `60fc4c0`; no publishing/tags/Jiazan changes.
+Preserve the user's pre-existing untracked test-results file.
+
+- [x] Verify alerts #531/#524/#525 and every installed Vitest/coverage dependency chain. (Registry metadata + yarn list: Vitest 1/3, coverage 1, tinypool 0.8.4/1.1.1; Vitest 4.1.11 supports Node 20/Vite 6 and removes tinypool.)
+- [x] Apply a compatible smol-toml fix and remove vulnerable tinypool chains without forcing an incompatible pool major. (Installed/locked graph gate passed; full runtime compatibility remains the next gate.)
+- [x] Resolve first install failure: Yarn 1 could not link Vitest's multi-major Vite dependency; constrain that compatible path to existing Vite 6.4.2 and verify installation. (Second normal install succeeded.)
+- [x] Verify frozen install and resolved/locked dependency versions; add a regression gate. (16 runner/coverage declarations aligned; Nx resolves 1.9.0; no locked tinypool; frozen install succeeded.)
+- [x] Run Node 20: 23-package build, typecheck, all affected unit suites, E2E, docs, template smoke and diff hygiene. (Final graph: 454 unit assertions, E2E 13/3, Vite smoke twice; build/typecheck rechecked after final alignment.)
+- [ ] Complete additional local Next smoke twice and Atomo frontend smoke; exact-SHA Linux CI also runs all five template checks.
+- [x] Run all real Vitest workspace suites directly; do not invoke unrelated legacy placeholder test scripts via Lerna. (15 suites / 454 assertions passed on first direct run; broad Lerna attempt failed at legacy auth-local globs.)
+- [x] Reverify final graph after aligning Vitest's Vite path to baseline locked core 6.4.3 (not the manifest minimum 6.4.2). (Normal + frozen install and graph gate passed; no production Vite upgrade.)
+- [x] Run E2E on an isolated port with separate output directory; preserve the existing process on port 3000 and original test-results. (19321: 13 passed / 3 expected skipped; no retries.)
+- [x] Verify the dependency regression gate rejects broken manifests/lock entries without modifying real files. (Node test 5/5; mutations injected in memory only.)
+- [x] Verify upgraded coverage provider with an actual coverage run; preserve assertions and exclusions. (Final graph: 239/239 with v8 enabled; report produced, no coverage thresholds weakened. CI uses the provider too.)
+- [x] Explicitly include Node types previously supplied transitively by old Vitest globals; rerun core typecheck. (Recheck passed; no runtime code changes.)
+- [ ] Commit/push a focused security branch, create PR, run exact-SHA CI and wait for Cloudflare checks.
+- [ ] Record actual results/remaining risks. Default-branch alerts cannot be declared fixed before merging and re-evaluation.

@@ -22,6 +22,10 @@ jobs:
           node-version: 20
           cache: yarn
       - run: yarn install --frozen-lockfile
+      - name: Security toolchain regression gate
+        run: |
+          node scripts/check-security-toolchain.cjs
+          node --test scripts/__tests__/security-toolchain.test.cjs
       # Build all package lib/ (the plugin generator requires it)
       - run: yarn tsc:build
       - name: App type-check
@@ -29,13 +33,15 @@ jobs:
         run: yarn typecheck
       - name: Unit tests (Dashin)
         working-directory: packages/dashin
-        run: yarn test
+        run: yarn test --coverage
       - name: Unit tests (Payload source)
         working-directory: packages/dashin-source-payload
         run: yarn test
       - name: Unit tests (D1 source)
         working-directory: packages/dashin-source-d1
         run: yarn test
+      - name: Additional affected workspace unit tests
+        run: node scripts/test-security-workspaces.cjs --additional
       - name: Production build (Vite)
         working-directory: packages/dashin
         run: yarn build

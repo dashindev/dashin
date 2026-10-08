@@ -514,3 +514,47 @@ versions, runtime dependencies or peers changed in the 15 workspace manifests.
 Additional Next twice / Atomo frontend smoke is still running; Linux exact-SHA
 CI and Cloudflare checks remain pending. Default-branch alerts remain open
 until a future merge/re-evaluation; no broad claim that all alerts are resolved.
+
+Candidate code SHA `00fdd5563389b8b1306f05663a0291054228852b` is pushed to
+`fix/security-toolchain-20261007`, PR #177 targets master. Exact-SHA Linux CI
+https://github.com/dashindev/dashin/actions/runs/37713389928 completed SUCCESS
+on first run: three jobs, Node 20.20.2, frozen install, actual dependency gate,
+5 Node regression tests, 23-package build/typecheck, all 454 Vitest assertions
+(core with V8 coverage), E2E 13 passed / 3 expected skipped / 0 failed,
+production/docs build, patch hygiene and five real template browser loads:
+Vite twice (root 15118), Next twice and Atomo frontend once (root 9073).
+Cloudflare Pages b518d716-0658-4d0c-86b3-c742b10496a4 and Workers Builds
+468f8169-2450-4f2a-9dbc-83cdb1d2c90c both COMPLETED/SUCCESS on that SHA.
+PR is OPEN/MERGEABLE/CLEAN; manual CI is checked explicitly, not inferred from
+merge state. Two Action-runtime/ubuntu-latest migration annotations are retained;
+the project commands themselves used Node 20.20.2. Additional local Next/Atomo
+smokes and the final evidence-only commit's exact-SHA CI remain to finish.
+
+### Final local completion and candidate handoff
+
+Additional local Next smoke okrJPe/z7JTKP and Atomo frontend smoke 8CLOcj all
+completed build/start/real browser assertions, root len 9073, no fatal errors;
+the sequential runner exited 0 and cleaned its own consumer directories. This
+does not validate the Atomo backend, Payload admin/authenticated deployment or
+cloud D1. No template/framework upgrades were smuggled into this security PR.
+
+The two isolated E2E output targets remain only in the OS temporary directory:
+dashin-security-e2e-e72cd5d06f334e69b804ba5aa470ce7f and
+dashin-security-e2e-d0381c5cec3b4bd695521dc59076b94f. Their validated-path
+cleanup command was rejected by execution policy; no alternate deletion was
+attempted. They are not repository artifacts or committed files. The original
+untracked test-results/.last-run.json is unchanged (SHA256
+91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903).
+
+The preceding pending descriptions are historical checkpoints. All local gates
+and the code candidate's first Linux/Cloudflare gates have now completed. This
+documentation-only evidence update gets another exact-HEAD CI run and new
+Cloudflare checks; latest precise SHA, Run URL and final outcomes are recorded
+in https://github.com/dashindev/dashin/pull/177 under Final candidate verification,
+not inferred from the older code SHA's run. Current next phase is candidate
+review/merge, then default-branch alert re-evaluation: #531/#524/#525 were still
+OPEN with fixed_at/dismissed_at null before merge. Other dependency alerts,
+legacy template warnings, Nx resolution warning and Action runner migration
+warnings remain; this focused PR is not a claim of an entirely clean audit.
+No merge, npm publish, Git/npm tags, Release, branch deletion or Jiazan changes
+have been performed by this candidate delivery phase.

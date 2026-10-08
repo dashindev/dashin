@@ -57,6 +57,9 @@ Tests use **Vitest** + **jsdom**. The vitest config is inlined in `packages/dash
 Run tests from the `packages/dashin` directory — running from the workspace root can cause
 module resolution issues.
 
+For isolated local E2E runs, set `DASHIN_E2E_PORT` (default 3000) and pass a separate
+Playwright `--output` directory; do not reuse or terminate another user's dev server.
+
 ## Releasing & publishing
 
 Lerna manages versioning across all 23 `@dashin-dev` packages.
@@ -302,7 +305,8 @@ GitHub Actions (`.github/workflows/ci.yml`) is **manual-only** — trigger via t
 or `gh workflow run ci.yml`. It does not run automatically on push/PR to avoid spend.
 
 Jobs:
-- **build-test:** `yarn tsc:build` → typecheck → unit tests → production build
+- **build-test:** security dependency gate → `yarn tsc:build` → typecheck → core unit tests with V8 coverage,
+  Payload/D1 and additional real Vitest workspace suites → production/docs builds
 - **e2e:** Playwright end-to-end smoke tests
 - **template-smoke:** scaffold against locally-packed tarballs; run Vite twice, Next.js build/start/browser twice,
   and the Atomo frontend once — catches prod-only regressions. Does not run the opt-in adapter backend integrations.

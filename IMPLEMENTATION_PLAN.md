@@ -420,3 +420,141 @@ https://github.com/dashindev/dashin/pull/171 的 Final delivery verification 为
 不能用上方代码 SHA 的 Run 代替新文档 SHA 门禁。保持功能分支，不合并/发布/Tag。
 保留 WSL exit 255 根因未知、Windows workerd WSARecv #64、Next 12/工具链旧警告与
 默认分支依赖告警；云 D1、Atomo 后台、认证端到端及 Payload Next/Admin 未验证。
+# Security toolchain follow-up (2026-10-07)
+
+Baseline: master `60fc4c0ee76c37ef40eb1a0275ff6d65c95a113b`; independent branch
+`fix/security-toolchain-20261007`. Prior PR #171 remains merged and is not reopened.
+
+Investigate smol-toml #531 (GHSA-r4xh-jqrq-34v2, fixed 1.9.0) and tinypool
+#524/#525 (GHSA-85c8-ppgw-ccpr / GHSA-5gmw-xhrv-c9v3; both covered by 2.1.2).
+The old smol-toml 1.7.1 resolution only fixes the earlier advisory. Vitest 1/3
+and coverage 1 remain distinct dependency roots, so updating only root Vitest
+would not remove all vulnerable pools. Prefer a supported runner upgrade over
+forcing tinypool 2 into callers expecting 0/1. Keep Node 20 and the production
+Vite 6 toolchain; audit coverage peer compatibility and test API/config changes.
+
+Before implementation: inventory -> checked plan. Then dependency changes and
+lockfile generation -> actual dependency regression check -> frozen install ->
+23-package build/typecheck -> affected tests/E2E/docs/templates -> focused PR
+and exact-SHA Linux CI/Cloudflare checks. Record first failures, not just retries.
+No npm publishing, tags/releases, branch deletion, or Jiazan changes. Alert
+closure must be checked on the default branch after a future merge; candidate
+checks are not proof that default-branch alerts have closed.
+
+Inventory verified: root and 14 package/plugin Vitest declarations plus core
+coverage provider. Vitest 4.1.11 registry metadata supports Node 20 and Vite 6
+and no longer depends on tinypool. Pin the runner and coverage to the same
+exact version, removing both 0.8.4 and 1.1.1 pool paths. No production framework
+or package versions are changed. Retain the Nx resolution compatibility warning
+until tested; 1.9.0 is the fixed parser for the newly published TOML advisory.
+Add a focused CI regression gate for all workspace runner declarations, actual
+installed versions, locked absence of legacy pools, and Nx's resolved parser.
+
+First upgrade install failed in Yarn 1 linking: `could not find a copy of vite
+to link in .../vitest/node_modules`. No updated lockfile was written. Constrain
+Vitest's compatible Vite dependency path to the existing 6.4.2, rather than let
+the runner's Vite 6/7/8 range select another production toolchain. A prematurely
+invoked frozen install also correctly rejected the still-old lockfile; neither
+attempt is counted as successful verification.
+
+Second normal install succeeded (115.87s), followed by frozen install (1.69s).
+The installed graph gate verifies 16 runner/coverage declarations and Nx's real
+TOML entry, with no tinypool in yarn.lock. The parser returns null-prototype
+objects; the first gate's plain-object deep equality rejected that secure shape.
+The gate now verifies content and the actual null-prototype contract explicitly.
+Build/test compatibility is not yet claimed.
+
+First broad `lerna run test` stopped at the existing auth-local placeholder
+Prettier/Jest script referencing nonexistent src/pages/test directories; Nx
+also reported the existing core/auth test dependency cycle. This is outside
+the Vitest migration. Run every actual `test: vitest run` suite from its own
+workspace with a portable Node runner instead; do not weaken any tests or
+modify unrelated legacy scripts. CI includes the additional real suites.
+
+23-package build passed under Node 20.20.2. First core typecheck failed because
+old Vitest globals had supplied Node globals transitively; explicitly add the
+already-installed Node types to tsconfig.app.json (process/require/global),
+without changing runtime code or TypeScript strictness. Core Vitest 4 tests
+passed 239/239 before this type-only follow-up.
+
+All 15 actual Vitest workspace suites passed (454 assertions): core 239,
+field-blocks 9, appwrite 11, atomo 20, D1 38, directus 9, Payload 51,
+pocketbase 16, supabase 11, turso 18, audit-log 8, auth-atomo 5,
+auth-payload 5, auth-pocketbase 3, auth-sso 11. Typecheck passed after explicit
+Node types. Lock audit confirms production Vite was already 6.4.3 on master;
+align the test-runner Vite resolution to that exact baseline, removing the
+unnecessary 6.4.2 duplicate. First local E2E refused existing port 3000; preserve
+that unrelated process and add optional DASHIN_E2E_PORT with strict port binding
+for isolated verification. Use a separate temporary output path, not the user's
+existing test-results directory.
+
+Final dependency graph: frozen install and focused gate passed after aligning
+Vite 6.4.3. Comparing parsed locks, the only retained selector whose value
+changes is smol-toml@1.6.1 (1.7.1 -> 1.9.0); other edits remove obsolete
+Vitest/Vite 5/7 worker chains or add Vitest 4/coverage transitive dependencies.
+Core 239/239 tests passed with actual v8 coverage enabled: statements 46.64%,
+branches 41.35%, functions 38.41%, lines 47.91%. This is a new provider's report,
+not a like-for-like claim of coverage improvement; exclusions/assertions remain
+unchanged and CI also exercises the upgraded coverage provider.
+
+Final-graph E2E at isolated port 19321 passed 13 / 3 expected skipped, no retry.
+The focused dependency gate's five Node tests passed: actual fixed graph,
+reintroduced legacy pool, legacy runner lock entry, old TOML resolution and
+mismatched coverage manifest. Invalid states are injected in memory, not files.
+Original test-results SHA256 remains unchanged. Local production/docs builds
+passed; existing circular Rollup chunks and Nx graph warnings remain nonblocking.
+
+Final graph local gates: 23-package build 88.35s, typecheck passed; Payload 51
+and D1 38 rechecked, core coverage 239 plus 12 additional suites (126) = 454
+unique assertions passed. Vite consumer smoke Fs39MU / 9muhmo both built and
+mounted root len 15118 with no fatal/pageerror; temporary consumer cleanup
+completed before moving to Next. E2E 13 passed / 3 expected skipped, docs and
+production builds, YAML/Node syntax and diff hygiene passed. No publishable
+versions, runtime dependencies or peers changed in the 15 workspace manifests.
+Additional Next twice / Atomo frontend smoke is still running; Linux exact-SHA
+CI and Cloudflare checks remain pending. Default-branch alerts remain open
+until a future merge/re-evaluation; no broad claim that all alerts are resolved.
+
+Candidate code SHA `00fdd5563389b8b1306f05663a0291054228852b` is pushed to
+`fix/security-toolchain-20261007`, PR #177 targets master. Exact-SHA Linux CI
+https://github.com/dashindev/dashin/actions/runs/37713389928 completed SUCCESS
+on first run: three jobs, Node 20.20.2, frozen install, actual dependency gate,
+5 Node regression tests, 23-package build/typecheck, all 454 Vitest assertions
+(core with V8 coverage), E2E 13 passed / 3 expected skipped / 0 failed,
+production/docs build, patch hygiene and five real template browser loads:
+Vite twice (root 15118), Next twice and Atomo frontend once (root 9073).
+Cloudflare Pages b518d716-0658-4d0c-86b3-c742b10496a4 and Workers Builds
+468f8169-2450-4f2a-9dbc-83cdb1d2c90c both COMPLETED/SUCCESS on that SHA.
+PR is OPEN/MERGEABLE/CLEAN; manual CI is checked explicitly, not inferred from
+merge state. Two Action-runtime/ubuntu-latest migration annotations are retained;
+the project commands themselves used Node 20.20.2. Additional local Next/Atomo
+smokes and the final evidence-only commit's exact-SHA CI remain to finish.
+
+### Final local completion and candidate handoff
+
+Additional local Next smoke okrJPe/z7JTKP and Atomo frontend smoke 8CLOcj all
+completed build/start/real browser assertions, root len 9073, no fatal errors;
+the sequential runner exited 0 and cleaned its own consumer directories. This
+does not validate the Atomo backend, Payload admin/authenticated deployment or
+cloud D1. No template/framework upgrades were smuggled into this security PR.
+
+The two isolated E2E output targets remain only in the OS temporary directory:
+dashin-security-e2e-e72cd5d06f334e69b804ba5aa470ce7f and
+dashin-security-e2e-d0381c5cec3b4bd695521dc59076b94f. Their validated-path
+cleanup command was rejected by execution policy; no alternate deletion was
+attempted. They are not repository artifacts or committed files. The original
+untracked test-results/.last-run.json is unchanged (SHA256
+91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903).
+
+The preceding pending descriptions are historical checkpoints. All local gates
+and the code candidate's first Linux/Cloudflare gates have now completed. This
+documentation-only evidence update gets another exact-HEAD CI run and new
+Cloudflare checks; latest precise SHA, Run URL and final outcomes are recorded
+in https://github.com/dashindev/dashin/pull/177 under Final candidate verification,
+not inferred from the older code SHA's run. Current next phase is candidate
+review/merge, then default-branch alert re-evaluation: #531/#524/#525 were still
+OPEN with fixed_at/dismissed_at null before merge. Other dependency alerts,
+legacy template warnings, Nx resolution warning and Action runner migration
+warnings remain; this focused PR is not a claim of an entirely clean audit.
+No merge, npm publish, Git/npm tags, Release, branch deletion or Jiazan changes
+have been performed by this candidate delivery phase.
